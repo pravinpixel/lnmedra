@@ -53,7 +53,10 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('supplier/lims_supplier_search', 'SupplierController@limsSupplierSearch')->name('supplier.search');
 	Route::resource('supplier', 'SupplierController');
 	
-	Route::get('supplier/vendor-password', 'SupplierController@limsSupplierSearch')->name('supplier.vendor-password');
+	Route::get('supplier/vendor-password/{id}', 'SupplierController@vendorPasswordResetView')->name('supplier.vendor-password');
+	
+	Route::put('supplier/vendor-reset-password/{id}', 'SupplierController@vendorReset')->name('supplier.vendor-reset-password');
+	
 
 
 	Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');

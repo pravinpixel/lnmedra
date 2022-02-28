@@ -25,8 +25,6 @@ class VendorController extends Controller
     }
     public function vendorRegister(Request $request)
     {
-        # code...
-        // return $request->all();
         
         $this->validate($request, [
             'company_name' => [
@@ -37,7 +35,7 @@ class VendorController extends Controller
             ],
             'email' => 'required|email|max:255|unique:suppliers,email|regex:/(.+)@(.+)\.(.+)/i',
             'phone_number' => 'required|digits:10|min:5',
-            // 'image' => 'image|mimes:jpg,jpeg,png,gif|max:100000',
+         
         ]);
         
         $lims_supplier_data = $request->all();
@@ -48,8 +46,7 @@ class VendorController extends Controller
       
 
         $vendor_id = Supplier::create($lims_supplier_data)->id;
-        
-        // print_r($lims_supplier_data);die();
+  
         $data['name'] =  $lims_supplier_data['name'];
         $data['email'] =  $lims_supplier_data['email'];
         $data['password'] =  $password;
@@ -69,16 +66,17 @@ class VendorController extends Controller
             'phone'    =>   $lims_supplier_data['phone_number'],
             'company_name'     =>   $lims_supplier_data['company_name']
             ]; 
-            // print_r($details);die();
+            
         try{
            
             $res = Mail::to($lims_supplier_data['email'])->send(new \App\Mail\SupplierMail($details));
         }
         catch(\Exception $e) {
             $message = $e;
-            // $message = 'Data inserted successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
+            $message = 'Data inserted successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
         }
       
         return redirect('vendor/vendor-register')->with('message', $message);
     }
+    
 }

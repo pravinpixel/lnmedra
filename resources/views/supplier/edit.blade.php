@@ -2,12 +2,29 @@
 @if(session()->has('not_permitted'))
   <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
 @endif
+@if(session()->has('message'))
+  <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{!! session()->get('message') !!}</div>
+@endif
 <style>
      .error{
             color: red;
         }
 </style>
-<section class="forms">
+<!-- Nav tabs -->
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="home-tab" data-toggle="tab" data-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Supplier</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="profile-tab" data-toggle="tab" data-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Password Reset</button>
+  </li>
+  
+</ul>
+
+<!-- Tab panes -->
+<div class="tab-content">
+  <div class="tab-pane active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <section class="forms">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
@@ -39,17 +56,7 @@
                                             </div>
                                             </div>
                                         </div>
-                                    <!-- <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>{{trans('file.Image')}}</label>
-                                            <input type="file" name="image" class="form-control">
-                                            @if($errors->has('image'))
-                                        <span>
-                                            <strong>{{ $errors->first('image') }}</strong>
-                                            </span>
-                                            @endif
-                                        </div>
-                                    </div> -->
+                                    
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.Mobile')}} *</label>
@@ -203,11 +210,11 @@
                                             <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                    <!-- <div class="col-md-6">
                                         <div class="form-group mt-4">
-                                        <a href="{{ route('supplier.vendor-password') }}" class="forgot-pass">{{trans('file.Vendor Reset Password?')}}</a>
+                                        <a href=" {{ route('supplier.vendor-password', $lims_supplier_data->id) }}" class="forgot-pass">{{trans('file.Vendor Reset Password?')}}</a>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 {!! Form::close() !!}
                             </div>
@@ -216,18 +223,72 @@
                 </div>
             </div>
         </section>
+  </div>
+  <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <section class="forms">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="card">
+                                    <div class="card-header d-flex align-items-center">
+                                        <h4><strong>{{trans('file.Password Reset')}}</strong></h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
+                                        {!! Form::open(['route' => ['supplier.vendor-reset-password',$lims_supplier_data->id],'name'=>'vendorPasswordForm','id'=>'vendorPasswordForm', 'method' => 'put', 'files' => true]) !!}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{trans('file.New Password')}} *</strong> </label>
+                                                    <input type="password" name="new_password" value="" required class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{trans('file.Confirm Password')}} *</strong> </label>
+                                                    <input type="password" name="confirm_password" value="" required class="form-control">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mt-4">
+                                                    <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
+                                                </div>
+                                            </div>
+                                        
+                                        </div>
+                                        {!! Form::close() !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+        </section>
+</div>
+ 
+</div>
+
 
 
 
 @endsection
 
 @push('scripts')
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script>
+
 <script type="text/javascript">
   $(document).ready(function(){
+  
         $("#vendorForm").validate({
                     
                     rules: {
-                    
+                        'new_password': {
+                            required: true,
+                            minlength: 8,
+                        },
+                        'confirm_password': {
+                            required: true,
+                            minlength: 8,
+                        },
                         'phone_number': {
                             required: true,
                             number: true,
@@ -243,24 +304,30 @@
                             required: true,
                             maxlength: 200
                         },
+                        
                     
                     },
-                    // messages: {
+                   
+                }); 
 
-                    //     'phone_number': {
-                    //         required: "Please enter Mobile Number",
-                    //     },
-                    //     'email': {
-                    //         required: "Please enter email",
-                    //     },
-                    //     'company_name': {
-                    //         required: "Please enter valid Date",
-                    //     },
+                $("#vendorPasswordForm").validate({
                     
-                    // },  
+                    rules: {
+                        'new_password': {
+                            required: true,
+                            minlength: 8,
+                        },
+                        'confirm_password': {
+                            required: true,
+                            minlength: 8,
+                        },
+                      
+                    },
+                   
                 }); 
      });
     $("ul#people").siblings('a').attr('aria-expanded','true');
     $("ul#people").addClass("show");
 </script>
+
 @endpush
