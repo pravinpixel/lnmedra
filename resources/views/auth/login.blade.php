@@ -11,7 +11,7 @@
     <link rel="manifest" href="{{url('manifest.json')}}">
     <link rel="icon" type="image/png" href="{{url('public/logo', $general_setting->site_logo)}}" />
     <!-- Bootstrap CSS-->
-    <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap.min.css') ?>" type="text/css">
+    <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap.css') ?>" type="text/css">
     <!-- Google fonts - Roboto -->
     <link rel="preload" href="https://fonts.googleapis.com/css?family=Nunito:400,500,700" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="https://fonts.googleapis.com/css?family=Nunito:400,500,700" rel="stylesheet"></noscript>
@@ -19,18 +19,49 @@
     <link rel="stylesheet" href="<?php echo asset('css/style.default.css') ?>" id="theme-stylesheet" type="text/css">
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="<?php echo asset('css/custom-'.$general_setting->theme) ?>" type="text/css">
-    <!-- Tweaks for older IEs--><!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
-
 
     <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery.min.js') ?>"></script>
-
   </head>
   <body>
-    <div class="page login-page">
-      <div class="container">
-        <div class="form-outer text-center d-flex align-items-center">
+    <div class="page login-page justify-content-center d-flex align-items-center " style="min-height: 100vh;background:linear-gradient(#000000c4,#00000070) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover ">
+      <div class="container h-100">
+        <div class="row p-5 shadow-lg align-items-center" style="backdrop-filter: blur(2px);background:#ffffffe8;border-radius:25px">
+          <div class="col-md-6 text-center">
+             <img src="{{ asset('public/logo/logo.png') }}" style="width: 350px" alt="">
+          </div>
+          <div class="col-md-6">
+            <h1 class="display-4 text-center mb-3">Login</h1>
+            <form method="POST" action="{{ route('login') }}" id="login-form" class="m-0 w-100 text-center" style="max-width: 100% !important">
+              @csrf
+              <div class="form-group-material">
+                <input id="login-username" type="text" name="name" required class="pl-3 input-material rounded-pill" value="">
+                <label for="login-username" class="label-material" style="left: 15px;">{{trans('file.UserName')}}</label>
+                  @if(session()->has('error'))
+                    <div class="position-relative">
+                      <small style="left: 10px;margin-top:6px" class="position-absolute text-danger">{{ session()->get('error') }}</small>
+                    </div>
+                  @endif
+              </div>
+              
+              <div class="form-group-material">
+                <input id="login-password" type="password" name="password" required class="pl-3 input-material rounded-pill" value="">
+                <label for="login-password" class="label-material" style="left: 15px;">{{trans('file.Password')}}</label>
+                @if(session()->has('error'))
+                  <div class="position-relative">
+                    <small style="left: 10px;margin-top:6px" class="position-absolute text-danger">{{ session()->get('error') }}</small>
+                  </div>
+                @endif
+              </div>
+              <button type="submit" class="btn rounded-pill btn-primary btn-block">{{trans('file.LogIn')}}</button>
+              <div class="mt-3">
+                <a href="{{ route('password.request') }}" class="forgot-pass mt-2">{{trans('file.Forgot Password?')}}</a>
+                <p>{{trans('file.Are You a Vendor')}} ? <a href="{{url('vendor/vendor-register')}}" class="signup">{{trans('file.Click Here to Register')}}</a></p>
+                
+              </div>
+            </form>
+          </div>
+        </div>
+        {{-- <div class="form-outer text-center d-flex align-items-center">
           <div class="form-inner">
             <div class="logo">
                 @if($general_setting->site_logo)
@@ -40,7 +71,7 @@
                 @endif
             </div>
             @if(session()->has('delete_message'))
-            <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('delete_message') }}</div> 
+              <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('delete_message') }}</div> 
             @endif
             <form method="POST" action="{{ route('login') }}" id="login-form">
               @csrf
@@ -65,16 +96,12 @@
               </div>
               <button type="submit" class="btn btn-primary btn-block">{{trans('file.LogIn')}}</button>
             </form>
-            <!-- This three button for demo only-->
-            <!-- <button type="submit" class="btn btn-success admin-btn">LogIn as Admin</button>
-            <button type="submit" class="btn btn-info staff-btn">LogIn as Staff</button>
-            <button type="submit" class="btn btn-dark customer-btn">LogIn as Customer</button>
-            <br><br> -->
+          
              <a href="{{ route('password.request') }}" class="forgot-pass">{{trans('file.Forgot Password?')}}</a>
             <p>{{trans('file.Are You a Vendor')}} ?</p><a href="{{url('vendor/vendor-register')}}" class="signup">{{trans('file.Click Here to Register')}}</a>
-          </div>
+          </div> --}}
           <div class="copyrights text-center">
-            <p>{{trans('file.Developed By')}} <span class="external">{{$general_setting->developed_by}}</span></p>
+            <p>{{trans('file.Developed By')}} <span class="external text-white">{{$general_setting->developed_by}}</span></p>
           </div>
         </div>
       </div>
