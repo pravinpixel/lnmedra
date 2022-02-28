@@ -14,7 +14,7 @@ class AddAccountIdToReturnsTable extends Migration
     public function up()
     {
         Schema::table('returns', function (Blueprint $table) {
-            $table->integer('account_id')->after('biller_id')->nullable();
+            $table->integer('account_id')->after('biller_id');
         });
     }
 

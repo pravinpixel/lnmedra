@@ -14,7 +14,7 @@ class AddUserIdToTransfersTable extends Migration
     public function up()
     {
         Schema::table('transfers', function (Blueprint $table) {
-            $table->integer('user_id')->after('reference_no')->nullable();
+            $table->integer('user_id')->after('reference_no');
         });
     }
 

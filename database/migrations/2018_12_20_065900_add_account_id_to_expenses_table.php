@@ -14,7 +14,7 @@ class AddAccountIdToExpensesTable extends Migration
     public function up()
     {
         Schema::table('expenses', function (Blueprint $table) {
-            $table->integer('account_id')->after('warehouse_id')->nullable();
+            $table->integer('account_id')->after('warehouse_id');
         });
     }
 

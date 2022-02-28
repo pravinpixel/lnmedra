@@ -70,8 +70,8 @@
             <button type="submit" class="btn btn-info staff-btn">LogIn as Staff</button>
             <button type="submit" class="btn btn-dark customer-btn">LogIn as Customer</button>
             <br><br> -->
-             <!-- <a href="{{ route('password.request') }}" class="forgot-pass">{{trans('file.Forgot Password?')}}</a>
-            <p>{{trans('file.Do not have an account?')}}</p><a href="{{url('register')}}" class="signup">{{trans('file.Register')}}</a>-->
+             <a href="{{ route('password.request') }}" class="forgot-pass">{{trans('file.Forgot Password?')}}</a>
+            <p>{{trans('file.Are You a Vendor')}} ?</p><a href="{{url('vendor/vendor-register')}}" class="signup">{{trans('file.Click Here to Register')}}</a>
           </div>
           <div class="copyrights text-center">
             <p>{{trans('file.Developed By')}} <span class="external">{{$general_setting->developed_by}}</span></p>

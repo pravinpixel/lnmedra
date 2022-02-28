@@ -7,9 +7,9 @@
 @endif
 <section>
     <div class="container-fluid">
-        @if(in_array("suppliers-add", $all_permission))
-        <a href="{{route('supplier.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Supplier')}}</a>
-        <a href="#" data-toggle="modal" data-target="#importSupplier" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Supplier')}}</a>
+        @if(in_array("enquiry-add", $all_permission))
+        <a href="{{route('enquiry.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.add_enquiry')}}</a>
+        <!-- <a href="#" data-toggle="modal" data-target="#importSupplier" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Enquiry')}}</a> -->
         @endif
     </div>
     <div class="table-responsive">
@@ -17,36 +17,26 @@
             <thead>
                 <tr>
                     <th class="not-exported"></th>
-                    <!-- <th>{{trans('file.Image')}}</th> -->
+                    
                     <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.Company Name')}}</th>
-                    <!-- <th>{{trans('file.VAT Number')}}</th> -->
+                    
                     <th>{{trans('file.Email')}}</th>
                     <th>{{trans('file.Phone Number')}}</th>
-                    <th>{{trans('file.Address')}}</th>
+                   
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach($lims_supplier_all as $key=>$supplier)
-                <tr data-id="{{$supplier->id}}">
+                @foreach($lims_supplier_all as $key=>$enquiry)
+                <tr data-id="{{$enquiry->id}}">
                     <td>{{$key}}</td>
-                    <!-- @if($supplier->image)
-                    <td> <img src="{{url('public/images/supplier',$supplier->image)}}" height="80" width="80">
-                    </td>
-                    @else
-                    <td>No Image</td>
-                    @endif -->
-                    <td>{{ $supplier->name }}</td>
-                    <td>{{ $supplier->company_name}}</td>
-                    <!-- <td>{{ $supplier->vat_number}}</td> -->
-                    <td>{{ $supplier->email}}</td>
-                    <td>{{ $supplier->phone_number}}</td>
-                    <td>{{ $supplier->address}}
-                            @if($supplier->city){{ ', '.$supplier->city}}@endif
-                            @if($supplier->state){{ ', '.$supplier->state}}@endif
-                            @if($supplier->postal_code){{ ', '.$supplier->postal_code}}@endif
-                            @if($supplier->country){{ ', '.$supplier->country}}@endif</td>
+                   
+                    <td>{{ $enquiry->name }}</td>
+                   
+
+                    <td>{{ $enquiry->email}}</td>
+                    <td>{{ $enquiry->mobile}}</td>
+                   
                     <td>
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
@@ -54,19 +44,20 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                @if(in_array("suppliers-edit", $all_permission))
+                                @if(in_array("enquiry-edit", $all_permission))
                                 <li>
-                                	<a href="{{ route('supplier.edit', $supplier->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
+                                	<a href="{{ route('enquiry.edit', $enquiry->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
                                 </li>
                                 @endif
                                 <li class="divider"></li>
-                                @if(in_array("suppliers-delete", $all_permission))
-                                {{ Form::open(['route' => ['supplier.destroy', $supplier->id], 'method' => 'DELETE'] ) }}
+                                @if(in_array("enquiry-delete", $all_permission))
+                                {{ Form::open(['route' => ['enquiry.destroy', $enquiry->id], 'method' => 'DELETE'] ) }}
                                 <li>
                                     <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
                                 </li>
                                 {{ Form::close() }}
                                 @endif
+                               
                             </ul>
                         </div>
                     </td>
@@ -150,7 +141,7 @@
         'columnDefs': [
             {
                 "orderable": false,
-                'targets': [0, 1, 6]
+                'targets': [0, 1, 4]
             },
             {
                 'checkboxes': {

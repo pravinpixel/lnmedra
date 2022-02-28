@@ -14,7 +14,7 @@ class AddIsDeletedToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_deleted')->default(0);
+            $table->boolean('is_deleted');
         });
     }
 

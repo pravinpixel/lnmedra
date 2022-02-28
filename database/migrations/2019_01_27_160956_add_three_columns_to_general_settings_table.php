@@ -14,9 +14,9 @@ class AddThreeColumnsToGeneralSettingsTable extends Migration
     public function up()
     {
         Schema::table('general_settings', function (Blueprint $table) {
-            $table->string('staff_access')->after('currency')->nullable();
-            $table->string('date_format')->after('staff_access')->nullable();
-            $table->string('theme')->after('date_format')->nullable();
+            $table->string('staff_access')->after('currency');
+            $table->string('date_format')->after('staff_access');
+            $table->string('theme')->after('date_format');
         });
     }
 

@@ -9,7 +9,7 @@ class AddKeybordActiveToPosSettingTable extends Migration
     public function up()
     {
         Schema::table('pos_setting', function (Blueprint $table) {
-            $table->boolean('keybord_active')->after('product_number')->nullable();
+            $table->boolean('keybord_active')->after('product_number');
         });
     }
 

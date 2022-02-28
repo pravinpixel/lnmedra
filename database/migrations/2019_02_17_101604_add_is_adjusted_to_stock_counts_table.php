@@ -14,7 +14,7 @@ class AddIsAdjustedToStockCountsTable extends Migration
     public function up()
     {
         Schema::table('stock_counts', function (Blueprint $table) {
-            $table->boolean('is_adjusted')->after('note')->nullable();
+            $table->boolean('is_adjusted')->after('note');
         });
     }
 

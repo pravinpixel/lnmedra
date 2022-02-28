@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }*/
         //setting language
-        /* if(isset($_COOKIE['language'])) {
+        if(isset($_COOKIE['language'])) {
             \App::setLocale($_COOKIE['language']);
         } else {
             \App::setLocale('en');
@@ -45,7 +45,7 @@ class AppServiceProvider extends ServiceProvider
         config(['staff_access' => $general_setting->staff_access, 'date_format' => $general_setting->date_format, 'currency' => $currency->code, 'currency_position' => $general_setting->currency_position]);
         
         $alert_product = DB::table('products')->where('is_active', true)->whereColumn('alert_quantity', '>', 'qty')->count();
-        View::share('alert_product', $alert_product); */
+        View::share('alert_product', $alert_product);
         Schema::defaultStringLength(191);
     }
 }

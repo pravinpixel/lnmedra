@@ -14,7 +14,7 @@ class AddUserIdToQuotationsTable extends Migration
     public function up()
     {
         Schema::table('quotations', function (Blueprint $table) {
-            $table->integer('user_id')->after('reference_no')->nullable();
+            $table->integer('user_id')->after('reference_no');
         });
     }
 

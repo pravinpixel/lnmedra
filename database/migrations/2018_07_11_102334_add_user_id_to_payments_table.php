@@ -14,7 +14,7 @@ class AddUserIdToPaymentsTable extends Migration
     public function up()
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->integer('user_id')->after('payment_reference')->nullable();
+            $table->integer('user_id')->after('payment_reference');
         });
     }
 

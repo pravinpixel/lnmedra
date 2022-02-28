@@ -14,7 +14,7 @@ class AddUserIdToSalesTable extends Migration
     public function up()
     {
         Schema::table('sales', function (Blueprint $table) {
-            $table->integer('user_id')->after('reference_no')->nullable();
+            $table->integer('user_id')->after('reference_no');
         });
     }
 

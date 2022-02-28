@@ -16,6 +16,8 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function() {
 	Route::get('/dashboard', 'HomeController@dashboard');
 });
+Route::get('vendor/vendor-register', 'VendorController@vendorregisterview')->name('vendor.vendor-register');
+Route::post('vendor/vendor-register-form', 'VendorController@vendorRegister')->name('vendor.vendor-register-form');
 
 Route::group(['middleware' => ['auth', 'active']], function() {
 
@@ -34,6 +36,8 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('unit/lims_unit_search', 'UnitController@limsUnitSearch')->name('unit.search');
 	Route::resource('unit', 'UnitController');
 
+	Route::resource('enquiry', 'EnquiryController');
+
 	Route::post('category/import', 'CategoryController@import')->name('category.import');
 	Route::post('category/deletebyselection', 'CategoryController@deleteBySelection');
 	Route::post('category/category-data', 'CategoryController@categoryData');
@@ -48,6 +52,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('supplier/deletebyselection', 'SupplierController@deleteBySelection');
 	Route::get('supplier/lims_supplier_search', 'SupplierController@limsSupplierSearch')->name('supplier.search');
 	Route::resource('supplier', 'SupplierController');
+	
+	Route::get('supplier/vendor-password', 'SupplierController@limsSupplierSearch')->name('supplier.vendor-password');
+
 
 	Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
 	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
@@ -207,7 +214,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('report/supplier', 'ReportController@supplierReport')->name('report.supplier');
 	Route::post('report/due_report_by_date', 'ReportController@dueReportByDate')->name('report.dueByDate');
 
-	Route::get('user/profile/{id}', 'UserController@profile')->name('user.profile');
+	Route::get('user/profile', 'UserController@profile')->name('user.profile');
 	Route::put('user/update_profile/{id}', 'UserController@profileUpdate')->name('user.profileUpdate');
 	Route::put('user/changepass/{id}', 'UserController@changePassword')->name('user.password');
 	Route::get('user/genpass', 'UserController@generatePassword');
