@@ -18,7 +18,7 @@
 <section>
     <div class="container-fluid">
         @if(in_array("vendorproducts-add", $all_permission))
-            <a href="{{route('vendorproducts.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{__('file.add_product')}}</a>
+            <a href="{{route('vendorproducts.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> Vendor {{__('file.add_product')}}</a>
             {{-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> --}}
         @endif
     </div>
