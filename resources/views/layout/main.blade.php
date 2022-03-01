@@ -116,14 +116,7 @@
                 </ul>
               </li>
               @endif
-
-
-
-
-
-
-
-
+              
               <?php
                 $customer_management_permission = DB::table('permissions')->where('name', 'customer-management')->first();
                   $customer_management_permission_active = DB::table('role_has_permissions')->where([
@@ -685,7 +678,7 @@
                   @endif
 
                   @if($supplier_index_permission_active)
-                  <li id="supplier-list-menu"><a href="{{route('supplier.index')}}">{{trans('file.Supplier List')}}</a></li>
+                  <li id=""><a href="{{route('supplier.index')}}">{{trans('file.Supplier List')}}</a></li>
                   <?php
                     $supplier_add_permission = DB::table('permissions')->where('name', 'suppliers-add')->first();
                     $supplier_add_permission_active = DB::table('role_has_permissions')->where([
@@ -1112,7 +1105,7 @@
                 </ul>
               </li>
               @endif
-              <li id="category-menu"><a href="{{route('enquiry.index')}}"><i class="dripicons-document-remove"></i><span>{{__('file.enquiry_management')}}</span></a></li>
+              <li id="enquiry-menu"><a href="{{route('enquiry.index')}}"><i class="dripicons-document-remove"></i><span>{{__('file.enquiry_management')}}</span></a></li>
             </ul>
           </div>
         </div>

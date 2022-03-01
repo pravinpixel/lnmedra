@@ -218,6 +218,7 @@ return [
 	'Delivery' => 'Delivery',
 	'Delivered' => 'Delivered',
 	'Password Reset'=>'Password Reset',
+	'Edit Supplier'=>'Edit Supplier',
 	'For Digital product sale_unit will be n/a' => 'For Digital product sale_unit will be n/a',
 	'Forgot Password?' => 'Forgot Password?',
 	'Reset Password'=>'Reset Password',

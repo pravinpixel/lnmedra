@@ -30,7 +30,7 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header d-flex align-items-center">
-                                <h4><strong>{{trans('file.Add Supplier')}}</strong></h4>
+                                <h4><strong>{{trans('file.Edit Supplier')}}</strong></h4>
                             </div>
                             <div class="card-body">
                                 <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
@@ -133,7 +133,7 @@
                                             <label>{{trans('file.Company Name')}} *</label>
                                             <input type="text" name="company_name"  value="{{$lims_supplier_data->company_name}}"  required class="form-control">
                                             @if($errors->has('company_name'))
-                                        <span>
+                                            <span>
                                             <strong style="color: red;">{{ $errors->first('company_name') }}</strong>
                                             </span>
                                             @endif
@@ -281,14 +281,7 @@
         $("#vendorForm").validate({
                     
                     rules: {
-                        'new_password': {
-                            required: true,
-                            minlength: 8,
-                        },
-                        'confirm_password': {
-                            required: true,
-                            minlength: 8,
-                        },
+                       
                         'phone_number': {
                             required: true,
                             number: true,

@@ -165,8 +165,7 @@ class SupplierController extends Controller
         $data['role_id'] = 6;
         $data['is_active'] =  $lims_supplier_data['is_active'];
         $data['vendor_id'] = $id;
-        // print_r($data);die();
-
+        
         $user_data = User::where('vendor_id',$id)->first();
 
         $user_data->name = $lims_supplier_data['name'];
@@ -178,12 +177,6 @@ class SupplierController extends Controller
         $user_data->is_active= $lims_supplier_data['is_active'];
         $user_data->vendor_id = $id;
         $user_data->update();
-
-        // print_r($user_data);die();
-        // $lims_supplier_data->update($data);
-
-
-
 
         return redirect('supplier')->with('message','Data updated successfully');
     }

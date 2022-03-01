@@ -9,7 +9,7 @@
     <div class="container-fluid">
         @if(in_array("suppliers-add", $all_permission))
         <a href="{{route('supplier.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Supplier')}}</a>
-        <a href="#" data-toggle="modal" data-target="#importSupplier" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Supplier')}}</a>
+        <!-- <a href="#" data-toggle="modal" data-target="#importSupplier" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Supplier')}}</a> -->
         @endif
     </div>
     <div class="table-responsive">
@@ -115,9 +115,9 @@
 @push('scripts')
 <script type="text/javascript">
 
-    $("ul#people").siblings('a').attr('aria-expanded','true');
-    $("ul#people").addClass("show");
-    $("ul#people #supplier-list-menu").addClass("active");
+    $("ul#vendor_supplier").siblings('a').attr('aria-expanded','true');
+    $("ul#vendor_supplier").addClass("show");
+    $("ul#vendor_supplier #supplier-list-menu").addClass("active");
 
     var all_permission = <?php echo json_encode($all_permission) ?>;
     var supplier_id = [];

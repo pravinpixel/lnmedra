@@ -29,7 +29,7 @@
                                         <div class="form-group">
                                             <label>{{trans('file.category')}}</strong> </label>
                                             <div class="input-group">
-                                            <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" title="Select Category..." required>
+                                            <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins"  required>
                                                 @foreach($category as $key=>$val)
                                                     <option value="{{$val['id']}}" {{old ('category') == $val['id'] ? 'selected' : ''}}>{{$val['name']}}</option>
                                                 @endforeach
@@ -85,14 +85,14 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>{{trans('file.Address')}} *</label>
-                                        <input type="text" name="address" value="{{old('address')}}" required class="form-control">
+                                        <label>{{trans('file.Address')}}</label>
+                                        <input type="text" name="address" value="{{old('address')}}" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>{{trans('file.City')}} *</label>
-                                        <input type="text" name="city" value="{{old('city')}}" required class="form-control">
+                                        <label>{{trans('file.City')}}</label>
+                                        <input type="text" name="city" value="{{old('city')}}" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -254,8 +254,8 @@
                     // },  
                 }); 
      });
-    $("ul#people").siblings('a').attr('aria-expanded','true');
-    $("ul#people").addClass("show");
-    $("ul#people #supplier-create-menu").addClass("active");
+    $("ul#vendor_supplier").siblings('a').attr('aria-expanded','true');
+    $("ul#vendor_supplier").addClass("show");
+    $("ul#vendor_supplier #supplier-create-menu").addClass("active");
 </script>
 @endpush
