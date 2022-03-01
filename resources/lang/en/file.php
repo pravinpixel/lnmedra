@@ -4,6 +4,7 @@ return [
 	'language' => 'Language',
 	'revenue' => 'Revenue',
 	'product' => 'Product',
+	'vendorproduct' => 'Vendorproduct',
 	'store_outlet_management'=>'Store Outlet',
 	'outlet_setup'=>'Outlet setup',
 	'user_management'=>'User management',

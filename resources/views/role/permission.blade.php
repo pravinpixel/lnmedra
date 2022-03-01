@@ -89,6 +89,59 @@
 						            </td>
 						        </tr>
 
+
+								<tr>
+						            <td>{{trans('file.vendorproduct')}}</td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("vendorproducts-index", $all_permission))
+								                <input type="checkbox" value="1" id="vendorproducts-index" name="vendorproducts-index" checked />
+								                @else
+								                <input type="checkbox" value="1" id="vendorproducts-index" name="vendorproducts-index" />
+								                @endif
+								                <label for="vendorproducts-index"></label>
+							            	</div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("vendorproducts-add", $all_permission))
+								               	<input type="checkbox" value="1" id="vendorproducts-add" name="vendorproducts-add" checked>
+								                @else
+								                <input type="checkbox" value="1" id="vendorproducts-add" name="vendorproducts-add">
+								                @endif
+								                <label for="vendorproducts-add"></label>
+							                </div>
+							            </div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("vendorproducts-edit", $all_permission))
+								                <input type="checkbox" value="1" id="vendorproducts-edit" name="vendorproducts-edit" checked />
+								                @else
+								                <input type="checkbox" value="1" id="vendorproducts-edit" name="vendorproducts-edit" />
+								                @endif
+								                <label for="vendorproducts-edit"></label>
+							                </div>
+							            </div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("vendorproducts-delete", $all_permission))
+								                <input type="checkbox" value="1" id="vendorproducts-delete" name="vendorproducts-delete" checked />
+								                @else
+								                <input type="checkbox" value="1" id="vendorproducts-delete" name="vendorproducts-delete" />
+								                @endif
+								                <label for="vendorproducts-delete"></label>
+							                </div>
+							            </div>
+						            </td>
+						        </tr>
+
 						        <tr>
 						            <td>{{trans('file.Purchase')}}</td>
 						            <td class="text-center">

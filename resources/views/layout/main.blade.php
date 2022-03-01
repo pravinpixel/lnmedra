@@ -291,6 +291,29 @@
                 </ul>
               </li>
               @endif
+
+
+              @if($category_permission_active || $index_permission_active || $print_barcode_active || $stock_count_active || $adjustment_active)
+              <li><a href="#vendorproduct" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.vendorproduct')}}</span><span></a>
+                <ul id="vendorproduct" class="collapse list-unstyled ">
+                 
+                  @if($index_permission_active)
+                  <li id="vendorproduct-list-menu"><a href="{{route('vendorproducts.index')}}">{{__('file.product_list')}}</a></li>
+                  <?php
+                    $add_permission = DB::table('permissions')->where('name', 'vendorproducts-add')->first();
+                    $add_permission_active = DB::table('role_has_permissions')->where([
+                        ['permission_id', $add_permission->id],
+                        ['role_id', $role->id]
+                    ])->first();
+                  ?>
+                  @if($add_permission_active)
+                  <li id="vendorproduct-create-menu"><a href="{{route('vendorproducts.create')}}">{{__('file.add_product')}}</a></li>
+                  @endif
+                  @endif
+                </ul>
+              </li>
+              @endif
+
               <?php
                     $supplier_index_permission = DB::table('permissions')->where('name', 'suppliers-index')->first();
                     $supplier_index_permission_active = DB::table('role_has_permissions')->where([
@@ -698,6 +721,7 @@
                       ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
                       ->where([
                         ['permissions.name', 'warehouse-stock-report'],
+
                         ['role_id', $role->id] ])->first();
                 $product_report_active = DB::table('permissions')
                       ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')

@@ -128,6 +128,41 @@ class RoleController extends Controller
         else
             $role->revokePermissionTo('products-delete');
 
+            if($request->has('vendorproducts-index')){
+                $permission = Permission::firstOrCreate(['name' => 'vendorproducts-index']);
+                if(!$role->hasPermissionTo('vendorproducts-index')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('vendorproducts-index');
+    
+            if($request->has('vendorproducts-add')){
+                $permission = Permission::firstOrCreate(['name' => 'vendorproducts-add']);
+                if(!$role->hasPermissionTo('vendorproducts-add')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('vendorproducts-add');
+            if($request->has('vendorproducts-edit')){
+                $permission = Permission::firstOrCreate(['name' => 'vendorproducts-edit']);
+                if(!$role->hasPermissionTo('vendorproducts-edit')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('vendorproducts-edit');
+    
+            if($request->has('vendorproducts-delete')){
+                $permission = Permission::firstOrCreate(['name' => 'vendorproducts-delete']);
+                if(!$role->hasPermissionTo('vendorproducts-delete')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('vendorproducts-delete');
+
         if($request->has('purchases-index')){
             $permission = Permission::firstOrCreate(['name' => 'purchases-index']);
             if(!$role->hasPermissionTo('purchases-index')){

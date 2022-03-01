@@ -85,6 +85,22 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('products/update', 'ProductController@updateProduct');
 	Route::resource('products', 'ProductController');
 
+	########### vendor product ############
+	
+	Route::post('vendorproducts/product-data', 'VendorProductController@productData');
+	Route::get('vendorproducts/gencode', 'VendorProductController@generateCode');
+	Route::get('vendorproducts/search', 'VendorProductController@search');
+	Route::get('vendorproducts/saleunit/{id}', 'VendorProductController@saleUnit');
+	Route::get('vendorproducts/getdata/{id}/{variant_id}', 'VendorProductController@getData');
+	Route::get('vendorproducts/product_warehouse/{id}', 'VendorProductController@productWarehouseData');
+	 
+	Route::get('vendorproducts/lims_product_search', 'VendorProductController@limsProductSearch')->name('product.search');
+	Route::post('vendorproducts/deletebyselection', 'VendorProductController@deleteBySelection');
+	Route::post('vendorproducts/update', 'VendorProductController@updateProduct');
+	Route::resource('vendorproducts', 'VendorProductController');
+	
+	######## end vendor product#########
+
 	Route::post('importcustomer_group', 'CustomerGroupController@importCustomerGroup')->name('customer_group.import');
 	Route::post('customer_group/deletebyselection', 'CustomerGroupController@deleteBySelection');
 	Route::get('customer_group/lims_customer_group_search', 'CustomerGroupController@limsCustomerGroupSearch')->name('customer_group.search');
