@@ -25,9 +25,9 @@
   <body>
         
     <div class="page login-page justify-content-center d-flex align-items-center " style="min-height: 100vh;background:linear-gradient(#000000c4,#00000070) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover ">
-      <div class="container h-100">
-        <div class="row p-5 shadow-lg align-items-center" style="backdrop-filter: blur(2px);background:#ffffffe8;border-radius:25px">
-          <div class="col-md-6 text-center">
+      <div class="container  h-100">
+        <div class="row p-5 col-md-10 mx-auto shadow-lg align-items-center" style="backdrop-filter: blur(2px);background:#ffffffe8;border-radius:25px">
+          <div class="col-md-6 border-right-bold text-center">
              <img src="{{ asset('public/logo/logo.png') }}" style="width: 350px" alt="">
           </div>
             
@@ -63,8 +63,8 @@
               </div>
               <button type="submit" class="btn rounded-pill btn-primary btn-block">{{trans('file.LogIn')}}</button>
               <div class="mt-3">
-                <a href="{{ route('password.request') }}" class="forgot-pass mt-2">{{trans('file.Forgot Password?')}}</a>
-                <p>{{trans('file.Are You a Vendor')}} ? <a href="{{url('vendor/vendor-register')}}" class="signup">{{trans('file.Click Here to Register')}}</a></p>
+                <a href="{{ route('password.request') }}" class="forgot-pass my-2">{{trans('file.Forgot Password?')}}</a>
+                <h4 class="lead">{{trans('file.Are You a Vendor')}} ? </h4> <a href="{{url('vendor/vendor-register')}}" class="signup">{{trans('file.Click Here to Register')}}</a>
                 
               </div>
             </form>

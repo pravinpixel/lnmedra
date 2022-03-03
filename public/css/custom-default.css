@@ -75,7 +75,7 @@ input.input-material:focus {
 
 input.input-material~label.active {
     font-size: 0.8em;
-    top: -10px;
+    top: -18px;
     color: #13A962;
 }
 

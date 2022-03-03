@@ -87,12 +87,15 @@
     </style>
   </head>
 
-  <body >
-    <header class="header">
-        <nav class="navbar">
+  <body   style="min-height: 100vh;background:linear-gradient(#000000c4,#00000070) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover ">
+
+    {{-- <header class="header">
+        <nav class="navbar" style="background: #00000062">
           <div class="container-fluid">
             <div class="navbar-holder d-flex align-items-center justify-content-between">
-              <a id="toggle-btn" href="#" class="menu-btn"><i class="fa fa-bars"> </i></a>
+              <a id="toggle-btn" href="#" class="menu-btn p-2 bg-white">
+                 
+              </a>
               <span class="brand-big">
                 @if($general_setting->site_logo)
                 <a href="{{url('/')}}"><img src="{{url('public/logo', $general_setting->site_logo)}}" width="115"></a>
@@ -138,9 +141,9 @@
             </div>
           </div>
         </nav>
-    </header>
-  
-    <div class="page">
+    </header> --}}
+    {{-- =========================== --}}
+    <div  >
         @if(session()->has('not_permitted'))
             <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
         @endif
@@ -148,16 +151,20 @@
             <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{!! session()->get('message') !!}</div>
         @endif
 
-        <section class="forms">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-header d-flex align-items-center">
-                                <h4><strong>{{trans('file.Vendor Register')}}</strong></h4>
+        <section class="forms mx-auto">
+            <div class="container align-items-center d-flex justify-content-center " style="min-height: 90vh">
+                <div class="row m-0 bg-white align-items-center  rounded-pill" >
+                    <div class="col-md-4 border-right text-center">
+                        <img src="{{url('public/logo', $general_setting->site_logo)}}" width="250px" class="mx-auto">
+                    </div>
+                    <div class="col-md-8 p p-0 py-4" >
+                        <div class="cardx">
+                            <div class="card-header d-flex text-center  align-items-center">
+                                <h1 class="text-center"><strong class="text-center">{{trans('file.Vendor Register')}}</strong></h1>
                             </div>
-                            <div class="card-body">
-                                <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
+                            <div class="card-body " style="max-height: 70vh;overflow:auto">
+                                <div class="px-3">
+                                    <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                                 {!! Form::open(['route' => 'vendor.vendor-register-form','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true]) !!}
                                 <div class="row">
                                     <div class="col-md-6">
@@ -329,20 +336,21 @@
                                             <input type="text" name="branch" value="{{old('branch')}}" class="form-control">
                                         </div>
                                     </div>
-                                    <!-- <div class="col-md-6">
+                                    {{-- <!-- <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.VAT Number')}}</label>
                                             <input type="text" name="vat_number" class="form-control">
                                         </div>
                                     </div> -->
-                                
+                                 --}}
                                 
                                 
                                     <div class="col-md-12">
                                         <div class="form-group mt-4">
-                                            <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
+                                            <input type="submit" value="{{trans('file.submit')}}" class="btn rounded-pill btn-primary">
                                         </div>
                                     </div>
+                                </div>
                                 </div>
                                 {!! Form::close() !!}
                             </div>
@@ -363,7 +371,7 @@
             <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                <p>&copy; {{$general_setting->site_title}} | {{trans('file.Developed')}} {{trans('file.By')}} <span class="external">{{$general_setting->developed_by}}</span></p>
+                <p>&copy; {{$general_setting->site_title}} | {{trans('file.Developed')}} {{trans('file.By')}} <span class="external text-white">{{$general_setting->developed_by}}</span></p>
                 </div>
             </div>
             </div>
