@@ -49,6 +49,9 @@
                                 	<a href="{{ route('enquiry.edit', $enquiry->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
                                 </li>
                                 @endif
+                                <li>
+                                	<a href="{{ route('enquiry.mail', $enquiry->id) }}" class="btn btn-link"><i class="dripicons-mail"></i> {{trans('file.Mail')}}</a>
+                                </li>
                                 <li class="divider"></li>
                                 @if(in_array("enquiry-delete", $all_permission))
                                 {{ Form::open(['route' => ['enquiry.destroy', $enquiry->id], 'method' => 'DELETE'] ) }}

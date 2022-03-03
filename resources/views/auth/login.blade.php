@@ -23,14 +23,23 @@
     <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery.min.js') ?>"></script>
   </head>
   <body>
+        
     <div class="page login-page justify-content-center d-flex align-items-center " style="min-height: 100vh;background:linear-gradient(#000000c4,#00000070) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover ">
       <div class="container h-100">
         <div class="row p-5 shadow-lg align-items-center" style="backdrop-filter: blur(2px);background:#ffffffe8;border-radius:25px">
           <div class="col-md-6 text-center">
              <img src="{{ asset('public/logo/logo.png') }}" style="width: 350px" alt="">
           </div>
+            
           <div class="col-md-6">
+          @if(session()->has('not_permitted'))
+            <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
+            @endif
+            @if(session()->has('message'))
+                <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{!! session()->get('message') !!}</div>
+            @endif
             <h1 class="display-4 text-center mb-3">Login</h1>
+           
             <form method="POST" action="{{ route('login') }}" id="login-form" class="m-0 w-100 text-center" style="max-width: 100% !important">
               @csrf
               <div class="form-group-material">
@@ -70,6 +79,7 @@
                   <span>{{$general_setting->site_title}}</span>
                 @endif
             </div>
+            
             @if(session()->has('delete_message'))
               <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('delete_message') }}</div> 
             @endif
@@ -122,6 +132,7 @@
     }
 </script>
 <script type="text/javascript">
+  $("div.alert").delay(3000).slideUp(750);
     $('.admin-btn').on('click', function(){
         $("input[name='name']").focus().val('admin');
         $("input[name='password']").focus().val('admin');

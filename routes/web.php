@@ -37,6 +37,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::resource('unit', 'UnitController');
 
 	Route::resource('enquiry', 'EnquiryController');
+	Route::get('enquiry/mail/{id}', 'EnquiryController@enquiryMail')->name('enquiry.mail');
+	Route::post('enquiry/sentMail', 'EnquiryController@enquirySentMail')->name('enquiry.sentMail');
+
 
 	Route::post('category/import', 'CategoryController@import')->name('category.import');
 	Route::post('category/deletebyselection', 'CategoryController@deleteBySelection');

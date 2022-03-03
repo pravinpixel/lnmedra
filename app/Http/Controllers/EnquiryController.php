@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\User;
 use App\Supplier;
 use App\Enquiry;
+use App\MailTemplate;
+use App\EnquiryMailAttachment;
 use Hash;
 use Illuminate\Validation\Rule;
 use Auth;
@@ -120,6 +122,84 @@ class EnquiryController extends Controller
         $lims_enquiry_data->save();
         $lims_enquiry_data->delete();
         return redirect('enquiry')->with('not_permitted','Data deleted successfully');
+    }
+    public function enquiryMail($id)
+    {
+        # code...
+        
+        $data = Enquiry::where('id',$id)->first()->toArray();
+        $mailDetail = MailTemplate::where('is_active', true)->get();
+        // print_r($mailDetail[0]['mail_content']);die();
+        $documentData =  $mailDetail[0]['mail_content'];
+        $keyData  = array_keys($data);
+        $valueData  = array_values($data);
+        $new_string = str_replace($keyData,$valueData,strval($documentData));
+
+        $search = array('{','}');
+        $mailDetail[0]['mail_content'] = str_replace($search,"",$new_string);
+        return view('enquiry.enquiry-mail',compact('data','mailDetail'));
+    }
+    public function enquirySentMail(Request $request)
+    {
+        // print_r($request['subject']);die();
+        $filePath = 'images/enquiry_attachment/';
+        $path = public_path($filePath); 
+        if(!file_exists($path))
+        {
+            mkdir($path, 0777, true);
+        }
+            
+        $files = [];
+        if($request->hasfile('filenames'))
+         {
+            foreach($request->file('filenames') as $file)
+            {
+               if($file->extension() == "pdf")
+               {
+                // print_r("if"." ".$file->getClientOriginalName()." ");
+                $name = $file->getClientOriginalName().'.'.$file->extension();
+                $file->move(public_path('images/enquiry_attachment'), $name);  
+                $files[] = $name; 
+               } 
+        
+            }
+           
+         }
+
+
+        
+        $data = new EnquiryMailAttachment();
+        $data->enquiry_id = $request['enquiry_id'];
+        $data->enquiry_email = $request['email'];
+        $data->bcc = $request['bcc'];
+        $data->cc = $request['cc'];
+        $data->mail_content = $request['mail_content'];
+        $data->attachment = json_encode($files);
+        $data->is_active = true;
+        $data->save();
+        $details = [
+            
+            'email'    =>  $request['email'],
+           
+            'mail_content'    =>  $request['mail_content'],
+            
+            ]; 
+          
+        $ccMail = explode(",",$request['cc']);
+        $bccMail = explode(",",$request['bcc']);
+       
+        try{
+       
+            $res = Mail::to($request['email'])->cc($ccMail)->bcc($bccMail)->send(new \App\Mail\EnquiryMailTemplate($details));
+
+        }
+        catch(\Exception $e) {
+            $message = $e;
+            $message = 'Data inserted successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
+        }
+
+        return redirect('enquiry')->with('message','Enquiry Mail Sent Successfully');
+
     }
 
 

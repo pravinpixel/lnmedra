@@ -58,7 +58,7 @@ class VendorController extends Controller
 
         User::create($data);
        
-        $message = 'Data inserted successfully';
+        $message = 'Vendor register successfully';
         $details = [
             'name'     =>   $lims_supplier_data['name'],
             'email'    =>  $lims_supplier_data['email'],
@@ -76,7 +76,8 @@ class VendorController extends Controller
             $message = 'Data inserted successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
         }
       
-        return redirect('vendor/vendor-register')->with('message', $message);
+        return redirect('/login')->with('message', $message);
+        // return view('login')->with('message', $message);
     }
     
 }
