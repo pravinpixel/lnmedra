@@ -123,7 +123,8 @@
                     // },  
                 }); 
      });
-    $("ul#people").siblings('a').attr('aria-expanded','true');
-    $("ul#people").addClass("show");
+     $("#enquiry_management").siblings('a').attr('aria-expanded','true');
+    $("#enquiry_management").addClass("show");
+    $("#enquiry-list-menu").addClass("active");
 </script>
 @endpush

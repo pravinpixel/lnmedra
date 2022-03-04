@@ -140,6 +140,18 @@
 							                </div>
 							            </div>
 						            </td>
+									<!-- <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("allvendorproductslist-index", $all_permission))
+								                <input type="checkbox" value="1" id="allvendorproductslist-index" name="allvendorproductslist-index" checked />
+								                @else
+								                <input type="checkbox" value="1" id="allvendorproductslist-index" name="allvendorproductslist-index" />
+								                @endif
+								                <label for="allvendorproductslist-index"></label>
+							                </div>
+							            </div>
+						            </td> -->
 						        </tr>
 
 						        <tr>

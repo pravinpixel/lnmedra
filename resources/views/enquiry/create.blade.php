@@ -118,8 +118,11 @@
                   
                 }); 
      });
-    $("ul#people").siblings('a').attr('aria-expanded','true');
-    $("ul#people").addClass("show");
-    $("ul#people #supplier-create-menu").addClass("active");
+    // $("ul#people").siblings('a').attr('aria-expanded','true');
+    // $("ul#people").addClass("show");
+    // $("ul#people #supplier-create-menu").addClass("active");
+    $("#enquiry_management").siblings('a').attr('aria-expanded','true');
+    $("#enquiry_management").addClass("show");
+    $("#enquiry-create-menu").addClass("active");
 </script>
 @endpush

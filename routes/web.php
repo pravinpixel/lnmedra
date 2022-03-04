@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	########### vendor product ############
 	
 	Route::post('vendorproducts/product-data', 'VendorProductController@productData');
+	Route::post('vendorproducts/all-vendor-product-data', 'VendorProductController@allVendorproductData');
 	Route::get('vendorproducts/gencode', 'VendorProductController@generateCode');
 	Route::get('vendorproducts/search', 'VendorProductController@search');
 	Route::get('vendorproducts/saleunit/{id}', 'VendorProductController@saleUnit');
@@ -101,6 +102,8 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('vendorproducts/deletebyselection', 'VendorProductController@deleteBySelection');
 	Route::post('vendorproducts/update', 'VendorProductController@updateProduct');
 	Route::resource('vendorproducts', 'VendorProductController');
+	Route::get('all-vendor-products-list', 'VendorProductController@allVendorProductsList')->name('all-vendor-products-list');
+	
 	
 	######## end vendor product#########
 
@@ -117,6 +120,8 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('customer/deletebyselection', 'CustomerController@deleteBySelection');
 	Route::get('customer/lims_customer_search', 'CustomerController@limsCustomerSearch')->name('customer.search');
 	Route::resource('customer', 'CustomerController');
+	// Route::post('customer/additionalData', 'CustomerController@additionalData')->name('customer.additionalData');
+
 
 	Route::post('importbiller', 'BillerController@importBiller')->name('biller.import');
 	Route::post('biller/deletebyselection', 'BillerController@deleteBySelection');

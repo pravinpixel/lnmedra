@@ -45,6 +45,7 @@ class CustomerController extends Controller
 
     public function store(Request $request)
     {
+        // print_r($request->all());die();
         $this->validate($request, [
             'phone_number' => [
                 'max:255',
@@ -75,8 +76,10 @@ class CustomerController extends Controller
 
             $lims_customer_data['phone'] = $lims_customer_data['phone_number'];
             $lims_customer_data['role_id'] = 5;
+            $lims_customer_data['customer_marry_date'] =  $lims_customer_data['marriage_date'];
+            $lims_customer_data['customer_dob'] =  $lims_customer_data['customer_dob'];
             $lims_customer_data['is_deleted'] = false;
-            $lims_customer_data['password'] = bcrypt($lims_customer_data['password']);
+            // $lims_customer_data['password'] = bcrypt($lims_customer_data['password']);
             $user = User::create($lims_customer_data);
             $lims_customer_data['user_id'] = $user->id;
             $message = 'Customer and user created successfully';
@@ -105,6 +108,7 @@ class CustomerController extends Controller
         else
             return redirect('customer')->with('create_message', $message);
     }
+
 
     public function edit($id)
     {

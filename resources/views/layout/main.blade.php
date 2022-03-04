@@ -302,6 +302,7 @@
                   @if($add_permission_active)
                   <li id="vendorproduct-create-menu"><a href="{{route('vendorproducts.create')}}">{{__('file.add_product')}}</a></li>
                   @endif
+                  <li id="vendorproduct-product-list-menu"><a href="{{route('all-vendor-products-list')}}">{{__('file.vendor_product_list')}}</a></li>
                   @endif
                 </ul>
               </li>
@@ -360,10 +361,6 @@
                 </ul>
               </li>
               @endif
-              
-
-             
-            
               
 
               <?php
@@ -1077,9 +1074,9 @@
                 @endif
                 <ul id="enquiry_management" class="collapse list-unstyled ">
                   @if($add_enquiry_permission_active)
-                  <li id="category-menu"><a href="{{route('category.index')}}">{{__('file.add_enquiry')}}</a></li>
+                  <li id="enquiry-create-menu"><a href="{{route('enquiry.create')}}">{{__('file.add_enquiry')}}</a></li>
                   @endif
-                  <li id="category-menu"><a href="{{route('category.index')}}">{{__('file.enquiry_list')}}</a></li>
+                  <li id="enquiry-list-menu"><a href="{{route('enquiry.index')}}">{{__('file.enquiry_list')}}</a></li>
                 </ul>
               </li>
               @endif
@@ -1105,7 +1102,7 @@
                 </ul>
               </li>
               @endif
-              <li id="enquiry-menu"><a href="{{route('enquiry.index')}}"><i class="dripicons-document-remove"></i><span>{{__('file.enquiry_management')}}</span></a></li>
+              <!-- <li id="enquiry-menu"><a href="{{route('enquiry.index')}}"><i class="dripicons-document-remove"></i><span>{{__('file.enquiry_management')}}</span></a></li> -->
             </ul>
           </div>
         </div>
