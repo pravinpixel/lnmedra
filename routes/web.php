@@ -16,6 +16,11 @@ Auth::routes();
 Route::group(['middleware' => 'auth'], function() {
 	Route::get('/dashboard', 'HomeController@dashboard');
 });
+
+Route::get('vendor-dashboard', function () {
+	return view('vendor-dashboard');
+})->name('vendor-dashboard');
+
 Route::get('vendor/vendor-register', 'VendorController@vendorregisterview')->name('vendor.vendor-register');
 Route::post('vendor/vendor-register-form', 'VendorController@vendorRegister')->name('vendor.vendor-register-form');
 

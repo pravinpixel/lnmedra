@@ -132,7 +132,7 @@ class ProductController extends Controller
                 $nestedData['key'] = $key;
                 $product_image = explode(",", $product->image);
                 $product_image = htmlspecialchars($product_image[0]);
-                $nestedData['image'] = '<img src="'.url('public/images/product', $product_image).'" height="80" width="80">';
+                $nestedData['image'] = '<img src="'.url('public/images/product', $product_image).'" height="60" width="60">';
                 $nestedData['name'] = $product->name;
                 $nestedData['code'] = $product->code;
                 if($product->brand_id)
@@ -156,9 +156,9 @@ class ProductController extends Controller
                 //$nestedData['stock_worth'] = ($product->qty * $product->price).'/'.($product->qty * $product->cost);
 
                 $nestedData['options'] = '<div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.trans("file.action").'
+                            <button type="button" class="btn btn-sm border rounded-pill" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               <span class="caret"></span>
-                              <span class="sr-only">Toggle Dropdown</span>
+                              <i class="dripicons-dots-3"></i> 
                             </button>
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                             <li>

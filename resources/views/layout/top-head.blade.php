@@ -56,6 +56,27 @@
       <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap-rtl.min.css') ?>" type="text/css">
       <link rel="stylesheet" href="<?php echo asset('css/custom-rtl.css') ?>" type="text/css" id="custom-style">
     @endif
+    <style>
+      .table th{
+        background: #0095ff !important;
+        color: white !important;
+        border-bottom: 1px solid #3b9970 !important;
+        text-align: center !important
+      }
+      .table th,td {
+        vertical-align: middle !important
+      }
+      td.col-sm-2,     td.col-sm-3 {
+        text-align:  center !important;
+        vertical-align: middle !important
+      }
+      td.col-sm-3 .input-group  {
+        justify-content: center !important
+      }
+      .top-0 {
+        top:  0 !important
+      }
+    </style>
   </head>
   <body onload="myFunction()">
     <div id="loader"></div>

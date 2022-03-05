@@ -23,7 +23,7 @@
                     <!-- <th>{{trans('file.VAT Number')}}</th> -->
                     <th>{{trans('file.Email')}}</th>
                     <th>{{trans('file.Phone Number')}}</th>
-                    <th>{{trans('file.Address')}}</th>
+                    <th>Status</th>
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
             </thead>
@@ -42,11 +42,12 @@
                     <!-- <td>{{ $supplier->vat_number}}</td> -->
                     <td>{{ $supplier->email}}</td>
                     <td>{{ $supplier->phone_number}}</td>
-                    <td>{{ $supplier->address}}
-                            @if($supplier->city){{ ', '.$supplier->city}}@endif
-                            @if($supplier->state){{ ', '.$supplier->state}}@endif
-                            @if($supplier->postal_code){{ ', '.$supplier->postal_code}}@endif
-                            @if($supplier->country){{ ', '.$supplier->country}}@endif</td>
+                    <td>
+                        <label class="switch" for="checkbox_{{ $key+1 }}">
+                            <input type="checkbox" id="checkbox_{{ $key+1 }}" />
+                            <div class="slider round"></div>
+                        </label>
+                    </td>
                     <td>
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}

@@ -54,8 +54,8 @@
                     {{Form::text('name',null,array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Type category name...'))}}
                 </div>
                 <div class="col-md-6 form-group">
-                    <label>{{trans('file.Image')}}</label>
-                    <input type="file" name="image" class="form-control">
+                    <label>{{trans('file.Image')}}  *</label>
+                    <input type="file" name="image" class="form-control" required>
                 </div>
                 <div class="col-md-6 form-group">
                     <label>{{trans('file.Parent Category')}}</label>

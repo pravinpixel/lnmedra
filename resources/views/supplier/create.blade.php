@@ -64,6 +64,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.Email')}} *</label>
+                                        <label for="setAsUsername" class="float-right"><input type="checkbox" name="" id="setAsUsername" > Set as Username</label>
                                         <input type="email" name="email" placeholder="example@example.com" value="{{old('email')}}" required class="form-control">
                                         @if($errors->has('email'))
                                     <span>

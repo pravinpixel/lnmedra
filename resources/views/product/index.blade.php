@@ -14,16 +14,15 @@
 @if(session()->has('message'))
     <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('message') }}</div>
 @endif
-
 <section>
     <div class="container-fluid">
         @if(in_array("products-add", $all_permission))
-            <a href="{{route('products.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{__('file.add_product')}}</a>
-            <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a>
+            <a href="{{route('products.create')}}" class="btn btn-info rounded-pill"><i class="dripicons-plus"></i> {{__('file.add_product')}}</a>
+            <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary rounded-pill ml-auto"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a>
         @endif
     </div>
     <div class="table-responsive">
-        <table id="product-data-table" class="table" style="width: 100%">
+        <table id="product-data-table" class="table custom table-hover table-centered" style="width: 100%">
             <thead>
                 <tr>
                     <th class="not-exported"></th>
@@ -36,7 +35,8 @@
                     <th>{{trans('file.Unit')}}</th>
                     <th>{{trans('file.Price')}}</th>
                     <th>{{trans('file.Cost')}}</th>
-                    <th>{{trans('file.Stock Worth (Price/Cost)')}}</th>
+                    {{-- <th>{{trans('file.Stock Worth (Price/Cost)')}}</th> --}}
+                    <th>Stock Worth</th>
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
             </thead>

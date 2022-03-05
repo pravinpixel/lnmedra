@@ -65,19 +65,103 @@
       <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap-rtl.min.css') ?>" type="text/css">
       <link rel="stylesheet" href="<?php echo asset('css/custom-rtl.css') ?>" type="text/css" id="custom-style">
     @endif
+
+    <style>
+      .table th{
+        background: #0095ff !important;
+        color: white !important;
+        border-bottom: 1px solid #3b9970 !important;
+        text-align: center !important
+      }
+      .table th,td {
+        vertical-align: middle !important
+      }
+      .top-0 {
+        top:  0 !important
+      }
+      .switch {
+        display: inline-block;
+        height: 24px;
+        position: relative;
+        width: 50px;
+      }
+
+      .switch input {
+        display:none;
+      }
+
+      .slider {
+        background-color: #ccc;
+        bottom: 0;
+        cursor: pointer;
+        left: 0;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transition: .4s;
+      }
+
+      .slider:before {
+        background-color: #fff;
+        bottom: 4px;
+        content: "";
+        height: 16px;
+        left: 4px;
+        position: absolute;
+        transition: .4s;
+        width: 16px;
+      }
+
+      input:checked + .slider {
+        background-color: #2395FC;
+      }
+
+      input:checked + .slider:before {
+        transform: translateX(26px);
+      }
+
+      .slider.round {
+        border-radius: 34px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      }
+        
+      .alert {
+        position: fixed !important;
+        top: 0%;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 350px !important;
+        box-shadow: 0px 0px 20px gray
+      }
+      #header-top.active {
+        padding-left: 0 !important;
+        transition:all .5s !important
+      }
+      #header-top {
+        transition:all .5s !important
+      }
+    </style>
   </head>
 
   <body onload="myFunction()">
     <div id="loader"></div>
       <!-- Side Navbar -->
-      <nav class="side-navbar">
+      <nav class="side-navbar h-100 bg-dark top-0"  style="background:linear-gradient(#fffffff1 60%,#ffffffab) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover;">
         <div class="side-navbar-wrapper">
           <!-- Sidebar Header    -->
           <!-- Sidebar Navigation Menus-->
           <div class="main-menu">
+            <div class="text-center my-3">
+              <a href="{{url('/')}}"><img src="{{url('public/logo/logo.png')}}" width="100px"></a>
+              {{-- <a id="toggle-btn" href="#" class="btn-pos rounded-pill"><i class="fa fa-bars"> </i></a> --}}
+            </div>
             <ul id="side-main-menu" class="side-menu list-unstyled">
-            <!-- href="{{url('/')}}" -->
+ 
             <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
+            <li><a href="{{url('/vendor-dashboard')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
             
 
               <?php
@@ -100,7 +184,6 @@
                           ['permission_id', $user_management->id],
                           ['role_id', $role->id]
                       ])->first();
-                     
 
               ?>
               @if($store_outlet_permission_active || $outlet_setup_active || $user_management_active)
@@ -1108,17 +1191,13 @@
         </div>
       </nav>
       <!-- navbar-->
-      <header class="header">
-        <nav class="navbar">
+      <header class="header" >
+        <nav class="navbar" id="header-top" style="padding-left:230px">
           <div class="container-fluid">
             <div class="navbar-holder d-flex align-items-center justify-content-between">
-              <a id="toggle-btn" href="#" class="menu-btn"><i class="fa fa-bars"> </i></a>
+              <a id="toggle-btn" href="#" class="btn-pos rounded-pill"><i class="fa fa-bars"> </i></a>
               <span class="brand-big">
-                @if($general_setting->site_logo)
-                <a href="{{url('/')}}"><img src="{{url('public/logo', $general_setting->site_logo)}}" width="115"></a>
-                @else
-                  <a href="{{url('/')}}"><h1 class="d-inline">{{$general_setting->site_title}}</h1></a>
-                @endif
+                <a href="{{url('/')}}"><h2>L & N Group | Sales & POS Management</h2></a>
               </span>
 
               <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
@@ -1136,7 +1215,7 @@
                   ])->first();
                 ?>
                 @if($add_permission_active)
-                <li class="nav-item"><a class="dropdown-item btn-pos btn-sm" href="{{route('sale.pos')}}"><i class="dripicons-shopping-bag"></i><span> POS</span></a></li>
+                  <li class="nav-item {{ Route::is('vendor-dashboard') ? 'd-none' : '' }}" ><a class="dropdown-item btn-pos btn-sm" href="{{route('sale.pos')}}"><i class="dripicons-shopping-bag"></i><span> POS</span></a></li>
                 @endif
                 <li class="nav-item"><a id="btnFullscreen" data-toggle="tooltip" title="{{trans('file.Full Screen')}}"><i class="dripicons-expand"></i></a></li>
                 @if(\Auth::user()->role_id <= 2)

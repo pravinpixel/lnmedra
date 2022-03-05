@@ -77,6 +77,7 @@ $(document).ready(function () {
         if ($(window).outerWidth() > 1199) {
             $('nav.side-navbar').toggleClass('shrink');
             $('.page').toggleClass('active');
+            $('#header-top').toggleClass('active');
         } else {
             $('nav.side-navbar').toggleClass('shrink');
             $('.page').toggleClass('active-sm');
