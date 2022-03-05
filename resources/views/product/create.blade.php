@@ -107,9 +107,26 @@
                                     <div class="form-group">
                                         <label>{{trans('file.category')}} *</strong> </label>
                                         <div class="input-group">
-                                          <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
+                                        <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
                                             @foreach($lims_category_list as $category)
-                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                               
+                                                @if($category->parent_id == '' || null)
+                                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                                @endif
+                                                
+                                            @endforeach
+                                          </select>
+                                      </div>
+                                      <span class="validation-msg"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.SubCategory')}} *</strong> </label>
+                                        <div class="input-group">
+                                          <select name="subcategory_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
+                                            @foreach($lims_category_list as $subcategory)
+                                                <option value="{{$category->id}}">{{$subcategory->name}}</option>
                                             @endforeach
                                           </select>
                                       </div>
@@ -418,6 +435,16 @@
             $('select[name="purchase_unit_id"]').empty();
         }
     });
+    $('select[name="category_id"]').on('change', function() {
+
+        catID = $(this).val();
+        if(catID) {
+            sub_category(catID);
+        }else{
+            $('select[name="subcategory_id"]').empty();
+        }
+        });
+    
     <?php $productArray = []; ?>
     var lims_product_code = [
         @foreach($lims_product_list_without_variant as $product)
@@ -524,6 +551,22 @@
             },
         });
     }
+    function sub_category(catID){
+        $.ajax({
+            url: 'subcategoryId/'+catID,
+            type: "GET",
+            dataType: "json",
+            success:function(data) {
+                  $('select[name="subcategory_id"]').empty();
+                  $.each(data, function(key, value) {
+                      $('select[name="subcategory_id"]').append('<option value="'+ key +'">'+ value +'</option>');
+                     
+                  });
+                  $('.selectpicker').selectpicker('refresh');
+            },
+        });
+    }
+    
 
     $("input[name='is_batch']").on("change", function () {
         if ($(this).is(':checked')) {

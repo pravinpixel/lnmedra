@@ -18,6 +18,7 @@ return [
 	'Basic Information'=>'Basic Information',
 	'Additional Information'=>'Additional Information',
 	'add_enquiry'=>'Add Enquiry',
+	'SubCategory'=>'SubCategory',
 	'edit_enquiry'=>'Edit Enquiry',
 	'enquiry_list'=>'Enquiry List',
 	'customer_management'=>'Customer',

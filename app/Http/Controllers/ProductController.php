@@ -221,6 +221,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request['subcategory_id']);die();
         $this->validate($request, [
             'code' => [
                 'max:255',
@@ -275,6 +276,9 @@ class ProductController extends Controller
             $file->move('public/product/files', $fileName);
             $data['file'] = $fileName;
         }
+
+        // dd($data);
+
         $lims_product_data = Product::create($data);
         //dealing with product variant
         if(!isset($data['is_batch']))
@@ -525,6 +529,13 @@ class ProductController extends Controller
         $unit = Unit::where("base_unit", $id)->orWhere('id', $id)->pluck('unit_name','id');
         return json_encode($unit);
     }
+    public function subcategoryId($id)
+    {
+        // print_r($id);die();
+        $unit = Category::where("parent_id", $id)->pluck('name','id');
+        return json_encode($unit);
+    }
+    
 
     public function getData($id, $variant_id)
     {

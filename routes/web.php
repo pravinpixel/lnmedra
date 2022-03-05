@@ -73,6 +73,8 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::resource('tax', 'TaxController');
 
 	//Route::get('products/getbarcode', 'ProductController@getBarcode');
+	
+	Route::get('products/subcategoryId/{id}', 'ProductController@subcategoryId')->name('product.subcategoryId');
 	Route::post('products/product-data', 'ProductController@productData');
 	Route::get('products/gencode', 'ProductController@generateCode');
 	Route::get('products/search', 'ProductController@search');
