@@ -12,10 +12,12 @@
                     <div class="card-body">
                         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                         <form id="product-form">
-                            <input type="hidden" name="id" value="{{$lims_product_data->id}}" />
+                            <input type="hidden" name="id" value="{{$lims_product_data->id}}" >
+                            <input type="hidden" name="dashboardView" value="{{$lims_product_data->dashboardView}}" >
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="form-group"> <input type="text" name="vendoruserid" id="vendoruserid" value="{{ Auth::id() }}">
+                                    <div class="form-group">
+                                         <input type="hidden" name="vendoruserid" id="vendoruserid" value="{{ Auth::id() }}">
                                         <label>{{trans('file.Product Type')}} *</strong> </label>
                                         <div class="input-group">
                                             <select name="type" required class="form-control selectpicker" id="type">
@@ -164,8 +166,8 @@
 @push('scripts')
 <script type="text/javascript">
 
-    $("ul#vendorproduct").siblings('a').attr('aria-expanded','true');
-    $("ul#vendorproduct").addClass("show");
+    // $("ul#vendorproduct").siblings('a').attr('aria-expanded','true');
+    // $("ul#vendorproduct").addClass("show");
     var product_id = <?php echo json_encode($lims_product_data->id) ?>;
     var is_batch = <?php echo json_encode($lims_product_data->is_batch) ?>;
     var is_variant = <?php echo json_encode($lims_product_data->is_variant) ?>;
@@ -650,8 +652,18 @@
                             url:'../update',
                             data: $("#product-form").serialize(),
                             success:function(response){
-                                //console.log(response);
-                                location.href = '{{ route('vendorproducts.index') }}';
+
+                                var data = response.data.dashboardView;
+                       
+                                if(data == 1){
+                           
+                                    location.href = '{{ route('vendor-dashboard') }}';
+                                   
+                                }else if(data == null){
+                                    location.href = '{{ route('vendorproducts.index') }}';
+                                    
+                                }
+                               
                             },
                             error:function(response) {
                                 //console.log(response);

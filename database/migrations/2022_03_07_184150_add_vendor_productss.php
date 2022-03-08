@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddProducts extends Migration
+class AddVendorProductss extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddProducts extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->integer('subcategory_id')->after('category_id')->nullable();
-            $table->integer('vendor_product_id')->after('barcode_symbology')->nullable();
+        Schema::table('vendor_products', function (Blueprint $table) {
+            $table->string('ln_price')->after('cost')->nullable();
+            $table->string('ln_qty')->after('cost')->nullable();
+            $table->string('subcategory_id')->after('category_id')->nullable();
         });
     }
 
@@ -26,7 +27,7 @@ class AddProducts extends Migration
      */
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
+        Schema::table('vendor_products', function (Blueprint $table) {
             //
         });
     }

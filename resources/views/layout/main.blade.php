@@ -161,7 +161,7 @@
             <ul id="side-main-menu" class="side-menu list-unstyled">
  
             <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
-            <li><a href="{{url('/vendor-dashboard')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
+            <li id="vendorDashboard-menu"><a href="{{url('/vendor-dashboard')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
             
 
               <?php
@@ -190,10 +190,10 @@
               <li><a href="#store_outlet" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.store_outlet_management')}}</span><span></a>
                 <ul id="store_outlet" class="collapse list-unstyled ">
                   @if($outlet_setup_active)
-                  <li id="category-menu"><a href="{{route('category.index')}}">{{__('file.outlet_setup')}}</a></li>
+                  <li id="category-menu"><a href="">{{__('file.outlet_setup')}}</a></li>
                   @endif
                   @if($user_management_active)
-                  <li id="printBarcode-menu"><a href="{{route('product.printBarcode')}}">{{__('file.user_management')}}</a></li>
+                  <li id="printBarcode-menu"><a href="">{{__('file.user_management')}}</a></li>
                   @endif
                   
                 </ul>
@@ -1177,9 +1177,9 @@
                 <li><a href="#vendor_login" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-document"></i><span>{{__('file.vendor_login')}}</span><span></a>
                 @endif
                 <ul id="vendor_login" class="collapse list-unstyled ">
-                  <li id="category-menu"><a href="{{route('category.index')}}">{{__('file.secure_login')}}</a></li>
-                  <li id="category-menu"><a href="{{route('category.index')}}">{{__('file.provision_manage_the_products')}}</a></li>
-                  <li id="printBarcode-menu"><a href="{{route('product.printBarcode')}}">{{__('file.details_of_product_Image')}}</a></li>
+                  <li id="category-menu"><a href="">{{__('file.secure_login')}}</a></li>
+                  <li id="category-menu"><a href="">{{__('file.provision_manage_the_products')}}</a></li>
+                  <li id="printBarcode-menu"><a href="">{{__('file.details_of_product_Image')}}</a></li>
                  
                   
                 </ul>

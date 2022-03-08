@@ -17,9 +17,9 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::get('/dashboard', 'HomeController@dashboard');
 });
 
-Route::get('vendor-dashboard', function () {
-	return view('vendor-dashboard');
-})->name('vendor-dashboard');
+// Route::get('vendor-dashboard', function () {
+// 	return view('vendor-dashboard');
+// })->name('vendor-dashboard');
 
 Route::get('vendor/vendor-register', 'VendorController@vendorregisterview')->name('vendor.vendor-register');
 Route::post('vendor/vendor-register-form', 'VendorController@vendorRegister')->name('vendor.vendor-register-form');
@@ -110,7 +110,16 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('vendorproducts/update', 'VendorProductController@updateProduct');
 	Route::resource('vendorproducts', 'VendorProductController');
 	Route::get('all-vendor-products-list', 'VendorProductController@allVendorProductsList')->name('all-vendor-products-list');
+	Route::get('vendor-dashboard', 'VendorProductController@vendorDashboard')->name('vendor-dashboard');
+	Route::post('vendor-dashboard-data', 'VendorProductController@vendorDashboardData')->name('vendor-dashboard-data');
+	Route::delete('vendorproducts/deletebyVendorDashboard/{id}', 'VendorProductController@deletebyVendorDashboard')->name('vendorproducts.deletebyVendorDashboard');
 	
+	Route::post('vendorproducts/ln-qty', 'VendorProductController@lnQtyStore')->name('vendorproducts.ln-qty');
+	Route::post('vendorproducts/ln-price', 'VendorProductController@lnPriceStore')->name('vendorproducts.ln-price');
+	Route::post('vendorproducts/row-data', 'VendorProductController@rowDataStore')->name('vendorproducts.row-data');
+	
+	
+	Route::get('vendorproducts/dashboardEdit/{id}', 'VendorProductController@vendorDashboardEdit')->name('vendorproducts.dashboardEdit');
 	
 	######## end vendor product#########
 

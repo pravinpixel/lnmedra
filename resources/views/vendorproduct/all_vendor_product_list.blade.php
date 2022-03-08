@@ -12,7 +12,7 @@
     <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
 @endif
 @if(session()->has('message'))
-    <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('message') }}</div>
+    <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('message') }}</div>
 @endif
 
 <section>
@@ -22,7 +22,9 @@
             {{-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> --}}
         @endif
     </div>
+   
     <div class="table-responsive">
+    {!! Form::open(['route' => 'vendorproducts.row-data','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true]) !!}
         <table id="product-data-table" class="table" style="width: 100%">
             <thead>
                 <tr>
@@ -33,13 +35,17 @@
                     <th>{{trans('file.Code')}}</th>
                     <th>{{trans('file.Brand')}}</th>
                     <th>{{trans('file.category')}}</th>
+                    <th>{{ trans('file.L&N Quantity')  }}</th>
                     <th>{{trans('file.Qty')}}</th>
+                    <th>{{ trans('file.L&N Price')  }}</th>
                     <th>{{trans('file.Price')}}</th>                    
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
             </thead>
 
         </table>
+        <input type="submit" id="btnClick" value="Get" class="btn btn-success" />
+    {!! Form::close() !!}
     </div>
 </section>
 
@@ -124,6 +130,7 @@
 
 @endsection
 @push('scripts')
+
 <script>
 
     $("ul#vendorproduct").siblings('a').attr('aria-expanded','true');
@@ -136,6 +143,60 @@
         }
         return false;
     }
+    $(document).on('keyup change','.ln_qty', function(){
+                
+                // console.log($(this).data('qty_row_id'));
+                var row_id = $(this).data('qty_row_id');
+                var row_qty_value = $(this).val();
+
+
+                console.log(row_id);
+                console.log(row_qty_value);
+               
+
+                $.ajax({
+                    type: "POST",
+                   
+                    url:"vendorproducts/ln-qty",
+                    data: {
+                        
+                        row_id:row_id,
+                        row_qty_value:row_qty_value,
+                        
+                    },
+                    success: function( msg ) {
+                    // alert(JSON.stringify(msg))
+                    }
+                });
+    });
+    $(document).on('keyup change','.ln_price', function(){
+                
+                // console.log($(this).data('qty_row_id'));
+                var row_id = $(this).data('price_row_id');
+                var row_price_value = $(this).val();
+
+
+                console.log(row_id);
+                console.log(row_price_value);
+               
+
+                $.ajax({
+                    type: "POST",
+                   
+                    url:"vendorproducts/ln-price",
+                    data: {
+                        
+                        row_id:row_id,
+                        row_price_value:row_price_value,
+                        
+                    },
+                    success: function( msg ) {
+                    // alert(JSON.stringify(msg))
+                    }
+                    });
+    });
+
+
 
     var warehouse = [];
     var variant = [];
@@ -161,7 +222,7 @@
         }
     });
 
-    $(document).on("click", "tr.product-link td:not(:first-child, :last-child)", function() {
+    $(document).on("click", "tr.product-link td:not(:first-child, :last-child,:nth-child(8),:nth-child(10))", function() {
         productDetails( $(this).parent().data('product'), $(this).parent().data('imagedata') );
     });
 
@@ -334,8 +395,9 @@
                 {"data": "code"},
                 {"data": "brand"},
                 {"data": "category"},
-              
+                {"data": "ln_qty"},
                 {"data": "qty"},
+                {"data": "ln_price"},
                 {"data": "price"},
                  
              
@@ -358,9 +420,11 @@
                     //'targets': [0, 1, 9, 10, 11]
                 },
                 {
+                    
                     'render': function(data, type, row, meta){
+                       
                         if(type === 'display'){
-                            data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
+                            data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
                         }
 
                        return data;
@@ -452,7 +516,7 @@
                                     },
                                     success:function(data){
                                         //dt.rows({ page: 'current', selected: true }).deselect();
-                                        dt.rows({ page: 'current', selected: true }).remove().draw(false);
+                                        // dt.rows({ page: 'current', selected: true }).remove().draw(false);
                                     }
                                 });
                             }

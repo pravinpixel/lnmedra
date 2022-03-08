@@ -88,6 +88,7 @@ class RoleController extends Controller
 
     public function setPermission(Request $request)
     {
+        // dd($request->all());
         if(!env('USER_VERIFIED'))
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
 
@@ -127,6 +128,46 @@ class RoleController extends Controller
         }
         else
             $role->revokePermissionTo('products-delete');
+
+          
+            if($request->has('vendor-dashboard-index')){
+               
+                $permission = Permission::firstOrCreate(['name' => 'vendor-dashboard-index']);
+                if(!$role->hasPermissionTo('vendor-dashboard-index')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('vendor-dashboard-add');
+
+            if($request->has('vendor-dashboard-add')){
+                $permission = Permission::firstOrCreate(['name' => 'vendor-dashboard-add']);
+                if(!$role->hasPermissionTo('vendor-dashboard-add')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('vendor-dashboard-add');
+
+            if($request->has('vendor-dashboard-edit')){
+                $permission = Permission::firstOrCreate(['name' => 'vendor-dashboard-edit']);
+                if(!$role->hasPermissionTo('vendor-dashboard-edit')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('vendor-dashboard-edit');
+
+            if($request->has('vendor-dashboard-delete')){
+                $permission = Permission::firstOrCreate(['name' => 'vendor-dashboard-delete']);
+                if(!$role->hasPermissionTo('vendor-dashboard-delete')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('vendor-dashboard-delete');
+
+
 
             if($request->has('vendorproducts-index')){
                 $permission = Permission::firstOrCreate(['name' => 'vendorproducts-index']);

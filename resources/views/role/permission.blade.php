@@ -153,7 +153,69 @@
 							            </div>
 						            </td> -->
 						        </tr>
-
+								<tr>
+						            <td>{{trans('file.vendor dashboard')}}</td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("vendor-dashboard-index", $all_permission))
+								                <input type="checkbox" value="1" id="vendor-dashboard-index" name="vendor-dashboard-index" checked />
+								                @else
+								                <input type="checkbox" value="1" id="vendor-dashboard-index" name="vendorproducts-index" />
+								                @endif
+								                <label for="vendor-dashboard-index"></label>
+							            	</div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("vendor-dashboard-add", $all_permission))
+								               	<input type="checkbox" value="1" id="vendor-dashboard-add" name="vendor-dashboard-add" checked>
+								                @else
+								                <input type="checkbox" value="1" id="vendor-dashboard-add" name="vendor-dashboard-add">
+								                @endif
+								                <label for="vendor-dashboard-add"></label>
+							                </div>
+							            </div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("vendor-dashboard-edit", $all_permission))
+								                <input type="checkbox" value="1" id="vendor-dashboard-edit" name="vendor-dashboard-edit" checked />
+								                @else
+								                <input type="checkbox" value="1" id="vendor-dashboard-edit" name="vendor-dashboard-edit" />
+								                @endif
+								                <label for="vendor-dashboard-edit"></label>
+							                </div>
+							            </div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("vendor-dashboard-delete", $all_permission))
+								                <input type="checkbox" value="1" id="vendor-dashboard-delete" name="vendor-dashboard-delete" checked />
+								                @else
+								                <input type="checkbox" value="1" id="vendor-dashboard-delete" name="vendor-dashboard-delete" />
+								                @endif
+								                <label for="vendor-dashboard-delete"></label>
+							                </div>
+							            </div>
+						            </td>
+									<!-- <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("allvendorproductslist-index", $all_permission))
+								                <input type="checkbox" value="1" id="allvendorproductslist-index" name="allvendorproductslist-index" checked />
+								                @else
+								                <input type="checkbox" value="1" id="allvendorproductslist-index" name="allvendorproductslist-index" />
+								                @endif
+								                <label for="allvendorproductslist-index"></label>
+							                </div>
+							            </div>
+						            </td> -->
+						        </tr>
 						        <tr>
 						            <td>{{trans('file.Purchase')}}</td>
 						            <td class="text-center">
