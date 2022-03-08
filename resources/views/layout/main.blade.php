@@ -369,6 +369,14 @@
               @endif
 
 
+              <?php
+                    // $add_permission = DB::table('permissions')->where('name', 'vendorproducts-index')->first();
+                    // $list_permission_active = DB::table('role_has_permissions')->where([
+                    //     ['permission_id', $add_permission->id],
+                    //     ['role_id', $role->id]
+                    // ])->first();
+                  ?>
+                  
               @if($category_permission_active || $index_permission_active || $print_barcode_active || $stock_count_active || $adjustment_active)
               <li><a href="#vendorproduct" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.vendorproduct')}}</span><span></a>
                 <ul id="vendorproduct" class="collapse list-unstyled ">
