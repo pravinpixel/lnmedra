@@ -226,7 +226,7 @@
                         if(supplier_id.length && confirm("Are you sure want to delete?")) {
                             $.ajax({
                                 type:'POST',
-                                url:'supplier/deletebyselection',
+                                url:'enquiry/deletebyselection',
                                 data:{
                                     supplierIdArray: supplier_id
                                 },
@@ -234,7 +234,7 @@
                                     alert(data);
                                 }
                             });
-                            dt.rows({ page: 'current', selected: true }).remove().draw(false);
+                            location.reload();
                         }
                         else if(!supplier_id.length)
                             alert('No supplier is selected!');

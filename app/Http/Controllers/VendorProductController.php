@@ -744,13 +744,11 @@ class VendorProductController extends Controller
     
         public function deleteBySelection(Request $request)
         {
-
             $product_id = $request['productIdArray'];
-           // print_r($product_id);die();
             foreach ((array)$product_id as $id) {
-                echo $id;
+                // echo $id;
                 $lims_product_data =VendorProduct::findOrFail($id);
-                $lims_product_data->is_active = false;
+                $lims_product_data->is_active = 2;
                 $lims_product_data->save();
             }
             return 'Product deleted successfully!';
@@ -794,13 +792,12 @@ class VendorProductController extends Controller
         {
         
             $role = Role::find(Auth::user()->role_id);
-            $sale = Sale::sum('grand_total');
-            $sale = round($sale);
-            
-            $purchase = Purchase::sum('grand_total');
-            $purchase = round($purchase);
-            $expense = Expense::sum('amount');
-            $expense = round($expense);
+
+            $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '!=',2)->count();
+            $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
+            $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
+            $pending = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
+
             if($role->hasPermissionTo('vendor-dashboard-index')){
                      
                 $permissions = Role::findByName($role->name)->permissions;
@@ -809,7 +806,7 @@ class VendorProductController extends Controller
                 if(empty($all_permission))
                     $all_permission[] = 'dummy text';
                     // print_r($sale);die();
-                return view('vendor-dashboard', compact('all_permission','sale','purchase','expense'));
+                return view('vendor-dashboard', compact('all_permission','project','approved','rejected','pending'));
             }
             else
                    
@@ -910,10 +907,9 @@ class VendorProductController extends Controller
                     $nestedData['image'] = '<img src="'.url('public/images/vendorproduct', $product_image).'" height="80" width="80">';
 
 
-                    $userData = User::where('id',$product->vendoruserid)->select('name')->first()->toArray();
-                    
+                    $userData = User::where('id',$product->vendoruserid)->select('name')->first();
+                      
                     $nestedData['user_name'] = $userData['name'];
-
                     $nestedData['name'] = $product->name;
 
                     $nestedData['code'] = $product->code;
@@ -923,6 +919,7 @@ class VendorProductController extends Controller
                         $nestedData['brand'] = "N/A";
                     $nestedData['category'] = $product->category->name;
                     $nestedData['qty'] = $product->qty;
+                    $nestedData['is_approve'] = $product->is_approve;
                     // if($product->unit_id)
                     //     $nestedData['unit'] = $product->unit->unit_name;
                     // else
@@ -938,15 +935,24 @@ class VendorProductController extends Controller
                     //$nestedData['stock_worth'] = ($product->qty * $product->price).'/'.($product->qty * $product->cost);
                     $nestedData['ln_qty'] = '<div class="btn-group">
                     
-                    <input type="number" name="ln_qty" id="ln_qty" class="form-control ln_qty"  data-qty_row_id="'.$product->id.'" style="width:70px;">
+                    <input type="number" name="ln_qty" id="ln_qty" class="form-control ln_qty"  data-qty_row_id="'.$product->id.'" value="'.$product->ln_qty.'" style="width:70px;" required>
 
                     <div>';
                     $nestedData['ln_price'] = '<div class="btn-group">
                     
-                    <input type="number" name="ln_qty" id="ln_price" class="form-control ln_price" data-price_row_id="'.$product->id.'" style="width:70px;">
+                    <input type="number" name="ln_qty" id="ln_price" class="form-control ln_price" data-price_row_id="'.$product->id.'" value="'.$product->ln_price.'" style="width:70px;" required>
 
                     <div>';
-                    $nestedData['options'] = '<div class="btn-group">
+                    if($product->is_approve == 1)
+                    {
+                        $nestedData['options'] = 'Approved';
+                    }
+                    else if($product->is_approve == 2)
+                    {
+                        $nestedData['options'] = 'Rejected';
+                    }
+                    else{
+                        $nestedData['options'] = '<div class="btn-group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.trans("file.action").'
                                   <span class="caret"></span>
                                   <span class="sr-only">Toggle Dropdown</span>
@@ -966,6 +972,9 @@ class VendorProductController extends Controller
                                 </li>'.\Form::close().'
                             </ul>
                         </div>';
+
+                    }
+                    
                     // data for product details by one click
                     // if($product->tax_id)
                     //     $tax = Tax::find($product->tax_id)->name;
@@ -1011,8 +1020,7 @@ class VendorProductController extends Controller
         }
         public function vendorDashboardData(Request $request)
         {
-            // dd(Auth::user()->role_id);
-           
+          
             $columns = array( 
                 2 => 'name', 
                 3 => 'code',
@@ -1046,18 +1054,18 @@ class VendorProductController extends Controller
                     // print_r($products);die();
                 }
                 else{
+                    // dd(Auth::user()->role_id);
                     if(Auth::user()->role_id == 6)
                     {
                         $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
                         ->where('is_active', '!=',2)
-                        ->where('vendoruserid',Auth::user()->role_id)
+                        ->where('vendoruserid',Auth::user()->id)
                         ->limit($limit)
                         ->orderBy($order,$dir)
                         ->get();
                     }
                     else if(Auth::user()->role_id == 1)
                     {
-                       
                         $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
                         ->where('is_active', '!=',2)
                         ->limit($limit)
@@ -1124,7 +1132,8 @@ class VendorProductController extends Controller
             $data = array();
             //  print_r($products);die();
             if(!empty($products))
-            { $i = 0;
+            { 
+                $i = 0;
                 foreach ($products as $key=>$product)
                 {
                     $i++;
@@ -1241,7 +1250,10 @@ class VendorProductController extends Controller
             // print_r($request->all());die();
                 foreach($request['is_approve_row_data'] as $val)
                 {
-                    $data[] = VendorProduct::where('id',$val)->first()->toArray();
+                    $val = VendorProduct::where('id',$val)->first();
+                    $val->is_approve = 1;
+                    $val->save();
+                     $data[] = $val;
                 }
                 foreach($data as $key=>$value)
                 {

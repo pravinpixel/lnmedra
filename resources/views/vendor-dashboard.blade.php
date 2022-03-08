@@ -31,7 +31,7 @@
                 <div class="wrapper count-title text-center">
                     <!-- <div class="icon"><i class="dripicons-graph-bar" style="color: #0095ff"></i></div> -->
                    
-                    <div class="count-number revenue-data">{{ $sale }}</div>
+                    <div class="count-number revenue-data">{{ $project }}</div>
                     <hr>
                     <div class="name"><strong style="color: #0095ff">Products</strong></div>
                 </div>
@@ -40,7 +40,7 @@
                 <div class="wrapper count-title text-center">
                     <!-- <div class="icon"><i class="dripicons-return" style="color: #0095ff"></i></div> -->
                     
-                    <div class="count-number return-data">{{ $purchase }}</div>
+                    <div class="count-number return-data">{{ $approved }}</div>
                     <hr>
                     <div class="name"><strong style="color: #0095ff">Approved</strong></div>
                 </div>
@@ -49,7 +49,16 @@
                 <div class="wrapper count-title text-center">
                     <!-- <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div> -->
                    
-                    <div class="count-number purchase_return-data">{{ $expense }}</div>
+                    <div class="count-number purchase_return-data">{{ $pending }}</div>
+                    <hr>
+                    <div class="name"><strong style="color: #0095ff">Pending</strong></div>
+                </div>
+            </div> 
+            <div class="col">
+                <div class="wrapper count-title text-center">
+                    <!-- <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div> -->
+                   
+                    <div class="count-number purchase_return-data">{{ $rejected }}</div>
                     <hr>
                     <div class="name"><strong style="color: #0095ff">Rejected</strong></div>
                 </div>

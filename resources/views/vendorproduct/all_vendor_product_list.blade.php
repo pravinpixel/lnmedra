@@ -44,7 +44,7 @@
             </thead>
 
         </table>
-        <input type="submit" id="btnClick" value="Get" class="btn btn-success" />
+        <input type="submit" id="btnClick" value="Approve" class="btn btn-success" />
     {!! Form::close() !!}
     </div>
 </section>
@@ -423,7 +423,10 @@
                     
                     'render': function(data, type, row, meta){
                        
-                        if(type === 'display'){
+                        if(type === 'display' && row.is_approve == 0){
+                            data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
+                        }
+                        else{
                             data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
                         }
 
@@ -516,7 +519,7 @@
                                     },
                                     success:function(data){
                                         //dt.rows({ page: 'current', selected: true }).deselect();
-                                        // dt.rows({ page: 'current', selected: true }).remove().draw(false);
+                                        dt.rows({ page: 'current', selected: true }).remove().draw(false);
                                     }
                                 });
                             }

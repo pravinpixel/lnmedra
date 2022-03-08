@@ -123,6 +123,16 @@ class EnquiryController extends Controller
         $lims_enquiry_data->delete();
         return redirect('enquiry')->with('not_permitted','Data deleted successfully');
     }
+    public function deleteBySelection(Request $request)
+    {
+        $supplier_id = $request['supplierIdArray'];
+        foreach ($supplier_id as $id) {
+            $lims_supplier_data = Enquiry::findOrFail($id);
+            $lims_supplier_data->is_active = false;
+            $lims_supplier_data->save();
+        }
+        return 'Supplier deleted successfully!';
+    }
     public function enquiryMail($id)
     {
         # code...

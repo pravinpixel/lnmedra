@@ -88,7 +88,7 @@ class RoleController extends Controller
 
     public function setPermission(Request $request)
     {
-        // dd($request->all());
+        dd($request->all());
         if(!env('USER_VERIFIED'))
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
 

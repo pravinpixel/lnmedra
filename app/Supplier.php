@@ -6,13 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Supplier extends Model
 {
-    // protected $fillable =[
-
-    //     "name", "image", "company_name", "vat_number",
-    //     "email", "phone_number", "address", "city",
-    //     "state", "postal_code", "country", "is_active"
-        
-    // ];
+    
     protected $fillable =[
 
         "name","category","phone_number", "email","password","address", "city", "state", "country","postal_code",
@@ -23,6 +17,6 @@ class Supplier extends Model
     public function product()
     {
     	return $this->hasMany('App/Product');
-    	dd();
+    	
     }
 }
