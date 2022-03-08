@@ -159,10 +159,13 @@
               {{-- <a id="toggle-btn" href="#" class="btn-pos rounded-pill"><i class="fa fa-bars"> </i></a> --}}
             </div>
             <ul id="side-main-menu" class="side-menu list-unstyled">
- 
-            <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
-            <li id="vendorDashboard-menu"><a href="{{url('/vendor-dashboard')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
+ @if(Auth::user()->role_id == 6) 
+ <li id="vendorDashboard-menu"><a href="{{url('/vendor-dashboard')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
             
+@else
+            <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
+            @endif
+           
 
               <?php
                   $role = DB::table('roles')->find(Auth::user()->role_id);
@@ -377,20 +380,22 @@
                     // ])->first();
                   ?>
                   
-              @if($category_permission_active || $index_permission_active || $print_barcode_active || $stock_count_active || $adjustment_active)
-              <li><a href="#vendorproduct" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.vendorproduct')}}</span><span></a>
-                <ul id="vendorproduct" class="collapse list-unstyled ">
-                 
-                  @if($index_permission_active)
-                  <li id="vendorproduct-list-menu"><a href="{{route('vendorproducts.index')}}">{{__('file.product_list')}}</a></li>
                   <?php
                     $add_permission = DB::table('permissions')->where('name', 'vendorproducts-add')->first();
-                    $add_permission_active = DB::table('role_has_permissions')->where([
+                    $vendoradd_permission_active = DB::table('role_has_permissions')->where([
                         ['permission_id', $add_permission->id],
                         ['role_id', $role->id]
                     ])->first();
                   ?>
-                  @if($add_permission_active)
+
+              @if($vendoradd_permission_active)
+              <li><a href="#vendorproduct" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.vendorproduct')}}</span><span></a>
+                <ul id="vendorproduct" class="collapse list-unstyled ">
+                 
+                  @if($vendoradd_permission_active)
+                  <li id="vendorproduct-list-menu"><a href="{{route('vendorproducts.index')}}">{{__('file.product_list')}}</a></li>
+                  
+                  @if($vendoradd_permission_active)
                   <li id="vendorproduct-create-menu"><a href="{{route('vendorproducts.create')}}">{{__('file.add_product')}}</a></li>
                   @endif
                   <li id="vendorproduct-product-list-menu"><a href="{{route('all-vendor-products-list')}}">{{__('file.vendor_product_list')}}</a></li>
@@ -407,18 +412,21 @@
                   ])->first();
               ?>
             
-              <li><a href="#vendor_supplier" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-card"></i><span>{{trans('file.vendor_supplier_management')}}</span></a>
-                <ul id="vendor_supplier" class="collapse list-unstyled ">
-                  
-                @if($supplier_index_permission_active)
-                  <li id="supplier-list-menu"><a href="{{route('supplier.index')}}">{{trans('file.Supplier List')}}</a></li>
-                  <?php
+            <?php
                     $supplier_add_permission = DB::table('permissions')->where('name', 'suppliers-add')->first();
                     $supplier_add_permission_active = DB::table('role_has_permissions')->where([
                         ['permission_id', $supplier_add_permission->id],
                         ['role_id', $role->id]
                     ])->first();
                   ?>
+                 
+                   @if($supplier_add_permission_active) 
+              <li><a href="#vendor_supplier" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-card"></i><span>{{trans('file.vendor_supplier_management')}}</span></a>
+                <ul id="vendor_supplier" class="collapse list-unstyled ">
+                  
+                @if($supplier_index_permission_active)
+                  <li id="supplier-list-menu"><a href="{{route('supplier.index')}}">{{trans('file.Supplier List')}}</a></li>
+                  
                   @if($supplier_add_permission_active)
                   <li id="supplier-create-menu"><a href="{{route('supplier.create')}}">{{trans('file.Add Supplier')}}</a></li>
                   @endif
@@ -426,7 +434,8 @@
               
                 </ul>
               </li>
-            
+              @endif
+
               <?php
                 $index_permission = DB::table('permissions')->where('name', 'purchases-index')->first();
                   $index_permission_active = DB::table('role_has_permissions')->where([
@@ -589,7 +598,7 @@
                       ['role_id', $role->id]
                   ])->first();
               ?>
-             
+               @if($pos_setting_permission_active)
               <li><a href="#point_of_sale_setup" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-return"></i><span>{{trans('file.point_of_sale_setup')}}</span></a>
                 <ul id="point_of_sale_setup" class="collapse list-unstyled ">
                   @if($pos_setting_permission_active)
@@ -600,7 +609,7 @@
                   
                 </ul>
               </li>
-              
+              @endif
 
 
               
