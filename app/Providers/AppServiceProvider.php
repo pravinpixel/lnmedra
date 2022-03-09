@@ -5,7 +5,10 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
-use DB;
+use Exception;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
@@ -33,19 +36,24 @@ class AppServiceProvider extends ServiceProvider
         }*/
         //setting language
         if(isset($_COOKIE['language'])) {
-            \App::setLocale($_COOKIE['language']);
+            App::setLocale($_COOKIE['language']);
         } else {
-            \App::setLocale('en');
+            App::setLocale('en');
         }
-        //get general setting value        
-        $general_setting = DB::table('general_settings')->latest()->first();
-        $currency = \App\Currency::find($general_setting->currency);
-        View::share('general_setting', $general_setting);
-        View::share('currency', $currency);
-        config(['staff_access' => $general_setting->staff_access, 'date_format' => $general_setting->date_format, 'currency' => $currency->code, 'currency_position' => $general_setting->currency_position]);
-        
-        $alert_product = DB::table('products')->where('is_active', true)->whereColumn('alert_quantity', '>', 'qty')->count();
-        View::share('alert_product', $alert_product);
-        Schema::defaultStringLength(191);
+        //get general setting value   
+        try{
+            $general_setting = DB::table('general_settings')->latest()->first();
+            $currency = \App\Currency::find($general_setting->currency);
+            View::share('general_setting', $general_setting);
+            View::share('currency', $currency);
+            config(['staff_access' => $general_setting->staff_access, 'date_format' => $general_setting->date_format, 'currency' => $currency->code, 'currency_position' => $general_setting->currency_position]);
+            
+            $alert_product = DB::table('products')->where('is_active', true)->whereColumn('alert_quantity', '>', 'qty')->count();
+            View::share('alert_product', $alert_product);
+            Schema::defaultStringLength(191);
+        }   catch (Exception $e){
+            Log::info($e->getMessage());
+        }
+       
     }
 }
