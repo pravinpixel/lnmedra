@@ -171,7 +171,7 @@
                     var cols = '';
                     cols += '<td>' + data[0] + '</td>';
                     cols += '<td class="product-code">' + data[1] + '</td>';
-                    cols += '<td><input type="number" class="form-control qty" name="qty[]" value="1" /></td>';
+                    cols += '<td><input type="number" min="0" onkeypress="return isNumber(event)" class="form-control qty" name="qty[]" value="1" /></td>';
                     cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">Delete</button></td>';
 
                     newRow.append(cols);
