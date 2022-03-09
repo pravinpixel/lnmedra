@@ -180,7 +180,7 @@ class ProductController extends Controller
                     </div>';
                 // data for product details by one click
                 if($product->tax_id)
-                    $tax = Tax::find($product->tax_id)->name;
+                    $tax = Tax::find($product->tax_id)->name ??  "N/A";
                 else
                     $tax = "N/A";
 
