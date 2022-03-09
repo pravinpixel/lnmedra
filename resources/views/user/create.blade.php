@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label><strong>{{trans('file.Email')}} *</strong></label>
-                                        <input type="email" name="email" placeholder="example@example.com" required class="form-control">
+                                        <input type="email" pattern="{{ config('global.email_pattern') }}" name="email" placeholder="example@example.com" required class="form-control">
                                         @if($errors->has('email'))
                                        <span>
                                            <strong>{{ $errors->first('email') }}</strong>
