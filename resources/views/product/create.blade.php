@@ -247,7 +247,7 @@
                                                         <input type="hidden" name="warehouse_id[]" value="{{$warehouse->id}}">
                                                         {{$warehouse->name}}
                                                     </td>
-                                                    <td><input type="number" name="diff_price[]" class="form-control"></td>
+                                                    <td><input type="number" name="diff_price[]" min="0" onkeypress="return isNumber(event)" class="form-control"></td>
                                                 </tr>
                                                 @endforeach
                                             </thead>
