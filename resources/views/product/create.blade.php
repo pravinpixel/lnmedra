@@ -170,14 +170,14 @@
                                 <div id="cost" class="col-md-4">
                                      <div class="form-group">
                                         <label>{{trans('file.Product Cost')}} *</strong> </label>
-                                        <input type="number" name="cost" required class="form-control" step="any">
+                                        <input type="number" min="0" onkeypress="return isNumber(event)" name="cost" required class="form-control" step="any">
                                         <span class="validation-msg"></span>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('file.Product Price')}} *</strong> </label>
-                                        <input type="number" name="price" required class="form-control" step="any">
+                                        <input type="number" min="0" onkeypress="return isNumber(event)" name="price" required class="form-control" step="any">
                                         <span class="validation-msg"></span>
                                     </div>
                                     <div class="form-group">
@@ -187,7 +187,7 @@
                                 <div id="alert-qty" class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('file.Alert Quantity')}}</strong> </label>
-                                        <input type="number" name="alert_quantity" class="form-control" step="any">
+                                        <input type="number" min="0" onkeypress="return isNumber(event)" name="alert_quantity" class="form-control" step="any">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
