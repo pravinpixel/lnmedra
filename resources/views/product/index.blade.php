@@ -61,7 +61,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>{{trans('file.Upload CSV File')}} *</label>
-                        {{Form::file('file', array('class' => 'form-control','required'))}}
+                        {{Form::file('file', array('class' => 'form-control','required', 'accept' =>'.csv'))}}
                     </div>
                 </div>
                 <div class="col-md-6">
