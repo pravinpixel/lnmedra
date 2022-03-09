@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Keygen;
 use App\Brand;
 use App\Category;
+use App\Notifications\ProductCreation;
 use App\Unit;
 use App\Tax;
 use App\Warehouse;
@@ -22,6 +23,8 @@ use Illuminate\Validation\Rule;
 use DB;
 use App\Variant;
 use App\ProductVariant;
+use App\User;
+use Illuminate\Support\Facades\Auth as FacadesAuth;
 
 class ProductController extends Controller
 {
@@ -280,6 +283,10 @@ class ProductController extends Controller
         // dd($data);
 
         $lims_product_data = Product::create($data);
+        if($lims_product_data){
+            $user = User::find(1);
+            $user->notify(new ProductCreation($lims_product_data));
+        }
         //dealing with product variant
         if(!isset($data['is_batch']))
             $data['is_batch'] = null;
@@ -710,9 +717,11 @@ class ProductController extends Controller
 
         $filePath=$upload->getRealPath();
         //open and read
+    
         $file=fopen($filePath, 'r');
         $header= fgetcsv($file);
         $escapedHeader=[];
+      
         //validate
         foreach ($header as $key => $value) {
             $lheader=strtolower($value);
@@ -726,7 +735,11 @@ class ProductController extends Controller
                 $value=preg_replace('/\D/','',$value);
             }
            $data= array_combine($escapedHeader, $columns);
-           
+           $configProductHeader = config('product.import_product');
+           $isDifferentHeader = array_diff($configProductHeader,$escapedHeader);
+           if(!empty($isDifferentHeader)){
+                return redirect('products')->with('not_permitted', 'Invalid header please download sample file and try again');
+           }
            if($data['brand'] != 'N/A' && $data['brand'] != ''){
                 $lims_brand_data = Brand::firstOrCreate(['title' => $data['brand'], 'is_active' => true]);
                 $brand_id = $lims_brand_data->id;
