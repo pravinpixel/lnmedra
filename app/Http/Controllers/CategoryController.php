@@ -206,6 +206,11 @@ class CategoryController extends Controller
             $escapedItem=preg_replace('/[^a-z]/', '', $lheader);
             array_push($escapedHeader, $escapedItem);
         }
+        $productCategory = config('product.import_product_category');
+        $isDiffHeader = array_diff($productCategory, $escapedHeader);
+        if(!empty($isDiffHeader)){
+            return redirect('category')->with('not_permitted', 'Invalid header format please download sample file and try again');
+        }
         //looping through othe columns
         while($columns=fgetcsv($file))
         {

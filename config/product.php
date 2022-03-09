@@ -14,5 +14,9 @@ return [
         "variantname",
          "itemcode",
         "additionalprice" ,
-    ]
+   ],
+    "import_product_category" => [
+        "name",
+        "parentcategory"
+    ],
 ];
