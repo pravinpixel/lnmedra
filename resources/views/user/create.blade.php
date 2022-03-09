@@ -28,8 +28,9 @@
                                     <div class="form-group">
                                         <label><strong>{{trans('file.Password')}} *</strong> </label>
                                         <div class="input-group">
-                                            <input type="password" name="password" required class="form-control">
+                                            <input type="password" id="password" name="password" required class="form-control">
                                             <div class="input-group-append">
+                                                <button   id="togglePassword" type="button" class="btn btn-default"><i id="icon-eye" class="fa fa-eye-slash "></i></button>
                                                 <button id="genbutton" type="button" class="btn btn-default">{{trans('file.Generate')}}</button>
                                             </div>
                                             @if($errors->has('password'))
@@ -50,7 +51,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label><strong>{{trans('file.Phone Number')}} *</strong></label>
-                                        <input type="text" name="phone_number" required class="form-control">
+                                        <input type="text" onkeypress="return isNumber(event)" name="phone_number" required class="form-control">
                                         @if($errors->has('phone_number'))
                                             <span>
                                                <strong>{{ $errors->first('phone_number') }}</strong>
@@ -149,6 +150,24 @@
 
 @push('scripts')
 <script type="text/javascript">
+
+
+    const password = document.querySelector("#password");
+
+    $(document).on('click', '#togglePassword', function () {
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+        if(type == 'password'){
+            $('#icon-eye').addClass('fa-eye-slash')
+            $('#icon-eye').removeClass('fa-eye')
+        } else {
+            $('#icon-eye').removeClass('fa-eye-slash')
+            $('#icon-eye').addClass('fa-eye')
+        }
+ 
+    });
+        
+   
 
     $("ul#people").siblings('a').attr('aria-expanded','true');
     $("ul#people").addClass("show");

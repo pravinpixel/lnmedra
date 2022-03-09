@@ -1799,7 +1799,12 @@
       }
 
       $("div.alert").delay(3000).slideUp(750);
-
+      function isNumber(evt) {
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+            return false;
+        return true;
+    }
       function confirmDelete() {
           if (confirm("Are you sure want to delete?")) {
               return true;
@@ -1897,6 +1902,7 @@
       $('.selectpicker').selectpicker({
           style: 'btn-link',
       });
+      
     </script>
   </body>
 </html>
