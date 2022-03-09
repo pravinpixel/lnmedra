@@ -360,17 +360,20 @@ class HomeController extends Controller
         $purchase = round($purchase);
         $expense = Expense::sum('amount');
         $expense = round($expense);
-        
+       
         if($role->hasPermissionTo('vendor-dashboard-index')){
-           
             
+            $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '!=',2)->count();
+            $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
+            $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
+            $pending = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
             $permissions = Role::findByName($role->name)->permissions;
             foreach ($permissions as $permission)
                 $all_permission[] = $permission->name;
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
                 // print_r($sale);die();
-            return view('vendor-dashboard', compact('all_permission','sale','purchase','expense'));
+            return view('vendor-dashboard', compact('all_permission','sale','purchase','expense','project','approved','rejected','pending'));
         }
         }else{
         return view('index', compact('revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price'));

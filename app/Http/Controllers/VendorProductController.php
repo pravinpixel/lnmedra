@@ -66,11 +66,26 @@ class VendorProductController extends Controller
         $order = 'vendor_products.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
         if(empty($request->input('search.value'))){
+            if(Auth::user()->role_id == 6)
+            {
+                $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('vendoruserid',Auth::user()->id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                
+               $totalFiltered = count($products);
+                
+            }
+          else if(Auth::user()->role_id == 1){
             $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
-                        ->where('is_active', true)
-                        ->limit($limit)
-                        ->orderBy($order,$dir)
-                        ->get();
+            ->where('is_active', true)
+            ->limit($limit)
+            ->orderBy($order,$dir)
+            ->get();
+          }
+            
         }
         else
         {
@@ -792,7 +807,7 @@ class VendorProductController extends Controller
         {
         
             $role = Role::find(Auth::user()->role_id);
-
+            // print_r(Auth::user()->id);die();
             $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '!=',2)->count();
             $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
             $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
@@ -805,7 +820,7 @@ class VendorProductController extends Controller
                     $all_permission[] = $permission->name;
                 if(empty($all_permission))
                     $all_permission[] = 'dummy text';
-                    // print_r($sale);die();
+                    // print_r($project);die();
                 return view('vendor-dashboard', compact('all_permission','project','approved','rejected','pending'));
             }
             else
@@ -1063,6 +1078,9 @@ class VendorProductController extends Controller
                         ->limit($limit)
                         ->orderBy($order,$dir)
                         ->get();
+                        $totalData =  count($products);
+                       $totalFiltered = count($products);
+                        
                     }
                     else if(Auth::user()->role_id == 1)
                     {
@@ -1215,14 +1233,15 @@ class VendorProductController extends Controller
                 }
                
             }
-            
+            // print_r($$data);die();
+            // $totalFiltered = 15;
             $json_data = array(
                 "draw"            => intval($request->input('draw')),  
                 "recordsTotal"    => intval($totalData),  
                 "recordsFiltered" => intval($totalFiltered), 
                 "data"            => $data   
             );
-                
+            // print_r($json_data);die();
             echo json_encode($json_data);
         }
         public function lnQtyStore(Request $request)

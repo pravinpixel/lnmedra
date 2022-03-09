@@ -160,7 +160,7 @@
             </div>
             <ul id="side-main-menu" class="side-menu list-unstyled">
  @if(Auth::user()->role_id == 6) 
- <li id="vendorDashboard-menu"><a href="{{url('/vendor-dashboard')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
+ <li id="vendorDashboard-menu"><a href=""> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
             
 @else
             <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
@@ -398,7 +398,7 @@
                   @if($vendoradd_permission_active)
                   <li id="vendorproduct-create-menu"><a href="{{route('vendorproducts.create')}}">{{__('file.add_product')}}</a></li>
                   @endif
-                  <li id="vendorproduct-product-list-menu"><a href="{{route('all-vendor-products-list')}}">{{__('file.vendor_product_list')}}</a></li>
+                  
                   @endif
                 </ul>
               </li>
@@ -430,6 +430,7 @@
                   @if($supplier_add_permission_active)
                   <li id="supplier-create-menu"><a href="{{route('supplier.create')}}">{{trans('file.Add Supplier')}}</a></li>
                   @endif
+                  <li id="vendorproduct-product-list-menu"><a href="{{route('all-vendor-products-list')}}">{{__('file.vendor_product_list')}}</a></li>
                   @endif
               
                 </ul>

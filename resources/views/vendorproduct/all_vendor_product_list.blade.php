@@ -133,9 +133,9 @@
 
 <script>
 
-    $("ul#vendorproduct").siblings('a').attr('aria-expanded','true');
-    $("ul#vendorproduct").addClass("show");
-    $("ul#vendorproduct #vendorproduct-product-list-menu").addClass("active");
+    $("ul#vendor_supplier").siblings('a').attr('aria-expanded','true');
+    $("ul#vendor_supplier").addClass("show");
+    $("ul#vendor_supplier #vendorproduct-product-list-menu").addClass("active");
 
     function confirmDelete() {
         if (confirm("Are you sure want to delete?")) {
@@ -426,7 +426,14 @@
                         if(type === 'display' && row.is_approve == 0){
                             data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
                         }
-                        else{
+                        else if(type === 'display' && row.is_approve == 1){
+                            // console.log(row);
+                            data = '';
+                        }
+                        else if(type === 'display' && row.is_approve == 2){
+                            data = '';
+                        }
+                        else {
                             data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
                         }
 
