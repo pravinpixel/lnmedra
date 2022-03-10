@@ -14,7 +14,7 @@ class AddQtyToProductVariantsTable extends Migration
     public function up()
     {
         Schema::table('product_variants', function (Blueprint $table) {
-            $table->double('qty')->after('additional_price');
+            $table->double('qty')->after('additional_price')->nullable();
         });
     }
 

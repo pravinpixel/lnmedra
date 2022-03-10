@@ -14,7 +14,7 @@ class AddCurrencyToGeneralSettingsTable extends Migration
     public function up()
     {
         Schema::table('general_settings', function (Blueprint $table) {
-            $table->string('currency');
+            $table->string('currency')->nullable();
         });
     }
 

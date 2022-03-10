@@ -14,10 +14,10 @@ class AddColumnsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->string('company_name')->nullable();
-            $table->integer('role_id');
-            $table->boolean('is_active');
+            $table->integer('role_id')->nullable();
+            $table->boolean('is_active')->default(0);
         });
     }
 

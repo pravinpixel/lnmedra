@@ -14,7 +14,7 @@ class AddAccountIdToPaymentsTable extends Migration
     public function up()
     {
         Schema::table('payments', function (Blueprint $table) {
-            $table->integer('account_id')->after('sale_id');
+            $table->integer('account_id')->after('sale_id')->nullable();
         });
     }
 
