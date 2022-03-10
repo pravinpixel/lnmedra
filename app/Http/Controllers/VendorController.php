@@ -13,6 +13,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Mail\UserNotification;
 use Illuminate\Support\Facades\Mail;
+use App\Notifications\VendorNotification;
 
 class VendorController extends Controller
 {
@@ -25,7 +26,7 @@ class VendorController extends Controller
     }
     public function vendorRegister(Request $request)
     {
-        
+        // dd("gg");
         $this->validate($request, [
             'company_name' => [
                 'max:255',
@@ -56,8 +57,12 @@ class VendorController extends Controller
         $data['vendor_id'] = $vendor_id;
         $data['is_active'] =  $lims_supplier_data['is_active'];
 
-        User::create($data);
-       
+       $vendorUser = User::create($data);
+        
+        if($vendorUser){
+            $user = User::find(1);
+            $user->notify(new VendorNotification($vendorUser));
+        }
         $message = 'Vendor register successfully';
         $details = [
             'name'     =>   $lims_supplier_data['name'],

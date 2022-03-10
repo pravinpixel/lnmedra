@@ -212,9 +212,9 @@
 
    
         
-    $("ul#people").siblings('a').attr('aria-expanded','true');
-    $("ul#people").addClass("show");
-    $("ul#people #customer-create-menu").addClass("active");
+    $("ul#customer_management").siblings('a').attr('aria-expanded','true');
+    $("ul#customer_management").addClass("show");
+    $("ul#customer_management #customer-create-menu").addClass("active");
 
     $(".user-input").hide();
 

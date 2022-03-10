@@ -160,7 +160,7 @@
             </div>
             <ul id="side-main-menu" class="side-menu list-unstyled">
  @if(Auth::user()->role_id == 6) 
- <li id="vendorDashboard-menu"><a href=""> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
+ <li id="vendorDashboard-menu"><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
             
 @else
             <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
@@ -1203,6 +1203,7 @@
                 </ul>
               </li>
               @endif
+               <li id="master-attribute-menu"><a href="{{route('master-attribute.index')}}"><i class="dripicons-document-remove"></i><span>{{__('file.Master Attribute')}}</span></a></li>
               <!-- <li id="enquiry-menu"><a href="{{route('enquiry.index')}}"><i class="dripicons-document-remove"></i><span>{{__('file.enquiry_management')}}</span></a></li> -->
             </ul>
           </div>
@@ -1244,14 +1245,22 @@
                   <li class="nav-item" id="notification-icon">
                         <a rel="nofollow" data-toggle="tooltip" title="{{__('Notifications')}}" class="nav-link dropdown-item"><i class="dripicons-bell"></i><span class="badge badge-danger notification-number">{{$alert_product + count(\Auth::user()->unreadNotifications)}}</span>
                         </a>
+                        
                         <ul class="right-sidebar">
                             <li class="notifications">
                               <a href="{{route('report.qtyAlert')}}" class="btn btn-link"> {{$alert_product}} product exceeds alert quantity</a>
+                              
                             </li>
                             @foreach(\Auth::user()->unreadNotifications as $key => $notification)
+                              @if($notification->type == "App\Notifications\VendorNotification")
                                 <li class="notifications">
-                                    <a href="#" class="btn btn-link">{{ $notification->data['message'] }}</a>
+                                    <a href="{{route('vendorproducts.index')}}" class="btn btn-link">{{ $notification->data['message'] }}</a>
                                 </li>
+                                @else
+                                <li class="notifications">
+                                    <a href="{{route('products.index')}}" class="btn btn-link">{{ $notification->data['message'] }}</a>
+                                </li>
+                                @endif
                             @endforeach
                         </ul>
                   </li>
@@ -1799,12 +1808,7 @@
       }
 
       $("div.alert").delay(3000).slideUp(750);
-      function isNumber(evt) {
-        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
-        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
-            return false;
-        return true;
-    }
+
       function confirmDelete() {
           if (confirm("Are you sure want to delete?")) {
               return true;
@@ -1902,7 +1906,6 @@
       $('.selectpicker').selectpicker({
           style: 'btn-link',
       });
-      
     </script>
   </body>
 </html>

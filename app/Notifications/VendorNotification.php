@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ProductCreation extends Notification
+class VendorNotification extends Notification
 {
     use Queueable;
     protected $product;
@@ -55,7 +55,7 @@ class ProductCreation extends Notification
     public function toArray($notifiable)
     {
         return [
-            'message' =>"New Product Added - {$this->product->name}"
+            'message' =>"New Vendor Added -{$this->product->name}"
         ];
     }
 }

@@ -120,6 +120,10 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('vendorproducts/row-data', 'VendorProductController@rowDataStore')->name('vendorproducts.row-data');
 	
 	
+	Route::resource('master-attribute', 'MasterAttributeController');
+	
+	Route::post('products/product-type-data', 'MasterAttributeController@productTypeData')->name('products.product-type-data');
+
 	Route::get('vendorproducts/dashboardEdit/{id}', 'VendorProductController@vendorDashboardEdit')->name('vendorproducts.dashboardEdit');
 	
 	######## end vendor product#########

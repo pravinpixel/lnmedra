@@ -88,7 +88,7 @@ class RoleController extends Controller
 
     public function setPermission(Request $request)
     {
-        dd($request->all());
+        // dd($request->all());
         if(!env('USER_VERIFIED'))
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
 
@@ -698,6 +698,43 @@ class RoleController extends Controller
         }
         else
             $role->revokePermissionTo('suppliers-delete');
+
+        if($request->has('attribute-index')){
+            $permission = Permission::firstOrCreate(['name' => 'attribute-index']);
+            if(!$role->hasPermissionTo('attribute-index')){
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('attribute-index');
+
+        if($request->has('attribute-add')){
+            $permission = Permission::firstOrCreate(['name' => 'attribute-add']);
+            if(!$role->hasPermissionTo('attribute-add')){
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('attribute-add');
+
+        if($request->has('attribute-edit')){
+            $permission = Permission::firstOrCreate(['name' => 'attribute-edit']);
+            if(!$role->hasPermissionTo('attribute-edit')){
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('attribute-edit');
+
+        if($request->has('attribute-delete')){
+            $permission = Permission::firstOrCreate(['name' => 'attribute-delete']);
+            if(!$role->hasPermissionTo('attribute-delete')){
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('attribute-delete');
+
 
         if($request->has('profit-loss')){
             $permission = Permission::firstOrCreate(['name' => 'profit-loss']);

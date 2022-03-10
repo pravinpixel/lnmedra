@@ -1334,6 +1334,57 @@
 						                </span>
 						            </td>
 						        </tr>
+								<tr>
+						            <td>{{trans('file.Master Attribute')}}</td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("attribute-index", $all_permission))
+								                <input type="checkbox" value="1" id="attribute-index" name="attribute-index" checked />
+								                @else
+								                <input type="checkbox" value="1" id="attribute-index" name="attribute-index">
+								                @endif
+								                <label for="attribute-index"></label>
+								            </div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("attribute-add", $all_permission))
+								                <input type="checkbox" value="1" id="attribute-add" name="attribute-add" checked />
+								                @else
+								                <input type="checkbox" value="1" id="attribute-add" name="attribute-add">
+								                @endif
+								                <label for="attribute-add"></label>
+								            </div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("attribute-edit", $all_permission))
+								                <input type="checkbox" value="1" id="attribute-edit" name="attribute-edit" checked>
+								                @else
+								                <input type="checkbox" value="1" id="attribute-edit" name="attribute-edit">
+								                @endif
+								                <label for="attribute-edit"></label>
+								            </div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("attribute-delete", $all_permission))
+								                <input type="checkbox" value="1" id="attribute-delete" name="attribute-delete" checked>
+								                @else
+								                <input type="checkbox" value="1" id="attribute-delete" name="attribute-delete">
+								                @endif
+								                <label for="attribute-delete"></label>
+								            </div>
+						            	</div>
+						            </td>
+						        </tr>
 						        <tr>
 						            <td>{{trans('file.Miscellaneous')}}</td>
 						            <td class="report-permissions" colspan="5">

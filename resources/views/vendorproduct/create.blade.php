@@ -65,9 +65,16 @@
                                     <div class="form-group">
                                         <label>{{trans('file.category')}} *</strong> </label>
                                         <div class="input-group">
-                                          <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
+                                          <select name="category_id" required class="selectpicker form-control" data-live-search="true" title="Select Category...">
                                             @foreach($lims_category_list as $category)
-                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                                @if($category->parent_id == '' || null)
+                                                    <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                                                    @foreach($lims_category_list as $subcategory)
+                                                    @if($category->id == $subcategory->parent_id)
+                                                    <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
+                                                    @endif    
+                                                    @endforeach
+                                                @endif
                                             @endforeach
                                           </select>
                                       </div>

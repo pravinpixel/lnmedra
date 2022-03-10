@@ -1157,4 +1157,16 @@ table.dataTable tbody td.dt-checkboxes-cell {
 	height: 75vh;
 	overflow-y: auto;
 }
+.option_parent .text{
+    font-weight: bold !important;
+	text-transform: capitalize;
+	font-size: 15px;
+	
+}
+.option_sub .text{
+ 
+	text-transform: capitalize;
+	font-size: 15px;
+	
+}
 

@@ -107,20 +107,25 @@
                                     <div class="form-group">
                                         <label>{{trans('file.category')}} *</strong> </label>
                                         <div class="input-group">
-                                        <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
+                                        <select name="category_id" required class="selectpicker form-control" data-live-search="true" title="Select Category...">
                                             @foreach($lims_category_list as $category)
                                                
                                                 @if($category->parent_id == '' || null)
-                                                    <option value="{{$category->id}}">{{$category->name}}</option>
+                                                    <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                                                    @foreach($lims_category_list as $subcategory)
+                                                    @if($category->id == $subcategory->parent_id)
+                                                    <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
+                                                    @endif    
+                                                    @endforeach
                                                 @endif
                                                 
                                             @endforeach
-                                          </select>
+                                        </select>
                                       </div>
                                       <span class="validation-msg"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <!-- <div class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('file.SubCategory')}} *</strong> </label>
                                         <div class="input-group">
@@ -132,7 +137,7 @@
                                       </div>
                                       <span class="validation-msg"></span>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div id="unit" class="col-md-12">
                                     <div class="row ">
                                         <div class="col-md-4 form-group">
@@ -435,15 +440,15 @@
             $('select[name="purchase_unit_id"]').empty();
         }
     });
-    $('select[name="category_id"]').on('change', function() {
+    // $('select[name="category_id"]').on('change', function() {
 
-        catID = $(this).val();
-        if(catID) {
-            sub_category(catID);
-        }else{
-            $('select[name="subcategory_id"]').empty();
-        }
-        });
+    //     catID = $(this).val();
+    //     if(catID) {
+    //         sub_category(catID);
+    //     }else{
+    //         $('select[name="subcategory_id"]').empty();
+    //     }
+    //     });
     
     <?php $productArray = []; ?>
     var lims_product_code = [
@@ -551,21 +556,21 @@
             },
         });
     }
-    function sub_category(catID){
-        $.ajax({
-            url: 'subcategoryId/'+catID,
-            type: "GET",
-            dataType: "json",
-            success:function(data) {
-                  $('select[name="subcategory_id"]').empty();
-                  $.each(data, function(key, value) {
-                      $('select[name="subcategory_id"]').append('<option value="'+ key +'">'+ value +'</option>');
+    // function sub_category(catID){
+    //     $.ajax({
+    //         url: 'subcategoryId/'+catID,
+    //         type: "GET",
+    //         dataType: "json",
+    //         success:function(data) {
+    //               $('select[name="subcategory_id"]').empty();
+    //               $.each(data, function(key, value) {
+    //                   $('select[name="subcategory_id"]').append('<option value="'+ key +'">'+ value +'</option>');
                      
-                  });
-                  $('.selectpicker').selectpicker('refresh');
-            },
-        });
-    }
+    //               });
+    //               $('.selectpicker').selectpicker('refresh');
+    //         },
+    //     });
+    // }
     
 
     $("input[name='is_batch']").on("change", function () {
