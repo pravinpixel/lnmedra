@@ -39,5 +39,6 @@ class DatabaseSeeder extends Seeder
         $this->call(UnitsTableSeeder::class);
         $this->call(WarehousesTableSeeder::class);
         $this->call(UsersTableSeeder::class);
+        $this->call(RewardPointSettingsTableSeeder::class);
     }
 }
