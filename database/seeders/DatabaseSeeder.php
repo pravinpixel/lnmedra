@@ -1,7 +1,19 @@
 <?php
 
+use Database\Seeders\BillersTableSeeder;
+use Database\Seeders\BrandsTableSeeder;
+use Database\Seeders\CategoriesTableSeeder;
+use Database\Seeders\CurrenciesTableSeeder;
+use Database\Seeders\GeneralSettingsTableSeeder;
+use Database\Seeders\HrmSettingsTableSeeder;
 use Database\Seeders\MailTemplateSeeder;
-use Database\Seeders\SqlFileSeeder;
+use Database\Seeders\PermissionsTableSeeder;
+use Database\Seeders\PosSettingTableSeeder;
+use Database\Seeders\RoleHasPermissionsTableSeeder;
+use Database\Seeders\RolesTableSeeder;
+use Database\Seeders\UnitsTableSeeder;
+use Database\Seeders\UsersTableSeeder;
+use Database\Seeders\WarehousesTableSeeder;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,6 +26,18 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(MailTemplateSeeder::class);
-        $this->call(SqlFileSeeder::class);
+        $this->call(RolesTableSeeder::class);
+        $this->call(PosSettingTableSeeder::class);
+        $this->call(BillersTableSeeder::class);
+        $this->call(BrandsTableSeeder::class);
+        $this->call(CategoriesTableSeeder::class);
+        $this->call(CurrenciesTableSeeder::class);
+        $this->call(PermissionsTableSeeder::class);
+        $this->call(RoleHasPermissionsTableSeeder::class);
+        $this->call(GeneralSettingsTableSeeder::class);
+        $this->call(HrmSettingsTableSeeder::class);
+        $this->call(UnitsTableSeeder::class);
+        $this->call(WarehousesTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
     }
 }
