@@ -17,11 +17,15 @@
                                     <div class="form-group">
                                         <label>{{trans('file.Product Type')}} *</strong> </label>
                                         <div class="input-group">
-                                            <select name="type" required class="form-control selectpicker" id="type">
-                                                <option value="standard">Standard</option>
+                                            <select name="type" required class="form-control selectpicker" id="productType">
+                                            <option value="">--Select--</option>
+                                                @foreach($productType as $product)
+                                                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                                @endforeach
+                                                <!-- <option value="standard">Standard</option>
                                                 <option value="combo">Combo</option>
                                                 <option value="digital">Digital</option>
-                                                <option value="service">Service</option>
+                                                <option value="service">Service</option> -->
                                             </select>
                                         </div>
                                     </div>
@@ -43,6 +47,15 @@
                                             </div>
                                         </div>
                                         <span class="validation-msg" id="code-error"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Product Code')}} *</strong> </label>
+                                        
+                                        <div id="attribute_img" >
+                                            
+                                        </div> 
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -125,19 +138,22 @@
                                       <span class="validation-msg"></span>
                                     </div>
                                 </div>
-                                <!-- <div class="col-md-4">
+                                <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>{{trans('file.SubCategory')}} *</strong> </label>
-                                        <div class="input-group">
-                                          <select name="subcategory_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
-                                            @foreach($lims_category_list as $subcategory)
-                                                <option value="{{$category->id}}">{{$subcategory->name}}</option>
-                                            @endforeach
-                                          </select>
-                                      </div>
-                                      <span class="validation-msg"></span>
+                                        <label>{{trans('file.sku')}} *</strong> </label>
+                                        <input type="text" name="sku" required class="form-control">
+                                        <span class="validation-msg"></span>
                                     </div>
-                                </div> -->
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Family {{trans('file.name')}} *</strong> </label>
+                                        <input type="text" name="family_name" required class="form-control">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                </div>
+                                
+                          
                                 <div id="unit" class="col-md-12">
                                     <div class="row ">
                                         <div class="col-md-4 form-group">
@@ -172,7 +188,24 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="cost" class="col-md-4">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Common {{trans('file.name')}} *</strong> </label>
+                                        <input type="text" name="common_name" required class="form-control">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                     <div class="form-group">
+                                        <label>{{trans('file.size')}} *</strong> </label>
+                                        <input type="number" min="0" onkeypress="return isNumber(event)" name="size" required class="form-control" step="any">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                </div>
+
+
+
+                                <!-- <div id="cost" class="col-md-4">
                                      <div class="form-group">
                                         <label>{{trans('file.Product Cost')}} *</strong> </label>
                                         <input type="number" min="0" onkeypress="return isNumber(event)" name="cost" required class="form-control" step="any">
@@ -188,7 +221,43 @@
                                     <div class="form-group">
                                         <input type="hidden" name="qty" value="0.00">
                                     </div>
+                                </div> -->
+
+
+                                <div id="cost" class="col-md-4">
+                                     <div class="form-group">
+                                        <label>{{trans('file.Purchase Price')}} *</strong> </label>
+                                        <input type="number" min="0" onkeypress="return isNumber(event)" name="cost" required class="form-control" step="any">
+                                        <span class="validation-msg"></span>
+                                    </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Sales Price')}} *</strong> </label>
+                                        <input type="number" min="0" onkeypress="return isNumber(event)" name="price" required class="form-control" step="any">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" name="qty" value="0.00">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Markup')}}% *</strong> </label>
+                                        <input type="text" name="markup" required class="form-control">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                   
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Max Discount')}} *</strong> </label>
+                                        <input type="text"  name="max_discount" required class="form-control">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                   
+                                </div>
+                                
                                 <div id="alert-qty" class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('file.Alert Quantity')}}</strong> </label>
@@ -381,54 +450,131 @@
       branding:false
     });
 
-    $('select[name="type"]').on('change', function() {
-        if($(this).val() == 'combo'){
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            hide();
-            $("#combo").show(300);
-            $("input[name='price']").prop('disabled',true);
-            $("#is-variant").prop("checked", false);
-            $("#is-diffPrice").prop("checked", false);
-            $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
-        }
-        else if($(this).val() == 'digital'){
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            $("input[name='file']").prop('required',true);
-            hide();
-            $("#digital").show(300);
-            $("#combo").hide(300);
-            $("input[name='price']").prop('disabled',false);
-            $("#is-variant").prop("checked", false);
-            $("#is-diffPrice").prop("checked", false);
-            $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
-        }
-        else if($(this).val() == 'service') {
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            $("input[name='file']").prop('required',true);
-            hide();
-            $("#combo").hide(300);
-            $("#digital").hide(300);
-            $("input[name='price']").prop('disabled',false);
-            $("#is-variant").prop("checked", false);
-            $("#variant-section, #variant-option").hide(300);
-        }
-        else if($(this).val() == 'standard') {
-            $("input[name='cost']").prop('required',true);
-            $("select[name='unit_id']").prop('required',true);
-            $("input[name='file']").prop('required',false);
-            $("#cost").show(300);
-            $("#unit").show(300);
-            $("#alert-qty").show(300);
-            $("#variant-option").show(300);
-            $("#diffPrice-option").show(300);
-            $("#digital").hide(300);
-            $("#combo").hide(300);
-            $("input[name='price']").prop('disabled',false);
-        }
+
+       $('#productType').on('change', function() {
+         
+           var typeId = $(this).val();
+        //    alert(typeId)
+           $.ajax({
+                type: 'GET',
+                url: 'get-attribute-image/' + typeId,
+               
+                success: function(res) {
+                    $('#attribute_img').html('');
+                    
+                // alert(res.data.length)
+                   for(var i=0;i<res.data.length;i++)
+                   {
+                    let att = res.data[i];
+                    console.log(res.data[i].id);
+                    $('#attribute_img').append(`
+                    ${res.data[i].checkbox} 
+                    ${res.data[i].image}     
+                    `)
+                   }
+                  
+                   
+                    
+                }
+            });
+
+
+        // if($(this).val() == 'combo'){
+        //     $("input[name='cost']").prop('required',false);
+        //     $("select[name='unit_id']").prop('required',false);
+        //     hide();
+        //     $("#combo").show(300);
+        //     $("input[name='price']").prop('disabled',true);
+        //     $("#is-variant").prop("checked", false);
+        //     $("#is-diffPrice").prop("checked", false);
+        //     $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
+        // }
+        // else if($(this).val() == 'digital'){
+        //     $("input[name='cost']").prop('required',false);
+        //     $("select[name='unit_id']").prop('required',false);
+        //     $("input[name='file']").prop('required',true);
+        //     hide();
+        //     $("#digital").show(300);
+        //     $("#combo").hide(300);
+        //     $("input[name='price']").prop('disabled',false);
+        //     $("#is-variant").prop("checked", false);
+        //     $("#is-diffPrice").prop("checked", false);
+        //     $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
+        // }
+        // else if($(this).val() == 'service') {
+        //     $("input[name='cost']").prop('required',false);
+        //     $("select[name='unit_id']").prop('required',false);
+        //     $("input[name='file']").prop('required',true);
+        //     hide();
+        //     $("#combo").hide(300);
+        //     $("#digital").hide(300);
+        //     $("input[name='price']").prop('disabled',false);
+        //     $("#is-variant").prop("checked", false);
+        //     $("#variant-section, #variant-option").hide(300);
+        // }
+        // else if($(this).val() == 'standard') {
+        //     $("input[name='cost']").prop('required',true);
+        //     $("select[name='unit_id']").prop('required',true);
+        //     $("input[name='file']").prop('required',false);
+        //     $("#cost").show(300);
+        //     $("#unit").show(300);
+        //     $("#alert-qty").show(300);
+        //     $("#variant-option").show(300);
+        //     $("#diffPrice-option").show(300);
+        //     $("#digital").hide(300);
+        //     $("#combo").hide(300);
+        //     $("input[name='price']").prop('disabled',false);
+        // }
     });
+
+    // $('select[name="type"]').on('change', function() {
+    //     if($(this).val() == 'combo'){
+    //         $("input[name='cost']").prop('required',false);
+    //         $("select[name='unit_id']").prop('required',false);
+    //         hide();
+    //         $("#combo").show(300);
+    //         $("input[name='price']").prop('disabled',true);
+    //         $("#is-variant").prop("checked", false);
+    //         $("#is-diffPrice").prop("checked", false);
+    //         $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
+    //     }
+    //     else if($(this).val() == 'digital'){
+    //         $("input[name='cost']").prop('required',false);
+    //         $("select[name='unit_id']").prop('required',false);
+    //         $("input[name='file']").prop('required',true);
+    //         hide();
+    //         $("#digital").show(300);
+    //         $("#combo").hide(300);
+    //         $("input[name='price']").prop('disabled',false);
+    //         $("#is-variant").prop("checked", false);
+    //         $("#is-diffPrice").prop("checked", false);
+    //         $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
+    //     }
+    //     else if($(this).val() == 'service') {
+    //         $("input[name='cost']").prop('required',false);
+    //         $("select[name='unit_id']").prop('required',false);
+    //         $("input[name='file']").prop('required',true);
+    //         hide();
+    //         $("#combo").hide(300);
+    //         $("#digital").hide(300);
+    //         $("input[name='price']").prop('disabled',false);
+    //         $("#is-variant").prop("checked", false);
+    //         $("#variant-section, #variant-option").hide(300);
+    //     }
+    //     else if($(this).val() == 'standard') {
+    //         $("input[name='cost']").prop('required',true);
+    //         $("select[name='unit_id']").prop('required',true);
+    //         $("input[name='file']").prop('required',false);
+    //         $("#cost").show(300);
+    //         $("#unit").show(300);
+    //         $("#alert-qty").show(300);
+    //         $("#variant-option").show(300);
+    //         $("#diffPrice-option").show(300);
+    //         $("#digital").hide(300);
+    //         $("#combo").hide(300);
+    //         $("input[name='price']").prop('disabled',false);
+    //     }
+    // });
 
     $('select[name="unit_id"]').on('change', function() {
 

@@ -12,9 +12,11 @@ use App\Tax;
 use App\Warehouse;
 use App\Supplier;
 use App\Product;
+use App\ProductType;
 use App\ProductBatch;
 use App\Product_Warehouse;
 use App\Product_Supplier;
+use App\MasterAttribute;
 use Auth;
 use DNS1D;
 use Spatie\Permission\Models\Role;
@@ -33,6 +35,7 @@ class ProductController extends Controller
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('products-index')){            
             $permissions = Role::findByName($role->name)->permissions;
+
             foreach ($permissions as $permission)
                 $all_permission[] = $permission->name;
             if(empty($all_permission))
@@ -45,6 +48,7 @@ class ProductController extends Controller
 
     public function productData(Request $request)
     {
+       
         $columns = array( 
             2 => 'name', 
             3 => 'code',
@@ -211,12 +215,14 @@ class ProductController extends Controller
         if ($role->hasPermissionTo('products-add')){
             $lims_product_list_without_variant = $this->productWithoutVariant();
             $lims_product_list_with_variant = $this->productWithVariant();
+            $productType = ProductType::get();
+            // dd($productType);
             $lims_brand_list = Brand::where('is_active', true)->get();
             $lims_category_list = Category::where('is_active', true)->get();
             $lims_unit_list = Unit::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-            return view('product.create',compact('lims_product_list_without_variant', 'lims_product_list_with_variant', 'lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_warehouse_list'));
+            return view('product.create',compact('lims_product_list_without_variant', 'lims_product_list_with_variant','productType','lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_warehouse_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -224,7 +230,9 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request['subcategory_id']);die();
+       
+        // $attribute = $request['attribute'];
+        // dd(json_encode($attribute));die();
         $this->validate($request, [
             'code' => [
                 'max:255',
@@ -241,18 +249,23 @@ class ProductController extends Controller
         ]);
         $data = $request->except('image', 'file');
         $data['name'] = htmlspecialchars(trim($data['name']));
-        if($data['type'] == 'combo'){
-            $data['product_list'] = implode(",", $data['product_id']);
-            $data['variant_list'] = implode(",", $data['variant_id']);
-            $data['qty_list'] = implode(",", $data['product_qty']);
-            $data['price_list'] = implode(",", $data['unit_price']);
-            $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
-        }
-        elseif($data['type'] == 'digital' || $data['type'] == 'service')
-            $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
+        // if($data['type'] == 'combo'){
+        //     $data['product_list'] = implode(",", $data['product_id']);
+        //     $data['variant_list'] = implode(",", $data['variant_id']);
+        //     $data['qty_list'] = implode(",", $data['product_qty']);
+        //     $data['price_list'] = implode(",", $data['unit_price']);
+        //     $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
+        // }
+        // elseif($data['type'] == 'digital' || $data['type'] == 'service')
+        //     $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
 
+
+        // $data['product_list'] = implode(",", $data['product_id']);
+        // $data['variant_list'] = implode(",", $data['variant_id']);
+        // $data['qty_list'] = implode(",", $data['product_qty']);
+        // $data['price_list'] = implode(",", $data['unit_price']);
         $data['product_details'] = str_replace('"', '@', $data['product_details']);
-
+            $data['attribute'] = json_encode($request['attribute']);
         if($data['starting_date'])
             $data['starting_date'] = date('Y-m-d', strtotime($data['starting_date']));
         if($data['last_date'])
@@ -833,5 +846,20 @@ class ProductController extends Controller
         }
         $lims_product_data->save();
         return redirect('products')->with('message', 'Product deleted successfully');
+    }
+    public function getAttributeImage($id)
+    {
+        
+       $data = MasterAttribute::where('product_type',$id)->get();
+       foreach($data as $key=>$val)
+       {
+        $attribute_image = explode(",", $val->image);
+        $attribute_image = htmlspecialchars($attribute_image[0]);
+        $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.'>';
+        $val['image'] = '<img src="'.url('public/images/attribute', $attribute_image).'" height="60" width="60">';
+       }
+        // dd($data);
+        
+          return response()->json(['data' => $data]);
     }
 }

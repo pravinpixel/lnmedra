@@ -95,6 +95,8 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('products/deletebyselection', 'ProductController@deleteBySelection');
 	Route::post('products/update', 'ProductController@updateProduct');
 	Route::resource('products', 'ProductController');
+	Route::get('products/get-attribute-image/{id}', 'ProductController@getAttributeImage')->name('product.get-attribute-image');
+	
 
 	########### vendor product ############
 	
