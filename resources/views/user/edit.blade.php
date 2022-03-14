@@ -48,6 +48,33 @@
                                         <input type="text" name="phone" required class="form-control" value="{{$lims_user_data->phone}}">
                                     </div>
                                     <div class="form-group">
+                                        <label><strong>{{trans('file.Date Of Join')}} *</strong></label>
+                                        <input type="date" name="join_date" value="{{$lims_user_data->join_date}}" required class="form-control">
+                                        @if($errors->has('join_date'))
+                                            <span>
+                                               <strong>{{ $errors->first('join_date') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>{{trans('file.Id Proof')}}</strong></label>
+                                        <input type="file" name="id_proof" value="{{$lims_user_data->id_proof}}" class="form-control">
+                                        @if($errors->has('id_proof'))
+                                            <span>
+                                               <strong>{{ $errors->first('id_proof') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group">
+                                        <label><strong>{{trans('file.Address Proof')}}</strong></label>
+                                        <input type="file" name="address_proof" class="form-control">
+                                        @if($errors->has('address_proof'))
+                                            <span>
+                                               <strong>{{ $errors->first('address_proof') }}</strong>
+                                            </span>
+                                        @endif
+                                    </div>
+                                    <div class="form-group">
                                         @if($lims_user_data->is_active)
                                         <input class="mt-2" type="checkbox" name="is_active" value="1" checked>
                                         @else

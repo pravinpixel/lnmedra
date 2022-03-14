@@ -1505,6 +1505,17 @@
                             <label>{{trans('file.City')}} *</label>
                             <input type="text" name="city" required class="form-control">
                         </div>
+                       
+                        <div class="form-group">
+                            <label>{{trans('file.requirement')}}</strong> </label>
+                            <div class="input-group">
+                                <select name="requirement" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('requirement')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" required>
+                                    <option value="1" {{old ('requirement') == 1 ? 'selected' : ''}}>Landscape Design</option>
+                                    <option value="2" {{old ('requirement') == 2 ? 'selected' : ''}}>Execution</option>
+                                </select>
+                            </div>
+                        </div>
+                                
                         <div class="form-group">
                         <input type="hidden" name="pos" value="1">
                           <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">

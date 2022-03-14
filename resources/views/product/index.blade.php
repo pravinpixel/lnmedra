@@ -127,7 +127,7 @@
 @endsection
 @push('scripts')
 <script>
-
+var baseUrl = $('#baseUrl').val();
     $("ul#product").siblings('a').attr('aria-expanded','true');
     $("ul#product").addClass("show");
     $("ul#product #product-list-menu").addClass("active");
@@ -317,7 +317,8 @@
             "processing": true,
             "serverSide": true,
             "ajax":{
-                url:"products/product-data",
+                // url:"products/product-data",
+                url: baseUrl +'/products/product-data',
                 data:{
                     all_permission: all_permission
                 },

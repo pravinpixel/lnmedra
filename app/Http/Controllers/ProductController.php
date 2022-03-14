@@ -27,6 +27,7 @@ use App\Variant;
 use App\ProductVariant;
 use App\User;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
 
 class ProductController extends Controller
 {
@@ -265,7 +266,8 @@ class ProductController extends Controller
         // $data['qty_list'] = implode(",", $data['product_qty']);
         // $data['price_list'] = implode(",", $data['unit_price']);
         $data['product_details'] = str_replace('"', '@', $data['product_details']);
-            $data['attribute'] = json_encode($request['attribute']);
+            $data['attribute'] = implode(',',$request['attribute']);
+            // dd(implode(',',$request['attribute']));
         if($data['starting_date'])
             $data['starting_date'] = date('Y-m-d', strtotime($data['starting_date']));
         if($data['last_date'])
@@ -340,14 +342,15 @@ class ProductController extends Controller
             $lims_product_list_without_variant = $this->productWithoutVariant();
             $lims_product_list_with_variant = $this->productWithVariant();
             $lims_brand_list = Brand::where('is_active', true)->get();
+            $productType = ProductType::get();
             $lims_category_list = Category::where('is_active', true)->get();
             $lims_unit_list = Unit::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
             $lims_product_data = Product::where('id', $id)->first();
             $lims_product_variant_data = $lims_product_data->variant()->orderBy('position')->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-
-            return view('product.edit',compact('lims_product_list_without_variant', 'lims_product_list_with_variant', 'lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_product_data', 'lims_product_variant_data', 'lims_warehouse_list'));
+            // print_r($lims_product_data);die();
+            return view('product.edit',compact('lims_product_list_without_variant','productType', 'lims_product_list_with_variant', 'lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_product_data', 'lims_product_variant_data', 'lims_warehouse_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -355,6 +358,7 @@ class ProductController extends Controller
 
     public function updateProduct(Request $request)
     {
+        // dd($request);
         if(!env('USER_VERIFIED')) {
             \Session::flash('not_permitted', 'This feature is disable for demo!');
         }
@@ -362,33 +366,34 @@ class ProductController extends Controller
             $this->validate($request, [
                 'name' => [
                     'max:255',
-                    Rule::unique('products')->ignore($request->input('id'))->where(function ($query) {
+                    Rule::unique('products')->ignore($request->input('type_id'))->where(function ($query) {
                         return $query->where('is_active', 1);
                     }),
                 ],
 
                 'code' => [
                     'max:255',
-                    Rule::unique('products')->ignore($request->input('id'))->where(function ($query) {
+                    Rule::unique('products')->ignore($request->input('type_id'))->where(function ($query) {
                         return $query->where('is_active', 1);
                     }),
                 ]
             ]);
-            
-            $lims_product_data = Product::findOrFail($request->input('id'));
+            // dd("f");
+            $lims_product_data = Product::findOrFail($request->input('type_id'));
+            // dd($lims_product_data);
             $data = $request->except('image', 'file', 'prev_img');
             $data['name'] = htmlspecialchars(trim($data['name']));
 
-            if($data['type'] == 'combo') {
-                $data['product_list'] = implode(",", $data['product_id']);
-                $data['variant_list'] = implode(",", $data['variant_id']);
-                $data['qty_list'] = implode(",", $data['product_qty']);
-                $data['price_list'] = implode(",", $data['unit_price']);
-                $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
-            }
-            elseif($data['type'] == 'digital' || $data['type'] == 'service')
-                $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
-
+            // if($data['type'] == 'combo') {
+            //     $data['product_list'] = implode(",", $data['product_id']);
+            //     $data['variant_list'] = implode(",", $data['variant_id']);
+            //     $data['qty_list'] = implode(",", $data['product_qty']);
+            //     $data['price_list'] = implode(",", $data['unit_price']);
+            //     $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
+            // }
+            // elseif($data['type'] == 'digital' || $data['type'] == 'service')
+            //     $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
+            // $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
             if(!isset($data['featured']))
                 $data['featured'] = 0;
 
@@ -400,7 +405,9 @@ class ProductController extends Controller
 
             if(!isset($data['is_imei']))
                 $data['is_imei'] = null;
-
+        
+                $data['attribute'] = implode(',',$request['attribute']);
+                $lims_product_data->attribute = json_encode($request['attribute']);
             $data['product_details'] = str_replace('"', '@', $data['product_details']);
             $data['product_details'] = $data['product_details'];
             if($data['starting_date'])
@@ -452,45 +459,45 @@ class ProductController extends Controller
                 $data['file'] = $fileName;
             }
 
-            $lims_product_variant_data = ProductVariant::where('product_id', $request->input('id'))->select('id', 'variant_id')->get();
-            foreach ($lims_product_variant_data as $key => $value) {
-                if (!in_array($value->variant_id, $data['variant_id'])) {
-                    ProductVariant::find($value->id)->delete();
-                }
-            }
+            // $lims_product_variant_data = ProductVariant::where('product_id', $request->input('id'))->select('id', 'variant_id')->get();
+            // foreach ($lims_product_variant_data as $key => $value) {
+            //     if (!in_array($value->variant_id, $data['variant_id'])) {
+            //         ProductVariant::find($value->id)->delete();
+            //     }
+            // }
             //dealing with product variant
-            if(isset($data['is_variant'])) {
-                foreach ($data['variant_name'] as $key => $variant_name) {
-                    if($data['product_variant_id'][$key] == 0) {
-                        $lims_variant_data = Variant::firstOrCreate(['name' => $data['variant_name'][$key]]);
-                        $lims_product_variant_data = new ProductVariant();
+            // if(isset($data['is_variant'])) {
+            //     foreach ($data['variant_name'] as $key => $variant_name) {
+            //         if($data['product_variant_id'][$key] == 0) {
+            //             $lims_variant_data = Variant::firstOrCreate(['name' => $data['variant_name'][$key]]);
+            //             $lims_product_variant_data = new ProductVariant();
 
-                        $lims_product_variant_data->product_id = $lims_product_data->id;
-                        $lims_product_variant_data->variant_id = $lims_variant_data->id;
+            //             $lims_product_variant_data->product_id = $lims_product_data->id;
+            //             $lims_product_variant_data->variant_id = $lims_variant_data->id;
 
-                        $lims_product_variant_data->position = $key + 1;
-                        $lims_product_variant_data->item_code = $data['item_code'][$key];
-                        $lims_product_variant_data->additional_price = $data['additional_price'][$key];
-                        $lims_product_variant_data->qty = 0;
-                        $lims_product_variant_data->save();
-                    }
-                    else {
-                        Variant::find($data['variant_id'][$key])->update(['name' => $variant_name]);
-                        ProductVariant::find($data['product_variant_id'][$key])->update([
-                            'position' => $key+1,
-                            'item_code' => $data['item_code'][$key],
-                            'additional_price' => $data['additional_price'][$key]
-                        ]);
-                    }
-                }
-            }
-            else {
-                $data['is_variant'] = null;
-                $product_variants = ProductVariant::where('product_id', $lims_product_data->id)->get();
-                foreach ($product_variants as $key => $product_variant) {
-                    $product_variant->delete();
-                }
-            }
+            //             $lims_product_variant_data->position = $key + 1;
+            //             $lims_product_variant_data->item_code = $data['item_code'][$key];
+            //             $lims_product_variant_data->additional_price = $data['additional_price'][$key];
+            //             $lims_product_variant_data->qty = 0;
+            //             $lims_product_variant_data->save();
+            //         }
+            //         else {
+            //             Variant::find($data['variant_id'][$key])->update(['name' => $variant_name]);
+            //             ProductVariant::find($data['product_variant_id'][$key])->update([
+            //                 'position' => $key+1,
+            //                 'item_code' => $data['item_code'][$key],
+            //                 'additional_price' => $data['additional_price'][$key]
+            //             ]);
+            //         }
+            //     }
+            // }
+            // else {
+            //     $data['is_variant'] = null;
+            //     $product_variants = ProductVariant::where('product_id', $lims_product_data->id)->get();
+            //     foreach ($product_variants as $key => $product_variant) {
+            //         $product_variant->delete();
+            //     }
+            // }
             if(isset($data['is_diffPrice'])) {
                 foreach ($data['diff_price'] as $key => $diff_price) {
                     if($diff_price) {
@@ -521,7 +528,10 @@ class ProductController extends Controller
                 }
             }
             $lims_product_data->update($data);
-            \Session::flash('edit_message', 'Product updated successfully');
+            // \Session::flash('edit_message', 'Product updated successfully');
+            // return redirect('/products/index')->with('edit_message', 'Product updated successfully');
+            return redirect()->route('products.index')->with('edit_message','Product updated successfully.');
+            // return back()->with('edit_message', 'Product updated successfully');
         }
     }
 
@@ -861,5 +871,29 @@ class ProductController extends Controller
         // dd($data);
         
           return response()->json(['data' => $data]);
+    }
+    public function getEditAttributeImage(Request $request,$id)
+    {
+       $dd = explode(",",$request->data);
+        // dd($dd);
+        
+        $data = MasterAttribute::where('product_type',$id)->get();
+        foreach($data as $key=>$val)
+        {
+         $attribute_image = explode(",", $val->image);
+         $attribute_image = htmlspecialchars($attribute_image[0]);
+         if(in_array("$val->id",$dd))
+         {
+            $val['checkbox'] = '<input type="checkbox" name="attribute[]" checked value='.$val->id.'>';
+         }
+         else{
+            $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.'>';
+         }
+        
+         $val['image'] = '<img src="'.url('public/images/attribute', $attribute_image).'" height="60" width="60">';
+        }
+         // dd($data);
+         
+           return response()->json(['data' => $data]);
     }
 }

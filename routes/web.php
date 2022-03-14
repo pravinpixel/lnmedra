@@ -96,6 +96,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('products/update', 'ProductController@updateProduct');
 	Route::resource('products', 'ProductController');
 	Route::get('products/get-attribute-image/{id}', 'ProductController@getAttributeImage')->name('product.get-attribute-image');
+	Route::get('products/get-edit-attribute-image/{id}', 'ProductController@getEditAttributeImage')->name('product.get-attribute-image');
 	
 
 	########### vendor product ############

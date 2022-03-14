@@ -57,6 +57,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        // dd($request->all());
         $this->validate($request, [
             'name' => [
                 'max:255',
@@ -85,6 +86,23 @@ class UserController extends Controller
         }
 
         $data = $request->all();
+        $file = $request->id_proof;
+        if ($file) {
+            $ext = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+            $fileName = strtotime(date('Y-m-d H:i:s'));
+            $fileName = $fileName . '.' . $ext;
+            $file->move('public/user/id_proof', $fileName);
+            $data['id_proof'] = $fileName;
+        }
+        $adrressfile = $request->address_proof;
+        if ($adrressfile) {
+            $ext = pathinfo($adrressfile->getClientOriginalName(), PATHINFO_EXTENSION);
+            $fileName = strtotime(date('Y-m-d H:i:s'));
+            $fileName = $fileName . '.' . $ext;
+            $adrressfile->move('public/user/address_proof', $fileName);
+            $data['address_proof'] = $fileName;
+        }
+        
         $message = 'User created successfully';
         try {
             Mail::send( 'mail.user_details', $data, function( $message ) use ($data)
@@ -146,6 +164,27 @@ class UserController extends Controller
         ]);
 
         $input = $request->except('password');
+
+
+        $file = $request->id_proof;
+        if ($file) {
+            $ext = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+            $fileName = strtotime(date('Y-m-d H:i:s'));
+            $fileName = $fileName . '.' . $ext;
+            $file->move('public/user/id_proof', $fileName);
+            $input['id_proof'] = $fileName;
+        }
+        $adrressfile = $request->address_proof;
+        if ($adrressfile) {
+            $ext = pathinfo($adrressfile->getClientOriginalName(), PATHINFO_EXTENSION);
+            $fileName = strtotime(date('Y-m-d H:i:s'));
+            $fileName = $fileName . '.' . $ext;
+            $adrressfile->move('public/user/address_proof', $fileName);
+            $input['address_proof'] = $fileName;
+        }
+
+        // print_r($input);die();
+
         if(!isset($input['is_active']))
             $input['is_active'] = false;
         if(!empty($request['password']))

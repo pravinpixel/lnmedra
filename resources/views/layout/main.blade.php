@@ -10,6 +10,7 @@
     <meta name="robots" content="all,follow">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="manifest" href="{{url('manifest.json')}}">
+    <input type="hidden" name="baseUrl" id="baseUrl" value="{{ url('/') }}">
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap.css') ?>" type="text/css">
 
@@ -1127,7 +1128,8 @@
                   @if($tax_permission_active)
                   <li id="tax-menu"><a href="{{route('tax.index')}}">{{trans('file.Tax')}}</a></li>
                   @endif
-                  <li id="user-menu"><a href="{{route('user.profile', ['id' => Auth::id()])}}">{{trans('file.User Profile')}}</a></li>
+                  <!-- <li id="user-menu"><a href="{{route('user.profile', ['id' => Auth::id()])}}">{{trans('file.User Profile')}}</a></li> -->
+                  <li id="user-menu"><a href="{{route('user.index')}}">{{trans('file.User Profile')}}</a></li>
                   <!-- @if($create_sms_permission_active)
                   <li id="create-sms-menu"><a href="{{route('setting.createSms')}}">{{trans('file.Create SMS')}}</a></li>
                   @endif -->

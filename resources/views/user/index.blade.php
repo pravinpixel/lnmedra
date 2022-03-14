@@ -83,9 +83,9 @@
 @push('scripts')
 <script type="text/javascript">
 
-    $("ul#people").siblings('a').attr('aria-expanded','true');
-    $("ul#people").addClass("show");
-    $("ul#people #user-list-menu").addClass("active");
+    $("ul#setting").siblings('a').attr('aria-expanded','true');
+    $("ul#setting").addClass("show");
+    $("ul#setting #user-menu").addClass("active");
 
     var user_id = [];
     var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;

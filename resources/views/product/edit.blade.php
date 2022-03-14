@@ -12,22 +12,30 @@
                     <div class="card-body">
                         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                         <form id="product-form">
-                            <input type="hidden" name="id" value="{{$lims_product_data->id}}" />
+                            <input type="hidden" name="type_id" value="{{$lims_product_data->id}}" id="type_id" />
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
+                                        <!-- //sssssss -->
                                         <label>{{trans('file.Product Type')}} *</strong> </label>
                                         <div class="input-group">
-                                            <select name="type" required class="form-control selectpicker" id="type">
-                                                <option value="standard">Standard</option>
+                                            <input type="hidden" name="types_id" value="{{$lims_product_data->type}}">
+                                            <select name="type" required class="form-control selectpicker"  data-live-search="true" data-live-search-style="begins" id="productType">
+                                            <option value="">--Select--</option>
+                                                @foreach($productType as $product)
+                                                <option value="{{ $product->id }}" >{{ $product->name }}</option>
+                                                @endforeach
+                                                <!-- <option value="standard">Standard</option>
                                                 <option value="combo">Combo</option>
                                                 <option value="digital">Digital</option>
-                                                <option value="service">Service</option>
+                                                <option value="service">Service</option> -->
                                             </select>
-                                            <input type="hidden" name="type_hidden" value="{{$lims_product_data->type}}">
                                         </div>
+                                       
                                     </div>
                                 </div>
+                                <input type="hidden" name="attributeInput" value="{{$lims_product_data->attribute}}"  id="attributeInput" >
+                               
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('file.Product Name')}} *</strong> </label>
@@ -45,6 +53,15 @@
                                             </div>
                                         </div>
                                         <span class="validation-msg" id="code-error"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Attribute')}} *</strong> </label>
+                                        
+                                        <div id="attribute_img" >
+                                            
+                                        </div> 
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -145,6 +162,20 @@
                                       </div>
                                     </div>
                                 </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.sku')}} *</strong> </label>
+                                        <input type="text" name="sku" value="{{ $lims_product_data->sku}}" required class="form-control">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Family {{trans('file.name')}} *</strong> </label>
+                                        <input type="text" name="family_name" value="{{ $lims_product_data->family_name}}"  required class="form-control">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                </div>
                                 <div id="unit" class="col-md-12">
                                     <div class="row ">
                                         <div class="col-md-4">
@@ -180,7 +211,21 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="cost" class="col-md-4">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>Common {{trans('file.name')}} *</strong> </label>
+                                        <input type="text" name="common_name" value="{{ $lims_product_data->common_name}}"  required class="form-control">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                     <div class="form-group">
+                                        <label>{{trans('file.size')}} *</strong> </label> 
+                                        <input type="number" min="0" onkeypress="return isNumber(event)" value="{{ $lims_product_data->size}}" name="size" required class="form-control" step="any">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                </div>
+                                <!-- <div id="cost" class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('file.Product Cost')}} *</strong> </label>
                                         <input type="number" name="cost" value="{{$lims_product_data->cost}}" required class="form-control" step="any">
@@ -196,6 +241,39 @@
                                     <div class="form-group">
                                         <input type="hidden" name="qty" value="{{ $lims_product_data->qty }}" class="form-control">
                                     </div>
+                                </div> -->
+                                <div id="cost" class="col-md-4">
+                                     <div class="form-group">
+                                        <label>{{trans('file.Purchase Price')}} *</strong> </label>
+                                        <input type="number" min="0" onkeypress="return isNumber(event)"  value="{{ $lims_product_data->cost}}" name="cost" required class="form-control" step="any">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Sales Price')}} *</strong> </label>
+                                        <input type="number" min="0" onkeypress="return isNumber(event)"  value="{{ $lims_product_data->price}}" name="price" required class="form-control" step="any">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input type="hidden" name="qty" value="0.00">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Markup')}}% *</strong> </label>
+                                        <input type="text" name="markup"  value="{{ $lims_product_data->markup}}" required class="form-control">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                   
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Max Discount')}} *</strong> </label>
+                                        <input type="text"  name="max_discount"  value="{{ $lims_product_data->max_discount}}" required class="form-control">
+                                        <span class="validation-msg"></span>
+                                    </div>
+                                   
                                 </div>
                                 <div id="alert-qty" class="col-md-4">
                                     <div class="form-group">
@@ -411,6 +489,13 @@
 @push('scripts')
 <script type="text/javascript">
 
+    $(document).ready(function(){
+
+        $('#productType').trigger('change');
+
+    });
+   
+var baseUrl = $('#baseUrl').val();
     $("ul#product").siblings('a').attr('aria-expanded','true');
     $("ul#product").addClass("show");
     var product_id = <?php echo json_encode($lims_product_data->id) ?>;
@@ -501,8 +586,14 @@
     var brand = $("input[name='brand']").val();
     $('select[name=brand_id]').val(brand);
 
+    
+
+    //sssssss
     var cat = $("input[name='category']").val();
     $('select[name=category_id]').val(cat);
+
+    var type = $("input[name='types_id']").val();
+    $('select[name=type]').val(type);
 
     if($("input[name='unit']").val()) {
         $('select[name=unit_id]').val($("input[name='unit']").val());
@@ -516,52 +607,79 @@
     var tax_method = $("input[name='tax_method_id']").val();
     $('select[name=tax_method]').val(tax_method);
     $('.selectpicker').selectpicker('refresh');
-
-    $('select[name="type"]').on('change', function() {
-        if($(this).val() == 'combo'){
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            hide();
-            $("#digital").hide();
-            $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
-            $("#combo").show();
-            $("input[name='price']").prop('disabled',true);
-        }
-        else if($(this).val() == 'digital'){
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            $("input[name='file']").prop('required',true);
-            hide();
-            $("#combo").hide();
-            $("#digital").show();
-            $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
-            $("input[name='price']").prop('disabled',false);
-        }
-        else if($(this).val() == 'service') {
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            $("input[name='file']").prop('required',true);
-            hide();
-            $("#combo").hide(300);
-            $("#digital").hide(300);
-            $("input[name='price']").prop('disabled',false);
-            $("#is-variant").prop("checked", false);
-            $("#variant-section, #variant-option").hide(300);
-        }
-        else if($(this).val() == 'standard'){
-            $("input[name='cost']").prop('required',true);
-            $("select[name='unit_id']").prop('required',true);
-            $("input[name='file']").prop('required',false);
-            $("#cost").show();
-            $("#unit").show();
-            $("#alert-qty").show();
-            $("#variant-option").show(300);
-            $("#diffPrice-option").show(300);
-            $("#digital").hide();
-            $("#combo").hide();
-            $("input[name='price']").prop('disabled',false);
-        }
-    });
+    $('#productType').on('change', function() {
+        
+        // alert($('#type_id').val());
+         var typeId = $(this).val();
+         
+         $.ajax({
+              type: 'GET',
+            //   url: 'get-attribute-image/' + typeId,
+              url: baseUrl +'/products/get-edit-attribute-image'+'/' + typeId,
+             data:{
+                 data:$('#attributeInput').val()
+             },
+              success: function(res) {
+                  $('#attribute_img').html('');
+                  
+              // alert(res.data.length)
+                 for(var i=0;i<res.data.length;i++)
+                 {
+                  let att = res.data[i];
+                  console.log(res.data[i].id);
+                  $('#attribute_img').append(`
+                  ${res.data[i].checkbox} 
+                  ${res.data[i].image}     
+                  `)
+                 }  
+              }
+          });
+  });
+    // $('select[name="type"]').on('change', function() {
+    //     if($(this).val() == 'combo'){
+    //         $("input[name='cost']").prop('required',false);
+    //         $("select[name='unit_id']").prop('required',false);
+    //         hide();
+    //         $("#digital").hide();
+    //         $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
+    //         $("#combo").show();
+    //         $("input[name='price']").prop('disabled',true);
+    //     }
+    //     else if($(this).val() == 'digital'){
+    //         $("input[name='cost']").prop('required',false);
+    //         $("select[name='unit_id']").prop('required',false);
+    //         $("input[name='file']").prop('required',true);
+    //         hide();
+    //         $("#combo").hide();
+    //         $("#digital").show();
+    //         $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
+    //         $("input[name='price']").prop('disabled',false);
+    //     }
+    //     else if($(this).val() == 'service') {
+    //         $("input[name='cost']").prop('required',false);
+    //         $("select[name='unit_id']").prop('required',false);
+    //         $("input[name='file']").prop('required',true);
+    //         hide();
+    //         $("#combo").hide(300);
+    //         $("#digital").hide(300);
+    //         $("input[name='price']").prop('disabled',false);
+    //         $("#is-variant").prop("checked", false);
+    //         $("#variant-section, #variant-option").hide(300);
+    //     }
+    //     else if($(this).val() == 'standard'){
+    //         $("input[name='cost']").prop('required',true);
+    //         $("select[name='unit_id']").prop('required',true);
+    //         $("input[name='file']").prop('required',false);
+    //         $("#cost").show();
+    //         $("#unit").show();
+    //         $("#alert-qty").show();
+    //         $("#variant-option").show(300);
+    //         $("#diffPrice-option").show(300);
+    //         $("#digital").hide();
+    //         $("#combo").hide();
+    //         $("input[name='price']").prop('disabled',false);
+    //     }
+    // });
 
     $('select[name="unit_id"]').on('change', function() {
         unitID = $(this).val();
