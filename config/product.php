@@ -44,4 +44,8 @@ return [
         "phone",
         "address"
     ],
+    "import_custome_group" => [
+        "name",
+        "percentage"
+    ],
 ];

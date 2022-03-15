@@ -82,6 +82,12 @@ class CustomerGroupController extends Controller
             $escapedItem=preg_replace('/[^a-z]/', '', $lheader);
             array_push($escapedHeader, $escapedItem);
         }
+
+        $configCustomGroupHeader = config('product.import_custome_group');
+        $isDifferentHeader = array_diff($configCustomGroupHeader,$escapedHeader);
+        if(!empty($isDifferentHeader)){
+            return redirect('customer_group')->with('not_permitted', 'Invalid header please download sample file and try again');
+        }
         //looping through othe columns
         while($columns=fgetcsv($file))
         {
