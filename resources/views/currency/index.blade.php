@@ -82,7 +82,7 @@
             </div>
             <div class="form-group">
                 <label>{{trans('file.Exchange Rate')}} *</label>
-                {{Form::text('exchange_rate',null,array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Type exchange rate...'))}}
+                {{Form::text('exchange_rate',null,array('required' => 'required', 'onkeypress' => 'javascript:return isNumber(event)','class' => 'form-control', 'placeholder' => 'Type exchange rate...'))}}
             </div>
             <div class="form-group">
               <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
@@ -113,7 +113,7 @@
             </div>
             <div class="form-group">
                 <label>{{trans('file.Exchange Rate')}} *</label>
-                {{Form::text('exchange_rate',null,array('required' => 'required', 'class' => 'form-control', 'placeholder' => 'Type exchange rate...'))}}
+                {{Form::text('exchange_rate',null,array('required' => 'required', 'onkeypress' => 'javascript:return isNumber(event)', 'class' => 'form-control', 'placeholder' => 'Type exchange rate...'))}}
             </div>
             <input type="hidden" name="currency_id">
             <div class="form-group">
