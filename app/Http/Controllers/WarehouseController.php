@@ -84,6 +84,12 @@ class WarehouseController extends Controller
             }
            $data= array_combine($escapedHeader, $columns);
 
+           $configWarehouseHeader = config('product.import_warehouse');
+           $isDifferentHeader = array_diff($configWarehouseHeader,$escapedHeader);
+           if(!empty($isDifferentHeader)){
+                return redirect('warehouse')->with('not_permitted', 'Invalid header please download sample file and try again');
+           }
+
            $warehouse = Warehouse::firstOrNew([ 'name'=>$data['name'], 'is_active'=>true ]);
            $warehouse->name = $data['name'];
            $warehouse->phone = $data['phone'];

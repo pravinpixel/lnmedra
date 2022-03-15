@@ -37,4 +37,11 @@ return [
         "title",
         "image"
     ],
+
+    "import_warehouse" => [
+        "name",
+        "email",
+        "phone",
+        "address"
+    ],
 ];
