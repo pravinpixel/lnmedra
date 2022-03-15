@@ -19,4 +19,9 @@ return [
         "name",
         "parentcategory"
     ],
+
+    "import_tax" => [
+        "name",
+        "rate"
+    ],
 ];
