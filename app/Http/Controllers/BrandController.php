@@ -94,6 +94,11 @@ class BrandController extends Controller
             $escapedItem=preg_replace('/[^a-z]/', '', $lheader);
             array_push($escapedHeader, $escapedItem);
         }
+        $configBrandHeader = config('product.import_brand');
+        $isDifferentHeader = array_diff($configBrandHeader,$escapedHeader);
+        if(!empty($isDifferentHeader)){
+             return redirect('brand')->with('not_permitted', 'Invalid header please download sample file and try again');
+        }
         //looping through othe columns
         while($columns=fgetcsv($file))
         {

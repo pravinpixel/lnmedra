@@ -32,4 +32,9 @@ return [
         "operator",
         "operation_value"
     ],
+
+    "import_brand" => [
+        "title",
+        "image"
+    ],
 ];

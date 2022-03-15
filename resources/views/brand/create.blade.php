@@ -80,7 +80,7 @@
             </div>
             <div class="form-group">
                 <label>{{trans('file.Image')}}</label>
-                {{Form::file('image', array('class' => 'form-control'))}}
+                {{Form::file('image', array('class' => 'form-control','accept'=>'image/*'))}}
             </div>
             <div class="form-group">
               <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
@@ -107,7 +107,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>{{trans('file.Upload CSV File')}} *</label>
-                        {{Form::file('file', array('class' => 'form-control','required'))}}
+                        {{Form::file('file', array('class' => 'form-control','required','accept' => 'images/*'))}}
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -141,7 +141,7 @@
         <input type="hidden" name="brand_id">
         <div class="form-group">
             <label>{{trans('file.Image')}}</label>
-            {{Form::file('image', array('class' => 'form-control'))}}
+            {{Form::file('image', array('class' => 'form-control','accept' => 'images/*'))}}
         </div>
         <div class="form-group">
             <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
