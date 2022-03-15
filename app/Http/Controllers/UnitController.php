@@ -127,7 +127,7 @@ class UnitController extends Controller
                 $unit->base_unit = null;
             else{
                 $base_unit = Unit::where('unit_code', $data['baseunit'])->first();
-                $unit->base_unit = $base_unit->id;
+                $unit->base_unit = $base_unit->id ?? null;
             }
             if($data['operator'] == null)
                 $unit->operator = '*';

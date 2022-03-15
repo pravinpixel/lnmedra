@@ -28,9 +28,9 @@ return [
     "import_unit" => [
         "code",
         "name",
-        "base_unit",
+        "baseunit",
         "operator",
-        "operation_value"
+        "operationvalue"
     ],
 
     "import_brand" => [
