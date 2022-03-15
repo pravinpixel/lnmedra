@@ -24,4 +24,12 @@ return [
         "name",
         "rate"
     ],
+
+    "import_unit" => [
+        "code",
+        "name",
+        "base_unit",
+        "operator",
+        "operation_value"
+    ],
 ];

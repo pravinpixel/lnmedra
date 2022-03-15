@@ -103,6 +103,11 @@ class UnitController extends Controller
             $escapedItem=preg_replace('/[^a-z]/', '', $lheader);
             array_push($escapedHeader, $escapedItem);
         }
+        $configUnitHeader = config('product.import_unit');
+        $isDifferentHeader = array_diff($configUnitHeader,$escapedHeader);
+        if(!empty($isDifferentHeader)){
+            return redirect('unit')->with('not_permitted', 'Invalid header please download sample file and try again');
+        }
         //looping through othe columns
         $lims_unit_data = [];
         while($columns=fgetcsv($file))
@@ -113,6 +118,7 @@ class UnitController extends Controller
                 $value=preg_replace('/\D/','',$value);
             }
             $data= array_combine($escapedHeader, $columns);
+
 
             $unit = Unit::firstOrNew(['unit_code' => $data['code'],'is_active' => true ]);
             $unit->unit_code = $data['code'];

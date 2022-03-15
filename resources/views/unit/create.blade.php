@@ -117,7 +117,7 @@
                         <label>{{trans('file.Operator')}}</label> <input type="text" name="operator" placeholder="Enter your Name" class="form-control" />
                     </div>
                     <div class="form-group operation_value">
-                        <label>{{trans('file.Operation Value')}}</label><input type="number" name="operation_value" placeholder="Enter operation value" class="form-control" step="any"/>
+                        <label>{{trans('file.Operation Value')}}</label><input type="number"  min="0" onkeypress="return isNumber(event)" name="operation_value" placeholder="Enter operation value" class="form-control" step="any"/>
                     </div>
                     <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
             </form>
@@ -162,7 +162,7 @@
                     <label>{{trans('file.Operator')}}</label> <input type="text" name="operator" placeholder="Enter your Name" class="form-control" />
                 </div>
                 <div class="form-group operation_value">
-                    <label>{{trans('file.Operation Value')}}</label><input type="number" name="operation_value" placeholder="Enter operation value" class="form-control" step="any"/>
+                    <label>{{trans('file.Operation Value')}}</label><input type="number" min="0" onkeypress="return isNumber(event)" name="operation_value" placeholder="Enter operation value" class="form-control" step="any"/>
                 </div>
                 <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
             </form>
@@ -187,7 +187,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <label>{{trans('file.Upload CSV File')}} *</label>
-                        {{Form::file('file', array('class' => 'form-control','required'))}}
+                        {{Form::file('file', array('class' => 'form-control','required', 'accept' => '.csv'))}}
                     </div>
                 </div>
                 <div class="col-md-6">
