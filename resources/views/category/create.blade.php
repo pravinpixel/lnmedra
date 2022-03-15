@@ -55,7 +55,7 @@
                 </div>
                 <div class="col-md-6 form-group">
                     <label>{{trans('file.Image')}}  *</label>
-                    <input type="file" name="image" class="form-control" required>
+                    <input type="file" name="image" class="form-control" accept="image/*" required>
                 </div>
                 <div class="col-md-6 form-group">
                     <label>{{trans('file.Parent Category')}}</label>
@@ -90,7 +90,7 @@
             <input type="hidden" name="category_id">
             <div class="col-md-6 form-group">
                 <label>{{trans('file.Image')}}</label>
-                <input type="file" name="image" class="form-control">
+                <input type="file" name="image" class="form-control"accept="image/*">
             </div>
             <div class="col-md-6 form-group">
                 <label>{{trans('file.Parent Category')}}</label>
