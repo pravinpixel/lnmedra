@@ -96,7 +96,7 @@
           </div>
           <div class="form-group">
             <label>{{trans('file.Phone Number')}} *</label>
-            <input type="text" name="phone" class="form-control" required>
+            <input type="text" name="phone" class="form-control" onkeypress="javascript:return isNumber(event)" required>
           </div>
           <div class="form-group">
             <label>{{trans('file.Email')}}</label>
