@@ -9,6 +9,7 @@ use Database\Seeders\HrmSettingsTableSeeder;
 use Database\Seeders\MailTemplateSeeder;
 use Database\Seeders\PermissionsTableSeeder;
 use Database\Seeders\PosSettingTableSeeder;
+use Database\Seeders\RewardPointSettingsTableSeeder;
 use Database\Seeders\RoleHasPermissionsTableSeeder;
 use Database\Seeders\RolesTableSeeder;
 use Database\Seeders\UnitsTableSeeder;
