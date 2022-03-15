@@ -42,24 +42,19 @@
            
             <form method="POST" action="{{ route('login') }}" id="login-form" class="m-0 w-100 text-center" style="max-width: 100% !important">
               @csrf
+              @if(session()->has('error'))
+                <small style="left: 10px;margin-top:6px" class="text-danger">{{ session()->get('error') }}</small>
+              @endif
               <div class="form-group-material">
                 <input id="login-username" type="text" name="name" required class="pl-3 input-material rounded-pill" value="">
-                <label for="login-username" class="label-material" style="left: 15px;">{{trans('file.UserName')}}</label>
-                  @if(session()->has('error'))
-                    <div class="position-relative">
-                      <small style="left: 10px;margin-top:6px" class="position-absolute text-danger">{{ session()->get('error') }}</small>
-                    </div>
-                  @endif
+                <label for="login-username" class="label-material" style="left: 15px;">{{trans('file.Username')}}</label>
+                  
               </div>
               
               <div class="form-group-material">
                 <input id="login-password" type="password" name="password" required class="pl-3 input-material rounded-pill" value="">
                 <label for="login-password" class="label-material" style="left: 15px;">{{trans('file.Password')}}</label>
-                @if(session()->has('error'))
-                  <div class="position-relative">
-                    <small style="left: 10px;margin-top:6px" class="position-absolute text-danger">{{ session()->get('error') }}</small>
-                  </div>
-                @endif
+    
               </div>
               <button type="submit" class="btn rounded-pill btn-primary btn-block">{{trans('file.LogIn')}}</button>
               <div class="mt-3">

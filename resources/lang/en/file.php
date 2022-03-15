@@ -15,7 +15,7 @@ return [
 	'details_of_product_Image'=>'Basic Details Of Product and Image Captured',
 	'enquiry_management'=>'Enquiry',
 	'vendor dashboard'=>'Vendor Dashboard',
-	'User Name'=>'User Name',
+	'Username'=>'User name',
 	'L&N Quantity'=>'L&N Quantity',
 	'L&N Price'=>'L&N Price',
 	'Master Attribute'=>'Master Attribute',
