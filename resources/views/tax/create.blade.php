@@ -80,7 +80,7 @@
                     </div>
                     <div class="form-group">
                         <label>{{trans('file.Rate')}}(%) *</label>
-                        {{Form::number('rate',null,array('required' => 'required', 'class' => 'form-control', 'step' => 'any'))}}
+                        {{Form::number('rate',null,array('required' => 'required', 'class' => 'form-control', 'step' => 'any', 'min'=> '0', 'onkeypress'=>'javascript:return isNumber(event)'))}}
                     </div>
                     <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
             	</form>
@@ -108,7 +108,7 @@
 		            </div>
 		            <div class="form-group">
 		                <label>{{trans('file.Rate')}}(%) *</label>
-		                {{Form::number('rate',null,array('required' => 'required', 'class' => 'form-control', 'step' => 'any'))}}
+		                {{Form::number('rate',null,array('required' => 'required', 'class' => 'form-control', 'step' => 'any', 'min'=> '0', 'onkeypress'=>'javascript:return isNumber(event)'))}}
 		            </div>
 		            <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
 		        </form>
