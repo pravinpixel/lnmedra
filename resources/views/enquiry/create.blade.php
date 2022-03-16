@@ -28,12 +28,13 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.Email')}} *</label>
-                                        <input type="email" name="email" placeholder="example@example.com" value="{{old('email')}}" required class="form-control">
-                                        @if($errors->has('email'))
-                                    <span>
+                                        <input type="email" name="email" id="email" placeholder="example@example.com"  onkeyup="ValidateEmail();"  value="{{old('email')}}" class="form-control">
+                                        <span id="lblError" style="color: red"></span>
+                                        <!-- @if($errors->has('email'))
+                                        <span>
                                         <strong style="color: red;">{{ $errors->first('email') }}</strong>
                                         </span>
-                                        @endif
+                                        @endif -->
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -52,7 +53,7 @@
                                     <div class="form-group">
                                         <label>{{trans('file.requirement')}}</strong> </label>
                                         <div class="input-group">
-                                            <select name="requirement" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('requirement')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" required>
+                                            <select name="requirement" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('requirement')}}"  title="Select Requirement..."  autocomplete="type" data-live-search="true" data-live-search-style="begins" required>
                                                
                                                     <option value="1" {{old ('requirement') == 1 ? 'selected' : ''}}>Landscape Design</option>
                                                     <option value="2" {{old ('requirement') == 2 ? 'selected' : ''}}>Execution</option>
@@ -91,7 +92,20 @@
 @endsection
 
 @push('scripts')
-  
+<script type="text/javascript">
+    
+    function ValidateEmail() {
+    
+        var email = document.getElementById("email").value;
+        // alert(email)
+        var lblError = document.getElementById("lblError");
+    lblError.innerHTML = "";
+        var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+        if (!expr.test(email)) {
+        lblError.innerHTML = "Invalid email address.";
+    }
+}
+</script>
 <script type="text/javascript">
      $(document).ready(function(){
         $("#enquiryForm").validate({
@@ -105,10 +119,7 @@
                             maxlength: 10
                         },
                         
-                        'email': {
-                            required: true,
-                            email: true
-                        },
+                        
                         'name': {
                             required: true,
                             maxlength: 200

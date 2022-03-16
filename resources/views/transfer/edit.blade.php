@@ -37,7 +37,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.From Warehouse')}} *</label>
+                                            <label>{{trans('file.From Outlet')}} *</label>
                                             <input type="hidden" name="from_warehouse_id_hidden" value="{{ $lims_transfer_data->from_warehouse_id }}" />
                                             <select id="from-warehouse-id" required name="from_warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
                                                 @foreach($lims_warehouse_list as $warehouse)
@@ -48,7 +48,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.To Warehouse')}} *</label>
+                                            <label>{{trans('file.To Outlet')}} *</label>
                                             <input type="hidden" name="to_warehouse_id_hidden" value="{{ $lims_transfer_data->to_warehouse_id }}" />
                                             <select required name="to_warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
                                                 @foreach($lims_warehouse_list as $warehouse)

@@ -24,7 +24,7 @@
     </div>
    
     <div class="table-responsive">
-    {!! Form::open(['route' => 'vendorproducts.row-data','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true]) !!}
+    {!! Form::open(['route' => 'vendorproducts.row-data','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true,'onsubmit' => 'return checkformvalidation()'],) !!}
         <table id="product-data-table" class="table" style="width: 100%">
             <thead>
                 <tr>
@@ -45,6 +45,7 @@
 
         </table>
         <input type="submit" id="btnClick" value="Approve" class="btn btn-success" />
+        <input id="btnClick" onclick="rejectProduct()" value="Reject" class="btn btn-danger product-delete" />
     {!! Form::close() !!}
     </div>
 </section>
@@ -132,10 +133,13 @@
 @push('scripts')
 
 <script>
-
+var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
     $("ul#vendor_supplier").siblings('a').attr('aria-expanded','true');
     $("ul#vendor_supplier").addClass("show");
     $("ul#vendor_supplier #vendorproduct-product-list-menu").addClass("active");
+
+
+  
 
     function confirmDelete() {
         if (confirm("Are you sure want to delete?")) {
@@ -143,6 +147,67 @@
         }
         return false;
     }
+    // function validateProduct(){
+    //     alert()
+    // var values=[];
+    // $('input[name="is_approve_row_data[]"]:checked').each(function () {
+    // values[values.length] = (this.checked ? $(this).closest("tr") : "");
+    // });
+    // console.log(values);
+        
+    // }
+   
+
+
+    // $(document).ready(function() {
+        
+    //     var table = $('#product-data-table').DataTable();
+ 
+    //     $('#product-data-table tbody').on( 'click', '.dt-checkboxes', function () {
+    //     if(this.checked==true)
+    //     {
+    //     console.log( table.row( this.closest('tr') ).data() );
+    //     }
+    //     } );
+
+        
+    // });
+    function rejectProduct(){
+       
+    // var i=0;
+        if(user_verified == '1') {
+            // product_id.length = 0;
+        var val = [];
+        $(':checkbox:checked').each(function(i){
+          
+          val[i] = $(this).val();
+        //   product_id =i;
+        });
+            // alert(val)
+    
+            if(val.length && confirmDelete()) {
+                $.ajax({
+                    type:'POST',
+                    url:'vendorproducts/vendorProductDeny',
+                    data:{
+                        productIdArray: val
+                    },
+                    success:function(data){
+                        // alert()
+                        //dt.rows({ page: 'current', selected: true }).deselect();
+                        // dt.rows({ page: 'current', selected: true }).remove().draw(false);
+                        location.reload();
+                    }
+                });
+            }
+            else if(!product_id.length)
+                alert('No product is selected!');
+        }
+        else
+            alert('This feature is disable for demo!');
+                
+    }
+
     $(document).on('keyup change','.ln_qty', function(){
                 
                 // console.log($(this).data('qty_row_id'));
@@ -206,7 +271,37 @@
     var product_id = [];
     var all_permission = <?php echo json_encode($all_permission) ?>;
     var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
-
+    function ddd()
+    {
+       var i=1;
+        if(user_verified == '1') {
+            alert()
+            product_id.length = 0;
+            $(':checkbox:checked').each(function(i){
+                if(i){
+                    var product_data = $(this).closest('tr').data('product');
+                    product_id[i-1] = product_data[7];
+                }
+            });
+            if(product_id.length && confirmDelete()) {
+                $.ajax({
+                    type:'POST',
+                    url:'vendorproducts/vendorProductDeny',
+                    data:{
+                        productIdArray: product_id
+                    },
+                    success:function(data){
+                        //dt.rows({ page: 'current', selected: true }).deselect();
+                        dt.rows({ page: 'current', selected: true }).remove().draw(false);
+                    }
+                });
+            }
+            else if(!product_id.length)
+                alert('No product is selected!');
+        }
+        else
+            alert('This feature is disable for demo!');                 
+    }
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -364,7 +459,16 @@
         $('#product-details').modal('show');
         $('#product-img-slider').carousel(0);
     }
-
+    
+                  
+                    
+                 
+            
+            //   $(document).ready(function() {
+               
+             
+                
+            // });
     $(document).ready(function() {
         var table = $('#product-data-table').DataTable( {
             responsive: true,
@@ -424,7 +528,7 @@
                     'render': function(data, type, row, meta){
                        
                         if(type === 'display' && row.is_approve == 0){
-                            data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
+                            data = '<input type="checkbox" class="dt-checkboxes checkbox " onclick="return checkoxvalidation(this)" id="check'+row.id+'" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
                         }
                         else if(type === 'display' && row.is_approve == 1){
                             // console.log(row);
@@ -434,7 +538,7 @@
                             data = '';
                         }
                         else {
-                            data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
+                            data = '<input type="checkbox" class="dt-checkboxes checkbox "  onclick="return checkoxvalidation(this)" id="check'+row.id+'" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
                         }
 
                        return data;
@@ -451,6 +555,7 @@
             dom: '<"row"lfB>rtip',
             buttons: [
                 {
+                
                     extend: 'pdf',
                     text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
                     exportOptions: {
@@ -551,6 +656,44 @@
         $('.buttons-delete').addClass('d-none');
 
     $('select').selectpicker();
+
+    function checkoxvalidation(getdatas){
+         
+        if($(getdatas).prop("checked") == true){
+                  var classname = $(getdatas).attr("id");
+                  
+                  $('.'+classname+'text').attr("required", true);
+                }
+                else if($(getdatas).prop("checked") == false){
+                var classname = $(getdatas).attr("id");
+                
+                 $('.'+classname+'text').attr("required", false);
+                }
+    }
+
+    function checkformvalidation(){      
+        let roleChecked = $("input:checked").length;
+        if (!roleChecked) {
+            alert("Please check at least one checkbox");
+            return false;
+        }
+      }
+        /*  $('input[type="checkbox"]').click(function(){
+            //$('.checkbox').change( function () {
+            alert("check")
+            if($(this).prop("checked") == true){
+               var classname = $(this).attr("id");
+               alert(classname + ' in')
+    $('#'+classname+'text').prop('required',true);
+                }
+                else if($(this).prop("checked") == false){
+                var classname = $(this).attr("id");
+                alert(classname + ' not')
+    $('#'+classname+'text').prop('required',false);
+                }
+            });
+        });
+*/
 
 </script>
 @endpush

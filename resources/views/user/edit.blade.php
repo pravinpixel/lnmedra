@@ -59,6 +59,7 @@
                                     <div class="form-group">
                                         <label><strong>{{trans('file.Id Proof')}}</strong></label>
                                         <input type="file" name="id_proof" value="{{$lims_user_data->id_proof}}" class="form-control">
+                                        <a href="{{ asset('public/user/id_proof/').'/'.$lims_user_data->id_proof }}" download>Id Proof</a>
                                         @if($errors->has('id_proof'))
                                             <span>
                                                <strong>{{ $errors->first('id_proof') }}</strong>
@@ -68,6 +69,7 @@
                                     <div class="form-group">
                                         <label><strong>{{trans('file.Address Proof')}}</strong></label>
                                         <input type="file" name="address_proof" class="form-control">
+                                        <a href="{{ asset('public/user/address_proof/').'/'.$lims_user_data->address_proof }}" download>Address Proof</a>
                                         @if($errors->has('address_proof'))
                                             <span>
                                                <strong>{{ $errors->first('address_proof') }}</strong>
@@ -110,7 +112,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group" id="warehouseId">
-                                        <label><strong>{{trans('file.Warehouse')}} *</strong></label>
+                                        <label><strong>{{trans('file.Outlet')}} *</strong></label>
                                         <input type="hidden" name="warehouse_id_hidden" value="{{$lims_user_data->warehouse_id}}">
                                         <select name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Warehouse...">
                                           @foreach($lims_warehouse_list as $warehouse)

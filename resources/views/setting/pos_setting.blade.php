@@ -60,11 +60,11 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
-                                        <label>{{trans('file.Default Warehouse')}} *</label>
+                                        <label>{{trans('file.Default')}} Outlet *</label>
                                         @if($lims_pos_setting_data)
                                         <input type="hidden" name="warehouse_id_hidden" value="{{$lims_pos_setting_data->warehouse_id}}">
                                         @endif
-                                        <select required name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
+                                        <select required name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
                                             @foreach($lims_warehouse_list as $warehouse)
                                             <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                             @endforeach

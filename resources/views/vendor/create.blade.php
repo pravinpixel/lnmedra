@@ -177,7 +177,8 @@
                                             <div class="form-group">
                                                 <label>{{trans('file.category')}}</strong> </label>
                                                 <div class="input-group">
-                                                <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" required>
+                                                <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins">
+                                                  
                                                     @foreach($category as $key=>$val)
                                                         <option value="{{$val['id']}}" {{old ('category') == $val['id'] ? 'selected' : ''}}>{{$val['name']}}</option>
                                                     @endforeach
@@ -200,7 +201,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.Mobile')}} *</label>
-                                            <input type="number" name="phone_number" value="{{old('phone_number')}}" required class="form-control">
+                                            <input type="number" name="phone_number" min="0" value="{{old('phone_number')}}" required class="form-control noscroll"/>
                                             @if($errors->has('phone_number'))
                                             
                                                 <span>
@@ -212,12 +213,15 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.Email')}} *</label>
-                                            <input type="email" name="email" placeholder="example@example.com" value="{{old('email')}}" required class="form-control">
-                                            @if($errors->has('email'))
-                                        <span>
-                                            <strong style="color: red;">{{ $errors->first('email') }}</strong>
+                                            <input type="text" name="email" id="email" placeholder="example@example.com" onkeyup="ValidateEmail();" value="{{old('email')}}" required class="form-control">
+                                            <!-- @if($errors->has('email'))
+                                            <span id="lblError" >
+                                            <strong  style="color: red;">{{ $errors->first('email') }}</strong>
                                             </span>
-                                            @endif
+                                            @endif -->
+                                            <!-- <input type="text" id="txtEmail" onkeyup="ValidateEmail();" /> -->
+                                            <span id="lblError" style="color: red"></span>
+                                          
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -282,7 +286,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.gst')}}</label>
-                                            <input type="number" name="gst" value="{{old('gst')}}" class="form-control">
+                                            <input type="text" name="gst" value="{{old('gst')}}" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -394,8 +398,23 @@
     <script type="text/javascript" src="<?php echo asset('vendor/chart.js/Chart.min.js') ?>"></script>
     <script type="text/javascript" src="<?php echo asset('js/charts-custom.js') ?>"></script>
     
+    <script type="text/javascript">
+    
+        function ValidateEmail() {
+            var email = document.getElementById("email").value;
+            // alert(email)
+            var lblError = document.getElementById("lblError");
+        lblError.innerHTML = "";
+            var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+            if (!expr.test(email)) {
+            lblError.innerHTML = "Invalid email address.";
+        }
+    }
+    </script>
     <script>
+        
      $(document).ready(function(){
+       
         $("div.alert").delay(3000).slideUp(750);
         $("#vendorForm").validate({
                     
@@ -407,31 +426,25 @@
                             minlength: 10,
                             maxlength: 10
                         },
-                        
-                        'email': {
+                        'password': {
                             required: true,
-                            email: true
+                            minlength: 8
                         },
+                        
+                       
                         'company_name': {
                             required: true,
                             maxlength: 200
                         },
                     
                     },
-                    // messages: {
 
-                    //     'phone_number': {
-                    //         required: "Please enter Mobile Number",
-                    //     },
-                    //     'email': {
-                    //         required: "Please enter email",
-                    //     },
-                    //     'company_name': {
-                    //         required: "Please enter valid Date",
-                    //     },
-                    
-                    // },  
-                }); 
+
+
+                  
+        }); 
+
+               
      });
    </script>
    

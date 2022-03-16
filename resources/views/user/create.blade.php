@@ -155,7 +155,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group" id="warehouseId">
-                                        <label><strong>{{trans('file.Warehouse')}} *</strong></label>
+                                        <label><strong>{{trans('file.Outlet')}} *</strong></label>
                                         <select name="warehouse_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Warehouse...">
                                           @foreach($lims_warehouse_list as $warehouse)
                                               <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>

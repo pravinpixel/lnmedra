@@ -62,7 +62,7 @@ class ProductController extends Controller
             10 => 'stock_worth'
         );
         
-        $totalData = Product::where('is_active', true)->count();
+        $totalData = Product::where('is_active','!=',2)->count();
         $totalFiltered = $totalData; 
 
         if($request->input('length') != -1)
@@ -74,7 +74,7 @@ class ProductController extends Controller
         $dir = $request->input('order.0.dir');
         if(empty($request->input('search.value'))){
             $products = Product::with('category', 'brand', 'unit')->offset($start)
-                        ->where('is_active', true)
+                        ->where('is_active', '!=',2)
                         ->limit($limit)
                         ->orderBy($order,$dir)
                         ->get();
@@ -88,21 +88,21 @@ class ProductController extends Controller
                         ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
                         ->where([
                             ['products.name', 'LIKE', "%{$search}%"],
-                            ['products.is_active', true]
+                            ['products.is_active','!=', 2]
                         ])
                         ->orWhere([
                             ['products.code', 'LIKE', "%{$search}%"],
-                            ['products.is_active', true]
+                            ['products.is_active','!=', 2]
                         ])
                         ->orWhere([
                             ['categories.name', 'LIKE', "%{$search}%"],
                             ['categories.is_active', true],
-                            ['products.is_active', true]
+                            ['products.is_active','!=', 2]
                         ])
                         ->orWhere([
                             ['brands.title', 'LIKE', "%{$search}%"],
                             ['brands.is_active', true],
-                            ['products.is_active', true]
+                            ['products.is_active','!=', 2]
                         ])
                         ->offset($start)
                         ->limit($limit)
@@ -113,21 +113,21 @@ class ProductController extends Controller
                             ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
                             ->where([
                                 ['products.name','LIKE',"%{$search}%"],
-                                ['products.is_active', true]
+                                ['products.is_active','!=', 2]
                             ])
                             ->orWhere([
                                 ['products.code', 'LIKE', "%{$search}%"],
-                                ['products.is_active', true]
+                                ['products.is_active','!=', 2]
                             ])
                             ->orWhere([
                                 ['categories.name', 'LIKE', "%{$search}%"],
                                 ['categories.is_active', true],
-                                ['products.is_active', true]
+                                ['products.is_active','!=', 2]
                             ])
                             ->orWhere([
                                 ['brands.title', 'LIKE', "%{$search}%"],
                                 ['brands.is_active', true],
-                                ['products.is_active', true]
+                                ['products.is_active','!=', 2]
                             ])
                             ->count();
         }
@@ -153,7 +153,24 @@ class ProductController extends Controller
                     $nestedData['unit'] = $product->unit->unit_name;
                 else
                     $nestedData['unit'] = 'N/A';
-                
+
+
+                    if($product->is_active == 1)
+                    {
+                        $nestedData['status'] = '
+                        <div class="btn-group">
+                                <button type="button" onclick="vendorProductId('.$product->id.')" class="btn btn-primary"  aria-haspopup="true" aria-expanded="false">Status</button>
+                                </div>
+                        ';
+                    }
+                    else if($product->is_active == 0){
+                        $nestedData['status'] = '
+                        <div class="btn-group">
+                                <button type="button" onclick="vendorProductId('.$product->id.')" class="btn btn-danger"  aria-haspopup="true" aria-expanded="false">Status</button>
+                                </div>
+                        ';
+                    }
+                   
                 $nestedData['price'] = $product->price;
                 $nestedData['cost'] = $product->cost;
 
@@ -228,7 +245,23 @@ class ProductController extends Controller
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
+    public function vendorProductStatus(Request $request)
+    {
+        // return $request->id;
+        $data = Product::where('id',$request->id)->first();
+        if($data->is_active == true){
+            $data->is_active = false;
+        }else{
+            $data->is_active = true;
+        }
+      
+       $res = $data->save();
+       if($res)
+       {
+        return response()->json(['status', 'Status Updated successfully!']);
+       }
 
+    }
     public function store(Request $request)
     {
        
@@ -846,7 +879,7 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $lims_product_data = Product::findOrFail($id);
-        $lims_product_data->is_active = false;
+        $lims_product_data->is_active = 2;
         if($lims_product_data->image != 'zummXD2dvAtI.png') {
             $images = explode(",", $lims_product_data->image);
             foreach ($images as $key => $image) {
@@ -865,7 +898,7 @@ class ProductController extends Controller
        {
         $attribute_image = explode(",", $val->image);
         $attribute_image = htmlspecialchars($attribute_image[0]);
-        $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.'>';
+        $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.' required>';
         $val['image'] = '<img src="'.url('public/images/attribute', $attribute_image).'" height="60" width="60">';
        }
         // dd($data);
@@ -884,7 +917,8 @@ class ProductController extends Controller
          $attribute_image = htmlspecialchars($attribute_image[0]);
          if(in_array("$val->id",$dd))
          {
-            $val['checkbox'] = '<input type="checkbox" name="attribute[]" checked value='.$val->id.'>';
+            $val['checkbox'] = '<input type="checkbox" name="attribute[]" checked value='.$val->id.'>
+            ';
          }
          else{
             $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.'>';

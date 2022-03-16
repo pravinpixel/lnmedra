@@ -22,7 +22,7 @@
             <div class="col d-flex p-0">
                 <input type="date" name="fromDate" id="fromDate" class="form-control mx-1">
                 <input type="date" name="toDate" id="toDate" class="form-control mx-1">
-                <input type="submit" name=""  value="Submit" id="dateValidate" class="btn btn-defult w-100">
+                <input type="submit" name=""  value="Submit" id="dateValidate" class="btn btn-primary">
             </div>
             </div>
         </div>
@@ -115,81 +115,7 @@
         </div>
         
     </div>
-    <!-- <div id="importProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-        <div role="document" class="modal-dialog">
-        <div class="modal-content">
-            {!! Form::open(['route' => 'product.import', 'method' => 'post', 'files' => true]) !!}
-            <div class="modal-header">
-            <h5 id="exampleModalLabel" class="modal-title">Import Product</h5>
-            <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
-            </div>
-            <div class="modal-body">
-            <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
-            <p>{{trans('file.The correct column order is')}} (image, name*, code*, type*, brand, category*, price*, product_details, item_code) {{trans('file.and you must follow this')}}.</p>
-            <p>{{trans('file.To display Image it must be stored in')}} public/images/vendorproduct {{trans('file.directory')}}. {{trans('file.Image name must be same as product name')}}</p>
-            <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>{{trans('file.Upload CSV File')}} *</label>
-                            {{Form::file('file', array('class' => 'form-control','required'))}}
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label> {{trans('file.Sample File')}}</label>
-                            <a href="public/sample_file/sample_products.csv" class="btn btn-info btn-block btn-md"><i class="dripicons-download"></i>  {{trans('file.Download')}}</a>
-                        </div>
-                    </div>
-            </div>
-                {{Form::submit('Submit', ['class' => 'btn btn-primary'])}}
-            </div>
-            {!! Form::close() !!}
-        </div>
-        </div>
-    </div> -->
-    <!-- <div id="product-details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-        <div role="document" class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <h5 id="exampleModalLabel" class="modal-title">{{trans('Product Details')}}</h5>
-            <button id="print-btn" type="button" class="btn btn-default btn-sm ml-3"><i class="dripicons-print"></i> {{trans('file.Print')}}</button>
-            <button type="button" id="close-btn" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-5" id="slider-content"></div>
-                    <div class="col-md-5 offset-1" id="product-content"></div>
-                    <div class="col-md-12 mt-2" id="product-warehouse-section">
-                        <h5>{{trans('file.Warehouse Quantity')}}</h5>
-                        <table class="table table-bordered table-hover product-warehouse-list">
-                            <thead>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-md-6 mt-2" id="product-variant-warehouse-section">
-                        <h5>{{trans('file.Warehouse quantity of product variants')}}</h5>
-                        <table class="table table-bordered table-hover product-variant-warehouse-list">
-                            <thead>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <h5 id="combo-header"></h5>
-                <table class="table table-bordered table-hover item-list">
-                    <thead>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        </div>
-    </div> -->
+  
 @endsection
 
 @push('scripts')
@@ -539,7 +465,29 @@
        
 
     } );
+    function vendorProductId(e) {
+        $.ajax({
+            type: "POST",
+            url:'vendorproducts/vendor-dashboard-status',
+    data: {
+        id:e
+    },                         
+        }).then(function (response) {
+             
+            // alert(response.status);
+            $('#product-data-table').DataTable().clear().draw();
+                
+        }, function (error) {
+            console.log(error);
+            Message('warning',response.data.msg);
+            console.log('Unable to delete');
+        });
 
+    
+    // $('#estimate-datatable').DataTable().clear().draw();
+
+
+    };
     if(all_permission.indexOf("vendorproducts-delete") == -1)
         $('.buttons-delete').addClass('d-none');
 

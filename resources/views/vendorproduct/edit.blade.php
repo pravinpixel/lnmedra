@@ -79,8 +79,16 @@
                                         <label>{{trans('file.category')}} *</strong> </label>
                                         <div class="input-group">
                                           <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
+                                           
                                             @foreach($lims_category_list as $category)
-                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                                @if($category->parent_id == '' || null)
+                                                    <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                                                    @foreach($lims_category_list as $subcategory)
+                                                    @if($category->id == $subcategory->parent_id)
+                                                    <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
+                                                    @endif    
+                                                    @endforeach
+                                                @endif
                                             @endforeach
                                           </select>
                                       </div>
@@ -106,7 +114,7 @@
                                
                                
                                 
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label>{{trans('file.Product Image')}}</strong> </label> <i class="dripicons-question" data-toggle="tooltip" title="{{trans('file.You can upload multiple image. Only .jpeg, .jpg, .png, .gif file can be uploaded. First image will be base image.')}}"></i>
                                         <div id="imageUpload" class="dropzone"></div>
@@ -129,7 +137,7 @@
                                                 <tr>
                                                     <td><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></i></td>
                                                     <td>
-                                                        <img src="{{url('public/images/vendorproduct', $image)}}" height="60" width="60">
+                                                        <img src="{{url('public/images/product', $image)}}" height="60" width="60">
                                                         <input type="hidden" name="prev_img[]" value="{{$image}}">
                                                     </td>
                                                     <td><button type="button" class="btn btn-sm btn-danger remove-img">X</button></td>

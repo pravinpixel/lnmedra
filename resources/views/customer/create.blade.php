@@ -65,6 +65,17 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
+                                            <label>{{trans('file.requirement')}}</strong> </label>
+                                            <div class="input-group">
+                                                <select name="requirement" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('requirement')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" required>
+                                                    <option value="1" {{old ('requirement') == 1 ? 'selected' : ''}}>Landscape Design</option>
+                                                    <option value="2" {{old ('requirement') == 2 ? 'selected' : ''}}>Execution</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
                                             <label>{{trans('file.Tax Number')}}</label>
                                             <input type="text" name="tax_no" class="form-control">
                                         </div>
@@ -93,18 +104,19 @@
                                             <input type="text" name="postal_code" class="form-control">
                                         </div>
                                     </div>
-                                    <div class="col-md-6 mt-3">
-                                        <div class="form-group">
-                                            <label>{{trans('file.Add User')}}</label>&nbsp;
-                                            <input type="checkbox" name="user" value="1" />
-                                        </div>
-                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.Country')}}</label>
                                             <input type="text" name="country" class="form-control">
                                         </div>
                                     </div>
+                                    <div class="col-md-6 mt-3">
+                                        <div class="form-group">
+                                            <label>{{trans('file.Add User')}}</label>&nbsp;
+                                            <input type="checkbox" name="user" value="1" />
+                                        </div>
+                                    </div>
+                                    
                                     <div class="col-md-6 user-input">
                                         <div class="form-group">
                                             <label>{{trans('file.UserName')}} *</label>

@@ -97,8 +97,8 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::resource('products', 'ProductController');
 	Route::get('products/get-attribute-image/{id}', 'ProductController@getAttributeImage')->name('product.get-attribute-image');
 	Route::get('products/get-edit-attribute-image/{id}', 'ProductController@getEditAttributeImage')->name('product.get-attribute-image');
+	Route::post('products/vendor-product-status', 'ProductController@vendorProductStatus')->name('product.vendor-product-status');
 	
-
 	########### vendor product ############
 	
 	Route::post('vendorproducts/product-data', 'VendorProductController@productData');
@@ -110,7 +110,10 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('vendorproducts/product_warehouse/{id}', 'VendorProductController@productWarehouseData');
 	 
 	Route::get('vendorproducts/lims_product_search', 'VendorProductController@limsProductSearch')->name('product.search');
+	
 	Route::post('vendorproducts/deletebyselection', 'VendorProductController@deleteBySelection');
+	Route::post('vendorproducts/vendorProductDeny', 'VendorProductController@vendorProductDeny');
+
 	Route::post('vendorproducts/update', 'VendorProductController@updateProduct');
 	Route::resource('vendorproducts', 'VendorProductController');
 	Route::get('all-vendor-products-list', 'VendorProductController@allVendorProductsList')->name('all-vendor-products-list');
@@ -121,7 +124,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('vendorproducts/ln-qty', 'VendorProductController@lnQtyStore')->name('vendorproducts.ln-qty');
 	Route::post('vendorproducts/ln-price', 'VendorProductController@lnPriceStore')->name('vendorproducts.ln-price');
 	Route::post('vendorproducts/row-data', 'VendorProductController@rowDataStore')->name('vendorproducts.row-data');
-	
+
+	Route::post('vendorproducts/vendor-dashboard-status', 'VendorProductController@vendorDashboardStatus')->name('vendor-dashboard-status');
+
 	
 	Route::resource('master-attribute', 'MasterAttributeController');
 	

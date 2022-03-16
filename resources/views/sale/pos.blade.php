@@ -643,12 +643,12 @@
               @endif
               @if($warehouse_report_active)
               <li id="warehouse-report-menu">
-                <a id="warehouse-report-link" href="">{{trans('file.Warehouse Report')}}</a>
+                <a id="warehouse-report-link" href="">{{trans('file.Outlet Report')}}</a>
               </li>
               @endif
               @if($warehouse_stock_report_active)
               <li id="warehouse-stock-report-menu">
-                <a href="{{route('report.warehouseStock')}}">{{trans('file.Warehouse Stock Chart')}}</a>
+                <a href="{{route('report.warehouseStock')}}">{{trans('file.Outlet Stock Chart')}}</a>
               </li>
               @endif
               @if($product_qty_alert_active)
@@ -762,7 +762,7 @@
               <li id="role-menu"><a href="{{route('role.index')}}">{{trans('file.Role Permission')}}</a></li>
               @endif
               @if($warehouse_permission_active)
-              <li id="warehouse-menu"><a href="{{route('warehouse.index')}}">{{trans('file.Warehouse')}}</a></li>
+              <li id="warehouse-menu"><a href="{{route('warehouse.index')}}">{{trans('file.Outlet')}}</a></li>
               @endif
               @if($customer_group_permission_active)
               <li id="customer-group-menu"><a href="{{route('customer_group.index')}}">{{trans('file.Customer Group')}}</a></li>
@@ -828,7 +828,7 @@
                     </div>
                     <div class="col px-1">
                         <div class="form-group">
-                            <label for="">Enter Warehouse</label>
+                            <label for="">Enter Outlet</label>
                             @if($lims_pos_setting_data)
                             <input type="hidden" name="warehouse_id_hidden" value="{{$lims_pos_setting_data->warehouse_id}}">
                             @endif
@@ -1637,7 +1637,7 @@
                       <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                         <div class="row m-0">
                           <div class="col-md-6 form-group warehouse-section">
-                              <label>{{trans('file.Warehouse')}} *</strong> </label>
+                              <label>{{trans('file.Outlet')}} *</strong> </label>
                               <select required name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
                                   @foreach($lims_warehouse_list as $warehouse)
                                   <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
@@ -1812,7 +1812,7 @@
                         <div class="row m-0">
                             <div class="col-md-6">
                                 <select required name="warehouseId" class="form-control">
-                                    <option value="0">{{trans('file.All Warehouse')}}</option>
+                                    <option value="0">{{trans('file.All Outlet')}}</option>
                                     @foreach($lims_warehouse_list as $warehouse)
                                     <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                     @endforeach
@@ -2269,7 +2269,7 @@ if(keyboard_active==1){
         }
         else if(!warehouse_id){
             $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
-            alert('Please select Warehouse!');
+            alert('Please select Outlet!');
         }
     });
 }
@@ -2284,7 +2284,7 @@ else{
         }
         else if(!warehouse_id){
             $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
-            alert('Please select Warehouse!');
+            alert('Please select Outlet!');
         }
 
     });
@@ -2520,7 +2520,7 @@ $(document).on('click', '.product-img', function() {
     if(!customer_id)
         alert('Please select Customer!');
     else if(!warehouse_id)
-        alert('Please select Warehouse!');
+        alert('Please select Outlet!');
     else{
         var data = $(this).data('product');
         data = data.split(" ");

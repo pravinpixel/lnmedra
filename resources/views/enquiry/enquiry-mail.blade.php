@@ -80,7 +80,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label>{{trans('file.Product Details')}}</label>
-                                        <textarea name="mail_content" class="form-control" rows="3">
+                                        <textarea name="mail_content" id="mail_content" class="form-control" rows="3">
                                             
                                             {{$mailDetail[0]['mail_content']}}
 
@@ -148,15 +148,18 @@
 <script type="text/javascript">
    $(function () {
         $("#btnShowPopup").click(function () {
-            var title = "Greetings";
+            // var title = "Greetings";
+            var dd = $('#mail_content').val();
+            // alert(dd)
+            var content = tinymce.get("mail_content").getContent();
+             console.log(content);
             var body = "Welcome to ASPSnippets.com";
             var enquiry_name = "{{$data['name'] }}";
             var enquiry_email = "{{$data['email'] }}";
             var enquiry_cc = "{{$mailDetail[0]['cc'] }}";
-            var mail_content = {!! json_encode($mailDetail[0]['mail_content']) !!};
-           
-            
-            $("#MyPopup .modal-title").html(title);
+            var mail_content = content;
+            // var mail_content = {!! json_encode($mailDetail[0]['mail_content']) !!};
+
             $("#MyPopup .modal-body").html(`
             Name: <strong>${enquiry_name}</strong><br>
             To:   <strong>${enquiry_email}</strong><br>

@@ -59,7 +59,16 @@
                 </div>
                 <div class="col-md-6 form-group">
                     <label>{{trans('file.Parent Category')}}</label>
-                    {{Form::select('parent_id', $lims_categories, null, ['class' => 'form-control','placeholder' => 'No Parent Category'])}}
+                    <select name="parent_id" class="form-control selectpicker" title="Select Category..." id="parent">
+                    @foreach($lims_categories as $category)
+
+                    @if($category->parent_id == '' || null)
+                        <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                       
+                    @endif
+                    @endforeach
+                </select>
+                    <!-- {{Form::select('parent_id', $lims_categories, null, ['class' => 'form-control','placeholder' => 'No Parent Category'])}} -->
                 </div>
             </div>
 
@@ -94,10 +103,17 @@
             </div>
             <div class="col-md-6 form-group">
                 <label>{{trans('file.Parent Category')}}</label>
-                <select name="parent_id" class="form-control selectpicker" id="parent">
-                    <option value="">No {{trans('file.parent')}}</option>
+                <select name="parent_id" class="form-control selectpicker" title="Select Category..." id="parent">
                     @foreach($lims_category_all as $category)
-                    <option value="{{$category->id}}">{{$category->name}}</option>
+
+                    @if($category->parent_id == '' || null)
+                        <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                        @foreach($lims_category_all as $subcategory)
+                        @if($category->id == $subcategory->parent_id)
+                        <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
+                        @endif    
+                        @endforeach
+                    @endif
                     @endforeach
                 </select>
             </div>

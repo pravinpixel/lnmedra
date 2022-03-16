@@ -35,8 +35,8 @@
                     <th>{{trans('file.Unit')}}</th>
                     <th>{{trans('file.Price')}}</th>
                     <th>{{trans('file.Cost')}}</th>
-                    
                     <th>Stock Worth</th>
+                    <th>{{trans('file.status')}}</th>
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
             </thead>
@@ -126,6 +126,7 @@
 
 @endsection
 @push('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 var baseUrl = $('#baseUrl').val();
     $("ul#product").siblings('a').attr('aria-expanded','true');
@@ -163,7 +164,7 @@ var baseUrl = $('#baseUrl').val();
         }
     });
 
-    $(document).on("click", "tr.product-link td:not(:first-child, :last-child)", function() {
+    $(document).on("click", "tr.product-link td:not(:first-child, :last-child,:nth-child(12))", function() {
         productDetails( $(this).parent().data('product'), $(this).parent().data('imagedata') );
     });
 
@@ -342,6 +343,7 @@ var baseUrl = $('#baseUrl').val();
                 {"data": "price"},
                 {"data": "cost"},
                 {"data": "stock_worth"},
+                {"data": "status"},
                 {"data": "options"},
             ],
             'language': {
@@ -475,6 +477,44 @@ var baseUrl = $('#baseUrl').val();
         } );
 
     } );
+
+
+    function vendorProductId(e) {
+
+					swal({
+						title: "Are you sure?",
+						text: "Once deleted, you will not be able to recover this Data!",
+						icon: "warning",
+						buttons: true,
+						dangerMode: true,
+					}).then((willDelete) => {
+                        // alert(willDelete)
+						if (willDelete) {
+							$.ajax({
+                                type: "POST",
+                                url:'products/vendor-product-status',
+                        data: {
+                            id:e
+                        },                         
+							}).then(function (response) {
+								 
+								// alert(response.status);
+                                $('#product-data-table').DataTable().clear().draw();
+                                    
+							}, function (error) {
+								console.log(error);
+                                Message('warning',response.data.msg);
+								console.log('Unable to delete');
+							});
+
+						} else {
+                            $('#product-data-table').DataTable().clear().draw();
+							swal("Your Data is safe!");
+						}
+                        // $('#estimate-datatable').DataTable().clear().draw();
+ 
+					});
+    };
 
     if(all_permission.indexOf("products-delete") == -1)
         $('.buttons-delete').addClass('d-none');

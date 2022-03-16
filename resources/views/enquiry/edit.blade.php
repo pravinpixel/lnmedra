@@ -51,20 +51,16 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-            
-                                            <div class="form-group">
-                                                <label>{{trans('file.requirement')}}</strong> </label>
-                                                <div class="input-group">
+                                        <div class="form-group">
+                                            <label>{{trans('file.requirement')}}</strong> </label>
+                                            <div class="input-group">
                                                 <select name="requirement" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('requirement')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins"  required>
-                                                    
-                                                        <option value="1" <?php echo "$lims_enquiry_data->requirement" == "1" ?   "selected" : '' ;?> >Landscape Design</option>
-                                                        <option value="2" <?php echo "$lims_enquiry_data->requirement" == "2" ?   "selected" : '' ;?> >Execution</option>
-                                                   
+                                                    <option value="1" <?php echo "$lims_enquiry_data->requirement" == "1" ?   "selected" : '' ;?> >Landscape Design</option>
+                                                    <option value="2" <?php echo "$lims_enquiry_data->requirement" == "2" ?   "selected" : '' ;?> >Execution</option>
                                                 </select>
-
-                                            </div>
                                             </div>
                                         </div>
+                                    </div>
                                   
                                 
                                     <div class="col-md-12">

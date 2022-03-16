@@ -311,16 +311,17 @@
                                             <input type="checkbox" name="featured" value="1">
                                         @endif
                                         <label>{{trans('file.Featured')}}</label>
+                                        <p class="italic">{{trans('file.Featured product will be displayed in POS')}}</p>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <label>{{trans('file.Product Image')}}</strong> </label> <i class="dripicons-question" data-toggle="tooltip" title="{{trans('file.You can upload multiple image. Only .jpeg, .jpg, .png, .gif file can be uploaded. First image will be base image.')}}"></i>
                                         <div id="imageUpload" class="dropzone"></div>
                                         <span class="validation-msg" id="image-error"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group">
                                         <table class="table table-hover">
                                             <thead>

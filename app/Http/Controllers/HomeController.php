@@ -363,7 +363,7 @@ class HomeController extends Controller
        
         if($role->hasPermissionTo('vendor-dashboard-index')){
             
-            $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '!=',2)->count();
+            $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '=',1)->count();
             $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
             $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
             $pending = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();

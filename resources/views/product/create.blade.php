@@ -11,7 +11,7 @@
                     </div>
                     <div class="card-body">
                         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
-                        <form id="product-form">
+                        <form id="product-form" name="product-form">
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group">
@@ -39,7 +39,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>{{trans('file.Attribute')}} *</strong> </label>
+                                        <label>{{trans('file.Product Code')}} *</strong> </label>
                                         <div class="input-group">
                                             <input type="text" name="code" class="form-control" id="code" aria-describedby="code" required>
                                             <div class="input-group-append">
@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group">
-                                        <label>{{trans('file.Product Code')}} *</strong> </label>
+                                        <label>{{trans('file.Attribute')}} *</strong> </label>
                                         
                                         <div id="attribute_img" >
                                             
@@ -408,6 +408,33 @@
 
 @endsection
 @push('scripts')
+<!-- <script type="text/javascript">
+     $(document).ready(function(){
+        $("#product-form").validate({
+                    
+                    rules: {
+                    
+                        'attribute': {
+                            required: true,
+                            number: true,
+                            minlength: 10,
+                            maxlength: 10
+                        },
+                        
+                        'email': {
+                            required: true,
+                            email: true
+                        },
+                        'company_name': {
+                            required: true,
+                            maxlength: 200
+                        },
+                    
+                    },  
+                }); 
+     });
+    
+</script> -->
 <script type="text/javascript">
 
     $("ul#product").siblings('a').attr('aria-expanded','true');
@@ -860,6 +887,40 @@
         }
     });
 
+
+//     $(document).ready(function(){
+	
+// 	$('#product-form').validate({
+// 	    rules: {
+	      
+//           "attribute[]": { 
+//           	//required: true,
+//           	//minlength: 1
+//             required: function(elem)
+//             {
+//                 return $("input.select:checked").length > 0;
+//             }
+             
+//           }
+// 	    },
+// 	    messages: { 
+            
+//             "attribute[]": "You must check at least 1 box",
+
+//         },
+// 	    // highlight: function(label) {
+// 	    // 	$(label).closest('.control-group').addClass('error');
+// 	    // },
+// 	    // success: function(label) {
+// 	    // 	label
+// 	    // 		.text('OK!').addClass('valid')
+// 	    // 		.closest('.control-group').addClass('success');
+// 	    // }
+	     
+// 	  });
+	  
+// });
+
     myDropzone = new Dropzone('div#imageUpload', {
         addRemoveLinks: true,
         autoProcessQueue: false,
@@ -882,6 +943,35 @@
         init: function () {
             var myDropzone = this;
             $('#submit-btn').on("click", function (e) {
+                alert()
+
+
+                $('#product-form').validate({
+                    rules: {
+                    
+                    "attribute[]": { 
+                        //required: true,
+                        //minlength: 1
+                        required: function(elem)
+                        {
+                            return $("input.select:checked").length > 0;
+                        }
+                        
+                    }
+                    },
+                    messages: { 
+                        
+                        "attribute[]": "You must check at least 1 box",
+
+                    },
+                    highlight: function(label) {
+                        $(label).closest('#attribute_img').addClass('error');
+                    },
+	     
+	        });
+
+
+
                 e.preventDefault();
                 if ( $("#product-form").valid() && validate() ) {
                     tinyMCE.triggerSave();

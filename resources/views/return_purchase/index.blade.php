@@ -19,7 +19,7 @@
                     <th class="not-exported"></th>
                     <th>{{trans('file.Date')}}</th>
                     <th>{{trans('file.reference')}}</th>
-                    <th>{{trans('file.Warehouse')}}</th>
+                    <th>{{trans('file.Outlet')}}</th>
                     <th>{{trans('file.Supplier')}}</th>
                     <th>{{trans('file.Account')}}</th>
                     <th>{{trans('file.grand total')}}</th>

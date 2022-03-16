@@ -13,15 +13,15 @@
 
 <section>
     <div class="container-fluid">
-        <a href="#" data-toggle="modal" data-target="#createModal" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Warehouse')}}</a>
-        <a href="#" data-toggle="modal" data-target="#importWarehouse" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Warehouse')}}</a>
+        <a href="#" data-toggle="modal" data-target="#createModal" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Outlet')}}</a>
+        <a href="#" data-toggle="modal" data-target="#importWarehouse" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Outlet')}}</a>
     </div>
     <div class="table-responsive">
         <table id="warehouse-table" class="table">
             <thead>
                 <tr>
                     <th class="not-exported"></th>
-                    <th>{{trans('file.Warehouse')}}</th>
+                    <th>{{trans('file.Outlet')}}</th>
                     <th>{{trans('file.Phone Number')}}</th>
                     <th>{{trans('file.Email')}}</th>
                     <th>{{trans('file.Address')}}</th>
@@ -85,14 +85,14 @@
     <div class="modal-content">
     	{!! Form::open(['route' => 'warehouse.store', 'method' => 'post']) !!}
       <div class="modal-header">
-        <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Add Warehouse')}}</h5>
+        <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Add Outlet')}}</h5>
         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
       </div>
       <div class="modal-body">
         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
           <div class="form-group">
             <label>{{trans('file.name')}} *</label>
-            <input type="text" placeholder="Type WareHouse Name..." name="name" required="required" class="form-control">
+            <input type="text" placeholder="Type Outlet Name..." name="name" required="required" class="form-control">
           </div>
           <div class="form-group">
             <label>{{trans('file.Phone Number')}} *</label>
@@ -120,7 +120,7 @@
     <div class="modal-content">
     	{!! Form::open(['route' => ['warehouse.update',1], 'method' => 'put']) !!}
       <div class="modal-header">
-        <h5 id="exampleModalLabel" class="modal-title"> {{trans('file.Update Warehouse')}}</h5>
+        <h5 id="exampleModalLabel" class="modal-title"> {{trans('file.Update Outlet')}}</h5>
         <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
       </div>
       <div class="modal-body">

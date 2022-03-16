@@ -29,6 +29,11 @@ class EnquiryMailTemplate extends Mailable
     public function build()
     {
         // return $this->markdown('emails.myDemoMail');
-        return $this->from('noreplay@gmail.com')->markdown('mail.enquiry_mail_template')->with('details', $this->details);
+        // return $this->from('noreplay@gmail.com')->markdown('mail.enquiry_mail_template')->with('details', $this->details);
+        $this->from('noreplay@gmail.com')->markdown('mail.enquiry_mail_template')->with('details', $this->details);
+         foreach ($this->details['attachment'] as $file){
+            $this->attach($file);
+        }
+        return $this;
     }
 }

@@ -18,7 +18,8 @@
                                         <input type="hidden" name="vendoruserid" id="vendoruserid" value="{{ Auth::id() }}">
                                         <label>{{trans('file.Product Type')}} *</strong> </label>
                                         <div class="input-group">
-                                            <select name="type" required class="form-control selectpicker" id="type">
+                                            <select name="type" required  data-live-search="true" title="Select Product Type..." class="form-control selectpicker" id="type">
+                                            
                                                 <option value="standard">Standard</option>
                                                 <option value="combo">Combo</option>
                                                 <option value="digital">Digital</option>
@@ -84,7 +85,7 @@
                                 <div id="alert-qty" class="col-md-2">
                                     <div class="form-group">
                                         <label>{{trans('file.Alert Quantity')}}</strong> </label>
-                                        <input type="number" name="qty" class="form-control" step="any">
+                                        <input type="number" name="qty" class="form-control noscroll" min="0" step="any">
                                     </div>
                                 </div>
                                 

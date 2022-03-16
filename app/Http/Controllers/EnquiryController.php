@@ -10,6 +10,7 @@ use App\Enquiry;
 use App\MailTemplate;
 use App\EnquiryMailAttachment;
 use Hash;
+use PDF;
 use Illuminate\Validation\Rule;
 use Auth;
 use Spatie\Permission\Models\Role;
@@ -151,7 +152,7 @@ class EnquiryController extends Controller
     }
     public function enquirySentMail(Request $request)
     {
-        // print_r($request['subject']);die();
+        // print_r($request['mail_content']);die();
         $filePath = 'images/enquiry_attachment/';
         $path = public_path($filePath); 
         if(!file_exists($path))
@@ -170,13 +171,15 @@ class EnquiryController extends Controller
                 $name = $file->getClientOriginalName().'.'.$file->extension();
                 $file->move(public_path('images/enquiry_attachment'), $name);  
                 $files[] = $name; 
+               $attachPath= public_path('images/enquiry_attachment');
+                $attachement[] =  $attachPath.'/'.$name;
                } 
         
             }
            
          }
 
-
+        // print_r($attachement);die();
         
         $data = new EnquiryMailAttachment();
         $data->enquiry_id = $request['enquiry_id'];
@@ -192,16 +195,19 @@ class EnquiryController extends Controller
             'email'    =>  $request['email'],
            
             'mail_content'    =>  $request['mail_content'],
-            
+            'attachment'=>$attachement
             ]; 
-          
+            // print_r($details);die();
         $ccMail = explode(",",$request['cc']);
         $bccMail = explode(",",$request['bcc']);
+        // $pdf = PDF::loadView('emails.myTestMail', $data);
        
         try{
        
             $res = Mail::to($request['email'])->cc($ccMail)->bcc($bccMail)->send(new \App\Mail\EnquiryMailTemplate($details));
-
+   
+               
+            
         }
         catch(\Exception $e) {
             $message = $e;

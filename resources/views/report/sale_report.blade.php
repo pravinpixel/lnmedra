@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-md-4 mt-4">
                     <div class="form-group row">
-                        <label class="d-tc mt-2"><strong>{{trans('file.Choose Warehouse')}}</strong> &nbsp;</label>
+                        <label class="d-tc mt-2"><strong>{{trans('file.Choose Outlet')}}</strong> &nbsp;</label>
                         <div class="d-tc">
                             <input type="hidden" name="warehouse_id_hidden" value="{{$warehouse_id}}" />
                             <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" >
