@@ -9,6 +9,7 @@ use App\Biller;
 use App\Warehouse;
 use App\CustomerGroup;
 use App\Customer;
+use App\OutletUser;
 use Auth;
 use Hash;
 use Keygen;
@@ -57,7 +58,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
+        // print_r($request->all());die();
         $this->validate($request, [
             'name' => [
                 'max:255',
@@ -118,7 +119,39 @@ class UserController extends Controller
         $data['is_deleted'] = false;
         $data['password'] = bcrypt($data['password']);
         $data['phone'] = $data['phone_number'];
-        User::create($data);
+        $formatData = collect($data)->except('warehouse_id')->toArray();
+    
+        $user_id =  User::create($formatData)->id;
+
+      
+        foreach($data['warehouse_id'] as $key=>$val )
+        {
+           
+                $ff = new OutletUser();
+                $ff->user_id = $user_id;
+                $ff->outlet_id = $val;
+                $ff->is_default = $data['outletIn'][$key];
+                $ff->is_active = 1;
+                $ff->save();
+               
+        }
+        foreach($data['warehouse_id'] as $key=>$val )
+        {
+            foreach($data['outletIn'] as $defaultKey=>$defaultVal)
+            {
+               
+                if($defaultKey ==1)
+                {
+                
+                  $defaultID = $val;
+                }
+            }
+        }
+       
+        $updateOutlet = User::where('id',$user_id)->first();
+        $updateOutlet->warehouse_id = $defaultID;
+        $updateOutlet->update();
+
         if($data['role_id'] == 5) {
             $data['name'] = $data['customer_name'];
             $data['phone_number'] = $data['phone'];
@@ -133,10 +166,13 @@ class UserController extends Controller
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('users-edit')){
             $lims_user_data = User::find($id);
+            $outlet_data = OutletUser::where('is_active',true)->where('user_id',$id)->get();
+            $outlet_count = OutletUser::where('is_active',true)->where('user_id',$id)->count();
             $lims_role_list = Roles::where('is_active', true)->get();
             $lims_biller_list = Biller::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-            return view('user.edit', compact('lims_user_data', 'lims_role_list', 'lims_biller_list', 'lims_warehouse_list'));
+            // print_r($outlet_data);die();
+            return view('user.edit', compact('lims_user_data', 'lims_role_list', 'lims_biller_list', 'lims_warehouse_list','outlet_data','outlet_count'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -144,6 +180,16 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        // print_r($request->all());die();
+        $outletData = OutletUser::where('user_id',$id)->get();
+
+        foreach($outletData as $val)
+        {
+            $val->is_active = 2;
+            $val->save();
+        }
+    
+        // print_r($outletData);die();
         if(!env('USER_VERIFIED'))
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
 
@@ -184,13 +230,52 @@ class UserController extends Controller
         }
 
         // print_r($input);die();
+     
 
         if(!isset($input['is_active']))
             $input['is_active'] = false;
         if(!empty($request['password']))
             $input['password'] = bcrypt($request['password']);
         $lims_user_data = User::find($id);
-        $lims_user_data->update($input);
+        $formatData = collect($input)->except('warehouse_id')->toArray();
+
+        $lims_user_data->update($formatData);
+       
+
+      
+        foreach($input['warehouse_id'] as $key=>$val )
+        {
+           
+                $ff = new OutletUser();
+                $ff->user_id = $id;
+                $ff->outlet_id = $val;
+                $ff->is_default = $input['outletIn'][$key];
+                $ff->is_active = 1;
+                $ff->save();
+               
+        }
+        foreach($input['warehouse_id'] as $key=>$val )
+        {
+            foreach($input['outletIn'] as $defaultKey=>$defaultVal)
+            {
+               
+                if($defaultVal ==1)
+                {
+                // dd("fff");
+                  $defaultID = $val;
+                }
+            }
+        }
+        $updateOutlet = User::where('id',$id)->first();
+        // if($defaultID)
+        // {
+        //     dd("if");
+        // }
+        // else{
+        //     dd("e");
+        // }
+        $updateOutlet->warehouse_id = $defaultID;
+        $updateOutlet->update();
         return redirect('user')->with('message2', 'Data updated successfullly');
     }
 

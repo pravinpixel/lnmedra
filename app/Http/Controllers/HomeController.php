@@ -15,6 +15,7 @@ use App\Payment;
 use App\Account;
 use App\Product_Sale;
 use App\Customer;
+use Session;
 use App\Product;
 use App\VendorProduct;
 use App\RewardPointSetting;
@@ -106,6 +107,11 @@ class HomeController extends Controller
         } finally {
             $printer -> close();
         }*/
+        
+        $default_outlet = Auth::user()->warehouse_id;
+        // print_r($default_outlet);die();
+        $ff= session()->put('default_outlet',$default_outlet);
+  
         if(Auth::user()->role_id == 5) {
             $customer = Customer::select('id', 'points')->where('user_id', Auth::id())->first();
             $lims_sale_data = Sale::with('warehouse')->where('customer_id', $customer->id)->orderBy('created_at', 'desc')->get();

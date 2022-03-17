@@ -898,7 +898,9 @@ class ProductController extends Controller
        {
         $attribute_image = explode(",", $val->image);
         $attribute_image = htmlspecialchars($attribute_image[0]);
-        $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.' required>';
+        $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.' required>
+        <span class="validation-msg"></span>
+        ';
         $val['image'] = '<img src="'.url('public/images/attribute', $attribute_image).'" height="60" width="60">';
        }
         // dd($data);

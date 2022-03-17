@@ -30,6 +30,7 @@ return [
 	'Attribute'=>'Attribute',
 	'Date Of Join'=>'Date Of Join',
 	'Id Proof'=>'Id Proof',
+	'Add Store Outlet'=>'Add Store Outlet',
 	'Address Proof'=>'Address Proof',
 	'Attribute Image'=>'Attribute Image',
 	'Basic Information'=>'Basic Information',

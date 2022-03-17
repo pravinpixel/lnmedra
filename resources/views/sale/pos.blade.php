@@ -832,14 +832,14 @@
                             @if($lims_pos_setting_data)
                             <input type="hidden" name="warehouse_id_hidden" value="{{$lims_pos_setting_data->warehouse_id}}">
                             @endif
-                            <select required id="warehouse_id" name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
+                            <select required id="warehouse_id" name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
                                 @foreach($lims_warehouse_list as $warehouse)
                                 <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col px-1">
+                    <!-- <div class="col px-1">
                         <div class="form-group">
                             <label for="">Enter Company Name</label>
                             @if($lims_pos_setting_data)
@@ -851,13 +851,19 @@
                             @endforeach
                             </select>
                         </div>
+                    </div> -->
+                    <div class="col px-1">
+                        <div class="form-group">
+                            <label for="">Sales Person Code</label>
+                            <input type="text" name="salesPersonCode" class="form-control" onkeyup='saveValue(this);'  placeholder="Type sales person code.." >
+                        </div>
                     </div>
                     <div class="col px-1">
                         <label for="">Enter Customer</label>
                         <div class="form-group">
 
                             @if($lims_pos_setting_data)
-                            <input type="hidden" name="customer_id_hidden" value="{{$lims_pos_setting_data->customer_id}}">
+                            <input type="hidden" name="customer_id" value="{{$lims_pos_setting_data->customer_id}}">
                             @endif
                             <div class="input-group pos">
                                 @if($customer_active)
@@ -929,7 +935,7 @@
                                             <p id="change" class="ml-2">0.00</p>
                                         </div>
                                         <div class="col-md-6 mt-1">
-                                            <input type="hidden" name="paid_by_id">
+                                            <input type="text" name="paid_by_id">
                                             <label>{{trans('file.Paid By')}}</label>
                                             <select name="paid_by_id_select" class="form-control selectpicker">
                                                 <option value="1">Cash</option>
@@ -953,6 +959,9 @@
                                             <input type="hidden" name="gift_card_id">
                                             <select id="gift_card_id_select" name="gift_card_id_select" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Gift Card..."></select>
                                         </div>
+                                        
+                                         
+                                       
                                         <div class="form-group col-md-12 cheque">
                                             <label>{{trans('file.Cheque Number')}} *</label>
                                             <input type="text" name="cheque_no" class="form-control">
@@ -962,6 +971,7 @@
                                             <textarea id="payment_note" rows="2" class="form-control" name="payment_note"></textarea>
                                         </div>
                                     </div>
+
                                     <div class="row m-0">
                                        <div class="col-md-6 form-group">
                                             <label>{{trans('file.Sale Note')}}</label>
@@ -1107,6 +1117,10 @@
                                     <input type="hidden" name="total_tax" value="0.00"/>
                                 </div>
                             </div>
+                            <input type="hidden" name="warehouse_id" id="warehousePaymentId" class="form-control warehousePaymentId">
+                            <input type="hidden" name="paid_amount" class="form-control numkey"  step="any">
+                            {{-- <input type="hidden" name="customer_id_hidden"> --}}
+                            <input type="hidden" id="customer_id_hidden" name="customer_id">
                             <div class="col-md-2">
                                 <div class="form-group">
                                     <input type="hidden" name="total_price" />
@@ -1186,7 +1200,7 @@
                         <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Scan/Search product by name/code" class="form-control form-control-lg rounded-pill mb-3 active"  />
                     </div>
                 </div>
-                {{-- <header class="header">
+                <!-- {{-- <header class="header">
                     <nav class="navbar">
                       <div class="container-fluid">
                         <div class="navbar-holder d-flex align-items-center justify-content-end">
@@ -1296,7 +1310,7 @@
                         </div>
                       </div>
                     </nav>
-                </header> --}}
+                </header> --}} -->
                 <div class="px-2 border pt-4 card">
                     <div class="filter-window">
                         <div class="category ">
@@ -1556,6 +1570,7 @@
                                     </tr>
                                   </thead>
                                   <tbody>
+                                   
                                     @foreach($recent_sale as $sale)
                                     <?php $customer = DB::table('customers')->find($sale->customer_id); ?>
                                     <tr>
@@ -1577,6 +1592,7 @@
                                       </td>
                                     </tr>
                                     @endforeach
+                                  
                                   </tbody>
                                 </table>
                               </div>
@@ -2202,10 +2218,12 @@ else {
 }
 
   if(getSavedValue("biller_id")) {
+      console.log(getSavedValue("customer_id"))
     $('select[name=customer_id]').val(getSavedValue("customer_id"));
   }
   else {
     $('select[name=customer_id]').val($("input[name='customer_id_hidden']").val());
+    console.log('else')
   }
 
 $('.selectpicker').selectpicker('refresh');
@@ -2390,6 +2408,7 @@ function populateProduct(data) {
 $('select[name="customer_id"]').on('change', function() {
     saveValue(this);
     var id = $(this).val();
+    $("#customer_id_hidden").val(id);
     $.get('sales/getcustomergroup/' + id, function(data) {
         customer_group_rate = (data / 100);
     });
@@ -2693,6 +2712,8 @@ $("#draft-btn").on("click",function(){
 });
 
 $("#submit-btn").on("click", function() {
+   
+  
     $('.payment-form').submit();
 });
 
@@ -2718,7 +2739,16 @@ $("#cheque-btn").on("click",function() {
 });
 
 $("#cash-btn").on("click",function() {
-    $('select[name="paid_by_id_select"]').val(1);
+
+
+    var wareId = $('#warehouse_id').val();
+  
+    $('#warehousePaymentId').val(wareId);
+
+
+    $('select[name="paid_by_id_select"]').val(1).change();
+
+    $('input[name="paid_by_id"]').val(1);
     $('.selectpicker').selectpicker('refresh');
     $('div.qc').show();
     hide();

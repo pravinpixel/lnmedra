@@ -146,6 +146,8 @@
                                             <input type="text" name="postal_code" class="form-control">
                                         </div>
                                     </div>
+                                   
+                                    
                                     <div class="form-group" id="biller-id">
                                         <label><strong>{{trans('file.Biller')}} *</strong></label>
                                         <select name="biller_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Biller...">
@@ -154,13 +156,33 @@
                                           @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group" id="warehouseId">
+                                    <!-- <div class="form-group" id="warehouseId">
                                         <label><strong>{{trans('file.Outlet')}} *</strong></label>
-                                        <select name="warehouse_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Warehouse...">
+                                        <select name="warehouse_id[]" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
                                           @foreach($lims_warehouse_list as $warehouse)
                                               <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                           @endforeach
                                         </select>
+                                        <input type="checkbox" name="outlet">
+                                    </div> -->
+                                  
+                                    <div class="field_wrapper" id="warehouseId">
+                                        <label><strong>{{trans('file.Add Store Outlet')}} *</strong></label>
+                                        <br>
+                                        <a  class="btn btn-primary add_button" title="Add field" >Add</a>
+                                        <!-- <div>
+                                            <input type="text" name="field_name[]" value=""/>
+                                           
+                                        </div> -->
+                                        <!-- <label><strong>{{trans('file.Outlet')}} *</strong></label> -->
+                                        <select name="warehouse_id[1]" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
+                                          @foreach($lims_warehouse_list as $warehouse)
+                                              <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                          @endforeach
+                                        </select>
+                                        <input type="radio" name="outlet"  value="1" required onclick="setValue('outletIn_1')">
+                                        <input type="hidden" name="outletIn[1]" id="outletIn_1" value="0">
+
                                     </div>
                                 </div>
                             </div>
@@ -193,8 +215,7 @@
         }
  
     });
-        
-   
+
 
     $("ul#setting").siblings('a').attr('aria-expanded','true');
     $("ul#setting").addClass("show");
@@ -215,30 +236,105 @@
     });
 
     $('select[name="role_id"]').on('change', function() {
+        // alert($(this).val())
+        $('.cloneOutlet').remove();
         if($(this).val() == 5) {
             $('#biller-id').hide(300);
             $('#warehouseId').hide(300);
             $('.customer-section').show(300);
             $('.customer-input').prop('required',true);
-            $('select[name="warehouse_id"]').prop('required',false);
+            // $('select[name="warehouse_id"]').prop('required',false);
             $('select[name="biller_id"]').prop('required',false);
         }
-        else if($(this).val() > 2 && $(this).val() != 5) {
+        else if($(this).val() == 1) {
+            $('select[name="biller_id"]').prop('required',false);
+            $('#biller-id').hide(300);
+            // $('#warehouseId').hide(300);
+            $('.customer-section').hide(300);
+            $('.customer-input').prop('required',false);
+        }
+        else if($(this).val() !=5 ){
             $('select[name="warehouse_id"]').prop('required',true);
+            $('#warehouseId').show(300);
+            
+            if($(this).val() > 2 && $(this).val() != 5)
+            {
+                $('select[name="biller_id"]').prop('required',true);
+                $('#biller-id').show(300);
+                // $('#warehouseId').show(300);
+                $('.customer-section').hide(300);
+                $('.customer-input').prop('required',false);
+            }
+        }
+        
+        else if($(this).val() > 2 && $(this).val() != 5) {
+            // $('select[name="warehouse_id"]').prop('required',true);
             $('select[name="biller_id"]').prop('required',true);
             $('#biller-id').show(300);
-            $('#warehouseId').show(300);
+            // $('#warehouseId').show(300);
             $('.customer-section').hide(300);
             $('.customer-input').prop('required',false);
         }
         else {
-            $('select[name="warehouse_id"]').prop('required',false);
+            // $('select[name="warehouse_id"]').prop('required',false);
             $('select[name="biller_id"]').prop('required',false);
             $('#biller-id').hide(300);
-            $('#warehouseId').hide(300);
+            
+            // $('#warehouseId').hide(300);
             $('.customer-section').hide(300);
             $('.customer-input').prop('required',false);
         }
     });
+
+
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+    var maxField = 10; //Input fields increment limitation
+    var addButton = $('.add_button'); //Add button selector
+    var wrapper = $('.field_wrapper'); //Input field wrapper
+    var fieldHTML = '<div><input type="text" name="field_name[]" value=""/><button class="btn btn-danger remove_button" ></button></div>'; //New input field html 
+    var x = 1; //Initial field counter is 1
+    
+    //Once add button is clicked
+    $(addButton).click(function(){
+        //Check maximum number of input fields
+        if(x < maxField){ 
+            x++; //Increment field counter
+            // $(wrapper).append(fieldHTML); //Add field html
+            $(wrapper).append(`
+            <div class="field_wrapper cloneOutlet" id="warehouseId">
+           
+            <br>
+                    <select name="warehouse_id[${x}]" id="warehouse_id[${x}]" class="selectpicker form-control" data-live-search="true" title="Select outlet..." required>
+                        @foreach($lims_warehouse_list as $warehouse)
+                            <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                        @endforeach
+                    </select>
+                    <input type="radio" value="1" name="outlet" onclick="setValue('outletIn_${x}')" required>
+                    <input type="hidden" name="outletIn[${x}]" id="outletIn_${x}" value="0">
+                    <button class="btn btn-danger remove_button" >X</button>
+                    <br>
+                    </div>
+           
+            `); //Add field html
+            $('.selectpicker').selectpicker({
+            style: 'btn-link',
+            });
+        }
+    });
+    
+    //Once remove button is clicked
+    $(wrapper).on('click', '.remove_button', function(e){
+        e.preventDefault();
+        $(this).parent('div').remove(); //Remove field html
+        x--; //Decrement field counter
+    });
+});
+
+function setValue(e){
+
+$('#'+e).val(1);
+}
 </script>
 @endpush

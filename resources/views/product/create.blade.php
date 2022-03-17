@@ -408,34 +408,10 @@
 
 @endsection
 @push('scripts')
-<!-- <script type="text/javascript">
-     $(document).ready(function(){
-        $("#product-form").validate({
-                    
-                    rules: {
-                    
-                        'attribute': {
-                            required: true,
-                            number: true,
-                            minlength: 10,
-                            maxlength: 10
-                        },
-                        
-                        'email': {
-                            required: true,
-                            email: true
-                        },
-                        'company_name': {
-                            required: true,
-                            maxlength: 200
-                        },
-                    
-                    },  
-                }); 
-     });
-    
-</script> -->
+
 <script type="text/javascript">
+
+
 
     $("ul#product").siblings('a').attr('aria-expanded','true');
     $("ul#product").addClass("show");
@@ -481,14 +457,12 @@
        $('#productType').on('change', function() {
          
            var typeId = $(this).val();
-        //    alert(typeId)
            $.ajax({
                 type: 'GET',
                 url: 'get-attribute-image/' + typeId,
                
                 success: function(res) {
                     $('#attribute_img').html('');
-                    
                 // alert(res.data.length)
                    for(var i=0;i<res.data.length;i++)
                    {
@@ -822,6 +796,9 @@
         var barcode_symbology = $('select[name="barcode_symbology"]').val();
         var exp = /^\d+$/;
 
+
+
+
         if(!(product_code.match(exp)) && (barcode_symbology == 'UPCA' || barcode_symbology == 'UPCE' || barcode_symbology == 'EAN8' || barcode_symbology == 'EAN13') ) {
             alert('Product code must be numeric.');
             return false;
@@ -848,6 +825,7 @@
                 return false;
             }
         }
+        
         if($("#is-variant").is(":checked")) {
             rowindex = $("table#variant-table tbody tr:last").index();
             if (rowindex < 0) {
@@ -888,39 +866,6 @@
     });
 
 
-//     $(document).ready(function(){
-	
-// 	$('#product-form').validate({
-// 	    rules: {
-	      
-//           "attribute[]": { 
-//           	//required: true,
-//           	//minlength: 1
-//             required: function(elem)
-//             {
-//                 return $("input.select:checked").length > 0;
-//             }
-             
-//           }
-// 	    },
-// 	    messages: { 
-            
-//             "attribute[]": "You must check at least 1 box",
-
-//         },
-// 	    // highlight: function(label) {
-// 	    // 	$(label).closest('.control-group').addClass('error');
-// 	    // },
-// 	    // success: function(label) {
-// 	    // 	label
-// 	    // 		.text('OK!').addClass('valid')
-// 	    // 		.closest('.control-group').addClass('success');
-// 	    // }
-	     
-// 	  });
-	  
-// });
-
     myDropzone = new Dropzone('div#imageUpload', {
         addRemoveLinks: true,
         autoProcessQueue: false,
@@ -943,35 +888,6 @@
         init: function () {
             var myDropzone = this;
             $('#submit-btn').on("click", function (e) {
-                alert()
-
-
-                $('#product-form').validate({
-                    rules: {
-                    
-                    "attribute[]": { 
-                        //required: true,
-                        //minlength: 1
-                        required: function(elem)
-                        {
-                            return $("input.select:checked").length > 0;
-                        }
-                        
-                    }
-                    },
-                    messages: { 
-                        
-                        "attribute[]": "You must check at least 1 box",
-
-                    },
-                    highlight: function(label) {
-                        $(label).closest('#attribute_img').addClass('error');
-                    },
-	     
-	        });
-
-
-
                 e.preventDefault();
                 if ( $("#product-form").valid() && validate() ) {
                     tinyMCE.triggerSave();

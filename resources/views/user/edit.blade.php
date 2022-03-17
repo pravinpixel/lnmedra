@@ -111,7 +111,7 @@
                                           @endforeach
                                         </select>
                                     </div>
-                                    <div class="form-group" id="warehouseId">
+                                    <!-- <div class="form-group" id="warehouseId">
                                         <label><strong>{{trans('file.Outlet')}} *</strong></label>
                                         <input type="hidden" name="warehouse_id_hidden" value="{{$lims_user_data->warehouse_id}}">
                                         <select name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Warehouse...">
@@ -119,6 +119,42 @@
                                               <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                           @endforeach
                                         </select>
+                                    </div> -->
+                                    <div class="field_wrapper cloneOutlet" id="warehouseId">
+                                        <label><strong>{{trans('file.Add Store Outlet')}} *</strong></label>
+                                        <a  class="btn btn-primary add_button" title="Add field" >Add</a>
+                                        @foreach($outlet_data  as $key=>$val)
+                                        <!-- {{$val->outlet_id}} = {{$warehouse->id}} -->
+                                        
+                                            <div class="form-group" id="warehouseId">
+                                            
+                                                <input type="hidden" name="warehouse_id_hidden" value="{{$lims_user_data->warehouse_id}}">
+                                                <select name="warehouse_id[{{ $key }}]" class="selectpicker form-control" required data-live-search="true" data-live-search-style="begins" title="Select Warehouse...">
+                                                @foreach($lims_warehouse_list as $warehouse)
+                                                    <option value="{{$warehouse->id}}" <?php echo "{{$val->outlet_id}}" == "{{$warehouse->id}}" ?   "selected" : '' ;?>>{{$warehouse->name}}</option>
+                                                @endforeach
+                                                </select>
+
+                                                @if($val->is_default == 1)
+                                                <input type="radio" name="outlet" checked  value="1" required onclick="setValue('outletIn_{{ $key }}')">
+                                                <input type="hidden" name="outletIn[{{ $key }}]" id="outletIn_{{ $key }}" value="0">
+                                                @else
+                                                <input type="radio" name="outlet"  value="1" required onclick="setValue('outletIn_{{ $key }}')">
+                                                <input type="hidden" name="outletIn[{{ $key }}]" id="outletIn_{{ $key }}" value="0">
+                                                @endif
+                                                <button class="btn btn-danger remove_button" >X</button>
+                                                <!-- @foreach($lims_warehouse_list as $key=>$warehouse)
+                                                @if($val->outlet_id == $warehouse->id)
+                                            
+                                                <input type="radio" name="outlet"  checked  value="1" onclick="setValue('outletIn_')">
+                                                <input type="hidden" name="outletIn[1]" id="outletIn_{{ $warehouse->id }}" value="0">
+                                                <button class="btn btn-danger remove_button" >X</button>
+                                                
+                                                @endif
+                                                @endforeach -->
+                                            </div>
+                                        
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
@@ -142,9 +178,9 @@
 
 
     $('select[name=role_id]').val($("input[name='role_id_hidden']").val());
-    if($('select[name=role_id]').val() > 2){
+    if($('select[name=role_id]').val()){
         $('#warehouseId').show();
-        $('select[name=warehouse_id]').val($("input[name='warehouse_id_hidden']").val());
+        // $('select[name=warehouse_id]').val($("input[name='warehouse_id_hidden']").val());
         $('#biller-id').show();
         $('select[name=biller_id]').val($("input[name='biller_id_hidden']").val());
     }
@@ -171,5 +207,62 @@
       });
     });
 
+    
+    
+
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+  var cnt = {{ $outlet_count }};
+//   alert(cnt)
+    var maxField = 10; //Input fields increment limitation
+    var addButton = $('.add_button'); //Add button selector
+    var wrapper = $('.field_wrapper'); //Input field wrapper
+    var fieldHTML = '<div><input type="text" name="field_name[]" value=""/><button class="btn btn-danger remove_button" ></button></div>'; //New input field html 
+    var x = cnt; //Initial field counter is 1
+    
+    //Once add button is clicked
+    $(addButton).click(function(){
+        //Check maximum number of input fields
+        if(x < maxField){ 
+            x++; //Increment field counter
+            // $(wrapper).append(fieldHTML); //Add field html
+            $(wrapper).append(`
+            <div class="field_wrapper cloneOutlet" id="warehouseId">
+          
+            <br>
+                    <select name="warehouse_id[${x}]" id="warehouse_id[${x}]" class="selectpicker form-control" data-live-search="true" required title="Select outlet...">
+                        @foreach($lims_warehouse_list as $warehouse)
+                            <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                        @endforeach
+                    </select>
+                    <input type="radio" value="1" name="outlet" onclick="setValue('outletIn_${x}')" required>
+                    <input type="hidden" name="outletIn[${x}]" id="outletIn_${x}" value="0">
+                    <button class="btn btn-danger remove_button" >X</button>
+                    <br>
+                    </div>
+           
+            `); //Add field html
+            $('.selectpicker').selectpicker({
+            style: 'btn-link',
+            });
+        }
+    });
+    
+    //Once remove button is clicked
+    $(wrapper).on('click', '.remove_button', function(e){
+        e.preventDefault();
+        // $('radio[name="outlet"]').val();
+        $(this).parent('div').remove(); //Remove field html
+        x--; //Decrement field counter
+    });
+});
+
+function setValue(e){
+
+    $('#'+e).val(1);
+    }
+
+    $('input[name="outlet"]:checked').trigger('click');
 </script>
 @endpush

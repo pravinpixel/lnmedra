@@ -31,12 +31,12 @@
                                     <input type="text" name="customer_name" value="{{$lims_customer_data->name}}" required class="form-control">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <!-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('file.Company Name')}} </label>
                                     <input type="text" name="company_name" value="{{$lims_customer_data->company_name}}" class="form-control">
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('file.Email')}}</label>

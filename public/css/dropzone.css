@@ -194,9 +194,9 @@
     text-align: center;
     margin: 2em 0; }
   .dropzone .dz-preview {
-    position: relative;
+    /* position: relative; */
     display: inline-block;
-    vertical-align: top;
+    /* vertical-align: top; */
     margin: 16px;
     min-height: 100px; }
     .dropzone .dz-preview:hover {

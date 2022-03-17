@@ -606,7 +606,6 @@ class SaleController extends Controller
             
             $lims_payment_data = new Payment();
             $lims_payment_data->user_id = Auth::id();
-
             if($data['paid_by_id'] == 1)
                 $paying_method = 'Cash';
             elseif ($data['paid_by_id'] == 2) {
@@ -624,7 +623,6 @@ class SaleController extends Controller
                 $paying_method = 'Points';
                 $lims_payment_data->used_points = $data['used_points'];
             }
-
             if($cash_register_data)
                 $lims_payment_data->cash_register_id = $cash_register_data->id;
             $lims_account_data = Account::where('is_default', true)->first();
