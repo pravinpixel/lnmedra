@@ -9,6 +9,8 @@ use Database\Seeders\HrmSettingsTableSeeder;
 use Database\Seeders\MailTemplateSeeder;
 use Database\Seeders\PermissionsTableSeeder;
 use Database\Seeders\PosSettingTableSeeder;
+use Database\Seeders\ProductsTableSeeder;
+use Database\Seeders\ProductTypesTableSeeder;
 use Database\Seeders\RewardPointSettingsTableSeeder;
 use Database\Seeders\RoleHasPermissionsTableSeeder;
 use Database\Seeders\RolesTableSeeder;
@@ -41,5 +43,7 @@ class DatabaseSeeder extends Seeder
         $this->call(WarehousesTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(RewardPointSettingsTableSeeder::class);
+        $this->call(ProductTypesTableSeeder::class);
+        $this->call(ProductsTableSeeder::class);
     }
 }
