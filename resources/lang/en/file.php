@@ -73,6 +73,7 @@ return [
 	'delete' => 'Delete',
 	'name' => 'Name',
 	'submit' => 'Submit',
+	'search' => 'Search',
 	'update' => 'Update',
 	'The field labels marked with * are required input fields' => 'The field labels marked with * are required input fields',
 	'Your Birth Day Date'=>'Your BirthDay Date',

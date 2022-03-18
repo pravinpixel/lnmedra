@@ -23,9 +23,15 @@
         @endif
     </div>
    
-    <div class="table-responsive">
+    <div class="table-responsive ">
     {!! Form::open(['route' => 'vendorproducts.row-data','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true,'onsubmit' => 'return checkformvalidation()'],) !!}
-        <table id="product-data-table" class="table" style="width: 100%">
+
+        <div class="m-3 ml-4">
+            <button class="btn-sm btn-success btn" id="btnClick" type="submit">Approve</button>
+            <button class="btn-sm btn-danger btn" id="btnClick" onclick="rejectProduct()" type="submit">Reject</button>
+        </div>
+
+        <table id="product-data-table" class="table m-0" style="width: 100%">
             <thead>
                 <tr>
                     <th class="not-exported"></th>
@@ -41,11 +47,8 @@
                     <th>{{trans('file.Price')}}</th>                    
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
-            </thead>
-
-        </table>
-        <input type="submit" id="btnClick" value="Approve" class="btn btn-success" />
-        <input id="btnClick" onclick="rejectProduct()" value="Reject" class="btn btn-danger product-delete" />
+            </thead> 
+        </table> 
     {!! Form::close() !!}
     </div>
 </section>

@@ -12,7 +12,7 @@
 @if(session()->has('not_permitted'))
   <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
 @endif
-
+ 
 <section>
     <div class="container-fluid">
         <!-- Trigger the modal with a button -->
@@ -20,7 +20,7 @@
         <button class="btn btn-primary" data-toggle="modal" data-target="#importCategory"><i class="dripicons-copy"></i> {{trans('file.Import Category')}}</button>
     </div>
     <div class="table-responsive">
-        <table id="category-table" class="table" style="width: 100%">
+        <table id="category-table" class="table text-center" style="width: 100%">
             <thead>
                 <tr>
                     <th class="not-exported"></th>
@@ -208,7 +208,7 @@
             $(row).attr('data-id', data['id']);
         },
         "columns": [
-            {"data": "key"},
+            {"data": "key" , },
             {"data": "image"},
             {"data": "name"},
             {"data": "parent_id"},

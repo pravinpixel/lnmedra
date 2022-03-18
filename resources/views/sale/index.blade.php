@@ -8,48 +8,38 @@
 
 <section>
     <div class="container-fluid">
-        <div class="card">
-            <div class="card-header mt-2">
-                <h3 class="text-center">{{trans('file.Sale List')}}</h3>
-            </div>
-            {!! Form::open(['route' => 'sales.index', 'method' => 'get']) !!}
-            <div class="row mb-3">
-                <div class="col-md-4 offset-md-2 mt-3">
-                    <div class="d-flex">
-                        <label class="">{{trans('file.Date')}} &nbsp;</label>
-                        <div class="">
-                            <div class="input-group">
-                                <input type="text" class="daterangepicker-field form-control" value="{{$starting_date}} To {{$ending_date}}" required />
-                                <input type="hidden" name="starting_date" value="{{$starting_date}}" />
-                                <input type="hidden" name="ending_date" value="{{$ending_date}}" />
+        <h3 class="mb-3">{{trans('file.Sale List')}}</h3>
+        <div class="card border"> 
+            <div class="card-body">
+                {!! Form::open(['route' => 'sales.index', 'method' => 'get']) !!}
+                    <div class="row m-0">
+                        <div class="col-5 d-flex align-items-center">
+                            <div class="mr-3">{{trans('file.Date')}}</div>
+                            <input type="text" class="daterangepicker-field form-control w-100" value="{{$starting_date}} To {{$ending_date}}" required />
+                            <input type="hidden" name="starting_date" value="{{$starting_date}}" />
+                            <input type="hidden" name="ending_date" value="{{$ending_date}}" />
+                        </div>
+                        <div class="col-5 @if(\Auth::user()->role_id > 2){{'d-none'}}@endif">
+                            <div class="d-flex align-items-center">
+                                <div class="mr-3">{{trans('file.Outlet')}}</div>
+                                <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" >
+                                    <option value="0">{{trans('file.All Outlet')}}</option>
+                                    @foreach($lims_warehouse_list as $warehouse)
+                                        @if($warehouse->id == $warehouse_id)
+                                            <option selected value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                        @else
+                                            <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4 mt-3 @if(\Auth::user()->role_id > 2){{'d-none'}}@endif">
-                    <div class="d-flex">
-                        <label class="">{{trans('file.Outlet')}} &nbsp;</label>
-                        <div class="">
-                            <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" >
-                                <option value="0">{{trans('file.All Outlet')}}</option>
-                                @foreach($lims_warehouse_list as $warehouse)
-                                    @if($warehouse->id == $warehouse_id)
-                                        <option selected value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                                    @else
-                                        <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                                    @endif
-                                @endforeach
-                            </select>
+                        <div class="col-2">
+                            <button class="btn btn-primary w-100" id="filter-btn" type="submit">{{trans('file.search')}}</button>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-2 mt-3">
-                    <div class="form-group">
-                        <button class="btn btn-primary" id="filter-btn" type="submit">{{trans('file.submit')}}</button>
-                    </div>
-                </div>
+                {!! Form::close() !!}
             </div>
-            {!! Form::close() !!}
         </div>
         @if(in_array("sales-add", $all_permission))
             <a href="{{route('sales.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Sale')}}</a>&nbsp;

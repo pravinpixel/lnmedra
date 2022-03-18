@@ -149,6 +149,23 @@
         -webkit-appearance: none;
         margin: 0;
         }
+        .dt-checkboxes-cell {
+            text-align: center !important
+        }
+        .checkbox label {
+            padding: 0 !important;
+            margin: 0 !important
+        }
+        table img {
+            height: 30px !important;
+            width: 40px !important;
+            object-fit: cover ;
+            border: 1px solid #1EA964;
+            background: #1EA964
+        }
+        .row {
+          margin: 0 !important
+        }
     </style>
   </head>
 

@@ -355,9 +355,9 @@
                                 </div>
                                 <div class="col-md-12 mt-2" id="diffPrice-option">
                                     @if($lims_product_data->is_diffPrice)
-                                        <h5><input name="is_diffPrice" type="checkbox" id="is-diffPrice" value="1" checked>&nbsp; {{trans('file.This product has different price for different warehouse')}}</h5>
+                                        <h5><input name="is_diffPrice" type="checkbox" id="is-diffPrice" value="1" checked>{{trans('file.This product has different price for different warehouse')}}</h5>
                                     @else
-                                        <h5><input name="is_diffPrice" type="checkbox" id="is-diffPrice" value="1">&nbsp; {{trans('file.This product has different price for different warehouse')}}</h5>
+                                        <h5><input name="is_diffPrice" type="checkbox" id="is-diffPrice" value="1">{{trans('file.This product has different price for different warehouse')}}</h5>
                                     @endif
                                 </div>
                                 <div class="col-md-6" id="diffPrice-section">
@@ -375,6 +375,7 @@
                                                         {{$warehouse->name}}
                                                     </td>
                                                     <td>
+                                                         
                                                         <?php
                                                             $product_warehouse = \App\Product_Warehouse::FindProductWithoutVariant($lims_product_data->id, $warehouse->id)->first();
                                                         ?>
@@ -394,23 +395,23 @@
                                 </div>
                                 <div class="col-md-12 mt-3" id="batch-option">
                                     @if($lims_product_data->is_batch)
-                                    <h5><input name="is_batch" type="checkbox" id="is-batch" value="1" checked>&nbsp; {{trans('file.This product has batch and expired date')}}</h5>
+                                        <h5><input name="is_batch" type="checkbox" id="is-batch" value="1" checked>{{trans('file.This product has batch and expired date')}}</h5>
                                     @else
-                                    <h5><input name="is_batch" type="checkbox" id="is-batch" value="1">&nbsp; {{trans('file.This product has batch and expired date')}}</h5>
+                                        <h5><input name="is_batch" type="checkbox" id="is-batch" value="1">{{trans('file.This product has batch and expired date')}}</h5>
                                     @endif
                                 </div>
                                 <div class="col-md-12 mt-3" id="imei-option">
                                     @if($lims_product_data->is_imei)
-                                    <h5><input name="is_imei" type="checkbox" id="is-imei" value="1" checked>&nbsp; {{trans('file.This product has IMEI or Serial numbers')}}</h5>
+                                    <h5><input name="is_imei" type="checkbox" id="is-imei" value="1" checked>{{trans('file.This product has IMEI or Serial numbers')}}</h5>
                                     @else
-                                    <h5><input name="is_imei" type="checkbox" id="is-imei" value="1">&nbsp; {{trans('file.This product has IMEI or Serial numbers')}}</h5>
+                                    <h5><input name="is_imei" type="checkbox" id="is-imei" value="1">{{trans('file.This product has IMEI or Serial numbers')}}</h5>
                                     @endif
                                 </div>
                                 <div class="col-md-12 mt-3" id="variant-option">
                                     @if($lims_product_data->is_variant)
-                                    <h5><input name="is_variant" type="checkbox" id="is-variant" value="1" checked>&nbsp; {{trans('file.This product has variant')}}</h5>
+                                    <h5><input name="is_variant" type="checkbox" id="is-variant" value="1" checked>{{trans('file.This product has variant')}}</h5>
                                     @else
-                                    <h5><input name="is_variant" type="checkbox" id="is-variant" value="1">&nbsp; {{trans('file.This product has variant')}}</h5>
+                                    <h5><input name="is_variant" type="checkbox" id="is-variant" value="1">{{trans('file.This product has variant')}}</h5>
                                     @endif
                                 </div>
                                 <div class="col-md-12" id="variant-section">
