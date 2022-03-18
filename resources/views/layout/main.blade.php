@@ -182,10 +182,10 @@
               {{-- <a id="toggle-btn" href="#" class="btn-pos rounded-pill"><i class="fa fa-bars"> </i></a> --}}
             </div>
             <ul id="side-main-menu" class="side-menu list-unstyled">
- @if(Auth::user()->role_id == 6) 
- <li id="vendorDashboard-menu"><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
-            
-@else
+          @if(Auth::user()->role_id == 6) 
+          <li id="vendorDashboard-menu"><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
+                      
+          @else
             <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
             @endif
            
@@ -296,7 +296,7 @@
               <li><a href="#sale" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.Sale')}}</span></a>
                 <ul id="sale" class="collapse list-unstyled ">
                   @if($sale_index_permission_active)
-                  <li id="sale-list-menu"><a href="{{route('sales.index')}}">{{trans('file.Sale List')}}</a></li>
+                  <!-- <li id="sale-list-menu"><a href="{{route('sales.index')}}">{{trans('file.Sale List')}}</a></li> -->
                     @if($sale_add_permission_active)
                     <li><a href="{{route('sale.pos')}}">POS</a></li>
                     <!-- <li id="sale-create-menu"><a href="{{route('sales.create')}}">{{trans('file.Add Sale')}}</a></li> -->
@@ -629,7 +629,7 @@
                   <li id="pos-setting-menu"><a href="{{route('setting.pos')}}">POS {{trans('file.settings')}}</a></li>
                   @endif
                   
-                  <li id="purchase-return-menu"><a href="">POS {{trans('file.bill_screen')}}</a></li>
+                  <!-- <li id="purchase-return-menu"><a href="">POS {{trans('file.bill_screen')}}</a></li> -->
                   
                 </ul>
               </li>
@@ -1068,6 +1068,14 @@
                                   ['role_id', $role->id]
                               ])->first();
 
+
+
+                              $user_permission = DB::table('permissions')->where('name', 'user-profile')->first();
+                              $user_permission_active = DB::table('role_has_permissions')->where([
+                                  ['permission_id', $user_permission->id],
+                                  ['role_id', $role->id]
+                              ])->first();
+                              
                       $general_setting_permission = DB::table('permissions')->where('name', 'general_setting')->first();
                       $general_setting_permission_active = DB::table('role_has_permissions')->where([
                                   ['permission_id', $general_setting_permission->id],
@@ -1120,6 +1128,12 @@
                               ['permission_id', $index_employee->id],
                               ['role_id', $role->id]
                           ])->first();
+                        
+                  $attribute_permission = DB::table('permissions')->where('name', 'attribute-index')->first();
+                  $attribute_permission_active = DB::table('role_has_permissions')->where([
+                      ['permission_id', $attribute_permission->id],
+                      ['role_id', $role->id]
+                  ])->first();
                   ?>
                   @if($mail_setting_permission_active)
                   <li id="mail-setting-menu"><a href="{{route('setting.mail')}}">{{trans('file.Mail Setting')}}</a></li>
@@ -1151,7 +1165,9 @@
                   <li id="tax-menu"><a href="{{route('tax.index')}}">{{trans('file.Tax')}}</a></li>
                   @endif
                   <!-- <li id="user-menu"><a href="{{route('user.profile', ['id' => Auth::id()])}}">{{trans('file.User Profile')}}</a></li> -->
+                  @if($user_permission_active)
                   <li id="user-menu"><a href="{{route('user.index')}}">{{trans('file.User Profile')}}</a></li>
+                  @endif
                   <!-- @if($create_sms_permission_active)
                   <li id="create-sms-menu"><a href="{{route('setting.createSms')}}">{{trans('file.Create SMS')}}</a></li>
                   @endif -->
@@ -1176,6 +1192,9 @@
                   @endif -->
                   @if($index_employee_active)
                   <li id="employee-menu"><a href="{{route('employees.index')}}">{{trans('file.Employee')}}</a></li>
+                  @endif
+                  @if($attribute_permission_active)
+                  <li id="master-attribute-menu"><a href="{{route('master-attribute.index')}}"><span>{{__('file.Master Attribute')}}</span></a></li>
                   @endif
                 </ul>
               </li>
@@ -1227,8 +1246,9 @@
                 </ul>
               </li>
               @endif
-               <li id="master-attribute-menu"><a href="{{route('master-attribute.index')}}"><i class="dripicons-document-remove"></i><span>{{__('file.Master Attribute')}}</span></a></li>
-              <!-- <li id="enquiry-menu"><a href="{{route('enquiry.index')}}"><i class="dripicons-document-remove"></i><span>{{__('file.enquiry_management')}}</span></a></li> -->
+              
+               
+               <!-- <li id="enquiry-menu"><a href="{{route('enquiry.index')}}"><i class="dripicons-document-remove"></i><span>{{__('file.enquiry_management')}}</span></a></li> -->
             </ul>
           </div>
         </div>
@@ -1242,8 +1262,12 @@
               <span class="brand-big">
                 <a href="{{url('/')}}"><h2>L & N Group | Sales & POS Management</h2></a>
               </span>
-
+           
               <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+                <div class="outletBtn"> 
+                <!-- <button class="btn btn-info" data-toggle="modal" onclick="outletbtn()" data-target="#outlet-modal"><i class="dripicons-plus"></i> Outlet</button> -->
+                  <!-- <li><a class="btn btn-primary"><i class="dripicons-shopping-bag"></i><span>Outlet</span></a></li> -->
+                </div>
                 <?php
                   $add_permission = DB::table('permissions')->where('name', 'sales-add')->first();
                   $add_permission_active = DB::table('role_has_permissions')->where([
@@ -1465,20 +1489,21 @@
                       $lims_account_list = \App\Account::where('is_active', true)->get();
 
                     ?>
+                     <?php $outletId = Auth::user()->warehouse_id ?>
                       <div class="row">
                         <div class="col-md-6 form-group">
                             <label>{{trans('file.Expense Category')}} *</label>
-                            <select name="expense_category_id" class="selectpicker form-control" required data-live-search="true" data-live-search-style="begins" title="Select Expense Category...">
+                            <select name="expense_category_id" class="selectpicker form-control " required data-live-search="true" data-live-search-style="begins" title="Select Expense Category...">
                                 @foreach($lims_expense_category_list as $expense_category)
-                                <option value="{{$expense_category->id}}">{{$expense_category->name . ' (' . $expense_category->code. ')'}}</option>
+                                <option value="{{$expense_category->id}}" >{{$expense_category->name . ' (' . $expense_category->code. ')'}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-md-6 form-group">
+                        <div class="col-md-6 form-group" id="outletStoreDiv">
                             <label>{{trans('file.Warehouse')}} *</label>
-                            <select name="warehouse_id" class="selectpicker form-control" required data-live-search="true" data-live-search-style="begins" title="Select Warehouse...">
+                            <select name="warehouse_id" class="selectpicker form-control outletStore" required data-live-search="true" data-live-search-style="begins" title="Select Outlet...">
                                 @foreach($lims_warehouse_list as $warehouse)
-                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                <option value="{{$warehouse->id}}"  <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?>>{{$warehouse->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -1507,6 +1532,39 @@
                           <button type="submit" class="btn btn-primary">{{trans('file.submit')}}</button>
                       </div>
                     {{ Form::close() }}
+                </div>
+            </div>
+        </div>
+      </div>
+      <div id="outlet-modal" tabindex="-1" role="dialog" aria-labelledby="outletModalLabel" aria-hidden="true" class="modal fade text-left">
+        <div role="document" class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Default Warehouse')}}</h5>
+                    <button type="button" data-dismiss="modal"  aria-label="Close" class="close"><span aria-hidden="true" ><i class="dripicons-cross"></i></span></button>
+                </div>
+                <div class="modal-body">
+                  <!-- <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p> -->
+                    
+                    
+                     <?php $outletId = Auth::user()->warehouse_id ?>
+                      <div class="row">
+                        <div class="col-md-6 form-group" id="outletDropdown">
+                            <label>{{trans('file.Outlet')}} *</label>
+                            <select name="outlet_id" class="selectpicker form-control " required data-live-search="true" data-live-search-style="begins" title="Select Expense Category...">
+                                @foreach($lims_expense_category_list as $expense_category)
+                                <option value="{{$expense_category->id}}" >{{$expense_category->name . ' (' . $expense_category->code. ')'}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                       
+                        
+                      </div>
+                     
+                      <!-- <div class="form-group">
+                          <button type="submit" class="btn btn-primary">{{trans('file.submit')}}</button>
+                      </div> -->
+                   
                 </div>
             </div>
         </div>
@@ -1804,6 +1862,20 @@
     @endif
     @stack('scripts')
     <script>
+    
+    <?php $id =Auth::user()->role_id ?>
+    var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+        $('#outletStoreDiv').hide();
+    }
+    else if(auth_id == 1)
+    {
+        $('.outletStore').prop('disabled',false);
+        $('.outletBtn').hide();
+    }
         if ('serviceWorker' in navigator ) {
             window.addEventListener('load', function() {
                 navigator.serviceWorker.register('/salepro/service-worker.js').then(function(registration) {
@@ -1936,6 +2008,40 @@
                 return false;
             return true;
         }
+    </script>
+    <script>
+    
+        function outletbtn(){
+         
+          <?php $id =Auth::user()->id ?>
+          var auth_id = {{$id}};
+        $.ajax({
+            type: "GET",
+            url:'default-outlet/'+ auth_id,
+            
+
+        }).then(function (response) {
+             
+            alert(response);
+            // for(var i=0; i<response.length; i++){
+            $('#outletDropdown').append(`
+                <option value="{{$expense_category->id}}" >{{$expense_category->name . ' (' . $expense_category->code. ')'}}</option>
+            `);
+            // }
+            // $('#product-data-table').DataTable().clear().draw();
+                
+        }, function (error) {
+            console.log(error);
+            Message('warning',response.data.msg);
+            console.log('Unable to delete');
+        });
+
+  
+        }
+    
+
+    
+    
     </script>
   </body>
 </html>

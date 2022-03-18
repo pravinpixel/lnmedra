@@ -48,12 +48,13 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <?php $outletId = Auth::user()->warehouse_id ?>
+                                    <div class="col-md-4" id="outletStoreDiv">
                                         <div class="form-group">
                                             <label>{{trans('file.Warehouse')}} *</label>
-                                            <select required name="warehouse_id" id="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
+                                            <select required name="warehouse_id" id="warehouse_id" class="selectpicker form-control outletStore" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
                                                 @foreach($lims_warehouse_list as $warehouse)
-                                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                                <option value="{{$warehouse->id}}" <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?>>{{$warehouse->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -419,7 +420,19 @@
 
 @push('scripts')
 <script type="text/javascript">
-
+<?php $id =Auth::user()->role_id ?>
+    var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+        $('#outletStoreDiv').hide();
+        
+    }
+    else if(auth_id == 1)
+    {
+        $('.outletStore').prop('disabled',false);
+    }
     $("ul#sale").siblings('a').attr('aria-expanded','true');
     $("ul#sale").addClass("show");
     $("ul#sale #sale-create-menu").addClass("active");

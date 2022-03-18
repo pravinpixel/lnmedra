@@ -138,7 +138,7 @@ class RoleController extends Controller
                 }
             }
             else
-                $role->revokePermissionTo('vendor-dashboard-add');
+                $role->revokePermissionTo('vendor-dashboard-index');
 
             if($request->has('vendor-dashboard-add')){
                 $permission = Permission::firstOrCreate(['name' => 'vendor-dashboard-add']);
@@ -897,6 +897,16 @@ class RoleController extends Controller
         }
         else
             $role->revokePermissionTo('backup_database');
+
+            if($request->has('user-profile')){
+                // dd("df");
+                $permission = Permission::firstOrCreate(['name' => 'user-profile']);
+                if(!$role->hasPermissionTo('user-profile')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('user-profile');
 
         if($request->has('general_setting')){
             $permission = Permission::firstOrCreate(['name' => 'general_setting']);

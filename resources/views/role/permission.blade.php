@@ -161,7 +161,7 @@
 								                @if(in_array("vendor-dashboard-index", $all_permission))
 								                <input type="checkbox" value="1" id="vendor-dashboard-index" name="vendor-dashboard-index" checked />
 								                @else
-								                <input type="checkbox" value="1" id="vendor-dashboard-index" name="vendorproducts-index" />
+								                <input type="checkbox" value="1" id="vendor-dashboard-index" name="vendor-dashboard-index" />
 								                @endif
 								                <label for="vendor-dashboard-index"></label>
 							            	</div>
@@ -1245,6 +1245,18 @@
 							                    	<input type="checkbox" value="1" id="backup_database" name="backup_database">
 							                    	@endif
 								                    <label for="backup_database" class="padding05">{{trans('file.Backup Database')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("user-profile", $all_permission))
+							                    	<input type="checkbox" value="1" id="user-profile" name="user-profile" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="user-profile" name="user-profile">
+							                    	@endif
+								                    <label for="user-profile" class="padding05">{{trans('file.User Profile')}} &nbsp;&nbsp;</label>
 								                </div>
 								            </div>
 						                </span>

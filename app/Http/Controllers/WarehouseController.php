@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Warehouse;
+use App\OutletUser;
 use Illuminate\Validation\Rule;
 use Keygen;
 
@@ -118,5 +119,21 @@ class WarehouseController extends Controller
         $lims_warehouse_data->is_active = false;
         $lims_warehouse_data->save();
         return redirect('warehouse')->with('not_permitted', 'Data deleted successfully');
+    }
+    public function getOutlet($id)
+    {
+        // return $id;
+        $data = OutletUser::where('user_id',$id)->get();
+        // foreach($data as $key=>$val)
+        // {
+        //     $outlet[] = Warehouse::select('name','id')->where('id',$val->outlet_id)->first();
+        // }
+        foreach($data as $key=>$val){
+           $outlet[] = Warehouse::select('name','id')->where('id',$val->outlet_id)->first();
+        }
+        
+        return $outlet;
+
+
     }
 }

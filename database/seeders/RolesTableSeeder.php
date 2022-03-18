@@ -62,22 +62,22 @@ class RolesTableSeeder extends Seeder
             4 => 
             array (
                 'id' => 5,
-                'name' => 'Vendor',
-                'description' => NULL,
-                'guard_name' => 'web',
-                'is_active' => 1,
-                'created_at' => NULL,
-                'updated_at' => NULL,
-            ),
-            5 => 
-            array (
-                'id' => 6,
                 'name' => 'Developer',
                 'description' => 'Lorem iposium idasuie',
                 'guard_name' => 'web',
                 'is_active' => 0,
                 'created_at' => '2022-03-04 15:27:31',
                 'updated_at' => '2022-03-04 15:27:46',
+            ),
+            5 => 
+            array (
+                'id' => 6,
+                'name' => 'Vendor',
+                'description' => NULL,
+                'guard_name' => 'web',
+                'is_active' => 1,
+                'created_at' => NULL,
+                'updated_at' => NULL,
             ),
         ));
         

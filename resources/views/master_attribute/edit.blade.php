@@ -110,9 +110,9 @@
    
 <script type="text/javascript">
 
-    // $("ul#product").siblings('a').attr('aria-expanded','true');
-    // $("ul#product").addClass("show");
-    // $("ul#product #product-create-menu").addClass("active");
+$("ul#setting").siblings('a').attr('aria-expanded','true');
+    $("ul#setting").addClass("show");
+    $("ul#setting #master-attribute-menu").addClass("active");
 
     $("#digital").hide();
     $("#combo").hide();

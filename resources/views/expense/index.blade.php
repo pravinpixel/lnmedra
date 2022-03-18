@@ -45,7 +45,7 @@
                     <th class="not-exported"></th>
                     <th>{{trans('file.Date')}}</th>
                     <th>{{trans('file.reference')}} No</th>
-                    <th>{{trans('file.Warehouse')}}</th>
+                    <th>{{trans('file.Outlet')}}</th>
                     <th>{{trans('file.category')}}</th>
                     <th>{{trans('file.Amount')}}</th>
                     <th>{{trans('file.Note')}}</th>
@@ -140,7 +140,7 @@
                         </div>
                         <div class="col-md-6 form-group">
                             <label>{{trans('file.Outlet')}} *</label>
-                            <select name="warehouse_id" class="selectpicker form-control" required data-live-search="true" data-live-search-style="begins" title="Select Warehouse...">
+                            <select name="warehouse_id" class="selectpicker form-control outletStore" required data-live-search="true" data-live-search-style="begins" title="Select Outlet...">
                                 @foreach($lims_warehouse_list as $warehouse)
                                 <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                 @endforeach
@@ -181,7 +181,17 @@
 
 @push('scripts')
 <script type="text/javascript">
-
+<?php $id =Auth::user()->role_id ?>
+    var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+    }
+    else if(auth_id == 1)
+    {
+        $('.outletStore').prop('disabled',false);
+    }
     $("ul#expense").siblings('a').attr('aria-expanded','true');
     $("ul#expense").addClass("show");
     $("ul#expense #exp-list-menu").addClass("active");

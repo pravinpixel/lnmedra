@@ -16,12 +16,14 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
-                                    <div class="col-md-6">
+                                <?php $outletId = Auth::user()->warehouse_id ?>
+                                   
+                                    <div class="col-md-6 outletStoreDiv"  id="outletStoreDiv">
                                         <div class="form-group">
                                             <label>{{trans('file.Outlet')}} *</label>
-                                            <select required name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
+                                            <select required name="warehouse_id" class="selectpicker form-control outletStore" data-live-search="true" data-live-search-style="begins" title="Select outlet..."  >
                                                 @foreach($lims_warehouse_list as $warehouse)
-                                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                                <option value="{{$warehouse->id}}" <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?>>{{$warehouse->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -266,7 +268,19 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
-
+<?php $id =Auth::user()->role_id ?>
+    var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+        $('.outletStoreDiv').hide();
+    }
+    else if(auth_id == 1)
+    {
+        $('.outletStore').prop('disabled',false);
+    }
+    
     $("ul#purchase").siblings('a').attr('aria-expanded','true');
     $("ul#purchase").addClass("show");
     $("ul#purchase #purchase-create-menu").addClass("active");

@@ -818,7 +818,7 @@
                     <div class="col px-1">
                         <div class="form-group">
                             <label for="">Enter Mobile No</label>
-                            <input type="text" id="reference-no" name="reference_no" class="form-control" placeholder="Type reference number" onkeyup='saveValue(this);'/>
+                            <input type="text" id="reference-no" name="reference_no" class="form-control" placeholder="Type Mobile number" onkeyup='saveValue(this);'/>
                         </div>
                         @if($errors->has('reference_no'))
                         <span>
@@ -826,13 +826,14 @@
                         </span>
                         @endif
                     </div>
+                    <?php $outletId = Auth::user()->warehouse_id ?>
                     <div class="col px-1">
                         <div class="form-group">
                             <label for="">Enter Outlet</label>
                             @if($lims_pos_setting_data)
-                            <input type="hidden" name="warehouse_id_hidden" value="{{$lims_pos_setting_data->warehouse_id}}">
+                            <input type="hidden" name="warehouse_id_hidden" value="{{$outletId}}">
                             @endif
-                            <select required id="warehouse_id" name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
+                            <select required id="warehouse_id" name="warehouse_id" class="selectpicker form-control outletStore" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
                                 @foreach($lims_warehouse_list as $warehouse)
                                 <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                 @endforeach
@@ -1871,7 +1872,17 @@
 
 @push('scripts')
 <script type="text/javascript">
-
+<?php $id =Auth::user()->role_id ?>
+    var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+    }
+    else if(auth_id == 1)
+    {
+        $('.outletStore').prop('disabled',false);
+    }
     $("ul#sale").siblings('a').attr('aria-expanded','true');
     $("ul#sale").addClass("show");
     $("ul#sale #sale-pos-menu").addClass("active");

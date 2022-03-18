@@ -34,14 +34,15 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php $outletId = Auth::user()->warehouse_id ?>
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.Warehouse')}} *</label>
                                             <input type="hidden" name="warehouse_id_hidden" value="{{$lims_return_data->warehouse_id}}" />
-                                            <select required id="warehouse_id" name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
+                                            <select required id="warehouse_id" name="warehouse_id" class="selectpicker form-control outletStore" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
                                                 @foreach($lims_warehouse_list as $warehouse)
-                                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                                <option value="{{$warehouse->id}}" <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?>>{{$warehouse->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -391,6 +392,17 @@
 
 @push('scripts')
 <script type="text/javascript">
+    <?php $id =Auth::user()->role_id ?>
+    var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+    }
+    else if(auth_id == 1)
+    {
+        $('.outletStore').prop('disabled',false);
+    }
     $("ul#return").siblings('a').attr('aria-expanded','true');
     $("ul#return").addClass("show");
     $("ul#return #sale-return-menu").addClass("active");

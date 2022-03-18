@@ -23,14 +23,16 @@
                         </div>
                     </div>
                 </div>
+                <?php $outletId = Auth::user()->warehouse_id ?>
                 <div class="col-md-4 mt-3">
                     <div class="form-group row">
                         <label class="d-tc mt-2"><strong>{{trans('file.Choose Outlet')}}</strong> &nbsp;</label>
                         <div class="d-tc">
-                            <select name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" >
+                            <select name="warehouse_id" class="selectpicker form-control outletStore" data-live-search="true" data-live-search-style="begins" >
                                 <option value="0">{{trans('file.All Warehouse')}}</option>
                                 @foreach($lims_warehouse_list as $warehouse)
-                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                <?php echo $warehouse->id ."=".$outletId?>
+                                <option value="{{$warehouse->id}}" <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?>>{{$warehouse->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -90,6 +92,20 @@
 
 @push('scripts')
 <script type="text/javascript">
+    <?php $id =Auth::user()->role_id ?>
+    <?php $defaultWarehouse =Auth::user()->role_id ?>
+    
+    var defaultWarehouse = {{$defaultWarehouse}};
+    var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+    }
+    else if(auth_id == 1)
+    {
+        $('.outletStore').prop('disabled',false);
+    }
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -97,7 +113,7 @@
     });
 
     var warehouse_id = <?php echo json_encode($warehouse_id)?>;
-    $('.product-report-filter select[name="warehouse_id"]').val(warehouse_id);
+    $('.product-report-filter select[name="warehouse_id"]').val(defaultWarehouse);
     $('.selectpicker').selectpicker('refresh');
 
     $(".daterangepicker-field").daterangepicker({

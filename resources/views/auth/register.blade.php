@@ -115,7 +115,7 @@
               </div>
               <div class="form-group-material" id="warehouse-id">
                 <select name="warehouse_id" class="form-control">
-                  <option value="">Select Warehouse*</option>
+                  <option value="">Select Outlet*</option>
                   @foreach($lims_warehouse_list as $warehouse)
                       <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                   @endforeach

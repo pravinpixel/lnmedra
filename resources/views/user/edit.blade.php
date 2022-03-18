@@ -129,7 +129,7 @@
                                             <div class="form-group" id="warehouseId">
                                             
                                                 <input type="hidden" name="warehouse_id_hidden" value="{{$lims_user_data->warehouse_id}}">
-                                                <select name="warehouse_id[{{ $key }}]" class="selectpicker form-control" required data-live-search="true" data-live-search-style="begins" title="Select Warehouse...">
+                                                <select name="warehouse_id[{{ $key }}]" class="selectpicker form-control" required data-live-search="true" data-live-search-style="begins" title="Select Outlet...">
                                                 @foreach($lims_warehouse_list as $warehouse)
                                                     <option value="{{$warehouse->id}}" <?php echo "{{$val->outlet_id}}" == "{{$warehouse->id}}" ?   "selected" : '' ;?>>{{$warehouse->name}}</option>
                                                 @endforeach

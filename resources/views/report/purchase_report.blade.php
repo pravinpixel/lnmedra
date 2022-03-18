@@ -24,12 +24,13 @@
                         </div>
                     </div>
                 </div>
+                <?php $outletId = Auth::user()->warehouse_id ?>
                 <div class="col-md-4 mt-3">
                     <div class="form-group row">
                         <label class="d-tc mt-2"><strong>{{trans('file.Choose Outlet')}}</strong> &nbsp;</label>
                         <div class="d-tc">
-                            <input type="hidden" name="warehouse_id_hidden" value="{{$warehouse_id}}" />
-                            <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" >
+                            <input type="hidden" name="warehouse_id_hidden" value="{{$outletId}}" />
+                            <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control outletStore" data-live-search="true" data-live-search-style="begins" >
                                 <option value="0">{{trans('file.All Warehouse')}}</option>
                                 @foreach($lims_warehouse_list as $warehouse)
                                 <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
@@ -148,6 +149,17 @@
 
 @push('scripts')
 <script type="text/javascript">
+       <?php $id =Auth::user()->role_id ?>
+var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+    }
+    else if(auth_id == 1)
+    { 
+		$('.outletStore').prop('disabled',false);
+    }
     $("ul#report").siblings('a').attr('aria-expanded','true');
     $("ul#report").addClass("show");
     $("ul#report #purchase-report-menu").addClass("active");

@@ -2,11 +2,12 @@
 <section>
 	<div class="container-fluid">
 		<div class="card">
+		<?php $outletId = Auth::user()->warehouse_id ?>
 			<div class="card-body">
 				{{ Form::open(['route' => ['report.monthlyPurchaseByWarehouse', $year], 'method' => 'post', 'id' => 'report-form']) }}
-				<input type="hidden" name="warehouse_id_hidden" value="{{$warehouse_id}}">
+				<input type="hidden" name="warehouse_id_hidden" value="{{$outletId}}">
 				<h4 class="text-center">{{trans('file.Monthly Purchase Report')}} &nbsp;&nbsp;
-				<select class="selectpicker" id="warehouse_id" name="warehouse_id">
+				<select class="selectpicker outletStore" id="warehouse_id" name="warehouse_id">
 					<option value="0">{{trans('file.All Warehouse')}}</option>
 					@foreach($lims_warehouse_list as $warehouse)
 					<option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
@@ -80,7 +81,18 @@
 
 @push('scripts')
 <script type="text/javascript">
-
+<?php $id =Auth::user()->role_id ?>
+var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+    }
+    else if(auth_id == 1)
+    { 
+		$('.outletStore').prop('disabled',false);
+    }
+      
 	$("ul#report").siblings('a').attr('aria-expanded','true');
     $("ul#report").addClass("show");
     $("ul#report #monthly-purchase-report-menu").addClass("active");

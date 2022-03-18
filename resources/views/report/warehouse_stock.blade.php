@@ -5,12 +5,13 @@
         <div class="card">
             <div class="card-body">
 				<div class="col-md-12">
+				<?php $outletId = Auth::user()->warehouse_id ?>
 					<div class="col-md-6 offset-md-3 mt-3 text-center">
 						{{ Form::open(['route' => 'report.warehouseStock', 'method' => 'post', 'id' => 'report-form']) }}
-						<input type="hidden" name="warehouse_id_hidden" value="{{$warehouse_id}}">
+						<input type="hidden" name="warehouse_id_hidden" value="{{$outletId}}">
 						<h3>{{trans('file.Stock Chart')}} </h3>
 						<p>Select warehouse to view chart</p>
-						<select class="form-control mb-3" id="warehouse_id" name="warehouse_id">
+						<select class="form-control mb-3 outletStore" id="warehouse_id" name="warehouse_id">
 							<option value="0">{{trans('file.All Warehouse')}}</option>
 							@foreach($lims_warehouse_list as $warehouse)
 							<option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
@@ -66,6 +67,17 @@
 
 @push('scripts')
 <script type="text/javascript">
+	   <?php $id =Auth::user()->role_id ?>
+var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+    }
+    else if(auth_id == 1)
+    { 
+		$('.outletStore').prop('disabled',false);
+    }
 	$("ul#report").siblings('a').attr('aria-expanded','true');
     $("ul#report").addClass("show");
     $("ul#report #warehouse-stock-report-menu").addClass("active");

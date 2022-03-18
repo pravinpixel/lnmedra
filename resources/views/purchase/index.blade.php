@@ -26,18 +26,17 @@
                         </div>
                     </div>
                 </div>
+                <?php $outletId = Auth::user()->warehouse_id ?>
+                
                 <div class="col-md-4 mt-3 @if(\Auth::user()->role_id > 2){{'d-none'}}@endif">
-                    <div class="form-group row">
-                        <label class="d-tc mt-2"><strong>{{trans('file.Choose Warehouse')}}</strong> &nbsp;</label>
+                    <div class="form-group row outletStore" id="outletStore">
+                        <label class="d-tc mt-2"><strong>{{trans('file.Choose Outlet')}}</strong> &nbsp;</label>
                         <div class="d-tc">
                             <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" >
-                                <option value="0">{{trans('file.All Warehouse')}}</option>
+                                <option value="0">{{trans('file.All Outlet')}}</option>
                                 @foreach($lims_warehouse_list as $warehouse)
-                                    @if($warehouse->id == $warehouse_id)
-                                        <option selected value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                                    @else
-                                        <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                                    @endif
+                                <option value="{{$warehouse->id}}"  <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?> >{{$warehouse->name}}</option>
+                                   
                                 @endforeach
                             </select>
                         </div>
@@ -53,7 +52,7 @@
         </div>
         @if(in_array("purchases-add", $all_permission))
             <a href="{{route('purchases.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Purchase')}}</a>&nbsp;
-            <a href="{{url('purchases/purchase_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Purchase')}}</a>
+            <!-- <a href="{{url('purchases/purchase_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Purchase')}}</a> -->
         @endif
     </div>
     <div class="table-responsive">
@@ -293,7 +292,17 @@
 
 @push('scripts')
 <script type="text/javascript">
-
+<?php $id =Auth::user()->role_id ?>
+    var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+        // alert("r")
+        $('.outletStore').hide();
+    }
+    else if(auth_id == 1)
+    {
+        $('.outletStore').show();
+    }
     $(".daterangepicker-field").daterangepicker({
       callback: function(startDate, endDate, period){
         var starting_date = startDate.format('YYYY-MM-DD');

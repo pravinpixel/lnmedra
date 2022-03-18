@@ -66,7 +66,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	
 	Route::put('supplier/vendor-reset-password/{id}', 'SupplierController@vendorReset')->name('supplier.vendor-reset-password');
 	
-
+	Route::get('purchases/default-outlet/{id}','WarehouseController@getOutlet')->name('purchases.default-outlet');
 
 	Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
 	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
@@ -183,7 +183,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('sales/today-sale', 'SaleController@todaySale');
 	Route::get('sales/today-profit/{warehouse_id}', 'SaleController@todayProfit');
 	Route::resource('sales', 'SaleController');
-
+	
 	Route::get('delivery', 'DeliveryController@index')->name('delivery.index');
 	Route::get('delivery/product_delivery/{id}','DeliveryController@productDeliveryData');
 	Route::get('delivery/create/{id}', 'DeliveryController@create');

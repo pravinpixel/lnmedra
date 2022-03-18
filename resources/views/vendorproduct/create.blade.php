@@ -577,7 +577,7 @@
         error: function (file, response) {
             console.log(response);
             if(response.errors.name) {
-              $("#name-error").text(response.errors.name);
+              $("#name-error").text(response.errors);
               this.removeAllFiles(true);
             }
             else if(response.errors.code) {

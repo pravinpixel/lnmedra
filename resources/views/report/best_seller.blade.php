@@ -1,14 +1,16 @@
 @extends('layout.main') @section('content')
 <div class="container-fluid">
 	<div class="row">
+    <?php $outletId = Auth::user()->warehouse_id ?>
+    
 		<div class="col-md-12">
 			{{ Form::open(['route' => 'report.bestSellerByWarehouse', 'method' => 'post', 'id' => 'report-form']) }}
-			<input type="hidden" name="warehouse_id_hidden" value="{{$warehouse_id}}">
+			<input type="hidden" name="warehouse_id_hidden" value="{{$outletId}}">
             <h4 class="text-center mt-3">{{trans('file.Best Seller')}} {{trans('file.From')}} {{$start_month.' - '.date("F Y")}} &nbsp;&nbsp;
-            <select class="selectpicker" id="warehouse_id" name="warehouse_id">
+            <select class="selectpicker outletStore" id="warehouse_id" name="warehouse_id">
 				<option value="0">{{trans('file.All Outlet')}}</option>
 				@foreach($lims_warehouse_list as $warehouse)
-				<option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+				<option value="{{$warehouse->id}}" <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?>>{{$warehouse->name}}</option>
 				@endforeach
 			</select>
             </h4>
@@ -41,7 +43,21 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
-
+<?php $id =Auth::user()->role_id ?>
+<?php $defaultWarehouse =Auth::user()->warehouse_id ?>
+   
+    var defaultWarehouse = {{$defaultWarehouse}};
+    alert(defaultWarehouse)
+    var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+    }
+    else if(auth_id == 1)
+    {
+        $('.outletStore').prop('disabled',false);
+    }
 	$("ul#report").siblings('a').attr('aria-expanded','true');
     $("ul#report").addClass("show");
     $("ul#report #best-seller-report-menu").addClass("active");

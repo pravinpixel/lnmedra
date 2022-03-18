@@ -26,7 +26,7 @@ class VendorController extends Controller
     }
     public function vendorRegister(Request $request)
     {
-        // dd("gg");
+        // print_r($request->all());die();
         $this->validate($request, [
             'company_name' => [
                 'max:255',

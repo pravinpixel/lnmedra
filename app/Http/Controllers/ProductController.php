@@ -159,14 +159,14 @@ class ProductController extends Controller
                     {
                         $nestedData['status'] = '
                         <div class="btn-group">
-                                <button type="button" onclick="vendorProductId('.$product->id.')" class="btn btn-primary"  aria-haspopup="true" aria-expanded="false">Status</button>
+                                <button type="button" onclick="vendorProductId('.$product->id.')" class="btn btn-primary"  aria-haspopup="true" aria-expanded="false">Active</button>
                                 </div>
                         ';
                     }
                     else if($product->is_active == 0){
                         $nestedData['status'] = '
                         <div class="btn-group">
-                                <button type="button" onclick="vendorProductId('.$product->id.')" class="btn btn-danger"  aria-haspopup="true" aria-expanded="false">Status</button>
+                                <button type="button" onclick="vendorProductId('.$product->id.')" class="btn btn-danger"  aria-haspopup="true" aria-expanded="false">In Active</button>
                                 </div>
                         ';
                     }

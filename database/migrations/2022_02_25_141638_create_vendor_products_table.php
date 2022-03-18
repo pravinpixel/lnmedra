@@ -18,14 +18,14 @@ class CreateVendorProductsTable extends Migration
             $table->string('name');
             $table->string('code');
             $table->string('type');
-            $table->string('barcode_symbology');
+            $table->string('barcode_symbology')->nullable();
             $table->integer('brand_id')->nullable();
-            $table->integer('category_id');
-            $table->integer('unit_id');
-            $table->integer('purchase_unit_id');
-            $table->integer('sale_unit_id');
-            $table->string('cost');
-            $table->string('price');
+            $table->integer('category_id')->nullable();
+            $table->integer('unit_id')->nullable();
+            $table->integer('purchase_unit_id')->nullable();
+            $table->integer('sale_unit_id')->nullable();
+            $table->string('cost')->nullable();
+            $table->string('price')->nullable();
             $table->double('qty')->nullable();
             $table->double('alert_quantity')->nullable();
             $table->tinyInteger('promotion')->nullable();
@@ -38,7 +38,7 @@ class CreateVendorProductsTable extends Migration
             $table->tinyInteger('featured')->nullable();
             $table->text('product_details')->nullable();
             $table->boolean('is_active')->nullable();
-            $table->boolean('vendoruserid')->nullable();
+            $table->integer('vendoruserid')->nullable();
             
             $table->timestamps();
         });

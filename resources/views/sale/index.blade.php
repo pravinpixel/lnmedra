@@ -39,6 +39,34 @@
                         </div>
                     </div>
                 {!! Form::close() !!}
+                    </div>
+                </div>
+                @if(session()->has('default_outlet'))
+                    
+                @endif
+                <?php $outletId = Auth::user()->warehouse_id ?>
+               
+                <div class="col-md-4 mt-3 @if(\Auth::user()->role_id > 2){{'d-none'}}@endif">
+                    
+                    <div class="d-flex " id="outletStore" >
+                    
+                        <div class="outletStore">
+                        <label class="">{{trans('file.Outlet')}} &nbsp;</label>
+                            <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" >
+                                <option value="0">{{trans('file.All Outlet')}}</option>
+                                @foreach($lims_warehouse_list as $warehouse)
+                                <option value="{{$warehouse->id}}"  <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?> >{{$warehouse->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col-md-2 mt-3">
+                    <div class="form-group">
+                        <button class="btn btn-primary" id="filter-btn" type="submit">{{trans('file.submit')}}</button>
+                    </div>
+                </div>
             </div>
         </div>
         @if(in_array("sales-add", $all_permission))
@@ -388,6 +416,18 @@
 
 @push('scripts')
 <script type="text/javascript">
+<?php $id =Auth::user()->role_id ?>
+var auth_id = {{$id}};
+// alert(auth_id)
+if(auth_id != 1)
+{
+    // alert("r")
+    $('.outletStore').hide();
+}
+else if(auth_id == 1)
+{
+    $('.outletStore').show();
+}
 
     $("ul#sale").siblings('a').attr('aria-expanded','true');
     $("ul#sale").addClass("show");
@@ -1060,6 +1100,7 @@
         }
         return false;
     }
+    
 
 </script>
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>

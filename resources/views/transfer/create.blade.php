@@ -19,19 +19,20 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.From Outlet')}} *</label>
-                                            <select required name="from_warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" id="from-warehouse-id" title="Select outlet...">
+                                            <select required name="from_warehouse_id" class="selectpicker form-control " data-live-search="true" data-live-search-style="begins" id="from-warehouse-id" title="Select outlet...">
                                                 @foreach($lims_warehouse_list as $warehouse)
                                                 <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
+                                    <?php $outletId = Auth::user()->warehouse_id ?>
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.To Outlet')}} *</label>
-                                            <select required name="to_warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
+                                            <select required name="to_warehouse_id" class="selectpicker form-control " data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
                                                 @foreach($lims_warehouse_list as $warehouse)
-                                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                                <option value="{{$warehouse->id}}" >{{$warehouse->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -216,6 +217,17 @@
 
 @push('scripts')
 <script type="text/javascript">
+    <?php $id =Auth::user()->role_id ?>
+    var auth_id = {{$id}};
+    if(auth_id != 1)
+    {
+    
+        $('.outletStore').prop('disabled',true);
+    }
+    else if(auth_id == 1)
+    {
+        $('.outletStore').prop('disabled',false);
+    }
     $("ul#transfer").siblings('a').attr('aria-expanded','true');
     $("ul#transfer").addClass("show");
     $("ul#transfer #transfer-create-menu").addClass("active");
