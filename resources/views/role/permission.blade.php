@@ -834,7 +834,58 @@
 						            	</div>
 						            </td>
 						        </tr>
-						        						        <tr>
+								<tr>
+						            <td>{{trans('file.enquiry_management')}}</td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("enquiry-index", $all_permission))
+								                <input type="checkbox" value="1" id="enquiry-index" name="enquiry-index" checked>
+								                @else
+								                <input type="checkbox" value="1" id="enquiry-index" name="enquiry-index">
+								                @endif
+								                <label for="enquiry-index"></label>
+								            </div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("enquiry-add", $all_permission))
+								                <input type="checkbox" value="1" id="enquiry-add" name="enquiry-add" checked>
+								                @else
+								                <input type="checkbox" value="1" id="enquiry-add" name="enquiry-add">
+								                @endif
+								                <label for="enquiry-add"></label>
+								            </div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("enquiry-edit", $all_permission))
+								                <input type="checkbox" value="1" id="enquiry-edit" name="enquiry-edit" checked>
+								                @else
+								                <input type="checkbox" value="1" id="enquiry-edit" name="enquiry-edit">
+								                @endif
+								                <label for="enquiry-edit"></label>
+								            </div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("enquiry-delete", $all_permission))
+								                <input type="checkbox" value="1" id="enquiry-delete" name="enquiry-delete" checked>
+								                @else
+								                <input type="checkbox" value="1" id="enquiry-delete" name="enquiry-delete">
+								                @endif
+								                <label for="enquiry-delete"></label>
+								            </div>
+						            	</div>
+						            </td>
+						        </tr>
+						        <tr>
 						            <td>{{trans('file.Accounting')}}</td>
 						            <td class="report-permissions" colspan="5">
 						            	<span>

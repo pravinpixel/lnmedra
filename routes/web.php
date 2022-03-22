@@ -101,6 +101,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	
 	########### vendor product ############
 	
+
+	Route::get('vendorproducts/get-attribute-image/{id}', 'VendorProductController@getAttributeImage')->name('vendorproducts.get-attribute-image');
+	Route::get('vendorproducts/get-edit-attribute-image/{id}', 'VendorProductController@getEditAttributeImage')->name('product.get-attribute-image');
 	Route::post('vendorproducts/product-data', 'VendorProductController@productData');
 	Route::post('vendorproducts/all-vendor-product-data', 'VendorProductController@allVendorproductData');
 	Route::get('vendorproducts/gencode', 'VendorProductController@generateCode');

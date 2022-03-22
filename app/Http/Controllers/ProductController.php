@@ -299,7 +299,10 @@ class ProductController extends Controller
         // $data['qty_list'] = implode(",", $data['product_qty']);
         // $data['price_list'] = implode(",", $data['unit_price']);
         $data['product_details'] = str_replace('"', '@', $data['product_details']);
+        if($request['attribute']){
             $data['attribute'] = implode(',',$request['attribute']);
+        }
+         
             // dd(implode(',',$request['attribute']));
         if($data['starting_date'])
             $data['starting_date'] = date('Y-m-d', strtotime($data['starting_date']));
@@ -438,8 +441,10 @@ class ProductController extends Controller
 
             if(!isset($data['is_imei']))
                 $data['is_imei'] = null;
-        
-                $data['attribute'] = implode(',',$request['attribute']);
+                if($request['attribute']){
+                    $data['attribute'] = implode(',',$request['attribute']);
+                }
+               
                 $lims_product_data->attribute = json_encode($request['attribute']);
             $data['product_details'] = str_replace('"', '@', $data['product_details']);
             $data['product_details'] = $data['product_details'];
@@ -919,11 +924,11 @@ class ProductController extends Controller
          $attribute_image = htmlspecialchars($attribute_image[0]);
          if(in_array("$val->id",$dd))
          {
-            $val['checkbox'] = '<input type="checkbox" name="attribute[]" checked value='.$val->id.'>
+            $val['checkbox'] = '<input type="checkbox" name="attribute[]" checked value='.$val->id.' required>
             ';
          }
          else{
-            $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.'>';
+            $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.' required>';
          }
         
          $val['image'] = '<img src="'.url('public/images/attribute', $attribute_image).'" height="60" width="60">';

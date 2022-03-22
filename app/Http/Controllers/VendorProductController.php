@@ -9,6 +9,8 @@ use App\Category;
 use App\User;
 use App\Unit;
 use App\Sale;
+use App\MasterAttribute;
+use App\ProductType;
 use App\Product;
 use App\Purchase;
 use App\Expense;
@@ -237,10 +239,11 @@ class VendorProductController extends Controller
             
          //   $lims_product_list_without_variant = $this->productWithoutVariant();
           //  $lims_product_list_with_variant = $this->productWithVariant();
+            $productType = ProductType::get();
             $lims_brand_list = Brand::where('is_active', true)->get();
             $lims_category_list = Category::where('is_active', true)->get();
              
-            return view('vendorproduct.create',compact('lims_brand_list', 'lims_category_list'));
+            return view('vendorproduct.create',compact('lims_brand_list', 'lims_category_list','productType'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -248,6 +251,7 @@ class VendorProductController extends Controller
 
     public function store(Request $request)
     {
+        // print_r($request->all());die();
         $this->validate($request, [
             'code' => [
                 'max:255',
@@ -264,7 +268,10 @@ class VendorProductController extends Controller
         ]);
         $data = $request->except('image', 'file');
         $data['name'] = htmlspecialchars(trim($data['name']));
-       
+        if($request['attribute']){
+            $data['attribute'] = implode(',',$request['attribute']);
+        }
+        
         if($data['type'] == 'combo'){
             $data['product_list'] = implode(",", $data['product_id']);
            // $data['variant_list'] = implode(",", $data['variant_id']);
@@ -358,13 +365,13 @@ class VendorProductController extends Controller
     {
         $role = Role::firstOrCreate(['id' => Auth::user()->role_id]);
         if ($role->hasPermissionTo('vendorproducts-edit')) {
-         
+            $productType = ProductType::get();
             $lims_brand_list = Brand::where('is_active', true)->get();
             $lims_category_list = Category::where('is_active', true)->get();
          
             $lims_product_data = VendorProduct::where('id', $id)->first();
             
-            return view('vendorproduct.edit',compact('lims_brand_list', 'lims_category_list',  'lims_product_data'));
+            return view('vendorproduct.edit',compact('lims_brand_list', 'lims_category_list',  'lims_product_data','productType'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -399,7 +406,9 @@ class VendorProductController extends Controller
             $data = $request->except('image', 'file', 'prev_img');
             $data['name'] = htmlspecialchars(trim($data['name']));
            
-          
+            if($request['attribute']){
+                $data['attribute'] = implode(',',$request['attribute']);
+            }
 
             if($data['type'] == 'combo') {
                 $data['product_list'] = implode(",", $data['product_id']);
@@ -483,7 +492,23 @@ class VendorProductController extends Controller
           
         }
     }
-
+    public function getAttributeImage($id)
+    {
+        
+       $data = MasterAttribute::where('product_type',$id)->get();
+       foreach($data as $key=>$val)
+       {
+        $attribute_image = explode(",", $val->image);
+        $attribute_image = htmlspecialchars($attribute_image[0]);
+        $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.' required>
+        <span class="validation-msg"></span>
+        ';
+        $val['image'] = '<img src="'.url('public/images/attribute', $attribute_image).'" height="60" width="60">';
+       }
+        // dd($data);
+        
+          return response()->json(['data' => $data]);
+    }
     public function generateCode()
     {
         $id = Keygen::numeric(8)->generate();
@@ -840,7 +865,7 @@ class VendorProductController extends Controller
             $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
             $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
             $pending = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
-
+            
             if($role->hasPermissionTo('vendor-dashboard-index')){
                      
                 $permissions = Role::findByName($role->name)->permissions;
@@ -978,12 +1003,12 @@ class VendorProductController extends Controller
                     //$nestedData['stock_worth'] = ($product->qty * $product->price).'/'.($product->qty * $product->cost);
                     $nestedData['ln_qty'] = '<div class="btn-group">
                     
-                    <input type="number" name="ln_qty" id="ln_qty" class="form-control ln_qty check'.$product->id.'text"  data-qty_row_id="'.$product->id.'" value="'.$product->ln_qty.'" style="width:70px;" >
+                    <input type="number" name="ln_qty" min="0" id="ln_qty" class="form-control ln_qty check'.$product->id.'text"  data-qty_row_id="'.$product->id.'" value="'.$product->ln_qty.'" style="width:70px;" >
 
                     <div>';
                     $nestedData['ln_price'] = '<div class="btn-group">
                     
-                    <input type="number" name="ln_qty" id="ln_price" class="form-control ln_price check'.$product->id.'text" data-price_row_id="'.$product->id.'" value="'.$product->ln_price.'" style="width:70px;">
+                    <input type="number" name="ln_qty" id="ln_price" min="0" class="form-control ln_price check'.$product->id.'text" data-price_row_id="'.$product->id.'" value="'.$product->ln_price.'" style="width:70px;">
 
                     <div>';
                     if($product->is_approve == 1)
@@ -1345,8 +1370,8 @@ class VendorProductController extends Controller
                     $insert->unit_id = $value['unit_id'];
                     $insert->purchase_unit_id = $value['purchase_unit_id'];
                     $insert->sale_unit_id = $value['sale_unit_id'];
-                    $insert->cost = $value['cost'];
-                    $insert->price = $value['price'];
+                    // $insert->cost = $value['cost'];
+                    $insert->cost = $value['price'];
                     $insert->qty = $value['qty'];
                     $insert->alert_quantity = $value['alert_quantity'];
                     $insert->promotion = $value['promotion'];
@@ -1396,5 +1421,30 @@ class VendorProductController extends Controller
                 return response()->json(['status', 'Status Updated successfully!']);
             }
         }
+        public function getEditAttributeImage(Request $request,$id)
+    {
+       $dd = explode(",",$request->data);
+        // dd($dd);
+        
+        $data = MasterAttribute::where('product_type',$id)->get();
+        foreach($data as $key=>$val)
+        {
+         $attribute_image = explode(",", $val->image);
+         $attribute_image = htmlspecialchars($attribute_image[0]);
+         if(in_array("$val->id",$dd))
+         {
+            $val['checkbox'] = '<input type="checkbox" name="attribute[]" checked value='.$val->id.' required>
+            ';
+         }
+         else{
+            $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.' required>';
+         }
+        
+         $val['image'] = '<img src="'.url('public/images/attribute', $attribute_image).'" height="60" width="60">';
+        }
+         // dd($data);
+         
+           return response()->json(['data' => $data]);
+    }
     }
     

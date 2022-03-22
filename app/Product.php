@@ -33,8 +33,8 @@ class Product extends Model
     public function scopeActiveStandard($query)
     {
         return $query->where([
-            ['is_active', true],
-            ['type', 'standard']
+            ['is_active', true]
+          
         ]);
     }
 

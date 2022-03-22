@@ -20,16 +20,21 @@
                                          <input type="hidden" name="vendoruserid" id="vendoruserid" value="{{ Auth::id() }}">
                                         <label>{{trans('file.Product Type')}} *</strong> </label>
                                         <div class="input-group">
-                                            <select name="type" required class="form-control selectpicker" id="type">
-                                                <option value="standard">Standard</option>
+                                        <select name="type" required class="form-control selectpicker"  data-live-search="true" data-live-search-style="begins" id="productType">
+                                            <option value="">--Select--</option>
+                                                @foreach($productType as $product)
+                                                <option value="{{ $product->id }}" >{{ $product->name }}</option>
+                                                @endforeach
+                                                <!-- <option value="standard">Standard</option>
                                                 <option value="combo">Combo</option>
                                                 <option value="digital">Digital</option>
-                                                <option value="service">Service</option>
+                                                <option value="service">Service</option> -->
                                             </select>
                                             <input type="hidden" name="type_hidden" value="{{$lims_product_data->type}}">
                                         </div>
                                     </div>
                                 </div>
+                                <input type="hidden" name="attributeInput" value="{{$lims_product_data->attribute}}"  id="attributeInput" >
                                 <div class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('file.Product Name')}} *</strong> </label>
@@ -49,7 +54,15 @@
                                         <span class="validation-msg" id="code-error"></span>
                                     </div>
                                 </div>
-                               
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Attribute')}} *</strong> </label>
+                                        
+                                        <div id="attribute_img" >
+                                            
+                                        </div> 
+                                    </div>
+                                </div>
                                 <div id="digital" class="col-md-4">
                                     <div class="form-group">
                                         <label>{{trans('file.Attach File')}}</strong> </label>
@@ -173,18 +186,26 @@
 
 @push('scripts')
 <script type="text/javascript">
+$(document).ready(function(){
 
+$('#productType').trigger('change');
+
+});
     // $("ul#vendorproduct").siblings('a').attr('aria-expanded','true');
     // $("ul#vendorproduct").addClass("show");
     var product_id = <?php echo json_encode($lims_product_data->id) ?>;
     var is_batch = <?php echo json_encode($lims_product_data->is_batch) ?>;
     var is_variant = <?php echo json_encode($lims_product_data->is_variant) ?>;
+    var baseUrl = $('#baseUrl').val();
     $('[data-toggle="tooltip"]').tooltip();
 
     $(".remove-img").on("click", function () {
         $(this).closest("tr").remove();
     });
 
+
+
+    
     $("#digital").hide();
     $("#combo").hide();
     $("select[name='type']").val($("input[name='type_hidden']").val());
@@ -196,6 +217,35 @@
         $("#batch-option").hide();
     }
 
+
+    $('#productType').on('change', function() {
+        
+        // alert($('#type_id').val());
+         var typeId = $(this).val();
+         
+         $.ajax({
+              type: 'GET',
+            //   url: 'get-attribute-image/' + typeId,
+              url: baseUrl +'/vendorproducts/get-edit-attribute-image'+'/' + typeId,
+             data:{
+                 data:$('#attributeInput').val()
+             },
+              success: function(res) {
+                  $('#attribute_img').html('');
+                  
+              // alert(res.data.length)
+                 for(var i=0;i<res.data.length;i++)
+                 {
+                  let att = res.data[i];
+                  console.log(res.data[i].id);
+                  $('#attribute_img').append(`
+                  ${res.data[i].checkbox} 
+                  ${res.data[i].image}     
+                  `)
+                 }  
+              }
+          });
+  });
 
     if($("input[name='type_hidden']").val() == "digital"){
         $("input[name='cost']").prop('required',false);
@@ -279,6 +329,9 @@
     var tax_method = $("input[name='tax_method_id']").val();
     $('select[name=tax_method]').val(tax_method);
     $('.selectpicker').selectpicker('refresh');
+
+
+
 
     $('select[name="type"]').on('change', function() {
         if($(this).val() == 'combo'){

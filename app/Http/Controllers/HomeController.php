@@ -357,8 +357,40 @@ class HomeController extends Controller
             $start = strtotime("+1 month", $start);
         }
         //return $month;
-       if(Auth::user()->role_id == 6) {
+        if(Auth::user()->role_id == 3) {
            
+            $role = Role::find(Auth::user()->role_id);
+            
+
+        if($role->hasPermissionTo('sales-add')){
+               
+            return redirect()->route('sales.index'); 
+            }
+         
+        }
+       if(Auth::user()->role_id == 6) {
+       
+        // print_r(Auth::user()->vendor_id);die(); 
+        $saleTotal = DB::table('vendor_products')
+        ->where('vendoruserid',Auth::user()->id)
+        ->join('products', 'products.vendor_product_id', '=', 'vendor_products.id')
+        ->join('product_sales', 'product_sales.product_id', '=', 'products.id')
+        ->select('vendor_products.id','products.id','product_sales.*')
+        ->sum('product_sales.total');
+
+        $paymentReceived = DB::table('purchases')
+        ->where('supplier_id',Auth::user()->vendor_id)
+        ->where('payment_status',2)
+        // ->select('item')
+        ->sum('paid_amount');
+        $toBePaid = DB::table('purchases')
+        ->where('supplier_id',Auth::user()->vendor_id)
+        ->where('payment_status',1)
+        // ->select('item')
+        ->sum('total_cost');
+
+        // print_r($paymentReceived);die();
+
         $role = Role::find(Auth::user()->role_id);
         $sale = Sale::sum('grand_total');
         $sale = round($sale);
@@ -381,7 +413,7 @@ class HomeController extends Controller
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
                 // print_r($sale);die();
-            return view('vendor-dashboard', compact('all_permission','sale','purchase','expense','project','approved','rejected','pending'));
+            return view('vendor-dashboard', compact('all_permission','sale','purchase','expense','project','approved','rejected','pending','toBePaid','paymentReceived','saleTotal'));
         }
        
         }else{

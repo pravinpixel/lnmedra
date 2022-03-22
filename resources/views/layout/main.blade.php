@@ -317,13 +317,13 @@
               </li>
               @endif
 
-              <li><a href="#stock_inventory" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.stock_inventory')}}</span></a>
+              <!-- <li><a href="#stock_inventory" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.stock_inventory')}}</span></a>
                 <ul id="stock_inventory" class="collapse list-unstyled ">
                 
                     <li><a href="">{{trans('file.stock_list')}}</a></li>
                     <li id="purchase-import-menu"><a href="{{url('purchases/purchase_by_csv')}}">{{trans('file.Import Purchase By CSV')}}</a></li>
                 </ul>
-              </li>
+              </li> -->
 
 
 
@@ -1022,10 +1022,7 @@
                 </ul>
               </li>
               @endif
-
-              <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-gear"></i><span>{{trans('file.settings')}}</span></a>
-                <ul id="setting" class="collapse list-unstyled ">
-                  <?php
+              <?php
                       $send_notification_permission = DB::table('permissions')->where('name', 'send_notification')->first();
                       $send_notification_permission_active = DB::table('role_has_permissions')->where([
                                   ['permission_id', $send_notification_permission->id],
@@ -1135,6 +1132,10 @@
                       ['role_id', $role->id]
                   ])->first();
                   ?>
+                  @if($mail_setting_permission_active||$send_notification_permission_active||$warehouse_permission_active||$customer_group_permission_active)
+              <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-gear"></i><span>{{trans('file.settings')}}</span></a>
+                <ul id="setting" class="collapse list-unstyled ">
+                  
                   @if($mail_setting_permission_active)
                   <li id="mail-setting-menu"><a href="{{route('setting.mail')}}">{{trans('file.Mail Setting')}}</a></li>
                   @endif
@@ -1198,15 +1199,16 @@
                   @endif
                 </ul>
               </li>
+              @endif
               <?php
                   $role = DB::table('roles')->find(Auth::user()->role_id);
                 
-                  $enquiry_management_permission = DB::table('permissions')->where('name', 'enquiry-management')->first();
+                  $enquiry_management_permission = DB::table('permissions')->where('name', 'enquiry-index')->first();
                   $enquiry_management_permission_active = DB::table('role_has_permissions')->where([
                       ['permission_id', $enquiry_management_permission->id],
                       ['role_id', $role->id]
                   ])->first();
-                  $add_enquiry_permission = DB::table('permissions')->where('name', 'add-enquiry')->first();
+                  $add_enquiry_permission = DB::table('permissions')->where('name', 'enquiry-add')->first();
                   $add_enquiry_permission_active = DB::table('role_has_permissions')->where([
                       ['permission_id', $add_enquiry_permission->id],
                       ['role_id', $role->id]

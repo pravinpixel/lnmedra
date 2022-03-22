@@ -18,12 +18,12 @@
                                         <input type="hidden" name="vendoruserid" id="vendoruserid" value="{{ Auth::id() }}">
                                         <label>{{trans('file.Product Type')}} *</strong> </label>
                                         <div class="input-group">
-                                            <select name="type" required  data-live-search="true" title="Select Product Type..." class="form-control selectpicker" id="type">
-                                            
-                                                <option value="standard">Standard</option>
-                                                <option value="combo">Combo</option>
-                                                <option value="digital">Digital</option>
-                                                <option value="service">Service</option>
+                                        <select name="type" required class="form-control selectpicker" id="productType">
+                                            <option value="">--Select--</option>
+                                                @foreach($productType as $product)
+                                                <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                                @endforeach
+                                                
                                             </select>
                                         </div>
                                     </div>
@@ -49,7 +49,15 @@
                                 </div>
                               
                               
-                                
+                                <div class="col-md-4" id="attribute_div">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Attribute')}} *</strong> </label>
+                                        
+                                        <div id="attribute_img">
+                                            
+                                        </div> 
+                                    </div>
+                                </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>{{trans('file.Brand')}}</strong> </label>
@@ -130,7 +138,7 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
-
+ $('#attribute_div').hide();
     $("ul#vendorproduct").siblings('a').attr('aria-expanded','true');
     $("ul#vendorproduct").addClass("show");
     $("ul#vendorproduct #vendorproduct-create-menu").addClass("active");
@@ -156,7 +164,35 @@
         $("input[name='code']").val(data);
       });
     });
-
+    $('#productType').on('change', function() {
+         
+         var typeId = $(this).val();
+         $.ajax({
+              type: 'GET',
+              url: 'get-attribute-image/' + typeId,
+             
+              success: function(res) {
+                  $('#attribute_img').html('');
+              // alert(res.data.length)
+              if(res.data.length){
+                $('#attribute_div').show();
+                    for(var i=0;i<res.data.length;i++)
+                    {
+                    let att = res.data[i];
+                    console.log(res.data[i].id);
+                    $('#attribute_img').append(`
+                    ${res.data[i].checkbox} 
+                    ${res.data[i].image}     
+                    `)
+                    } 
+                } 
+                else
+                {
+                    $('#attribute_div').hide();
+                }
+              }
+          });
+  });
 
 
     tinymce.init({

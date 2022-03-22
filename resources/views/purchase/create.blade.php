@@ -361,6 +361,7 @@
 
     lims_productcodeSearch.autocomplete({
     source: function(request, response) {
+        console.log(lims_product_code)
         var matcher = new RegExp(".?" + $.ui.autocomplete.escapeRegex(request.term), "i");
         response($.grep(lims_product_code, function(item) {
             return matcher.test(item);
@@ -516,6 +517,7 @@
     });
 
     function productSearch(data) {
+        // alert(data)
         $.ajax({
             type: 'GET',
             url: 'lims_product_search',
@@ -523,6 +525,8 @@
                 data: data
             },
             success: function(data) {
+                alert(data)
+                console.log(data);
                 var flag = 1;
                 $(".product-code").each(function(i) {
                     if ($(this).val() == data[1]) {

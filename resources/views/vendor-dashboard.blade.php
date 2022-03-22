@@ -27,49 +27,83 @@
             </div>
         </div>
         <div class="row mb-3">
-            <div class="col">
-                <div class="wrapper count-title text-center">
-                    <!-- <div class="icon"><i class="dripicons-graph-bar" style="color: #0095ff"></i></div> -->
-                   
-                    <div class="count-number revenue-data">{{ $project }}</div>
-                    <hr>
-                    <div class="name"><strong style="color: #0095ff">Products</strong></div>
+           <!-- <h1>Sales Detail:</h1> -->
+                <div class="col">
+                    <div class="wrapper count-title text-center">
+                        <!-- <div class="icon"><i class="dripicons-return" style="color: #0095ff"></i></div> -->
+                        
+                        <div class="count-number return-data">{{ $saleTotal }}</div>
+                        <hr>
+                        <div class="name"><strong style="color: #0095ff">Sale</strong></div>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="wrapper count-title text-center">
-                    <!-- <div class="icon"><i class="dripicons-return" style="color: #0095ff"></i></div> -->
-                    
-                    <div class="count-number return-data">{{ $approved }}</div>
-                    <hr>
-                    <div class="name"><strong style="color: #0095ff">Approved</strong></div>
+                <div class="col">
+                    <div class="wrapper count-title text-center">
+                        <!-- <div class="icon"><i class="dripicons-return" style="color: #0095ff"></i></div> -->
+                        
+                        <div class="count-number return-data">{{ $paymentReceived }}</div>
+                        <hr>
+                        <div class="name"><strong style="color: #0095ff">Paid</strong></div>
+                    </div>
                 </div>
-            </div>
-            <div class="col">
-                <div class="wrapper count-title text-center">
-                    <!-- <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div> -->
-                   
-                    <div class="count-number purchase_return-data">{{ $pending }}</div>
-                    <hr>
-                    <div class="name"><strong style="color: #0095ff">Pending</strong></div>
+                
+                <div class="col">
+                    <div class="wrapper count-title text-center">
+                        <!-- <div class="icon"><i class="dripicons-return" style="color: #0095ff"></i></div> -->
+                        
+                        <div class="count-number return-data">{{ $toBePaid }}</div>
+                        <hr>
+                        <div class="name"><strong style="color: #0095ff">To Be Paid</strong></div>
+                    </div>
                 </div>
-            </div> 
-            <div class="col">
-                <div class="wrapper count-title text-center">
-                    <!-- <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div> -->
-                   
-                    <div class="count-number purchase_return-data">{{ $rejected }}</div>
-                    <hr>
-                    <div class="name"><strong style="color: #0095ff">Rejected</strong></div>
-                </div>
-            </div> 
+            
+            
         </div>
+        <div class="row mb-3">
+        <!-- <h1>Product Detail:</h1> -->
+                <div class="col">
+                    <div class="wrapper count-title text-center">
+                        <!-- <div class="icon"><i class="dripicons-graph-bar" style="color: #0095ff"></i></div> -->
+                    
+                        <div class="count-number revenue-data">{{ $project }}</div>
+                        <hr>
+                        <div class="name"><strong style="color: #0095ff">Products</strong></div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="wrapper count-title text-center">
+                        <!-- <div class="icon"><i class="dripicons-return" style="color: #0095ff"></i></div> -->
+                        
+                        <div class="count-number return-data">{{ $approved }}</div>
+                        <hr>
+                        <div class="name"><strong style="color: #0095ff">Approved</strong></div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="wrapper count-title text-center">
+                        <!-- <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div> -->
+                    
+                        <div class="count-number purchase_return-data">{{ $pending }}</div>
+                        <hr>
+                        <div class="name"><strong style="color: #0095ff">Pending</strong></div>
+                    </div>
+                </div> 
+                <div class="col">
+                    <div class="wrapper count-title text-center">
+                        <!-- <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div> -->
+                    
+                        <div class="count-number purchase_return-data">{{ $rejected }}</div>
+                        <hr>
+                        <div class="name"><strong style="color: #0095ff">Rejected</strong></div>
+                    </div>
+                </div> 
+            </div>
         <div class="row card">
             <div class="d-flex justify-content-between align-items-center p-3 ">
                 <h3 class="m-0">Product Listing</h3>
                 <div class="float-end">
                     <a href="{{route('vendorproducts.create')}}" class="btn btn-primary">Add Product</a>
-                <a href="" class="btn btn-secondary">Export</a>
+                <!-- <a href="" class="btn btn-secondary">Export</a> -->
                 </div>
             </div>
             <table id="product-data-table" class="table custom table-hover bg-white">

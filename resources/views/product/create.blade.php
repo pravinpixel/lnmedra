@@ -49,7 +49,7 @@
                                         <span class="validation-msg" id="code-error"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="attribute_div">
                                     <div class="form-group">
                                         <label>{{trans('file.Attribute')}} *</strong> </label>
                                         
@@ -412,7 +412,7 @@
 <script type="text/javascript">
 
 
-
+$('#attribute_div').hide();
     $("ul#product").siblings('a').attr('aria-expanded','true');
     $("ul#product").addClass("show");
     $("ul#product #product-create-menu").addClass("active");
@@ -464,6 +464,9 @@
                 success: function(res) {
                     $('#attribute_img').html('');
                 // alert(res.data.length)
+                if(res.data.length){
+
+                    $('#attribute_div').show();
                    for(var i=0;i<res.data.length;i++)
                    {
                     let att = res.data[i];
@@ -472,7 +475,11 @@
                     ${res.data[i].checkbox} 
                     ${res.data[i].image}     
                     `)
-                   }  
+                   } 
+                }
+                else{
+                    $('#attribute_div').hide();
+                } 
                 }
             });
     });

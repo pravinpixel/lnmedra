@@ -699,6 +699,49 @@ class RoleController extends Controller
         else
             $role->revokePermissionTo('suppliers-delete');
 
+
+
+
+            if($request->has('enquiry-index')){
+                $permission = Permission::firstOrCreate(['name' => 'enquiry-index']);
+                if(!$role->hasPermissionTo('enquiry-index')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('enquiry-index');
+    
+            if($request->has('enquiry-add')){
+                $permission = Permission::firstOrCreate(['name' => 'enquiry-add']);
+                if(!$role->hasPermissionTo('enquiry-add')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('enquiry-add');
+    
+            if($request->has('enquiry-edit')){
+                $permission = Permission::firstOrCreate(['name' => 'enquiry-edit']);
+                if(!$role->hasPermissionTo('enquiry-edit')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('enquiry-edit');
+    
+            if($request->has('enquiry-delete')){
+                $permission = Permission::firstOrCreate(['name' => 'enquiry-delete']);
+                if(!$role->hasPermissionTo('enquiry-delete')){
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('enquiry-delete');
+
+
+
+
+
         if($request->has('attribute-index')){
             $permission = Permission::firstOrCreate(['name' => 'attribute-index']);
             if(!$role->hasPermissionTo('attribute-index')){

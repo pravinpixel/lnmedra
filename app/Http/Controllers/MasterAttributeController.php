@@ -47,12 +47,12 @@ class MasterAttributeController extends Controller
         $order = 'master_attributes.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
         if(empty($request->input('search.value'))){
-            $products = MasterAttribute::where('is_active', true)
-                        ->limit($limit)
-                        ->get();
+          
+            $products = MasterAttribute::where('is_active', true)->get();
         }
         else
         {
+           
             $search = $request->input('search.value'); 
             $products =  MasterAttribute::select('master_attributes.*')
                         ->where([
@@ -64,7 +64,7 @@ class MasterAttributeController extends Controller
                             ['master_attributes.is_active', true]
                         ])
                         ->limit($limit)
-                        ->orderBy($order,$dir)->get();
+                        ->orderBy($order,$dir)->get()->toArray();
 
             $totalFiltered = MasterAttribute::where([
                                 ['master_attributes.title','LIKE',"%{$search}%"],
@@ -75,12 +75,13 @@ class MasterAttributeController extends Controller
                                
                             ])->count();
         }
-      
+  
         $data = array();
         if(!empty($products))
         {
             foreach ($products as $key=>$product)
             {
+                // print_r($product);die();
                 $nestedData['id'] = $product->id;
                 $nestedData['key'] = $key+1;
                 $product_image = explode(",", $product->image);
