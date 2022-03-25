@@ -16,6 +16,7 @@ class AddVendorProductss extends Migration
         Schema::table('vendor_products', function (Blueprint $table) {
             $table->string('ln_price')->after('cost')->nullable();
             $table->string('ln_qty')->after('cost')->nullable();
+            $table->string('discount')->after('ln_qty')->nullable();
             $table->string('attribute')->after('alert_quantity')->nullable();
         });
     }

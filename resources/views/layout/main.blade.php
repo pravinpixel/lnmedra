@@ -212,7 +212,7 @@
                       ])->first();
 
               ?>
-              @if($store_outlet_permission_active || $outlet_setup_active || $user_management_active)
+              {{-- @if($store_outlet_permission_active || $outlet_setup_active || $user_management_active)
               <li><a href="#store_outlet" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.store_outlet_management')}}</span><span></a>
                 <ul id="store_outlet" class="collapse list-unstyled ">
                   @if($outlet_setup_active)
@@ -224,7 +224,7 @@
                   
                 </ul>
               </li>
-              @endif
+              @endif --}}
               
               <?php
                 $customer_management_permission = DB::table('permissions')->where('name', 'customer-management')->first();
@@ -441,9 +441,15 @@
                         ['permission_id', $supplier_add_permission->id],
                         ['role_id', $role->id]
                     ])->first();
+                    $index_permission = DB::table('permissions')->where('name', 'vendor-approval-index')->first();
+            
+                    $index_permission_active = DB::table('role_has_permissions')->where([
+                          ['permission_id', $index_permission->id],
+                          ['role_id', $role->id]
+                      ])->first();      
                   ?>
                  
-                   @if($supplier_add_permission_active) 
+                   @if($supplier_add_permission_active || $index_permission_active)
               <li><a href="#vendor_supplier" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-card"></i><span>{{trans('file.vendor_supplier_management')}}</span></a>
                 <ul id="vendor_supplier" class="collapse list-unstyled ">
                   
@@ -453,13 +459,23 @@
                   @if($supplier_add_permission_active)
                   <li id="supplier-create-menu"><a href="{{route('supplier.create')}}">{{trans('file.Add Supplier')}}</a></li>
                   @endif
+                 
+                  @endif
+
+                  @if($index_permission_active)
                   <li id="vendorproduct-product-list-menu"><a href="{{route('all-vendor-products-list')}}">{{__('file.vendor_product_list')}}</a></li>
+
                   @endif
               
                 </ul>
               </li>
               @endif
 
+
+
+        
+
+             
               <?php
                 $index_permission = DB::table('permissions')->where('name', 'purchases-index')->first();
                   $index_permission_active = DB::table('role_has_permissions')->where([
@@ -518,8 +534,13 @@
                         ['permission_id', $index_permission->id],
                         ['role_id', $role->id]
                     ])->first();
+                    $index_stock_transfer_permission = DB::table('permissions')->where('name', 'transfers-index')->first();
+                    $index_stock_transfer_permission_active = DB::table('role_has_permissions')->where([
+                            ['permission_id', $index_stock_transfer_permission->id],
+                            ['role_id', $role->id]
+                        ])->first();
               ?>
-              @if($index_permission_active)
+              @if($index_stock_transfer_permission_active)
               <li><a href="#stock_transfer" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-wallet"></i><span>{{trans('file.stock_transfer')}}</span></a>
                 <ul id="stock_transfer" class="collapse list-unstyled ">
                 <li id="transfer-list-menu"><a href="{{route('transfers.index')}}">{{trans('file.Transfer List')}}</a></li>
@@ -663,7 +684,7 @@
                     ])->first();
 
               ?>
-              <!-- @if($index_permission_active || $balance_sheet_permission_active || $account_statement_permission_active || $money_transfer_permission_active)
+              @if($index_permission_active || $balance_sheet_permission_active || $account_statement_permission_active || $money_transfer_permission_active)
               <li class=""><a href="#account" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-briefcase"></i><span>{{trans('file.Accounting')}}</span></a>
                 <ul id="account" class="collapse list-unstyled ">
                   @if($index_permission_active)
@@ -681,7 +702,7 @@
                   @endif
                 </ul>
               </li>
-              @endif -->
+              @endif 
               <?php
                 $department = DB::table('permissions')->where('name', 'department')->first();
                 $department_active = DB::table('role_has_permissions')->where([
@@ -745,7 +766,7 @@
                             ['permission_id', $biller_index_permission->id],
                             ['role_id', $role->id]
                         ])->first();
-
+                
                   $supplier_index_permission = DB::table('permissions')->where('name', 'suppliers-index')->first();
 
                   $supplier_index_permission_active = DB::table('role_has_permissions')->where([
@@ -753,6 +774,25 @@
                             ['role_id', $role->id]
                         ])->first();
               ?>
+             
+              @if($biller_index_permission_active)
+              <li><a href="#biller" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-user"></i><span>{{trans('file.Biller')}}</span></a>
+              <ul id="biller" class="collapse list-unstyled ">
+                <li id="biller-list-menu"><a href="{{route('biller.index')}}">{{trans('file.Biller List')}}</a></li>
+                <?php
+                  $biller_add_permission = DB::table('permissions')->where('name', 'billers-add')->first();
+                  $biller_add_permission_active = DB::table('role_has_permissions')->where([
+                      ['permission_id', $biller_add_permission->id],
+                      ['role_id', $role->id]
+                  ])->first();
+                ?>
+                @if($biller_add_permission_active)
+                <li id="biller-create-menu"><a href="{{route('biller.create')}}">{{trans('file.Add Biller')}}</a></li>
+                </ul>
+              </li>
+                @endif
+              @endif
+        
               <!-- @if($user_index_permission_active || $customer_index_permission_active || $biller_index_permission_active || $supplier_index_permission_active)
               <li><a href="#people" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-user"></i><span>{{trans('file.People')}}</span></a>
                 <ul id="people" class="collapse list-unstyled ">
@@ -783,7 +823,7 @@
                   <li id="customer-create-menu"><a href="{{route('customer.create')}}">{{trans('file.Add Customer')}}</a></li>
                   @endif
                   @endif
-
+                  
                   @if($biller_index_permission_active)
                   <li id="biller-list-menu"><a href="{{route('biller.index')}}">{{trans('file.Biller List')}}</a></li>
                   <?php
@@ -1235,7 +1275,7 @@
                       ['role_id', $role->id]
                   ])->first();
               ?>
-              @if($vendor_login_permission_active)
+              {{-- @if($vendor_login_permission_active)
                 @if($outlet_setup_active)
                 <li><a href="#vendor_login" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-document"></i><span>{{__('file.vendor_login')}}</span><span></a>
                 @endif
@@ -1247,7 +1287,7 @@
                   
                 </ul>
               </li>
-              @endif
+              @endif --}}
               
                
                <!-- <li id="enquiry-menu"><a href="{{route('enquiry.index')}}"><i class="dripicons-document-remove"></i><span>{{__('file.enquiry_management')}}</span></a></li> -->

@@ -81,8 +81,8 @@
                                                         <th>{{trans('file.Code')}}</th>
                                                         <th>{{trans('file.Quantity')}}</th>
                                                         <th class="recieved-product-qty d-none">{{trans('file.Recieved')}}</th>
-                                                        <th>{{trans('file.Batch No')}}</th>
-                                                        <th>{{trans('file.Expired Date')}}</th>
+                                                        <th>{{trans('file.Tax')}}</th>
+                                                        <th>{{trans('file.Product Unit')}}</th>
                                                         <th>{{trans('file.Net Unit Cost')}}</th>
                                                         <th>{{trans('file.Discount')}}</th>
                                                         <th>{{trans('file.Tax')}}</th>
@@ -393,7 +393,9 @@
 
     //Change quantity
     $("#myTable").on('input', '.qty', function() {
+        
         rowindex = $(this).closest('tr').index();
+        // alert($(this).val())
         if($(this).val() < 1 && $(this).val() != '') {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(1);
         alert("Quantity can't be less than 1");
@@ -453,10 +455,48 @@
     temp_unit_operation_value.pop();
     $('select[name="edit_unit"]').empty();
     $.each(temp_unit_name, function(key, value) {
-        $('select[name="edit_unit"]').append('<option value="' + key + '">' + value + '</option>');
+        // $('select[name="edit_unit"]').append('<option value="' + key + '">' + value + '</option>');
     });
     $('.selectpicker').selectpicker('refresh');
  });
+ $("#myTable").on('input', '.net_unit_cost', function() {
+    var edit_unit_cost = 0;
+        rowindex = $(this).closest('tr').index();
+        // alert($(this).val())
+        if($(this).val() < 1 && $(this).val() != '') {
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val(1);
+        alert("Net cost should not e empty");
+        }
+        product_cost[rowindex] = parseInt($(this).val());
+        // checkQuantity($(this).val(), true); parseInt($(this).val());
+        var edit_discount = parseInt($('input[name="discount[]"]').val());
+        var edit_qty = parseInt($('input[name="qty[]"]').val()); 
+        var edit_unit_cost =parseInt($(this).val());
+    
+        checkQuantity(edit_qty, false);
+        // alert(edit_discount)
+         
+        // alert(edit_unit_cost
+ })
+
+    $("#myTable").on('input', '.discount-value', function() {
+        // alert()
+        rowindex = $(this).closest('tr').index();
+        // alert($(this).val())
+        if($(this).val() < 1 && $(this).val() != '') {
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val(1);
+        alert("Quantity can't be less than 1");
+        }
+        product_discount[rowindex] = parseInt($(this).val());
+        // checkQuantity($(this).val(), true);
+        var edit_discount = parseInt($(this).val());
+        var edit_qty = parseInt($('input[name="qty[]"]').val()); 
+        var edit_unit_cost = parseInt($('input[name="net_unit_cost[]"]').val());
+        // alert(edit_discount)
+        checkQuantity(edit_qty, false);
+    });
+
+
 
     //Update product
     $('button[name="update_btn"]').on("click", function() {
@@ -516,6 +556,7 @@
         checkQuantity(edit_qty, false);
     });
 
+
     function productSearch(data) {
         // alert(data)
         $.ajax({
@@ -525,76 +566,114 @@
                 data: data
             },
             success: function(data) {
-                alert(data)
+               
                 console.log(data);
                 var flag = 1;
-                $(".product-code").each(function(i) {
-                    if ($(this).val() == data[1]) {
-                        rowindex = i;
-                        var qty = parseFloat($('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val()) + 1;
-                        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(qty);
-                        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .recieved').val(qty);
-                        calculateRowProductData(qty);
-                        flag = 0;
-                    }
-                });
-                $("input[name='product_code_name']").val('');
-                if(flag){
-                    var newRow = $("<tr>");
-                    var cols = '';
-                    temp_unit_name = (data[6]).split(',');
-                    cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
-                    cols += '<td>' + data[1] + '</td>';
-                    cols += '<td><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
-                    if($('select[name="status"]').val() == 1)
-                        cols += '<td class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
-                    else if($('select[name="status"]').val() == 2)
-                        cols += '<td class="recieved-product-qty"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
-                    else
-                        cols += '<td class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="0" step="any"/></td>';
-                    if(data[10]) {
-                        cols += '<td><input type="text" class="form-control batch-no" name="batch_no[]" required/></td>';
-                        cols += '<td><input type="text" class="form-control expired-date" name="expired_date[]" required/></td>';
-                    }
-                    else {
-                        cols += '<td><input type="text" class="form-control batch-no" name="batch_no[]" disabled/></td>';
-                        cols += '<td><input type="text" class="form-control expired-date" name="expired_date[]" disabled/></td>';
-                    }
+                if(data != "false"){
 
-                    cols += '<td class="net_unit_cost"></td>';
-                    cols += '<td class="discount">0.00</td>';
-                    cols += '<td class="tax"></td>';
-                    cols += '<td class="sub-total"></td>';
-                    cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>';
-                    cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data[1] + '"/>';
-                    cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[9] + '"/>';
-                    cols += '<input type="hidden" class="purchase-unit" name="purchase_unit[]" value="' + temp_unit_name[0] + '"/>';
-                    cols += '<input type="hidden" class="net_unit_cost" name="net_unit_cost[]" />';
-                    cols += '<input type="hidden" class="discount-value" name="discount[]" />';
-                    cols += '<input type="hidden" class="tax-rate" name="tax_rate[]" value="' + data[3] + '"/>';
-                    cols += '<input type="hidden" class="tax-value" name="tax[]" />';
-                    cols += '<input type="hidden" class="subtotal-value" name="subtotal[]" />';
-                    cols += '<input type="hidden" class="imei-number" name="imei_number[]" />';
+                
+                    $(".product-code").each(function(i) {
+                        if ($(this).val() == data[1]) {
+                            rowindex = i;
+                            var qty = parseFloat($('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val()) + 1;
+                            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(qty);
+                            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .recieved').val(qty);
+                            calculateRowProductData(qty);
+                            flag = 0;
+                        }
+                    });
+                    
+                    $("input[name='product_code_name']").val('');
+                    if(flag){
+                        
+                        var newRow = $("<tr>");
+                        var cols = '';
+                        temp_unit_name = (data[6]).split(',');
+                        cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target=""> </button></td>';
+                        // cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
+                        cols += '<td>' + data[1] + '</td>';
+                        cols += '<td><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
+                        if($('select[name="status"]').val() == 1)
+                            cols += '<td class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
+                        else if($('select[name="status"]').val() == 2)
+                            cols += '<td class="recieved-product-qty"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
+                        else
+                            cols += '<td class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="0" step="any"/></td>';
+                        // if(data[10]) {
+                        //     cols += '<td><input type="text" class="form-control batch-no" name="batch_no[]" required/></td>';
+                        //     cols += '<td><input type="text" class="form-control expired-date" name="expired_date[]" required/></td>';
+                        // }
+                        // else {
+                        //     cols += '<td><input type="text" class="form-control batch-no" name="batch_no[]" disabled/></td>';
+                        //     cols += '<td><input type="text" class="form-control expired-date" name="expired_date[]" disabled/></td>';
+                        // }
+                        // cols += '<td><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
+                        // cols += '<td><input type="number" class="form-control qty" name="edit_discount" value="0" step="any" required/></td>';
+                        
+                            
+                        cols += `<td>
+                                <select name="edit_tax_rate[]" class="form-control">
+                                @foreach($tax_name_all as $key => $name)
+                                <option value="{{$key}}">{{$name}}</option>
+                                @endforeach
+                                </select>
+                        
+                        </td>`;
+                     
 
-                    newRow.append(cols);
-                    $("table.order-list tbody").prepend(newRow);
+                        // $('select[name="edit_unit[]"]').empty();
+                         var srr = (data[6]).split(',');
+                        // $.each( srr, function( key, value ) {                                
+                        //         cols += '<option value="key">'+value+'</option>';
+                        //         });
+                        //         cols +='</select></td>';
+                      
+                        console.log(data[6]);
+                        console.log(srr);
+                         console.log(typeof(srr));
+                        cols += '<td><select name="edit_unit[]" class="form-control">';
+                        
+                        $.each( srr, function( key, value ) {                                
+                                cols += '<option value="key">'+value+'</option>';
+                                });
+                                cols +='</select></td>';
+                            
+                        cols +='</select></td>'
 
-                    rowindex = newRow.index();
-                    product_cost.splice(rowindex,0, parseFloat(data[2]));
-                    product_discount.splice(rowindex,0, '0.00');
-                    tax_rate.splice(rowindex,0, parseFloat(data[3]));
-                    tax_name.splice(rowindex,0, data[4]);
-                    tax_method.splice(rowindex,0, data[5]);
-                    unit_name.splice(rowindex,0, data[6]);
-                    unit_operator.splice(rowindex,0, data[7]);
-                    unit_operation_value.splice(rowindex,0, data[8]);
-                    is_imei.splice(rowindex, 0, data[11]);
-                    calculateRowProductData(1);
-                    if(data[11]) {
-                        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.edit-product').click();
+                        cols += '<td class=""><input type="text" class="net_unit_cost form-control" min="0" value="1" name="net_unit_cost[]" /></td>';
+                        cols += '<td class=""><input type="text" class="discount-value form-control" min="0" name="discount[]" /></td>';
+                        cols += '<td class="tax"></td>';
+                        cols += '<td class="sub-total"></td>';
+                        cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>';
+                        cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data[1] + '"/>';
+                        cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[9] + '"/>';
+                        cols += '<input type="hidden" class="purchase-unit" name="purchase_unit[]" value="' + temp_unit_name[0] + '"/>';
+                        cols += '<input type="hidden" class="tax-rate" name="tax_rate[]" value="' + data[3] + '"/>';
+                        cols += '<input type="hidden" class="tax-value" name="tax[]" />';
+                        cols += '<input type="hidden" class="subtotal-value" name="subtotal[]" />';
+                        cols += '<input type="hidden" class="imei-number" name="imei_number[]" />';
+
+                        newRow.append(cols);
+                        $("table.order-list tbody").prepend(newRow);
+
+                        rowindex = newRow.index();
+                        product_cost.splice(rowindex,0, parseFloat(data[2]));
+                        product_discount.splice(rowindex,0, '0.00');
+                        tax_rate.splice(rowindex,0, parseFloat(data[3]));
+                        tax_name.splice(rowindex,0, data[4]);
+                        tax_method.splice(rowindex,0, data[5]);
+                        unit_name.splice(rowindex,0, data[6]);
+                        unit_operator.splice(rowindex,0, data[7]);
+                        unit_operation_value.splice(rowindex,0, data[8]);
+                        is_imei.splice(rowindex, 0, data[11]);
+                        calculateRowProductData(1);
+                        if(data[11]) {
+                            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.edit-product').click();
+                        }
                     }
-                }
-
+                }else{
+                    alert("Product data not filling properly..!")
+                }  
             }
         });
     }
@@ -622,28 +701,31 @@
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount').text((product_discount[rowindex] * quantity).toFixed(2));
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val((product_discount[rowindex] * quantity).toFixed(2));
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-rate').val(tax_rate[rowindex].toFixed(2));
-
-        if (tax_method[rowindex] == 1) {
+        var net_unit_cost = 0;
+        if (tax_method[rowindex] == 1) {          
             var net_unit_cost = row_product_cost - product_discount[rowindex];
             var tax = net_unit_cost * quantity * (tax_rate[rowindex] / 100);
             var sub_total = (net_unit_cost * quantity) + tax;
-
-            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').text(net_unit_cost.toFixed(2));
-            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').val(net_unit_cost.toFixed(2));
-            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax').text(tax.toFixed(2));
-            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-value').val(tax.toFixed(2));
+            if(isNaN(net_unit_cost)){net_unit_cost = '';}else{net_unit_cost.toFixed(2)}
+            if(isNaN(tax)){tax = '';}else{tax.toFixed(2)}
+          
+          //  $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').text(net_unit_cost.toFixed(2));
+            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').val(net_unit_cost);
+            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax').text(tax);
+            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-value').val(tax);
             $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.sub-total').text(sub_total.toFixed(2));
             $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.subtotal-value').val(sub_total.toFixed(2));
-        } else {
+        } else {  
             var sub_total_unit = row_product_cost - product_discount[rowindex];
             var net_unit_cost = (100 / (100 + tax_rate[rowindex])) * sub_total_unit;
             var tax = (sub_total_unit - net_unit_cost) * quantity;
             var sub_total = sub_total_unit * quantity;
-
-            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').text(net_unit_cost.toFixed(2));
-            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').val(net_unit_cost.toFixed(2));
-            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax').text(tax.toFixed(2));
-            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-value').val(tax.toFixed(2));
+            if(isNaN(net_unit_cost)){net_unit_cost = '';}else{net_unit_cost.toFixed(2)}
+            if(isNaN(tax)){tax = '';}else{tax.toFixed(2)}
+      //      $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').text(net_unit_cost.toFixed(2));
+            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').val(net_unit_cost);
+            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax').text(tax);
+            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-value').val(tax);
             $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.sub-total').text(sub_total.toFixed(2));
             $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.subtotal-value').val(sub_total.toFixed(2));
         }

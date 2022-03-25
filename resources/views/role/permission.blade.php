@@ -216,6 +216,33 @@
 							            </div>
 						            </td> -->
 						        </tr>
+
+
+								<tr>
+						            <td>{{trans('file.vendorproductapprove')}}</td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("vendor-approval-index", $all_permission))
+								                <input type="checkbox" value="1" id="vendor-approval-index" name="vendor-approval-index" checked />
+								                @else
+								                <input type="checkbox" value="1" id="vendor-approval-index" name="vendor-approval-index" />
+								                @endif
+								                <label for="vendor-approval-index"></label>
+							            	</div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						               -
+						            </td>
+						            <td class="text-center">
+						               -
+						            </td>
+						            <td class="text-center">
+						               -
+						            </td> 
+						        </tr>
+
 						        <tr>
 						            <td>{{trans('file.Purchase')}}</td>
 						            <td class="text-center">

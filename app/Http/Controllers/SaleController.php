@@ -353,7 +353,6 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
-        
         $data = $request->all();
         if(isset($request->reference_no)) {
             $this->validate($request, [
@@ -430,7 +429,7 @@ class SaleController extends Controller
             $lims_customer_data->points += $point;
             $lims_customer_data->save();
         }
-        
+
         //collecting male data
         $mail_data['email'] = $lims_customer_data->email;
         $mail_data['reference_no'] = $lims_sale_data->reference_no;
@@ -618,7 +617,7 @@ class SaleController extends Controller
             elseif ($data['paid_by_id'] == 4)
                 $paying_method = 'Cheque';
             elseif ($data['paid_by_id'] == 5)
-                $paying_method = 'Paypal';
+                $paying_method = 'UPI';
             elseif($data['paid_by_id'] == 6)
                 $paying_method = 'Deposit';
             elseif($data['paid_by_id'] == 7) {
@@ -640,7 +639,7 @@ class SaleController extends Controller
 
             $lims_payment_data = Payment::latest()->first();
             $data['payment_id'] = $lims_payment_data->id;
-            if($paying_method == 'Credit Card'){
+            if($paying_method == 'Credit Card_'){
                 $lims_pos_setting_data = PosSetting::latest()->first();
                 Stripe::setApiKey($lims_pos_setting_data->stripe_secret_key);
                 $token = $data['stripeToken'];

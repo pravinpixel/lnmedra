@@ -88,8 +88,8 @@
                                                         <th>{{trans('file.Code')}}</th>
                                                         <th>{{trans('file.Quantity')}}</th>
                                                         <th class="recieved-product-qty d-none">{{trans('file.Recieved')}}</th>
-                                                        <th>{{trans('file.Batch No')}}</th>
-                                                        <th>{{trans('file.Expired Date')}}</th>
+                                                        <th>{{trans('file.Tax')}}</th>
+                                                        <th>{{trans('file.Product Unit')}}</th>
                                                         <th>{{trans('file.Net Unit Cost')}}</th>
                                                         <th>{{trans('file.Discount')}}</th>
                                                         <th>{{trans('file.Tax')}}</th>
@@ -148,15 +148,42 @@
 
                                                         $product_batch_data = \App\ProductBatch::select('batch_no', 'expired_date')->find($product_purchase->product_batch_id);
                                                     ?>
-                                                        <td>{{$product_data->name}} <button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button> </td>
+                                                        <!-- <td>{{$product_data->name}} <button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button> </td> -->
+                                                        <td>{{$product_data->name}} <button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#"> </button> </td>
                                                         <td>{{$product_data->code}}</td>
                                                         <td><input type="number" class="form-control qty" name="qty[]" value="{{$product_purchase->qty}}" step="any" required /></td>
                                                         <td class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="{{$product_purchase->recieved}}" step="any"/></td>
-                                                        @if($product_purchase->product_batch_id)
+                                                        <?php
+                                                            $tax_name_all[] = 'No Tax';
+                                                            $tax_rate_all[] = 0;
+                                                            foreach($lims_tax_list as $tax) {
+                                                                $tax_name_all[] = $tax->name;
+                                                                $tax_rate_all[] = $tax->rate;
+                                                            }
+                                                        ?>
+
+                                                        <td>
+                                                            <select name="edit_tax_rate[]" class="form-control">
+                                                                @foreach($tax_name_all as $key => $name)
+                                                                <option value="{{$key}}">{{$name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </td>
+                                                        <td>
+                                                            
+                                                            <select name="edit_unit[]" class="form-control">';
+                                                                @foreach($units as $key => $name)
+                                                                <option value="{{$key}}"  >{{$name->unit_name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </td>
+                          
+                                                        <!-- @if($product_purchase->product_batch_id)
                                                         <td>
                                                             <input type="hidden" name="product_batch_id[]" value="{{$product_purchase->product_batch_id}}">
                                                             <input type="text" class="form-control batch-no" name="batch_no[]" value="{{$product_batch_data->batch_no}}" required/>
                                                         </td>
+                                                        
                                                         <td>
                                                             <input type="text" class="form-control expired-date" name="expired_date[]" value="{{$product_batch_data->expired_date}}" required/>
                                                         </td>
@@ -168,9 +195,11 @@
                                                         <td>
                                                             <input type="text" class="form-control expired-date" name="expired_date[]" disabled />
                                                         </td>
-                                                        @endif
-                                                        <td class="net_unit_cost">{{ number_format((float)$product_purchase->net_unit_cost, 2, '.', '') }} </td>
-                                                        <td class="discount">{{ number_format((float)$product_purchase->discount, 2, '.', '') }}</td>
+                                                        @endif -->
+                                                        <!-- <td class="net_unit_cost">{{ number_format((float)$product_purchase->net_unit_cost, 2, '.', '') }} </td> -->
+                                                        <td class="net_unit_cost"> <input type="text" class="net_unit_cost form-control" name="net_unit_cost[]" min="0" value="{{$product_purchase->net_unit_cost}}" /> </td>
+                                                    
+                                                        <td class=""><input type="text" class="discount-value form-control discount" name="discount[]" value="{{$product_purchase->discount}}" /></td>
                                                         <td class="tax">{{ number_format((float)$product_purchase->tax, 2, '.', '') }}</td>
                                                         <td class="sub-total">{{ number_format((float)$product_purchase->total, 2, '.', '') }}</td>
                                                         <td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>
@@ -180,8 +209,8 @@
                                                         <input type="hidden" class="purchase-unit" name="purchase_unit[]" value="{{$unit_name}}"/>
                                                         <input type="hidden" class="purchase-unit-operator" value="{{$unit_operator}}"/>
                                                         <input type="hidden" class="purchase-unit-operation-value" value="{{$unit_operation_value}}"/>
-                                                        <input type="hidden" class="net_unit_cost" name="net_unit_cost[]" value="{{$product_purchase->net_unit_cost}}" />
-                                                        <input type="hidden" class="discount-value" name="discount[]" value="{{$product_purchase->discount}}" />
+                                                        <!-- <input type="hidden" class="net_unit_cost" name="net_unit_cost[]" value="{{$product_purchase->net_unit_cost}}" /> -->
+                                                        <!-- <input type="hidden" class="discount-value" name="discount[]" value="{{$product_purchase->discount}}" /> -->
                                                         <input type="hidden" class="tax-rate" name="tax_rate[]" value="{{$product_purchase->tax_rate}}"/>
                                                         @if($tax)
                                                         <input type="hidden" class="tax-name" value="{{$tax->name}}" />
@@ -523,14 +552,7 @@ $('body').on('focus',".expired-date", function() {
 });
 
 //Change quantity
-$("#myTable").on('input', '.qty', function() {
-    rowindex = $(this).closest('tr').index();
-    if($(this).val() < 1 && $(this).val() != '') {
-      $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(1);
-      alert("Quantity can't be less than 1");
-    }
-    checkQuantity($(this).val(), true);
-});
+
 
 
 //Delete product
@@ -581,10 +603,56 @@ $("table.order-list").on("click", ".edit-product", function() {
     temp_unit_operation_value.pop();
     $('select[name="edit_unit"]').empty();
     $.each(temp_unit_name, function(key, value) {
-        $('select[name="edit_unit"]').append('<option value="' + key + '">' + value + '</option>');
+        // $('select[name="edit_unit"]').append('<option value="' + key + '">' + value + '</option>');
     });
     $('.selectpicker').selectpicker('refresh');
 });
+$("#myTable").on('input', '.qty', function() {
+    
+    rowindex = $(this).closest('tr').index();
+    if($(this).val() < 1 && $(this).val() != '') {
+      $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(1);
+      alert("Quantity can't be less than 1");
+    }
+    product_discount[rowindex] = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val();
+    
+    checkQuantity($(this).val(), true);
+});
+$("#myTable").on('input', '.net_unit_cost', function() {
+    var edit_unit_cost = 0;
+        rowindex = $(this).closest('tr').index();
+        // alert($(this).val())
+        if($(this).val() < 1 && $(this).val() != '') {
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val(1);
+        alert("Net cost should not empty");
+        }
+        product_cost[rowindex] = parseInt($(this).val());
+        product_discount[rowindex] = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val();
+        // checkQuantity($(this).val(), true); parseInt($(this).val());
+        var edit_discount = parseInt($('input[name="discount[]"]').val());
+        var edit_qty = parseInt($('input[name="qty[]"]').val()); 
+        var edit_unit_cost =parseInt($(this).val());
+    
+        checkQuantity(edit_qty, false);
+ })
+
+    $("#myTable").on('input', '.discount-value', function() {
+       
+        rowindex = $(this).closest('tr').index();
+        
+        if($(this).val() < 1 && $(this).val() != '') {
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val(1);
+        alert("Quantity can't be less than 1");
+        }
+        product_discount[rowindex] = parseInt($(this).val());
+        // checkQuantity($(this).val(), true);
+        var edit_discount = parseInt($(this).val());
+        var edit_qty = parseInt($('input[name="qty[]"]').val()); 
+        var edit_unit_cost = parseInt($('input[name="net_unit_cost[]"]').val());
+        // alert(edit_discount)
+        checkQuantity(edit_qty, false);
+    });
+
 
 //Update product
 $('button[name="update_btn"]').on("click", function() {
@@ -667,7 +735,8 @@ function productSearch(data) {
                 var newRow = $("<tr>");
                 var cols = '';
                 temp_unit_name = (data[6]).split(',');
-                cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
+                // cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
+                cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target=""></button></td>';
                 cols += '<td>' + data[1] + '</td>';
                 cols += '<td><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required /></td>';
                 if($('select[name="status"]').val() == 1)
@@ -676,24 +745,43 @@ function productSearch(data) {
                     cols += '<td class="recieved-product-qty"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
                 else
                     cols += '<td class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="0" step="any"/></td>';
-                if(data[10]) {
-                    cols += '<td><input type="text" class="form-control batch-no" name="batch_no[]" required/></td>';
-                    cols += '<td><input type="text" class="form-control expired-date" name="expired_date[]" required/></td>';
-                }
-                else {
-                    cols += '<td><input type="text" class="form-control batch-no" name="batch_no[]" disabled/></td>';
-                    cols += '<td><input type="text" class="form-control expired-date" name="expired_date[]" disabled/></td>';
-                }
-                cols += '<td class="net_unit_cost"></td>';
-                cols += '<td class="discount">0.00</td>';
+                // if(data[10]) {
+                //     cols += '<td><input type="text" class="form-control batch-no" name="batch_no[]" required/></td>';
+                //     cols += '<td><input type="text" class="form-control expired-date" name="expired_date[]" required/></td>';
+                // }
+                // else {
+                //     cols += '<td><input type="text" class="form-control batch-no" name="batch_no[]" disabled/></td>';
+                //     cols += '<td><input type="text" class="form-control expired-date" name="expired_date[]" disabled/></td>';
+                // } 
+                cols += `<td>
+                                <select name="edit_tax_rate[]" class="form-control">
+                                @foreach($tax_name_all as $key => $name)
+                                <option value="{{$key}}">{{$name}}</option>
+                                @endforeach
+                                </select>
+                        </td>`;
+                        var srr = (data[6]).split(',');
+                        console.log(data[6]);
+                        console.log(srr);
+                         console.log(typeof(srr));
+                cols += '<td><select name="edit_unit[]" class="form-control">';
+                
+                $.each( srr, function( key, value ) {                                
+                        cols += '<option value="key">'+value+'</option>';
+                        });
+                        cols +='</select></td>';
+                    
+                cols +='</select></td>'
+                cols += '<td class="net_unit_cost"><input type="text" class="net_unit_cost form-control" min="0" value="1" name="net_unit_cost[]" /></td>';
+                cols += '<td class=""><input type="text" class="discount-value form-control discount" min="0" name="discount[]" /></td>';
                 cols += '<td class="tax"></td>';
                 cols += '<td class="sub-total"></td>';
                 cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>';
                 cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data[1] + '"/>';
                 cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[9] + '"/>';
                 cols += '<input type="hidden" class="purchase-unit" name="purchase_unit[]" value="' + temp_unit_name[0] + '"/>';
-                cols += '<input type="hidden" class="net_unit_cost" name="net_unit_cost[]" />';
-                cols += '<input type="hidden" class="discount-value" name="discount[]" />';
+                // cols += '<input type="hidden" class="net_unit_cost" name="net_unit_cost[]" />';
+                // cols += '<input type="hidden" class="discount-value" name="discount[]" />';
                 cols += '<input type="hidden" class="tax-rate" name="tax_rate[]" value="' + data[3] + '"/>';
                 cols += '<input type="hidden" class="tax-value" name="tax[]" />';
                 cols += '<input type="hidden" class="subtotal-value" name="subtotal[]" />';
@@ -741,19 +829,29 @@ function checkQuantity(purchase_qty, flag) {
 
 function calculateRowProductData(quantity) {
     unitConversion();
-    $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount').text((product_discount[rowindex] * quantity).toFixed(2));
-    $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val((product_discount[rowindex] * quantity).toFixed(2));
+    // alert("p")
+//  alert(product_discount[rowindex])
+    if(isNaN((product_discount[rowindex] * quantity))){
+        var discountdata = '0';
+    }else{
+        var discountdata = (product_discount[rowindex] * quantity).toFixed(2);
+    }
+   // $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount').text((product_discount[rowindex] * quantity).toFixed(2));
+    $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val(discountdata);
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-rate').val(tax_rate[rowindex].toFixed(2));
 
     if (tax_method[rowindex] == 1) {
+
         var net_unit_cost = row_product_cost - product_discount[rowindex];
         var tax = net_unit_cost * quantity * (tax_rate[rowindex] / 100);
         var sub_total = (net_unit_cost * quantity) + tax;
-
-        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').text(net_unit_cost.toFixed(2));
-        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').val(net_unit_cost.toFixed(2));
-        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax').text(tax.toFixed(2));
-        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-value').val(tax.toFixed(2));
+        if(isNaN(net_unit_cost)){net_unit_cost = '';}else{net_unit_cost.toFixed(2)}
+            if(isNaN(tax)){tax = '';}else{tax.toFixed(2)}
+            
+        // $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').text(net_unit_cost.toFixed(2));
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').val(net_unit_cost);
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax').text(tax);
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-value').val(tax);
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.sub-total').text(sub_total.toFixed(2));
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.subtotal-value').val(sub_total.toFixed(2));
     } else {
@@ -761,11 +859,12 @@ function calculateRowProductData(quantity) {
         var net_unit_cost = (100 / (100 + tax_rate[rowindex])) * sub_total_unit;
         var tax = (sub_total_unit - net_unit_cost) * quantity;
         var sub_total = sub_total_unit * quantity;
-
-        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').text(net_unit_cost.toFixed(2));
-        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').val(net_unit_cost.toFixed(2));
-        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax').text(tax.toFixed(2));
-        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-value').val(tax.toFixed(2));
+        if(isNaN(net_unit_cost)){net_unit_cost = '';}else{net_unit_cost.toFixed(2)}
+        if(isNaN(tax)){tax = '';}else{tax.toFixed(2)}
+        // $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').text(net_unit_cost.toFixed(2));
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_cost').val(net_unit_cost);
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax').text(tax);
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-value').val(tax);
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.sub-total').text(sub_total.toFixed(2));
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.subtotal-value').val(sub_total.toFixed(2));
     }
@@ -786,6 +885,7 @@ function unitConversion() {
 
 function calculateTotal() {
     //Sum of quantity
+    
     var total_qty = 0;
     $(".qty").each(function() {
 
@@ -801,10 +901,16 @@ function calculateTotal() {
     //Sum of discount
     var total_discount = 0;
     $(".discount").each(function() {
-        total_discount += parseFloat($(this).text());
+        total_discount += parseInt($(this).closest('tr').find('.discount-value').val());
+
     });
+    console.log(total_discount)
+   
+
     $("#total-discount").text(total_discount.toFixed(2));
     $('input[name="total_discount"]').val(total_discount.toFixed(2));
+    
+    // alert( $('input[name="total_discount"]').val());
 
     //Sum of tax
     var total_tax = 0;
@@ -817,9 +923,14 @@ function calculateTotal() {
     //Sum of subtotal
     var total = 0;
     $(".sub-total").each(function() {
-        total += parseFloat($(this).text());
+        if(isNaN($(this).text())){
+            var totals = 0;
+        }else{
+            var totals = $(this).text();
+        }
+        total += parseFloat(totals);
     });
-    $("#total").text(total.toFixed(2));
+  $("#total").text(total.toFixed(2));
     $('input[name="total_cost"]').val(total.toFixed(2));
 
     calculateGrandTotal();
@@ -828,18 +939,25 @@ function calculateTotal() {
 function calculateGrandTotal() {
 
     var item = $('table.order-list tbody tr:last').index();
-
     var total_qty = parseFloat($('#total-qty').text());
     var subtotal = parseFloat($('#total').text());
+
+    // var subtotal = 0;
     var order_tax = parseFloat($('select[name="order_tax_rate"]').val());
     var order_discount = parseFloat($('input[name="order_discount"]').val());
     var shipping_cost = parseFloat($('input[name="shipping_cost"]').val());
-
+    
     if (!order_discount)
         order_discount = 0.00;
     if (!shipping_cost)
         shipping_cost = 0.00;
-
+    console.log('total_qty',total_qty);
+    console.log('subtotal',subtotal);
+    console.log('order_tax',order_tax);
+    console.log('order_discount',order_discount);
+    console.log('shipping_cost',shipping_cost);
+// console.log('order_discount',order_discount);
+   
     item = ++item + '(' + total_qty + ')';
     order_tax = (subtotal - order_discount) * (order_tax / 100);
     var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
@@ -853,6 +971,7 @@ function calculateGrandTotal() {
     $('#shipping_cost').text(shipping_cost.toFixed(2));
     $('#grand_total').text(grand_total.toFixed(2));
     $('input[name="grand_total"]').val(grand_total.toFixed(2));
+    
 }
 
 $('input[name="order_discount"]').on("input", function() {
@@ -866,6 +985,7 @@ $('input[name="shipping_cost"]').on("input", function() {
 $('select[name="order_tax_rate"]').on("change", function() {
     calculateGrandTotal();
 });
+// alert(4)
 
 $(window).keydown(function(e){
     if (e.which == 13) {

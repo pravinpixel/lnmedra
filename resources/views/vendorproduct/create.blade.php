@@ -173,7 +173,7 @@
              
               success: function(res) {
                   $('#attribute_img').html('');
-              // alert(res.data.length)
+            //   alert(res.data.length)
               if(res.data.length){
                 $('#attribute_div').show();
                     for(var i=0;i<res.data.length;i++)

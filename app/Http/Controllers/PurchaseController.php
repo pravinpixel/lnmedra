@@ -303,7 +303,10 @@ class PurchaseController extends Controller
                     ['products.is_active', true]
                 ])->first();
         }
-
+        // print_r($lims_product_data->cost);die();
+        if($lims_product_data->price == ''|| Null){
+            return "false";
+        }
         $product[] = $lims_product_data->name;
         if($lims_product_data->is_variant)
             $product[] = $lims_product_data->item_code;
@@ -350,8 +353,10 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
+        // print_r($request->all());die();
         $data = $request->except('document');
         //return dd($data);
+        // print_r( $data['product_id']);die();
         $data['user_id'] = Auth::id();
         $data['reference_no'] = 'pr-' . date("Ymd") . '-'. date("his");
         $document = $request->document;
@@ -379,8 +384,8 @@ class PurchaseController extends Controller
         $product_code = $data['product_code'];
         $qty = $data['qty'];
         $recieved = $data['recieved'];
-        $batch_no = $data['batch_no'];
-        $expired_date = $data['expired_date'];
+        // $batch_no = $data['batch_no'];
+        // $expired_date = $data['expired_date'];
         $purchase_unit = $data['purchase_unit'];
         $net_unit_cost = $data['net_unit_cost'];
         $discount = $data['discount'];
@@ -401,28 +406,28 @@ class PurchaseController extends Controller
             $lims_product_data = Product::find($id);
 
             //dealing with product barch
-            if($batch_no[$i]) {
-                $product_batch_data = ProductBatch::where([
-                                        ['product_id', $lims_product_data->id],
-                                        ['batch_no', $batch_no[$i]]
-                                    ])->first();
-                if($product_batch_data) {
-                    $product_batch_data->expired_date = $expired_date[$i];
-                    $product_batch_data->qty += $quantity;
-                    $product_batch_data->save();
-                }
-                else {
-                    $product_batch_data = ProductBatch::create([
-                                            'product_id' => $lims_product_data->id,
-                                            'batch_no' => $batch_no[$i],
-                                            'expired_date' => $expired_date[$i],
-                                            'qty' => $quantity
-                                        ]);   
-                }
-                $product_purchase['product_batch_id'] = $product_batch_data->id;
-            }
-            else
-                $product_purchase['product_batch_id'] = null;
+            // if($batch_no[$i]) {
+            //     $product_batch_data = ProductBatch::where([
+            //                             ['product_id', $lims_product_data->id],
+            //                             ['batch_no', $batch_no[$i]]
+            //                         ])->first();
+            //     if($product_batch_data) {
+            //         $product_batch_data->expired_date = $expired_date[$i];
+            //         $product_batch_data->qty += $quantity;
+            //         $product_batch_data->save();
+            //     }
+            //     else {
+            //         $product_batch_data = ProductBatch::create([
+            //                                 'product_id' => $lims_product_data->id,
+            //                                 'batch_no' => $batch_no[$i],
+            //                                 'expired_date' => $expired_date[$i],
+            //                                 'qty' => $quantity
+            //                             ]);   
+            //     }
+            //     $product_purchase['product_batch_id'] = $product_batch_data->id;
+            // }
+            // else
+            //     $product_purchase['product_batch_id'] = null;
 
             if($lims_product_data->is_variant) {
                 $lims_product_variant_data = ProductVariant::select('id', 'variant_id', 'qty')->FindExactProductWithCode($lims_product_data->id, $product_code[$i])->first();
@@ -438,10 +443,10 @@ class PurchaseController extends Controller
             }
             else {
                 $product_purchase['variant_id'] = null;
-                if($product_purchase['product_batch_id']) {
+                if($product_purchase) {
                     $lims_product_warehouse_data = Product_Warehouse::where([
                         ['product_id', $id],
-                        ['product_batch_id', $product_purchase['product_batch_id'] ],
+                        // ['product_batch_id', $product_purchase['product_batch_id'] ],
                         ['warehouse_id', $data['warehouse_id'] ],
                     ])->first();
                 }
@@ -462,7 +467,7 @@ class PurchaseController extends Controller
             else {
                 $lims_product_warehouse_data = new Product_Warehouse();
                 $lims_product_warehouse_data->product_id = $id;
-                $lims_product_warehouse_data->product_batch_id = $product_purchase['product_batch_id'];
+                // $lims_product_warehouse_data->product_batch_id = $product_purchase['product_batch_id'];
                 $lims_product_warehouse_data->warehouse_id = $data['warehouse_id'];
                 $lims_product_warehouse_data->qty = $quantity;
                 if($lims_product_data->is_variant)
@@ -673,9 +678,11 @@ class PurchaseController extends Controller
             $lims_product_list_without_variant = $this->productWithoutVariant();
             $lims_product_list_with_variant = $this->productWithVariant();
             $lims_purchase_data = Purchase::find($id);
+            $units = Unit::where('is_active',1)
+                    ->get();
             $lims_product_purchase_data = ProductPurchase::where('purchase_id', $id)->get();
 
-            return view('purchase.edit', compact('lims_warehouse_list', 'lims_supplier_list', 'lims_product_list_without_variant', 'lims_product_list_with_variant', 'lims_tax_list', 'lims_purchase_data', 'lims_product_purchase_data'));
+            return view('purchase.edit', compact('lims_warehouse_list', 'lims_supplier_list', 'units','lims_product_list_without_variant', 'lims_product_list_with_variant', 'lims_tax_list', 'lims_purchase_data', 'lims_product_purchase_data'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -717,8 +724,8 @@ class PurchaseController extends Controller
         $product_code = $data['product_code'];
         $qty = $data['qty'];
         $recieved = $data['recieved'];
-        $batch_no = $data['batch_no'];
-        $expired_date = $data['expired_date'];
+        // $batch_no = $data['batch_no'];
+        // $expired_date = $data['expired_date'];
         $purchase_unit = $data['purchase_unit'];
         $net_unit_cost = $data['net_unit_cost'];
         $discount = $data['discount'];
@@ -750,13 +757,13 @@ class PurchaseController extends Controller
                 $lims_product_variant_data->save();
             }
             elseif($product_purchase_data->product_batch_id) {
-                $product_batch_data = ProductBatch::find($product_purchase_data->product_batch_id);
+                // $product_batch_data = ProductBatch::find($product_purchase_data->product_batch_id);
                 $product_batch_data->qty -= $old_recieved_value;
                 $product_batch_data->save();
 
                 $lims_product_warehouse_data = Product_Warehouse::where([
                     ['product_id', $product_purchase_data->product_id],
-                    ['product_batch_id', $product_purchase_data->product_batch_id],
+                    // ['product_batch_id', $product_purchase_data->product_batch_id],
                     ['warehouse_id', $lims_purchase_data->warehouse_id],
                 ])->first();
             }
@@ -797,28 +804,28 @@ class PurchaseController extends Controller
 
             $lims_product_data = Product::find($pro_id);
             //dealing with product barch
-            if($batch_no[$key]) {
-                $product_batch_data = ProductBatch::where([
-                                        ['product_id', $lims_product_data->id],
-                                        ['batch_no', $batch_no[$key]]
-                                    ])->first();
-                if($product_batch_data) {
-                    $product_batch_data->qty += $new_recieved_value;
-                    $product_batch_data->expired_date = $expired_date[$key];
-                    $product_batch_data->save();
-                }
-                else {
-                    $product_batch_data = ProductBatch::create([
-                                            'product_id' => $lims_product_data->id,
-                                            'batch_no' => $batch_no[$key],
-                                            'expired_date' => $expired_date[$key],
-                                            'qty' => $new_recieved_value
-                                        ]);   
-                }
-                $product_purchase['product_batch_id'] = $product_batch_data->id;
-            }
-            else
-                $product_purchase['product_batch_id'] = null;
+            // if($batch_no[$key]) {
+            //     $product_batch_data = ProductBatch::where([
+            //                             ['product_id', $lims_product_data->id],
+            //                             ['batch_no', $batch_no[$key]]
+            //                         ])->first();
+            //     if($product_batch_data) {
+            //         $product_batch_data->qty += $new_recieved_value;
+            //         $product_batch_data->expired_date = $expired_date[$key];
+            //         $product_batch_data->save();
+            //     }
+            //     else {
+            //         $product_batch_data = ProductBatch::create([
+            //                                 'product_id' => $lims_product_data->id,
+            //                                 'batch_no' => $batch_no[$key],
+            //                                 'expired_date' => $expired_date[$key],
+            //                                 'qty' => $new_recieved_value
+            //                             ]);   
+            //     }
+            //     $product_purchase['product_batch_id'] = $product_batch_data->id;
+            // }
+            // else
+            //     $product_purchase['product_batch_id'] = null;
 
             if($lims_product_data->is_variant) {
                 $lims_product_variant_data = ProductVariant::select('id', 'variant_id', 'qty')->FindExactProductWithCode($pro_id, $product_code[$key])->first();
@@ -834,10 +841,10 @@ class PurchaseController extends Controller
             }
             else {
                 $product_purchase['variant_id'] = null;
-                if($product_purchase['product_batch_id']) {
+                if($product_purchase) {
                     $lims_product_warehouse_data = Product_Warehouse::where([
                         ['product_id', $pro_id],
-                        ['product_batch_id', $product_purchase['product_batch_id'] ],
+                        // ['product_batch_id', $product_purchase['product_batch_id'] ],
                         ['warehouse_id', $data['warehouse_id'] ],
                     ])->first();
                 }

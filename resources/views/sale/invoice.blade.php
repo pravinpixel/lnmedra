@@ -100,8 +100,8 @@
             
             <h2>{{$lims_biller_data->company_name}}</h2>
             
-            <p>{{trans('file.Address')}}: {{$lims_warehouse_data->address}}
-                <br>{{trans('file.Phone Number')}}: {{$lims_warehouse_data->phone}}
+            <p>{{trans('file.Address')}}: {{$lims_warehouse_data->address ?? ''}}
+                <br>{{trans('file.Phone Number')}}: {{$lims_warehouse_data->phone ?? ''}}
             </p>
         </div>
         <p>{{trans('file.Date')}}: {{$lims_sale_data->created_at}}<br>

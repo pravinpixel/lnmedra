@@ -364,7 +364,7 @@ class HomeController extends Controller
 
         if($role->hasPermissionTo('sales-add')){
                
-            return redirect()->route('sales.index'); 
+            return redirect()->route('sale.pos'); 
             }
          
         }

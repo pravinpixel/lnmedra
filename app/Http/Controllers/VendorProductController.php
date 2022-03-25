@@ -29,6 +29,7 @@ use Illuminate\Validation\Rule;
 use DB;
 use App\Variant;
 use App\ProductVariant;
+use Illuminate\Support\Facades\Validator;
 
 class VendorProductController extends Controller
 {
@@ -350,13 +351,12 @@ class VendorProductController extends Controller
          
             $lims_brand_list = Brand::where('is_active', true)->get();
             $lims_category_list = Category::where('is_active', true)->get();
-         
+            $productType = ProductType::get();
+            // print_r($productType);die();
             $lims_product_data = VendorProduct::where('id', $id)->first();
 
             $lims_product_data['dashboardView'] = 1;
-            
-            // print_r($lims_product_data);die();
-            return view('vendorproduct.edit',compact('lims_brand_list', 'lims_category_list',  'lims_product_data'));
+            return view('vendorproduct.edit',compact('lims_brand_list', 'lims_category_list',  'lims_product_data','productType'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -366,6 +366,7 @@ class VendorProductController extends Controller
         $role = Role::firstOrCreate(['id' => Auth::user()->role_id]);
         if ($role->hasPermissionTo('vendorproducts-edit')) {
             $productType = ProductType::get();
+            // print_r($productType);die();
             $lims_brand_list = Brand::where('is_active', true)->get();
             $lims_category_list = Category::where('is_active', true)->get();
          
@@ -842,14 +843,17 @@ class VendorProductController extends Controller
             // print_r("dd");die();
             $role = Role::find(Auth::user()->role_id);
             // print_r($role);die();
-            if($role->hasPermissionTo('allvendorproductslist-index')){
+            if($role->hasPermissionTo('vendor-approval-index')){
                      
                 $permissions = Role::findByName($role->name)->permissions;
                 foreach ($permissions as $permission)
                     $all_permission[] = $permission->name;
                 if(empty($all_permission))
                     $all_permission[] = 'dummy text';
-                return view('vendorproduct.all_vendor_product_list', compact('all_permission'));
+                
+                $lims_supplier_list = Supplier::where('is_active', true)->get();
+                $lims_warehouse_list = Warehouse::where('is_active', true)->get();
+                return view('vendorproduct.all_vendor_product_list', compact('all_permission','lims_warehouse_list','lims_supplier_list'));
             }
             else
                    
@@ -1003,14 +1007,41 @@ class VendorProductController extends Controller
                     //$nestedData['stock_worth'] = ($product->qty * $product->price).'/'.($product->qty * $product->cost);
                     $nestedData['ln_qty'] = '<div class="btn-group">
                     
-                    <input type="number" name="ln_qty" min="0" id="ln_qty" class="form-control ln_qty check'.$product->id.'text"  data-qty_row_id="'.$product->id.'" value="'.$product->ln_qty.'" style="width:70px;" >
+                    <input type="number" name="ln_qty[]" min="0" id="ln_qty'.$product->id.'" class="form-control ln_qty check'.$product->id.'text"  data-qty_row_id="'.$product->id.'" value="'.$product->ln_qty.'" style="width:70px;" >
 
                     <div>';
                     $nestedData['ln_price'] = '<div class="btn-group">
                     
-                    <input type="number" name="ln_qty" id="ln_price" min="0" class="form-control ln_price check'.$product->id.'text" data-price_row_id="'.$product->id.'" value="'.$product->ln_price.'" style="width:70px;">
+                    <input type="number" name="ln_price[]" id="ln_price'.$product->id.'" min="0" class="form-control ln_price check'.$product->id.'text" data-price_row_id="'.$product->id.'" value="'.$product->ln_price.'" style="width:70px;">
 
                     <div>';
+                    $nestedData['discount'] = '<div class="btn-group">
+                    <input type="text" class="discount-value form-control discount" min="0" name="discount[]" data-discount_row_id="'.$product->id.'" value="'.$product->discount.'" style="width:70px;"/>
+                    <div>';
+                    $unit = Unit::where('is_active',1)->get();
+                    $nestedData['unit'] = '<div class="btn-group">
+
+                    <select name="edit_tax_rate[]" class="form-control">';
+                        foreach($unit as $key => $name)
+                        {
+                            $nestedData['unit'] .= '<option value='.$name['id'].'>'.$name['unit_name'].'</option>';
+                        }
+                        $nestedData['unit'] .='</select>
+                    </div>';
+
+                                $tax = Tax::where('is_active',1)->get();
+                               
+                              
+                                $nestedData['tax'] = '<div class="btn-group">
+
+                            <select name="edit_tax_rate[]" class="form-control">';
+                                foreach($tax as $key => $name)
+                                {
+                                    $nestedData['tax'] .= '<option value='.$name['id'].'>'.$name['name'].'</option>';
+                                }
+                                $nestedData['tax'] .='</select>
+                            </div>';
+                    // print_r($nestedData['unit']);die();
                     if($product->is_approve == 1)
                     {
                         $nestedData['options'] = 'Approved';
@@ -1343,6 +1374,16 @@ class VendorProductController extends Controller
             return true;
             
         }
+        public function lnDiscountStore(Request $request)
+        {
+            # code...
+            
+            $data = VendorProduct::find($request['row_id']);
+            $data->discount = $request['row_discount_value'];
+            $res = $data->update();
+           
+            return true;
+        }
         public function rowDataStore(Request $request)
         {
             // print_r($request->all());die();
@@ -1355,14 +1396,16 @@ class VendorProductController extends Controller
                     $val->save();
                      $data[] = $val;
                 }
-           
-               
+                $productCount = 0;
+                $total_qty=0;
                 foreach($data as $key=>$value)
                 {
+                    ++$productCount;
                     $insert = new Product();
                     $insert->name = $value['name'];
                     $insert->code = $value['code'];
                     $insert->type = $value['type'];
+                    $insert->attribute = $value['attribute'];
                     $insert->barcode_symbology = $value['barcode_symbology'];
                     $insert->vendor_product_id = $value['id'];
                     $insert->brand_id = $value['brand_id'];
@@ -1394,8 +1437,46 @@ class VendorProductController extends Controller
                     $insert->product_details = $value['product_details'];
                     $insert->is_active =1;
                     $insert->save();
-                
+                    $product_id[] = $insert->id;
+                    $total_qty += $value['qty'];
+                // array_push( $data['product_id'],$insert->id);
                 }
+                // /////////// purchase store
+                // // print_r($produ);
+                // // $data['product_id'] = $product_id;
+                // print_r($total_qty."____");
+                // // print_r($request->all());die();
+
+                // die();
+
+                // $data['user_id'] = Auth::id();
+                // $data['reference_no'] = 'pr-' . date("Ymd") . '-'. date("his");
+                // $data['warehouse_id'] = $request->warehouse_id;
+                // $data['supplier_id'] = $request->supplier_id;
+                // $data['item'] = $request->productCount;
+                
+                // $document = $request->document;
+                // if ($document) {
+                //     $v = Validator::make(
+                //         [
+                //             'extension' => strtolower($request->document->getClientOriginalExtension()),
+                //         ],
+                //         [
+                //             'extension' => 'in:jpg,jpeg,png,gif,pdf,csv,docx,xlsx,txt',
+                //         ]
+                //     );
+                //     if ($v->fails())
+                //         return redirect()->back()->withErrors($v->errors());
+
+                //     $documentName = $document->getClientOriginalName();
+                //     $document->move('public/documents/purchase', $documentName);
+                //     $data['document'] = $documentName;
+                // }
+                // Purchase::create($data);
+
+
+                /////////////////////
+
             }
             else{
                 return redirect('all-vendor-products-list')->with('message', 'No product is selected!');

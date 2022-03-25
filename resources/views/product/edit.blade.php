@@ -55,7 +55,7 @@
                                         <span class="validation-msg" id="code-error"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="attribute_div">
                                     <div class="form-group">
                                         <label>{{trans('file.Attribute')}} *</strong> </label>
                                         
@@ -625,6 +625,7 @@ var baseUrl = $('#baseUrl').val();
                   $('#attribute_img').html('');
                   
               // alert(res.data.length)
+              if(res.data.length){
                  for(var i=0;i<res.data.length;i++)
                  {
                   let att = res.data[i];
@@ -634,6 +635,10 @@ var baseUrl = $('#baseUrl').val();
                   ${res.data[i].image}     
                   `)
                  }  
+                }
+                else{
+                    $('#attribute_div').hide();
+                }
               }
           });
   });

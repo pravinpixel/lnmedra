@@ -54,7 +54,7 @@
                                         <span class="validation-msg" id="code-error"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-4" id="attribute_div">
                                     <div class="form-group">
                                         <label>{{trans('file.Attribute')}} *</strong> </label>
                                         
@@ -232,8 +232,9 @@ $('#productType').trigger('change');
              },
               success: function(res) {
                   $('#attribute_img').html('');
-                  
-              // alert(res.data.length)
+                //   alert(res.data.length)
+                  if(res.data.length){
+              
                  for(var i=0;i<res.data.length;i++)
                  {
                   let att = res.data[i];
@@ -243,6 +244,10 @@ $('#productType').trigger('change');
                   ${res.data[i].image}     
                   `)
                  }  
+                }
+                else{
+                    $('#attribute_div').hide();
+                }
               }
           });
   });

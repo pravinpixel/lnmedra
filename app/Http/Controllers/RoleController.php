@@ -129,6 +129,26 @@ class RoleController extends Controller
         else
             $role->revokePermissionTo('products-delete');
 
+
+        if($request->has('vendor-approval-index')){
+            $permission = Permission::firstOrCreate(['name' => 'vendor-approval-index']);
+            if(!$role->hasPermissionTo('vendor-approval-index')){
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('vendor-approval-index');
+            
+            // if($request->has('vendor-approval-index')){
+               
+            //     $permission = Permission::firstOrCreate(['name' => 'vendor-approval-index']);
+            //     if(!$role->hasPermissionTo('vendor-approval-index')){
+            //         $role->givePermissionTo($permission);
+            //     }
+            // }
+            // else
+            //     $role->revokePermissionTo('vendor-approval-index');
+
           
             if($request->has('vendor-dashboard-index')){
                

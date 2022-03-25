@@ -35,7 +35,7 @@
                                     </span>
                                     @endif
                                 </div>
-                                <div class="col-md-6 mt-4">
+                                <!--<div class="col-md-6 mt-4">
                                     <div class="form-group">
                                         @if($lims_general_setting_data->is_rtl)
                                         <input type="checkbox" name="is_rtl" value="1" checked>
@@ -46,7 +46,7 @@
                                         <label>{{trans('file.RTL Layout')}}</label>
 
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.Time Zone')}}</label>

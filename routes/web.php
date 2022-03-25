@@ -126,6 +126,8 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	
 	Route::post('vendorproducts/ln-qty', 'VendorProductController@lnQtyStore')->name('vendorproducts.ln-qty');
 	Route::post('vendorproducts/ln-price', 'VendorProductController@lnPriceStore')->name('vendorproducts.ln-price');
+	Route::post('vendorproducts/ln-discount', 'VendorProductController@lnDiscountStore')->name('vendorproducts.ln-discount');
+	
 	Route::post('vendorproducts/row-data', 'VendorProductController@rowDataStore')->name('vendorproducts.row-data');
 
 	Route::post('vendorproducts/vendor-dashboard-status', 'VendorProductController@vendorDashboardStatus')->name('vendor-dashboard-status');
