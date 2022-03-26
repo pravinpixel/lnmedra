@@ -502,7 +502,7 @@ class SaleController extends Controller
                     $child_warehouse_data->save();
                 }
             }
-
+            
             if($sale_unit[$i] != 'n/a') {
                 $lims_sale_unit_data  = Unit::where('unit_name', $sale_unit[$i])->first();
                 $sale_unit_id = $lims_sale_unit_data->id;
@@ -1223,7 +1223,7 @@ class SaleController extends Controller
             $product[] = 'No Tax';
         }
         $product[] = $lims_product_data->tax_method;
-        if($lims_product_data->type == 'standard'){
+        if($lims_product_data->type == 'standard' || true){
             $units = Unit::where("base_unit", $lims_product_data->unit_id)
                     ->orWhere('id', $lims_product_data->unit_id)
                     ->get();
