@@ -55,7 +55,7 @@
                                         <div class="form-group">
                                             <label>{{trans('file.Attach Document')}}</label>
                                             <i class="dripicons-question" data-toggle="tooltip" title="Only jpg, jpeg, png, gif, pdf, csv, docx, xlsx and txt file is supported"></i>
-                                            <input type="file" name="document" class="form-control" />
+                                            <input type="file" name="document" class="form-control" accept=".csv" />
                                             @if($errors->has('extension'))
                                                 <span>
                                                    <strong>{{ $errors->first('extension') }}</strong>
@@ -68,7 +68,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.Upload CSV File')}} *</label>
-                                            <input type="file" name="file" class="form-control" required />
+                                            <input type="file" name="file" class="form-control" accept=".csv" required />
                                             <p>{{trans('file.The correct column order is')}} (product_code, quantity, purchase_unit, product_cost, discount, tax_name) {{trans('file.and you must follow this')}}. {{trans('file.All columns are required')}}</p>
                                         </div>
                                     </div>

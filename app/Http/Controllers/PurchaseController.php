@@ -665,7 +665,7 @@ class PurchaseController extends Controller
         $lims_purchase_data->order_tax = ($lims_purchase_data->total_cost - $lims_purchase_data->order_discount) * ($data['order_tax_rate'] / 100);
         $lims_purchase_data->grand_total = ($lims_purchase_data->total_cost + $lims_purchase_data->order_tax + $lims_purchase_data->shipping_cost) - $lims_purchase_data->order_discount;
         $lims_purchase_data->save();
-        return redirect('purchases');
+        return redirect('purchases')->with('message', 'Purchase imported successfully');
     }
 
     public function edit($id)
