@@ -22,14 +22,33 @@
             {{-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> --}}
         @endif
     </div>
-   
+    <div class="col-md-6 mx-auto">
+            <div class="d-flex align-items-center">
+                <div class="col-3 text-right">
+                    <label class=" me-2"><strong>{{trans('file.Vendor Name')}}</strong> </label>
+                </div>
+                <select name="vendorName" id="vendorName" class="selectpicker form-control mr-3" title="Select vendor name.." autocomplete="type" data-live-search="true" >
+                    @foreach($lims_supplier_list as $key=>$val)
+                        <option value="{{$val['id']}}" >{{$val['name']}}</option>
+                    @endforeach
+                </select>
+                <button class="btn-sm btn-danger btn"  onclick="resetVendor()" >Reset Vendor</button>
+            </div>
+        </div>
     <div class="table-responsive ">
     {!! Form::open(['route' => 'vendorproducts.row-data','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true,'onsubmit' => 'return checkformvalidation()'],) !!}
 
         <div class="m-3 ml-4">
             <button class="btn-sm btn-success btn" id="btnClick" type="submit">Approve</button>
-            <button class="btn-sm btn-danger btn" id="btnClick" onclick="rejectProduct()" type="submit">Reject</button>
+            <button class="btn-sm btn-danger btn"  onclick="rejectProduct()" >Reject</button>
         </div>
+       
+        <!-- <div class="m-3 ml-4">
+            <button class="btn-sm btn-success btn" id="btnClick" type="submit">Approve</button>
+            <button class="btn-sm btn-danger btn" id="btnClick" onclick="rejectProduct()" type="submit">Reject</button>
+            
+           
+        </div> -->
 
         <table id="product-data-table" class="table m-0" style="width: 100%">
             <thead>
@@ -176,9 +195,9 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
         
     // });
     function rejectProduct(){
-       
-    // var i=0;
+     
         if(user_verified == '1') {
+            
             // product_id.length = 0;
         var val = [];
         $(':checkbox:checked').each(function(i){
@@ -209,6 +228,9 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
         else
             alert('This feature is disable for demo!');
                 
+    }
+    function resetVendor(){
+        location.reload();
     }
 
     $(document).on('keyup change','.ln_qty', function(){
@@ -278,7 +300,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
     {
        var i=1;
         if(user_verified == '1') {
-            alert()
+           
             product_id.length = 0;
             $(':checkbox:checked').each(function(i){
                 if(i){
@@ -473,7 +495,18 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                 
             // });
     $(document).ready(function() {
+
+
+        $("#vendorName").on('change',function(){
+           
+            console.log($('#vendorName').val());
+            table.clear().draw()
+
+        });
+        
+        
         var table = $('#product-data-table').DataTable( {
+           
             responsive: true,
             fixedHeader: {
                 header: true,
@@ -483,8 +516,9 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
             "serverSide": true,
             "ajax":{
                 url:"vendorproducts/all-vendor-product-data",
-                data:{
-                    all_permission: all_permission
+                data: function(d) {
+                    d.all_permission= all_permission;
+                   d.vendorName= $('#vendorName').val();
                 },
                 dataType: "json",
                 type:"post"
@@ -506,8 +540,6 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                 {"data": "qty"},
                 {"data": "ln_price"},
                 {"data": "price"},
-                 
-             
                 {"data": "options"},
             ],
             'language': {

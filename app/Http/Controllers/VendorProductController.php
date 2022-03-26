@@ -813,7 +813,7 @@ class VendorProductController extends Controller
             // return $id;
             if($id !="on")
             {
-                $lims_product_data =VendorProduct::findOrFail($id);
+                $lims_product_data =VendorProduct::where('id',$id)->first();
                 // return $lims_product_data;
                 $lims_product_data->is_approve = 2;
                 $lims_product_data->save();
@@ -851,7 +851,7 @@ class VendorProductController extends Controller
                 if(empty($all_permission))
                     $all_permission[] = 'dummy text';
                 
-                $lims_supplier_list = Supplier::where('is_active', true)->get();
+                $lims_supplier_list = User::where('role_id',6)->where('is_active', true)->get();
                 $lims_warehouse_list = Warehouse::where('is_active', true)->get();
                 return view('vendorproduct.all_vendor_product_list', compact('all_permission','lims_warehouse_list','lims_supplier_list'));
             }
@@ -887,6 +887,7 @@ class VendorProductController extends Controller
         }
         public function allVendorproductData(Request $request)
         {
+            // print_r($request->vendorName);die();
             $columns = array( 
                 2 => 'name', 
                 3 => 'code',
@@ -906,15 +907,33 @@ class VendorProductController extends Controller
             $order = 'vendor_products.'.$columns[$request->input('order.0.column')];
             $dir = $request->input('order.0.dir');
             if(empty($request->input('search.value'))){
+                
                 $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
                         ->where('is_active', '!=',2)
                             ->where('is_active', true)
                             ->limit($limit)
                             ->orderBy($order,$dir)
                             ->get();
+
+                if($request->vendorName)
+                {
+                    $totalData =VendorProduct::where('vendoruserid',$request->vendorName)->with('category', 'brand', 'unit')->offset($start)
+                    ->where('is_active', true)
+                    ->limit($limit)
+                    ->orderBy($order,$dir)
+                    ->count();
+                    $totalFiltered = $totalData; 
+                    $products = VendorProduct::where('vendoruserid',$request->vendorName)->with('category', 'brand', 'unit')->offset($start)
+                      
+                            ->where('is_active', true)
+                            ->limit($limit)
+                            ->orderBy($order,$dir)
+                            ->get();
+                }
             }
             else
             {
+                // print_r("vendorMMM1".$request->vendorName);die();
                 $search = $request->input('search.value'); 
                 $products =  VendorProduct::select('vendor_products.*')
                             ->with('category', 'brand', 'unit')
