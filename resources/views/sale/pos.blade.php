@@ -2232,6 +2232,12 @@ else {
       warehouse_id = $("input[name='warehouse_id_hidden']").val();
     }
 
+    if(getSavedValue("customer_id")){
+        customer_id = getSavedValue("customer_id");
+    }
+    else {
+        customer_id = $("input[name='customer_id_hidden']").val();
+    }
     if(getSavedValue("biller_id")){
       biller_id = getSavedValue("biller_id");
     }
@@ -2240,16 +2246,16 @@ else {
     }
     $('select[name=warehouse_id]').val(warehouse_id);
     $('select[name=biller_id]').val(biller_id);
+    $('select[name=customer_id]').val(customer_id);
 }
 
-  if(getSavedValue("biller_id")) {
-      console.log(getSavedValue("customer_id"))
-    $('select[name=customer_id]').val(getSavedValue("customer_id"));
-  }
-  else {
-    $('select[name=customer_id]').val($("input[name='customer_id_hidden']").val());
-    console.log('else')
-  }
+//   if(getSavedValue("biller_id")) {
+//     $('select[name=customer_id]').val(getSavedValue("customer_id"));
+//   }
+//   else {
+//     $('select[name=customer_id]').val($("input[name='customer_id_hidden']").val());
+    
+//   }
 
 $('.selectpicker').selectpicker('refresh');
 
