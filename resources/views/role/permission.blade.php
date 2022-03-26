@@ -1475,6 +1475,57 @@
 						            	</div>
 						            </td>
 						        </tr>
+								<tr>
+						            <td>{{trans('file.Accounts Date')}}</td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("accounts-date-index", $all_permission))
+								                <input type="checkbox" value="1" id="accounts-date-index" name="accounts-date-index" checked />
+								                @else
+								                <input type="checkbox" value="1" id="accounts-date-index" name="accounts-date-index">
+								                @endif
+								                <label for="accounts-date-index"></label>
+								            </div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("accounts-date-add", $all_permission))
+								                <input type="checkbox" value="1" id="accounts-date-add" name="accounts-date-add" checked />
+								                @else
+								                <input type="checkbox" value="1" id="accounts-date-add" name="accounts-date-add">
+								                @endif
+								                <label for="accounts-date-add"></label>
+								            </div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("accounts-date-edit", $all_permission))
+								                <input type="checkbox" value="1" id="accounts-date-edit" name="accounts-date-edit" checked>
+								                @else
+								                <input type="checkbox" value="1" id="accounts-date-edit" name="accounts-date-edit">
+								                @endif
+								                <label for="accounts-date-edit"></label>
+								            </div>
+						            	</div>
+						            </td>
+						            <td class="text-center">
+						                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false">
+							                <div class="checkbox">
+								                @if(in_array("accounts-date-delete", $all_permission))
+								                <input type="checkbox" value="1" id="accounts-date-delete" name="accounts-date-delete" checked>
+								                @else
+								                <input type="checkbox" value="1" id="accounts-date-delete" name="accounts-date-delete">
+								                @endif
+								                <label for="accounts-date-delete"></label>
+								            </div>
+						            	</div>
+						            </td>
+						        </tr>
 						        <tr>
 						            <td>{{trans('file.Miscellaneous')}}</td>
 						            <td class="report-permissions" colspan="5">

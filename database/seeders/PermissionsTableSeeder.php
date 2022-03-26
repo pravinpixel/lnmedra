@@ -1044,6 +1044,87 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
+            128 => 
+            array (
+                'id' => 136,
+                'name' => 'attribute-index',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            129 => 
+            array (
+                'id' => 137,
+                'name' => 'attribute-add',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            130 => 
+            array (
+                'id' => 138,
+                'name' => 'attribute-edit',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            131 => 
+            array (
+                'id' => 139,
+                'name' => 'attribute-delete',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            132 => 
+            array (
+                'id' => 140,
+                'name' => 'user-profile',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+
+            133 => 
+            array (
+                'id' => 141,
+                'name' => 'vendor-approval-index',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            134 => 
+            array (
+                'id' => 142,
+                'name' => 'accounts-date-index',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            135 => 
+            array (
+                'id' => 143,
+                'name' => 'accounts-date-add',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            136 => 
+            array (
+                'id' => 144,
+                'name' => 'accounts-date-edit',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            137 => 
+            array (
+                'id' => 145,
+                'name' => 'accounts-date-delete',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
         ));
         
         

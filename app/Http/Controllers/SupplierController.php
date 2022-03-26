@@ -88,7 +88,7 @@ class SupplierController extends Controller
         $data['password'] =  $password;
         $data['phone'] =  $lims_supplier_data['phone_number'];
         $data['company_name'] =  $lims_supplier_data['company_name'];
-        $data['role_id'] =  $role->id;
+        $data['role_id'] =  6;
         $data['is_active'] =  $lims_supplier_data['is_active'];
         $data['vendor_id'] =  $vendor_id;
         

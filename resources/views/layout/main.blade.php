@@ -1171,6 +1171,13 @@
                       ['permission_id', $attribute_permission->id],
                       ['role_id', $role->id]
                   ])->first();
+                  $accounts_permission = DB::table('permissions')->where('name', 'accounts-date-index')->first();
+                  // print_r($accounts_permission->id);die();
+                  $accounts_permission_active = DB::table('role_has_permissions')->where([
+                      ['permission_id', $accounts_permission->id],
+                      ['role_id', $role->id]
+                  ])->first();
+                  
                   ?>
                   @if($mail_setting_permission_active||$send_notification_permission_active||$warehouse_permission_active||$customer_group_permission_active)
               <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-gear"></i><span>{{trans('file.settings')}}</span></a>
@@ -1237,8 +1244,12 @@
                   @if($attribute_permission_active)
                   <li id="master-attribute-menu"><a href="{{route('master-attribute.index')}}"><span>{{__('file.Master Attribute')}}</span></a></li>
                   @endif
+                  @if($accounts_permission_active)
+                  <li id="accounts-date-menu"><a href="{{route('accounts-date.index')}}"><span>{{__('file.Accounts Date')}}</span></a></li>
+                  @endif
                 </ul>
               </li>
+             
               @endif
               <?php
                   $role = DB::table('roles')->find(Auth::user()->role_id);

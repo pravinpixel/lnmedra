@@ -27,7 +27,10 @@
             </div>
         </div>
         <div class="row m-0 ">
-            <div class="col-3">
+            <div class="col-12">
+                <h3 class="mb-3">Sales</h3>
+            </div>
+            <div class="col-4">
                 <div class="card">
                     <div class="card-body">
                         <span class="text-info h3 m-0"><strong>Sales</strong></span>
@@ -35,7 +38,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 <div class="card">
                     <div class="card-body">
                         <span class="text-info h3 m-0"><strong>Paid</strong></span>
@@ -43,13 +46,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
+            <div class="col-4">
                 <div class="card">
                     <div class="card-body">
                         <span class="text-info h3 m-0"><strong>To Be Paid</strong></span>
                         <div class="float-right laed h1">{{ $toBePaid }}</div>
                     </div>
                 </div>
+            </div>
+            <div class="col-12">
+                <h3 class="mb-3">Products</h3>
             </div>
             <div class="col-3">
                 <div class="card">

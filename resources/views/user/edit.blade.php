@@ -120,13 +120,17 @@
                                           @endforeach
                                         </select>
                                     </div> -->
-                                    <div class="field_wrapper cloneOutlet" id="warehouseId">
-                                        <label><strong>{{trans('file.Add Store Outlet')}} *</strong></label>
-                                        <a  class="btn btn-primary add_button" title="Add field" >Add</a>
+                                    <label><strong>{{trans('file.Add Store Outlet')}} *</strong></label>
+                                    <ul class="list-group field_wrapper" id="warehouseId">
+                                       
+                                        <li class="list-group-item border-0 p-0 mb-3">
+                                            <a  class="btn btn-primary add_button" title="Add field" >Add</a>
+                                        </li>
+                                       
                                         @foreach($outlet_data  as $key=>$val)
                                         <!-- {{$val->outlet_id}} = {{$warehouse->id}} -->
                                         
-                                            <div class="form-group" id="warehouseId">
+                                            <li class="list-group-item d-flex w-100 align-items-center rounded p-0 my-2">
                                             
                                                 <input type="hidden" name="warehouse_id_hidden" value="{{$lims_user_data->warehouse_id}}">
                                                 <select name="warehouse_id[{{ $key }}]" class="selectpicker form-control" required data-live-search="true" data-live-search-style="begins" title="Select Outlet...">
@@ -136,26 +140,45 @@
                                                 </select>
 
                                                 @if($val->is_default == 1)
-                                                <input type="radio" name="outlet" checked  value="1" required onclick="setValue('outletIn_{{ $key }}')">
+                                                <input type="radio" name="outlet" checked  value="1" required onclick="setValue('{{ $key }}')">
                                                 <input type="hidden" name="outletIn[{{ $key }}]" id="outletIn_{{ $key }}" value="0">
                                                 @else
-                                                <input type="radio" name="outlet"  value="1" required onclick="setValue('outletIn_{{ $key }}')">
+                                                <input type="radio" name="outlet"  value="1" required onclick="setValue('{{ $key }}')">
                                                 <input type="hidden" name="outletIn[{{ $key }}]" id="outletIn_{{ $key }}" value="0">
                                                 @endif
                                                 <button class="btn btn-danger remove_button" >X</button>
-                                                <!-- @foreach($lims_warehouse_list as $key=>$warehouse)
-                                                @if($val->outlet_id == $warehouse->id)
-                                            
-                                                <input type="radio" name="outlet"  checked  value="1" onclick="setValue('outletIn_')">
-                                                <input type="hidden" name="outletIn[1]" id="outletIn_{{ $warehouse->id }}" value="0">
-                                                <button class="btn btn-danger remove_button" >X</button>
                                                 
-                                                @endif
-                                                @endforeach -->
-                                            </div>
+                                            </li>
                                         
                                         @endforeach
-                                    </div>
+                                    </ul>
+                                    <input type="hidden" name="selected_outlet" id="selected_outlet">
+
+
+
+                                    <!-- <ul class="list-group field_wrapper" id="warehouseId">
+                                        <li class="list-group-item border-0 p-0 mb-3">
+                                            <a  class="btn btn-primary add_button" title="Add field" >Add</a>
+                                        </li>
+                                        <li class="list-group-item d-flex w-100 align-items-center rounded p-0 my-2">
+                                            <select name="warehouse_id[1]" required class="selectpicker form-control border-0" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
+                                                @foreach($lims_warehouse_list as $warehouse)
+                                                    <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="btn btn-light border-0">
+                                                <input type="radio" name="outlet"  value="1" required onclick="setValue('1')">
+                                                <input type="hidden" name="outletIn[1]" id="outletIn_1" >
+                                                <input type="hidden" name="selected_outlet" id="selected_outlet">
+                                            </div>
+                                        </li>
+                                    </ul> -->
+
+
+
+
+
+
                                 </div>
                             </div>
                         {!! Form::close() !!}
@@ -228,19 +251,23 @@ $(document).ready(function(){
             x++; //Increment field counter
             // $(wrapper).append(fieldHTML); //Add field html
             $(wrapper).append(`
-            <div class="field_wrapper cloneOutlet" id="warehouseId">
-          
-            <br>
-                    <select name="warehouse_id[${x}]" id="warehouse_id[${x}]" class="selectpicker form-control" data-live-search="true" required title="Select outlet...">
+           
+
+
+
+
+                    <li class="list-group-item d-flex w-100 align-items-center rounded p-0 my-2 field_wrapper cloneOutlet" id="warehouseId">
+                    <select name="warehouse_id[${x}]" id="warehouse_id[${x}]" required class="selectpicker form-control border-0" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
                         @foreach($lims_warehouse_list as $warehouse)
                             <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                         @endforeach
                     </select>
-                    <input type="radio" value="1" name="outlet" onclick="setValue('outletIn_${x}')" required>
-                    <input type="hidden" name="outletIn[${x}]" id="outletIn_${x}" value="0">
-                    <button class="btn btn-danger remove_button" >X</button>
-                    <br>
+                    <div class="btn btn-light border-0">
+                        <input type="radio" value="1" name="outlet" onclick="setValue('${x}')" required>
+                        <input type="hidden" name="outletIn[${x}]" id="outletIn_${x}">
                     </div>
+                    <button class="btn btn-danger remove_button" >X</button>
+                </li>
            
             `); //Add field html
             $('.selectpicker').selectpicker({
@@ -253,14 +280,15 @@ $(document).ready(function(){
     $(wrapper).on('click', '.remove_button', function(e){
         e.preventDefault();
         // $('radio[name="outlet"]').val();
-        $(this).parent('div').remove(); //Remove field html
+        $(this).parent('li').remove(); //Remove field html
         x--; //Decrement field counter
     });
 });
 
 function setValue(e){
 
-    $('#'+e).val(1);
+    $('#outletIn_'+e).val(1);
+    $("#selected_outlet").val(e);
     }
 
     $('input[name="outlet"]:checked').trigger('click');

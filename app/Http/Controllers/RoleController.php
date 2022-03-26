@@ -771,14 +771,50 @@ class RoleController extends Controller
         else
             $role->revokePermissionTo('attribute-index');
 
-        if($request->has('attribute-add')){
-            $permission = Permission::firstOrCreate(['name' => 'attribute-add']);
-            if(!$role->hasPermissionTo('attribute-add')){
+        if($request->has('attribute-index')){
+            $permission = Permission::firstOrCreate(['name' => 'attribute-index']);
+            if(!$role->hasPermissionTo('attribute-index')){
                 $role->givePermissionTo($permission);
             }
         }
         else
-            $role->revokePermissionTo('attribute-add');
+            $role->revokePermissionTo('attribute-index');
+
+        if($request->has('accounts-date-index')){
+            $permission = Permission::firstOrCreate(['name' => 'accounts-date-index']);
+            if(!$role->hasPermissionTo('accounts-date-index')){
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('accounts-date-index');
+
+        if($request->has('accounts-date-add')){
+            $permission = Permission::firstOrCreate(['name' => 'accounts-date-add']);
+            if(!$role->hasPermissionTo('accounts-date-add')){
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('accounts-date-add');
+
+        if($request->has('accounts-date-edit')){
+            $permission = Permission::firstOrCreate(['name' => 'accounts-date-edit']);
+            if(!$role->hasPermissionTo('accounts-date-edit')){
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('accounts-date-edit');
+
+        if($request->has('accounts-date-delete')){
+            $permission = Permission::firstOrCreate(['name' => 'accounts-date-delete']);
+            if(!$role->hasPermissionTo('accounts-date-delete')){
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('accounts-date-delete');
 
         if($request->has('attribute-edit')){
             $permission = Permission::firstOrCreate(['name' => 'attribute-edit']);

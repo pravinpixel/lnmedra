@@ -48,7 +48,10 @@ class MasterAttributeController extends Controller
         $dir = $request->input('order.0.dir');
         if(empty($request->input('search.value'))){
           
-            $products = MasterAttribute::where('is_active', true)->get();
+            $products = MasterAttribute::where('is_active', true)
+            ->limit($limit)
+            ->orderBy($order, $dir)
+            ->get();
         }
         else
         {

@@ -155,7 +155,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('customer/lims_customer_search', 'CustomerController@limsCustomerSearch')->name('customer.search');
 	Route::resource('customer', 'CustomerController');
 	// Route::post('customer/additionalData', 'CustomerController@additionalData')->name('customer.additionalData');
-
+	Route::resource('accounts-date', 'AccountsDateController');
+	
+	Route::post('accounts-date/product-type-data', 'AccountsDateController@AccountsData')->name('accounts-date.product-type-data');
 
 	Route::post('importbiller', 'BillerController@importBiller')->name('biller.import');
 	Route::post('biller/deletebyselection', 'BillerController@deleteBySelection');
