@@ -270,16 +270,16 @@
 <script type="text/javascript">
 <?php $id =Auth::user()->role_id ?>
     var auth_id = {{$id}};
-    if(auth_id != 1)
-    {
+    // if(auth_id != 1)
+    // {
     
-        $('.outletStore').prop('disabled',true);
-        $('.outletStoreDiv').hide();
-    }
-    else if(auth_id == 1)
-    {
-        $('.outletStore').prop('disabled',false);
-    }
+    //     $('.outletStore').prop('disabled',true);
+    //     $('.outletStoreDiv').hide();
+    // }
+    // else if(auth_id == 1)
+    // {
+    //     $('.outletStore').prop('disabled',false);
+    // }
     
     $("ul#purchase").siblings('a').attr('aria-expanded','true');
     $("ul#purchase").addClass("show");

@@ -69,43 +69,53 @@
                 </div>
             </div>
         </div>
-        @if(in_array("sales-add", $all_permission))
-            <a href="{{route('sales.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Sale')}}</a>&nbsp;
-            <a href="{{url('sales/sale_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Sale')}}</a>
-        @endif
-    </div>
-    <div class="table-responsive">
-        <table id="sale-table" class="table sale-list" style="width: 100%">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Date')}}</th>
-                    <th>{{trans('file.reference')}}</th>
-                    <th>{{trans('file.Biller')}}</th>
-                    <th>{{trans('file.customer')}}</th>
-                    <th>{{trans('file.Sale Status')}}</th>
-                    <th>{{trans('file.Payment Status')}}</th>
-                    <th>{{trans('file.grand total')}}</th>
-                    <th>{{trans('file.Paid')}}</th>
-                    <th>{{trans('file.Due')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-
-            <tfoot class="tfoot active">
-                <th></th>
-                <th>{{trans('file.Total')}}</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tfoot>
-        </table>
+        <div class="card">
+            <div class="card-header">
+                @if(in_array("sales-add", $all_permission))
+                    <div class="text-right">
+                        <div class="btn-group">
+                            <a href="{{route('sales.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Sale')}}</a>
+                            <a href="{{url('sales/sale_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Sale')}}</a>
+                        </div>
+                    </div>
+                @endif
+            </div>
+            <div class="card-body">
+                <div class="table-responsive p-0 m-0">
+                    <table id="sale-table" class="table m-0 sale-list" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th class="not-exported"></th>
+                                <th>{{trans('file.Date')}}</th>
+                                <th>{{trans('file.reference')}}</th>
+                                <th>{{trans('file.Biller')}}</th>
+                                <th>{{trans('file.customer')}}</th>
+                                <th>{{trans('file.Sale Status')}}</th>
+                                <th>{{trans('file.Payment Status')}}</th>
+                                <th>{{trans('file.grand total')}}</th>
+                                <th>{{trans('file.Paid')}}</th>
+                                <th>{{trans('file.Due')}}</th>
+                                <th class="not-exported">{{trans('file.action')}}</th>
+                            </tr>
+                        </thead>
+            
+                        <tfoot class="tfoot active">
+                            <th></th>
+                            <th>{{trans('file.Total')}}</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div> 
     </div>
 </section>
 
