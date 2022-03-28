@@ -2957,7 +2957,7 @@ function addNewProduct(data){
     var cols = '';
     temp_unit_name = (data[6]).split(',');
     pos = product_code.indexOf(data[1]);
-    cols += '<td class="col-sm-2 product-title"><button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"><strong>' + data[0] + '</strong></button><br>' + data[1] + '<p>In Stock: <span class="in-stock"></span></p></td>';
+    cols += '<td class="col-sm-2 product-title"><button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"><strong>' + data[0] + '</strong></button><br>' + data[1] + '<p class="stock-count text-white">In Stock: <span class="in-stock"></span></p></td>';
     if(data[12]) {
         cols += '<td class="col-sm-2"><input type="text" class="form-control form-control-sm batch-no" value="'+batch_no[pos]+'" required/> <input type="hidden" class="product-batch-id" name="product_batch_id[]" value="'+product_batch_id[pos]+'"/> </td>';
     }
@@ -3145,6 +3145,11 @@ function checkQuantity(sale_qty, flag) {
     var row_product_code = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.product-code').val();
     pos = product_code.indexOf(row_product_code);
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text(product_qty[pos]);
+    if(product_qty[pos] <= 0){
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.stock-count').addClass('badge badge-danger');
+    } else {
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.stock-count').addClass('badge badge-success');
+    }
     localStorageQty[rowindex] = sale_qty;
     localStorage.setItem("localStorageQty", localStorageQty);
     if(product_type[pos] == 'standard') {
