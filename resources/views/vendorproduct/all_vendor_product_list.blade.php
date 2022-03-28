@@ -56,7 +56,7 @@
                     <th class="not-exported"></th>
                     <th>{{trans('file.Image')}}</th>
                     <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.User Name')}}</th>
+                    <th>{{trans('file.Vendor Name')}}</th>
                     <th>{{trans('file.Code')}}</th>
                     <th>{{trans('file.Brand')}}</th>
                     <th>{{trans('file.category')}}</th>

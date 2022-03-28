@@ -237,8 +237,6 @@ class UserController extends Controller
             $input['address_proof'] = $fileName;
         }
 
-        // print_r($input);die();
-     
 
         if(!isset($input['is_active']))
             $input['is_active'] = false;

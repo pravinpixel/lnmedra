@@ -1024,16 +1024,49 @@ class VendorProductController extends Controller
                     else
                         $nestedData['stock_worth'] = ($product->qty * $product->price).' '.config('currency').' / '.($product->qty * $product->cost).' '.config('currency');
                     //$nestedData['stock_worth'] = ($product->qty * $product->price).'/'.($product->qty * $product->cost);
-                    $nestedData['ln_qty'] = '<div class="btn-group">
+                    if($product->is_approve == 1)
+                    {
+                        $nestedData['ln_qty'] = '<div class="btn-group">
                     
-                    <input type="number" name="ln_qty[]" min="0" id="ln_qty'.$product->id.'" class="form-control ln_qty check'.$product->id.'text"  data-qty_row_id="'.$product->id.'" value="'.$product->ln_qty.'" style="width:70px;" >
-
-                    <div>';
-                    $nestedData['ln_price'] = '<div class="btn-group">
+                        <input type="number" name="ln_qty[]" min="0" id="ln_qty'.$product->id.'" class="form-control ln_qty check'.$product->id.'text"  data-qty_row_id="'.$product->id.'" value="'.$product->ln_qty.'" style="width:70px;" readonly >
+    
+                        <div>';
+                    }
+                    elseif($product->is_approve == 2)
+                    {
+                        $nestedData['ln_qty'] = '<div class="btn-group">
                     
-                    <input type="number" name="ln_price[]" id="ln_price'.$product->id.'" min="0" class="form-control ln_price check'.$product->id.'text" data-price_row_id="'.$product->id.'" value="'.$product->ln_price.'" style="width:70px;">
+                        <input type="number" name="ln_qty[]" min="0" id="ln_qty'.$product->id.'" class="form-control ln_qty check'.$product->id.'text"  data-qty_row_id="'.$product->id.'" value="'.$product->ln_qty.'" style="width:70px;" readonly >
+    
+                        <div>';
+                    }
+                    elseif($product->is_approve == 0)
+                    {
+                        $nestedData['ln_qty'] = '<div class="btn-group">
+                    
+                        <input type="number" name="ln_qty[]" min="0" id="ln_qty'.$product->id.'" class="form-control ln_qty check'.$product->id.'text"  data-qty_row_id="'.$product->id.'" value="'.$product->ln_qty.'" style="width:70px;" >
+    
+                        <div>';
+                    }
 
-                    <div>';
+                    if($product->is_approve == 1)
+                    {
+                        $nestedData['ln_price'] = '<div class="btn-group">
+                    
+                        <input type="number" name="ln_price[]" id="ln_price'.$product->id.'" min="0" class="form-control ln_price check'.$product->id.'text" data-price_row_id="'.$product->id.'" value="'.$product->ln_price.'" style="width:70px;" readonly>
+    
+                        <div>';
+                    }
+                    elseif($product->is_approve == 0)
+                    {
+                        $nestedData['ln_price'] = '<div class="btn-group">
+                    
+                        <input type="number" name="ln_price[]" id="ln_price'.$product->id.'" min="0" class="form-control ln_price check'.$product->id.'text" data-price_row_id="'.$product->id.'" value="'.$product->ln_price.'" style="width:70px;">
+    
+                        <div>';
+                    }
+                   
+                   
                     $nestedData['discount'] = '<div class="btn-group">
                     <input type="text" class="discount-value form-control discount" min="0" name="discount[]" data-discount_row_id="'.$product->id.'" value="'.$product->discount.'" style="width:70px;"/>
                     <div>';
@@ -1443,7 +1476,7 @@ class VendorProductController extends Controller
                     $insert->tax_id = $value['tax_id'];
                     $insert->tax_method = $value['tax_method'];
                     $insert->image = $value['image'];
-                    // $insert->file = $value['name'];
+                    $insert->vendor_user_id = $value['vendoruserid'];
                     // $insert->is_variant = $value['name'];
                     // $insert->is_batch = $value['name'];
                     // $insert->is_diffPrice = $value['name'];

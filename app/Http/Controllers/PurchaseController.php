@@ -23,6 +23,7 @@ use Auth;
 use App\User;
 use App\ProductVariant;
 use App\ProductBatch;
+use App\VendorProduct;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Validator;
@@ -31,6 +32,7 @@ class PurchaseController extends Controller
 {
     public function index(Request $request)
     {
+       
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('purchases-index')) {
             if($request->input('warehouse_id'))
@@ -287,14 +289,32 @@ class PurchaseController extends Controller
                 ->orderBy('position')->get();
     }
 
+    public function supplierSearch(Request $request)
+    {
+        $supplierId = $request->supplierId;
+       
+        $vendorData = User::where('vendor_id',$supplierId)->select('id')->first();
+        // return $vendorData;
+        $lims_product_data = Product::where([
+            ['products.vendor_user_id',$vendorData->id],
+            ['is_active', true]
+        ])->get();
+       
+        return $lims_product_data;
+    }
+
     public function limsProductSearch(Request $request)
     {
+        // print_r($request->all());die();
         $product_code = explode("(", $request['data']);
+        $supplierId = $request->supplierId;
         $product_code[0] = rtrim($product_code[0], " ");
+      
         $lims_product_data = Product::where([
             ['code', $product_code[0]],
             ['is_active', true]
         ])->first();
+      
         if(!$lims_product_data) {
             $lims_product_data = Product::join('product_variants', 'products.id', 'product_variants.product_id')
                 ->select('products.*', 'product_variants.item_code')
@@ -303,6 +323,7 @@ class PurchaseController extends Controller
                     ['products.is_active', true]
                 ])->first();
         }
+        
         // print_r($lims_product_data->cost);die();
         if($lims_product_data->price == ''|| Null){
             return "false";
@@ -312,7 +333,8 @@ class PurchaseController extends Controller
             $product[] = $lims_product_data->item_code;
         else
             $product[] = $lims_product_data->code;
-        $product[] = $lims_product_data->cost;
+        // $product[] = $lims_product_data->cost;
+        $product[] = $lims_product_data->price;
         
         if ($lims_product_data->tax_id) {
             $lims_tax_data = Tax::find($lims_product_data->tax_id);
@@ -322,7 +344,8 @@ class PurchaseController extends Controller
             $product[] = 0;
             $product[] = 'No Tax';
         }
-        $product[] = $lims_product_data->tax_method;
+        // $product[] = $lims_product_data->tax_method;
+        $product[] = $lims_product_data->qty;
 
         $units = Unit::where("base_unit", $lims_product_data->unit_id)
                     ->orWhere('id', $lims_product_data->unit_id)
@@ -348,6 +371,7 @@ class PurchaseController extends Controller
         $product[] = $lims_product_data->id;
         $product[] = $lims_product_data->is_batch;
         $product[] = $lims_product_data->is_imei;
+        $product[] = $lims_product_data->vendor_user_id;
         return $product;
     }
 
@@ -374,6 +398,7 @@ class PurchaseController extends Controller
 
             $documentName = $document->getClientOriginalName();
             $document->move('public/documents/purchase', $documentName);
+            $data['vendor_id'] = $request->vendor_id;
             $data['document'] = $documentName;
         }
         //return dd($data);

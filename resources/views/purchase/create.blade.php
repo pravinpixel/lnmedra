@@ -31,7 +31,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.Supplier')}}</label>
-                                            <select name="supplier_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select supplier...">
+                                            <select name="supplier_id" class="selectpicker form-control" id="supplier_id" data-live-search="true" data-live-search-style="begins" title="Select supplier...">
                                                 @foreach($lims_supplier_list as $supplier)
                                                 <option value="{{$supplier->id}}">{{$supplier->name .' ('. $supplier->company_name .')'}}</option>
                                                 @endforeach
@@ -360,7 +360,14 @@
     var lims_productcodeSearch = $('#lims_productcodeSearch');
 
     lims_productcodeSearch.autocomplete({
+       
     source: function(request, response) {
+         
+         if(!$('#supplier_id').val())
+         {
+            alert("Please select supplier..");
+            return false;
+         }
         console.log(lims_product_code)
         var matcher = new RegExp(".?" + $.ui.autocomplete.escapeRegex(request.term), "i");
         response($.grep(lims_product_code, function(item) {
@@ -557,13 +564,53 @@
     });
 
 
+    $('#supplier_id').on('change',function(){
+        // alert($(this).val())
+        // productSearch($(this).val());
+        $.ajax({
+            type: 'GET',
+            url: 'supplier_search',
+            data: {
+               
+                supplierId:$(this).val()
+            },
+            success: function(data) {
+                if(data.length>0){
+                    console.log(lims_product_code)
+                //    alert(data.length)
+                lims_product_code.length = 0;
+      
+            
+                    for(var i=0;i<data.length;i++)
+                    {
+                        lims_product_code.push((data[i].code +' (' + data[i].name + ')'));
+                    }
+                lims_product_code.map((item) => {
+                    productSearch(item);
+                });
+                    console.log(lims_product_code);
+                    return false;
+                }
+                else(data.length)
+                {
+                    alert("Please add vendor product..")
+                }
+                
+               
+            }
+        });
+    })
+    
     function productSearch(data) {
         // alert(data)
+       var supplier_id= $('#supplier_id').val();
+        // alert(supplier_id)
         $.ajax({
             type: 'GET',
             url: 'lims_product_search',
             data: {
-                data: data
+                data: data,
+                supplierId:supplier_id
             },
             success: function(data) {
                
@@ -592,7 +639,7 @@
                         cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target=""> </button></td>';
                         // cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
                         cols += '<td>' + data[1] + '</td>';
-                        cols += '<td><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
+                        cols += '<td><input type="number" class="form-control qty" name="qty[]" value="'+data[5]+'" step="any" required/></td>';
                         if($('select[name="status"]').val() == 1)
                             cols += '<td class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
                         else if($('select[name="status"]').val() == 2)
@@ -652,6 +699,7 @@
                         cols += '<input type="hidden" class="tax-value" name="tax[]" />';
                         cols += '<input type="hidden" class="subtotal-value" name="subtotal[]" />';
                         cols += '<input type="hidden" class="imei-number" name="imei_number[]" />';
+                        cols += '<input type="hidden" class="imei-number" name="vendor_id" value="' + data[12] + '" />';
 
                         newRow.append(cols);
                         $("table.order-list tbody").prepend(newRow);
@@ -673,7 +721,9 @@
                     }
                 }else{
                     alert("Product data not filling properly..!")
-                }  
+                } 
+                checkQuantity(data[5], flag) 
+               
             }
         });
     }

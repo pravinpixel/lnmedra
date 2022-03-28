@@ -316,13 +316,18 @@
                 </ul>
               </li>
               @endif
-              @if(userHasAccess('stock_count'))
-                <li><a href="#stock_inventory" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.stock_inventory')}}</span></a>
-                  <ul id="stock_inventory" class="collapse list-unstyled">
-                      <li><a href="{{ route('stock-count.index') }}">{{trans('file.stock_list')}}</a></li>
-                  </ul>
-                </li>
-              @endif
+
+              <!-- <li><a href="#stock_inventory" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.stock_inventory')}}</span></a>
+                <ul id="stock_inventory" class="collapse list-unstyled ">
+                
+                    <li><a href="">{{trans('file.stock_list')}}</a></li>
+                    <li id="purchase-import-menu"><a href="{{url('purchases/purchase_by_csv')}}">{{trans('file.Import Purchase By CSV')}}</a></li>
+                </ul>
+              </li> -->
+
+
+
+
                <?php
                   $role = DB::table('roles')->find(Auth::user()->role_id);
                   $category_permission_active = DB::table('permissions')
@@ -1312,10 +1317,7 @@
               </span>
            
               <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
-                <div class="outletBtn"> 
-                <!-- <button class="btn btn-info" data-toggle="modal" onclick="outletbtn()" data-target="#outlet-modal"><i class="dripicons-plus"></i> Outlet</button> -->
-                  <!-- <li><a class="btn btn-primary"><i class="dripicons-shopping-bag"></i><span>Outlet</span></a></li> -->
-                </div>
+               
                 <?php
                   $add_permission = DB::table('permissions')->where('name', 'sales-add')->first();
                   $add_permission_active = DB::table('role_has_permissions')->where([
@@ -1922,7 +1924,7 @@
     else if(auth_id == 1)
     {
         $('.outletStore').prop('disabled',false);
-        $('.outletBtn').hide();
+       
     }
         if ('serviceWorker' in navigator ) {
             window.addEventListener('load', function() {
@@ -2057,6 +2059,6 @@
             return true;
         }
     </script>
-
+  
   </body>
 </html>

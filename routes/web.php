@@ -214,6 +214,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('purchases/purchase-data', 'PurchaseController@purchaseData')->name('purchases.data');
 	Route::get('purchases/product_purchase/{id}','PurchaseController@productPurchaseData');
 	Route::get('purchases/lims_product_search', 'PurchaseController@limsProductSearch')->name('product_purchase.search');
+	Route::get('purchases/supplier_search', 'PurchaseController@supplierSearch')->name('product_purchase.supplierSearch');
+
+
 	Route::post('purchases/add_payment', 'PurchaseController@addPayment')->name('purchase.add-payment');
 	Route::get('purchases/getpayment/{id}', 'PurchaseController@getPayment')->name('purchase.get-payment');
 	Route::post('purchases/updatepayment', 'PurchaseController@updatePayment')->name('purchase.update-payment');
