@@ -316,18 +316,13 @@
                 </ul>
               </li>
               @endif
-
-              <!-- <li><a href="#stock_inventory" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.stock_inventory')}}</span></a>
-                <ul id="stock_inventory" class="collapse list-unstyled ">
-                
-                    <li><a href="">{{trans('file.stock_list')}}</a></li>
-                    <li id="purchase-import-menu"><a href="{{url('purchases/purchase_by_csv')}}">{{trans('file.Import Purchase By CSV')}}</a></li>
-                </ul>
-              </li> -->
-
-
-
-
+              @if(userHasAccess('stock_count'))
+                <li><a href="#stock_inventory" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.stock_inventory')}}</span></a>
+                  <ul id="stock_inventory" class="collapse list-unstyled">
+                      <li><a href="{{ route('stock-count.index') }}">{{trans('file.stock_list')}}</a></li>
+                  </ul>
+                </li>
+              @endif
                <?php
                   $role = DB::table('roles')->find(Auth::user()->role_id);
                   $category_permission_active = DB::table('permissions')
@@ -2062,39 +2057,6 @@
             return true;
         }
     </script>
-    <script>
-    
-        function outletbtn(){
-         
-          <?php $id =Auth::user()->id ?>
-          var auth_id = {{$id}};
-        $.ajax({
-            type: "GET",
-            url:'default-outlet/'+ auth_id,
-            
 
-        }).then(function (response) {
-             
-            alert(response);
-            // for(var i=0; i<response.length; i++){
-            $('#outletDropdown').append(`
-                <option value="{{$expense_category->id}}" >{{$expense_category->name . ' (' . $expense_category->code. ')'}}</option>
-            `);
-            // }
-            // $('#product-data-table').DataTable().clear().draw();
-                
-        }, function (error) {
-            console.log(error);
-            Message('warning',response.data.msg);
-            console.log('Unable to delete');
-        });
-
-  
-        }
-    
-
-    
-    
-    </script>
   </body>
 </html>

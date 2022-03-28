@@ -15,7 +15,7 @@
         <button class="btn btn-info" data-toggle="modal" data-target="#create-modal"><i class="dripicons-plus"></i> {{trans('file.Add Coupon')}}</button>
     </div>
     <div class="table-responsive">
-        <table id="coupon-table" class="table">
+        <table id="coupon-table" class="table" style="width: 100% !important">
             <thead>
                 <tr>
                     <th class="not-exported"></th>

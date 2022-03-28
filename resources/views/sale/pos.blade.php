@@ -2218,8 +2218,8 @@ if(keyboard_active==1){
   }
 
 if(role_id > 2){
-    $('#biller_id').addClass('d-none');
-    $('#warehouse_id').addClass('d-none');
+    // $('#biller_id').addClass('d-none');
+    // $('#warehouse_id').addClass('d-none');
     $('select[name=warehouse_id]').val(warehouse_id);
     $('select[name=biller_id]').val(biller_id);
     isCashRegisterAvailable(warehouse_id);

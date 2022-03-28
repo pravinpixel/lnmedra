@@ -1014,21 +1014,13 @@ class PermissionsTableSeeder extends Seeder
             ),
             124 => 
             array (
-                'id' => 132,
-                'name' => 'vendor-dashboard-index',
-                'guard_name' => 'web',
-                'created_at' => NULL,
-                'updated_at' => NULL,
-            ),
-            125 => 
-            array (
                 'id' => 133,
                 'name' => 'vendor-dashboard-add',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            126 => 
+            125 => 
             array (
                 'id' => 134,
                 'name' => 'vendor-dashboard-edit',
@@ -1036,7 +1028,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            127 => 
+            126 => 
             array (
                 'id' => 135,
                 'name' => 'vendor-dashboard-delete',
@@ -1044,7 +1036,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            128 => 
+            127 => 
             array (
                 'id' => 136,
                 'name' => 'attribute-index',
@@ -1052,7 +1044,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            129 => 
+            128 => 
             array (
                 'id' => 137,
                 'name' => 'attribute-add',
@@ -1060,7 +1052,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            130 => 
+            129 => 
             array (
                 'id' => 138,
                 'name' => 'attribute-edit',
@@ -1068,7 +1060,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            131 => 
+            130 => 
             array (
                 'id' => 139,
                 'name' => 'attribute-delete',
@@ -1076,7 +1068,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            132 => 
+            131 => 
             array (
                 'id' => 140,
                 'name' => 'user-profile',
@@ -1084,8 +1076,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-
-            133 => 
+            132 => 
             array (
                 'id' => 141,
                 'name' => 'vendor-approval-index',
@@ -1093,7 +1084,8 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            134 => 
+           
+            133 => 
             array (
                 'id' => 142,
                 'name' => 'accounts-date-index',
@@ -1101,7 +1093,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            135 => 
+            134 => 
             array (
                 'id' => 143,
                 'name' => 'accounts-date-add',
@@ -1109,7 +1101,7 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            136 => 
+            135 => 
             array (
                 'id' => 144,
                 'name' => 'accounts-date-edit',
@@ -1117,16 +1109,13 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => NULL,
                 'updated_at' => NULL,
             ),
-            137 => 
+            136 => 
             array (
                 'id' => 145,
                 'name' => 'accounts-date-delete',
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
-            ),
-        ));
-        
-        
+        )));
     }
 }
