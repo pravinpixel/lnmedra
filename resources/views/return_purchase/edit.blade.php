@@ -361,17 +361,7 @@
 
 @push('scripts')
 <script type="text/javascript">
-    <?php $id =Auth::user()->role_id ?>
-    var auth_id = {{$id}};
-    if(auth_id != 1)
-    {
-    
-        $('.outletStore').prop('disabled',true);
-    }
-    else if(auth_id == 1)
-    {
-        $('.outletStore').prop('disabled',false);
-    }
+   
     $("ul#return").siblings('a').attr('aria-expanded','true');
     $("ul#return").addClass("show");
     $("ul#return #purchase-return-menu").addClass("active");

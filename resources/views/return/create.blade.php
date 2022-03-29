@@ -19,7 +19,7 @@
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>{{trans('file.customer')}} *</label>
-                                            <select required name="customer_id" id="customer_id" class="selectpicker form-control" data-live-search="true" id="customer-id" data-live-search-style="begins" title="Select customer...">
+                                            <select required name="customer_id" id="customer_id" class="selectpicker form-control" data-live-search="true" id="customer-id"  title="Select customer...">
                                                 @foreach($lims_customer_list as $customer)
                                                 <option value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
                                                 @endforeach
@@ -278,18 +278,7 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
-    <?php $id =Auth::user()->role_id ?>
-    var auth_id = {{$id}};
-    if(auth_id != 1)
-    {
     
-        $('.outletStore').prop('disabled',true);
-        $('#outletStoreDiv').hide();
-    }
-    else if(auth_id == 1)
-    {
-        $('.outletStore').prop('disabled',false);
-    }
     $("ul#return").siblings('a').attr('aria-expanded','true');
     $("ul#return").addClass("show");
     $("ul#return #sale-return-menu").addClass("active");
@@ -328,6 +317,23 @@ var currency = <?php echo json_encode($currency) ?>;
 	    });
 	});
 
+    $(document).ready(function(){
+        var id = $('select[name="warehouse_id"]').val();
+	    $.get('getproduct/' + id, function(data) {
+	        lims_product_array = [];
+	        product_code = data[0];
+	        product_name = data[1];
+	        product_qty = data[2];
+            product_type = data[3];
+            product_warehouse_price = data[4];
+            is_batch = data[5];
+	        $.each(product_code, function(index) {
+	            lims_product_array.push(product_code[index] + ' (' + product_name[index] + ')');
+	        });
+	    });
+        isCashRegisterAvailable(id);
+    });
+    
 	$('select[name="warehouse_id"]').on('change', function() {
 	    var id = $(this).val();
 	    $.get('getproduct/' + id, function(data) {

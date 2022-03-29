@@ -19,6 +19,8 @@
           <button class="btn btn-light  date-btn" data-start_date="{{date('Y-m-d', strtotime(' -7 day'))}}" data-end_date="{{date('Y-m-d')}}">{{trans('file.Last 7 Days')}}</button>
           <button class="btn btn-light  date-btn active" data-start_date="{{date('Y').'-'.date('m').'-'.'01'}}" data-end_date="{{date('Y-m-d')}}">{{trans('file.This Month')}}</button>
           <button class="btn btn-light  date-btn" data-start_date="{{date('Y').'-01'.'-01'}}" data-end_date="{{date('Y').'-12'.'-31'}}">{{trans('file.This Year')}}</button>
+          <input type="hidden" id="this-month-start-date" name="this-month-start-date" value="{{date('Y').'-'.date('m').'-'.'01'}}">
+          <input type="hidden" id="this-month-end-date" name="this-month-end-date" value="{{date('Y-m-d')}}">
         </div>
       </div>
     </div>
@@ -26,39 +28,59 @@
   
   <section class="dashboard-counts">
     <div class="container-fluid">
-      <div class="row">
+      <div class="row m-0">
         <div class="col-md-12 p-0 mb-4">
           <div class="row m-0">
             <!-- Count item widget-->
-            <div class="col-sm-3">
+            <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-graph-bar" style="color: #0095ff"></i></div>
                 <div class="name"><strong style="color: #0095ff">Sales</strong></div>
-                <b class="count-number revenue-data">134500</b>
+                <div class="count-number revenue-data">00.00</div>
               </div>
             </div>
-            <!-- Count item widget-->
-            <div class="col-sm-3">
+             <!-- Count item widget-->
+             <div class="col">
               <div class="wrapper count-title text-center">
-                <div class="icon"><i class="dripicons-return" style="color: #0095ff"></i></div>
+                <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div>
                 <div class="name"><strong style="color: #0095ff">Purchase</strong></div>
-                <b class="count-number return-data">250500</b>
+                <div class="count-number purchase-data">00.00</div>
               </div>
             </div>
+
             <!-- Count item widget-->
-            <div class="col-sm-3">
+            <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div>
                 <div class="name"><strong style="color: #0095ff">Expense</strong></div>
-                <b class="count-number purchase_return-data">50000</b>
+                <div class="count-number expense-data">00.00</div>
+              </div>
+            </div>
+            
+            <!-- Count item widget-->
+            <div class="col">
+              <div class="wrapper count-title text-center">
+                <div class="icon"><i class="dripicons-return" style="color: #0095ff"></i></div>
+                <div class="name"><strong style="color: #0095ff">Sale Return</strong></div>
+                <div class="count-number return-data">00.00</div>
               </div>
             </div>
             <!-- Count item widget-->
-            <div class="col-sm-3">
+            <div class="col">
+              <div class="wrapper count-title text-center">
+                <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div>
+                <div class="name"><strong style="color: #0095ff">Purchase Return</strong></div>
+                <div class="count-number purchase_return-data">00.00</div>
+              </div>
+            </div>
+
+           
+            <!-- Count item widget-->
+            <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-trophy" style="color: #0095ff"></i></div>
                 <div class="name"><strong style="color: #0095ff">Profit</strong></div>
-                <b class="count-number profit-data">50000</b>
+                <div class="count-number profit-data">00.00</div>
               </div>
             </div>
           </div>
@@ -153,19 +175,8 @@
       </div>
     </div>
 
-    <div class="col-md-8 my-4 mb-5 mx-auto">
-      <div class="row align-items-center">
-        <div class="col text-end">Choose the date period</div>
-        <div class="col d-flex p-0">
-          <input type="date" name="" id="" class="form-control mx-1">
-          <input type="date" name="" id="" class="form-control mx-1">
-          <input type="submit" name="" value="Submit" id="" class="btn btn-primary w-100">
-        </div>
-      </div>
-    </div>
-
     <div class="container-fluid">
-      <div class="row mb-3">
+      {{-- <div class="row mb-3">
         @for ($i=0;$i<5;$i++)
           <div class="col  ">
             <table class="table bg-white shadow border w-100">
@@ -199,7 +210,7 @@
             </table>
           </div>
         @endfor
-      </div>
+      </div> --}}
       <div class="row">
         
         <div class="col-md-12">
@@ -435,6 +446,11 @@
 
 @push('scripts')
 <script type="text/javascript">
+  $(document).ready(function(){
+    $.get('dashboard-filter/' + $("#this-month-start-date").val() + '/' + $("#this-month-end-date").val(), function(data) {
+            dashboardFilter(data);
+      });
+  });
     // Show and hide color-switcher
     $(".color-switcher .switcher-button").on('click', function() {
         $(".color-switcher").toggleClass("show-color-switcher", "hide-color-switcher", 300);
@@ -477,6 +493,14 @@
         $('.purchase_return-data').hide();
         $('.purchase_return-data').html(parseFloat(data[3]).toFixed(2));
         $('.purchase_return-data').show(500);
+
+        $('.purchase-data').hide();
+        $('.purchase-data').html(parseFloat(data['purchase']).toFixed(2));
+        $('.purchase-data').show(500);
+
+        $('.expense-data').hide();
+        $('.expense-data').html(parseFloat(data['expense']).toFixed(2));
+        $('.expense-data').show(500);
     }
 </script>
 @endpush

@@ -578,13 +578,17 @@ class HomeController extends Controller
             $revenue = Sale::whereDate('created_at', '>=' , $start_date)->whereDate('created_at', '<=' , $end_date)->sum('grand_total');
             $return = Returns::whereDate('created_at', '>=' , $start_date)->whereDate('created_at', '<=' , $end_date)->sum('grand_total');
             $purchase_return = ReturnPurchase::whereDate('created_at', '>=' , $start_date)->whereDate('created_at', '<=' , $end_date)->sum('grand_total');
+            $purchase = Purchase::whereDate('created_at', '>=' , $start_date)->whereDate('created_at', '<=' , $end_date)->sum('grand_total');
+            $expense = Expense::whereDate('created_at', '>=' , $start_date)->whereDate('created_at', '<=' , $end_date)->sum('amount');
             $revenue -= $return;
-            $profit = $revenue + $purchase_return - $product_cost;
+            $profit = $revenue + $purchase_return - $product_cost - $expense;
 
             $data[0] = $revenue;
             $data[1] = $return;
             $data[2] = $profit;
             $data[3] = $purchase_return;
+            $data['purchase'] = $purchase;
+            $data['expense'] = $expense;
         }
         
         return $data;

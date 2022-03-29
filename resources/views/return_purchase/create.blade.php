@@ -254,17 +254,7 @@
 
 @push('scripts')
 <script type="text/javascript">
-    <?php $id =Auth::user()->role_id ?>
-    var auth_id = {{$id}};
-    if(auth_id != 1)
-    {
     
-        $('.outletStore').prop('disabled',true);
-    }
-    else if(auth_id == 1)
-    {
-        $('.outletStore').prop('disabled',false);
-    }
     $("ul#return").siblings('a').attr('aria-expanded','true');
     $("ul#return").addClass("show");
     $("ul#return #purchase-return-menu").addClass("active");
@@ -299,6 +289,21 @@ var row_product_cost;
             $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
             alert('Please select Warehouse!');
         }
+    });
+
+    $(document).ready(function() {
+        var id = $('select[name="warehouse_id"]').val();
+        $.get('getproduct/' + id, function(data) {
+            lims_product_array = [];
+            product_code = data[0];
+            product_name = data[1];
+            product_qty = data[2];
+            product_type = data[3];
+            is_batch = data[4];
+            $.each(product_code, function(index) {
+                lims_product_array.push(product_code[index] + ' (' + product_name[index] + ')');
+            });
+        });
     });
 
     $('select[name="warehouse_id"]').on('change', function() {
