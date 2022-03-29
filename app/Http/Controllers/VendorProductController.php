@@ -797,7 +797,6 @@ class VendorProductController extends Controller
         {
             $product_id = $request['productIdArray'];
             foreach ((array)$product_id as $id) {
-                // echo $id;
                 $lims_product_data =VendorProduct::findOrFail($id);
                 $lims_product_data->is_active = 2;
                 $lims_product_data->save();
@@ -806,11 +805,8 @@ class VendorProductController extends Controller
         }
         public function vendorProductDeny(Request $request)
         {
-        //    return $request->all();
            $product_id = $request['productIdArray'];
            foreach ((array)$product_id as $id) {
-            // echo $id;\
-            // return $id;
             if($id !="on")
             {
                 $lims_product_data =VendorProduct::where('id',$id)->first();
@@ -840,9 +836,8 @@ class VendorProductController extends Controller
         public function allVendorProductsList(Type $var = null)
         {
         
-            // print_r("dd");die();
+
             $role = Role::find(Auth::user()->role_id);
-            // print_r($role);die();
             if($role->hasPermissionTo('vendor-approval-index')){
                      
                 $permissions = Role::findByName($role->name)->permissions;
@@ -864,7 +859,7 @@ class VendorProductController extends Controller
         {
         
             $role = Role::find(Auth::user()->role_id);
-            // print_r(Auth::user()->id);die();
+
             $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '!=',2)->count();
             $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
             $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
@@ -877,7 +872,6 @@ class VendorProductController extends Controller
                     $all_permission[] = $permission->name;
                 if(empty($all_permission))
                     $all_permission[] = 'dummy text';
-                    // print_r($project);die();
                 return view('vendor-dashboard', compact('all_permission','project','approved','rejected','pending'));
             }
             else
@@ -887,7 +881,6 @@ class VendorProductController extends Controller
         }
         public function allVendorproductData(Request $request)
         {
-            // print_r($request->vendorName);die();
             $columns = array( 
                 2 => 'name', 
                 3 => 'code',
@@ -933,7 +926,6 @@ class VendorProductController extends Controller
             }
             else
             {
-                // print_r("vendorMMM1".$request->vendorName);die();
                 $search = $request->input('search.value'); 
                 $products =  VendorProduct::select('vendor_products.*')
                             ->with('category', 'brand', 'unit')
@@ -985,7 +977,6 @@ class VendorProductController extends Controller
                                 ->count();
             }
             $data = array();
-             //print_r($products);die();
             if(!empty($products))
             {
                 foreach ($products as $key=>$product)
@@ -1093,7 +1084,7 @@ class VendorProductController extends Controller
                                 }
                                 $nestedData['tax'] .='</select>
                             </div>';
-                    // print_r($nestedData['unit']);die();
+                  
                     if($product->is_approve == 1)
                     {
                         $nestedData['options'] = 'Approved';
@@ -1144,7 +1135,7 @@ class VendorProductController extends Controller
                 }
                
             }
-            //print_r($data);die();
+          
             $json_data = array(
                 "draw"            => intval($request->input('draw')),  
                 "recordsTotal"    => intval($totalData),  
@@ -1202,10 +1193,10 @@ class VendorProductController extends Controller
                     ->limit($limit)
                     ->orderBy($order,$dir)
                     ->get();
-                    // print_r($products);die();
+                   
                 }
                 else{
-                    // dd(Auth::user()->role_id);
+                   
                     if(Auth::user()->role_id == 6)
                     {
                         $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
