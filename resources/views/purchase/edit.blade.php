@@ -132,6 +132,7 @@
                                                                 $unit_operation_value[] = $unit->operation_value;
                                                             }
                                                         }
+                                                        // print_r($product_purchase->discount."22222222  ".$product_purchase->qty." ".$unit_operation_value[0]);die();
                                                         if($product_data->tax_method == 1){
                                                             $product_cost = ($product_purchase->net_unit_cost + ($product_purchase->discount / $product_purchase->qty)) / $unit_operation_value[0];
                                                         }

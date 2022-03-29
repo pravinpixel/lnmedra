@@ -333,8 +333,8 @@ class PurchaseController extends Controller
             $product[] = $lims_product_data->item_code;
         else
             $product[] = $lims_product_data->code;
-        // $product[] = $lims_product_data->cost;
-        $product[] = $lims_product_data->price;
+        $product[] = $lims_product_data->cost;
+        // $product[] = $lims_product_data->price;
         
         if ($lims_product_data->tax_id) {
             $lims_tax_data = Tax::find($lims_product_data->tax_id);
@@ -344,8 +344,8 @@ class PurchaseController extends Controller
             $product[] = 0;
             $product[] = 'No Tax';
         }
-        // $product[] = $lims_product_data->tax_method;
-        $product[] = $lims_product_data->qty;
+        $product[] = $lims_product_data->tax_method;
+        // $product[] = $lims_product_data->qty;
 
         $units = Unit::where("base_unit", $lims_product_data->unit_id)
                     ->orWhere('id', $lims_product_data->unit_id)

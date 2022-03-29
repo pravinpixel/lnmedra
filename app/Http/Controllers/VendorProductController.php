@@ -1467,7 +1467,7 @@ class VendorProductController extends Controller
                     $insert->sale_unit_id = $value['sale_unit_id'];
                     // $insert->cost = $value['cost'];
                     $insert->cost = $value['price'];
-                    $insert->qty = $value['qty'];
+                    // $insert->qty = $value['qty'];
                     $insert->alert_quantity = $value['alert_quantity'];
                     $insert->promotion = $value['promotion'];
                     $insert->promotion_price = $value['promotion_price'];

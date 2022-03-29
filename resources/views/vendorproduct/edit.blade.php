@@ -110,7 +110,7 @@
                              
                                 <div id="alert-qty" class="col-md-2">
                                     <div class="form-group">
-                                        <label>{{trans('file.Alert Quantity')}}</strong> </label>
+                                        <label>{{trans('file.Quantity')}}</strong> </label>
                                         <input type="number" name="qty" value="{{ $lims_product_data->qty }}" class="form-control" step="any">
                                     </div>
                                 </div>

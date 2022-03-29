@@ -639,7 +639,7 @@
                         cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target=""> </button></td>';
                         // cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
                         cols += '<td>' + data[1] + '</td>';
-                        cols += '<td><input type="number" class="form-control qty" name="qty[]" value="'+data[5]+'" step="any" required/></td>';
+                        cols += '<td><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
                         if($('select[name="status"]').val() == 1)
                             cols += '<td class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
                         else if($('select[name="status"]').val() == 2)

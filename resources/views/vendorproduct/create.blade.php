@@ -92,7 +92,7 @@
                                 </div>
                                 <div id="alert-qty" class="col-md-2">
                                     <div class="form-group">
-                                        <label>{{trans('file.Alert Quantity')}}</strong> </label>
+                                        <label>{{trans('file.Quantity')}}</strong> </label>
                                         <input type="number" name="qty" class="form-control noscroll" min="0" step="any">
                                     </div>
                                 </div>
