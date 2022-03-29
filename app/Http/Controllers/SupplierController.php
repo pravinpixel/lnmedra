@@ -29,7 +29,7 @@ class SupplierController extends Controller
                 $all_permission[] = $permission->name;
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
-            $lims_supplier_all = Supplier::where('is_active', true)->select('id','name','company_name','email','phone_number','address')->get();
+            $lims_supplier_all = Supplier::where('is_active','!=',2)->select('id','name','company_name','email','phone_number','address','is_active')->get();
             return view('supplier.index',compact('lims_supplier_all', 'all_permission'));
         }
         else
@@ -195,9 +195,27 @@ class SupplierController extends Controller
     public function destroy($id)
     {
         $lims_supplier_data = Supplier::findOrFail($id);
-        $lims_supplier_data->is_active = false;
+        $lims_supplier_data->is_active = 2;
         $lims_supplier_data->save();
         return redirect('supplier')->with('not_permitted','Data deleted successfully');
+    }
+    public function vendorStatus(Request $request)
+    {
+        // return $request->all();
+        # code...
+        $lims_supplier_data = Supplier::findOrFail($request->id);
+        if($lims_supplier_data->is_active == 1)
+        {
+
+            $lims_supplier_data->is_active = 0;
+        }
+        else if($lims_supplier_data->is_active == 0){
+            $lims_supplier_data->is_active = 1;
+        }
+       
+        $lims_supplier_data->save();
+        return true;
+
     }
 
     public function importSupplier(Request $request)

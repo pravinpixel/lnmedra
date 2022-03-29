@@ -43,10 +43,16 @@
                     <td>{{ $supplier->email}}</td>
                     <td>{{ $supplier->phone_number}}</td>
                     <td>
-                        <label class="switch" for="checkbox_{{ $key+1 }}">
-                            <input type="checkbox" id="checkbox_{{ $key+1 }}" />
-                            <div class="slider round"></div>
-                        </label>
+                        <!-- {{$supplier['id']}} -->
+                        @if($supplier->is_active)
+                            <a href="#" class="badge badge-success " onclick="vendorStatus({{$supplier->id}})">{{trans('file.Active')}}</a>
+                        
+                        @else
+                            <a href="#" class="badge badge-danger " onclick="vendorStatus({{$supplier->id}})">{{trans('file.InActive')}}</a>
+                        
+                        @endif
+                    
+                        
                     </td>
                     <td>
                         <div class="btn-group">
@@ -136,6 +142,23 @@
 	    }
 	    return false;
 	}
+    function vendorStatus(e)
+    {
+        // alert(e);
+        var vendorId = e;
+        $.ajax({
+            type:'GET',
+            url:'supplier/vendorStatus',
+            data:{
+                id: vendorId
+            },
+            success:function(data) {
+                // alert(data);
+                location.reload();
+               
+            }
+        });
+    }
 
     $('#supplier-table').DataTable( {
         "order": [],

@@ -59,6 +59,8 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 
 	Route::post('importsupplier', 'SupplierController@importSupplier')->name('supplier.import');
 	Route::post('supplier/deletebyselection', 'SupplierController@deleteBySelection');
+	Route::get('supplier/vendorStatus', 'SupplierController@vendorStatus')->name('supplier.vendorStatus');
+	
 	Route::get('supplier/lims_supplier_search', 'SupplierController@limsSupplierSearch')->name('supplier.search');
 	Route::resource('supplier', 'SupplierController');
 	

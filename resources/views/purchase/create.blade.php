@@ -593,7 +593,7 @@
                 }
                 else(data.length)
                 {
-                    alert("Please add vendor product..")
+                    alert("Product is not avaialable in the selected supplier")
                 }
                 
                
