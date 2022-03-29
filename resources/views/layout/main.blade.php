@@ -317,13 +317,13 @@
               </li>
               @endif
 
-              <!-- <li><a href="#stock_inventory" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.stock_inventory')}}</span></a>
+              <li><a href="#stock_inventory" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.stock_inventory')}}</span></a>
                 <ul id="stock_inventory" class="collapse list-unstyled ">
                 
                     <li><a href="">{{trans('file.stock_list')}}</a></li>
                     <li id="purchase-import-menu"><a href="{{url('purchases/purchase_by_csv')}}">{{trans('file.Import Purchase By CSV')}}</a></li>
                 </ul>
-              </li> -->
+              </li> 
 
 
 
