@@ -816,17 +816,17 @@
             </audio>
             <div class="col-12  mb-3">
                 <div class="row card-header shadow border m-0">
-                    <div class="col px-1">
-                        <div class="form-group">
+                    {{-- <div class="col px-1"> --}}
+                        {{-- <div class="form-group">
                             <label for="">Enter Mobile No</label>
                             <input type="text" id="reference-no" name="reference_no" class="form-control" placeholder="Type Mobile number" onkeyup='saveValue(this);'/>
-                        </div>
+                        </div> --}}
                         @if($errors->has('reference_no'))
                         <span>
                             <strong>{{ $errors->first('reference_no') }}</strong>
                         </span>
                         @endif
-                    </div>
+                    {{-- </div> --}}
                     <?php $outletId = Auth::user()->warehouse_id  ?>
                     <div class="col px-1">
                         <div class="form-group" id="warehouse_dev">
@@ -870,7 +870,7 @@
                             <div class="input-group pos">
                                 @if($customer_active)
                                     <div class="btn-group w-100 d-flex">
-                                        <select required name="customer_id" id="customer_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" title="Select customer..." style="width: 100px">
+                                        <select required name="customer_id" id="customer_id" class="selectpicker form-control w-100"  data-live-search="true" title="Select customer..." style="width: 100px">
                                             <?php
                                             $deposit = [];
                                             $points = [];
@@ -881,7 +881,7 @@
 
                                             $points[$customer->id] = $customer->points;
                                             @endphp
-                                            <option value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
+                                            <option  data-tokens="{{$customer->name . ' (' . $customer->phone_number . ')'}}" value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
                                         @endforeach
                                         </select>
                                         <button type="button" title="Add Customers" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCustomer">
@@ -893,14 +893,15 @@
                                     $deposit = [];
                                     $points = [];
                                 ?>
-                                <select required name="customer_id" id="customer_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select customer...">
+                                
+                                <select required name="customer_id" id="customer_id" class="selectpicker form-control"   data-live-search="true"  title="Select customer...">
                                 @foreach($lims_customer_list as $customer)
                                     @php
                                         $deposit[$customer->id] = $customer->deposit - $customer->expense;
 
                                         $points[$customer->id] = $customer->points;
                                     @endphp
-                                    <option value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
+                                    <option data-tokens="{{$customer->name . ' (' . $customer->phone_number . ')'}}" value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
                                 @endforeach
                                 </select>
                                 @endif
