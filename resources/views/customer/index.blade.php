@@ -12,14 +12,14 @@
   <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
 @endif
 
-<section>
-    <div class="container-fluid">
+<section class="container-fluid">
+    <div class="text-right mt-4">
         @if(in_array("customers-add", $all_permission))
             <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Customer')}}</a>&nbsp;
             <!-- <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Customer')}}</a> -->
         @endif
     </div>
-    <div class="table-responsive">
+    <div>
         <table id="customer-table" class="table">
             <thead>
                 <tr>
