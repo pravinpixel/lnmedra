@@ -1918,12 +1918,12 @@
     if(auth_id != 1)
     {
     
-        $('.outletStore').prop('disabled',true);
-        $('#outletStoreDiv').hide();
+        // $('.outletStore').prop('disabled',true);
+        // $('#outletStoreDiv').hide();
     }
     else if(auth_id == 1)
     {
-        $('.outletStore').prop('disabled',false);
+        // $('.outletStore').prop('disabled',false);
        
     }
         if ('serviceWorker' in navigator ) {
