@@ -247,13 +247,13 @@
                       ['role_id', $role->id]
                   ])->first();
               ?>
-              @if($customer_management_permission_active)
+              @if(userHasAccess('customers-add') || userHasAccess('customers-index'))
               <li><a href="#customer_management" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-card"></i><span>{{trans('file.customer_management')}}</span></a>
                 <ul id="customer_management" class="collapse list-unstyled ">
-                  @if($customer_index_permission_active)
+                  @if(userHasAccess('customers-index'))
                   <li id="customer-list-menu"><a href="{{route('customer.index')}}">{{trans('file.Customer List')}}</a></li>
                   @endif
-                  @if($customer_add_permission_active)
+                  @if(userHasAccess('customers-add'))
                   <li id="customer-create-menu"><a href="{{route('customer.create')}}">{{trans('file.Add Customer')}}</a></li>
                   @endif
                 

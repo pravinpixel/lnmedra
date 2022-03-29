@@ -73,14 +73,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.Address')}} *</label>
-                                    <input type="text" name="address" required value="{{$lims_customer_data->address}}" class="form-control">
+                                    <label>{{trans('file.Address')}} </label>
+                                    <input type="text" name="address" value="{{$lims_customer_data->address}}" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.City')}} *</label>
-                                    <input type="text" name="city" required value="{{$lims_customer_data->city}}" class="form-control">
+                                    <label>{{trans('file.City')}} </label>
+                                    <input type="text" name="city"  value="{{$lims_customer_data->city}}" class="form-control">
                                 </div>
                             </div>
                             <div class="col-md-6">

@@ -26,13 +26,13 @@
                     <th class="not-exported"></th>
                     <th>{{trans('file.Customer Group')}}</th>
                     <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.Company Name')}}</th>
+                    {{-- <th>{{trans('file.Company Name')}}</th> --}}
                     <th>{{trans('file.Email')}}</th>
                     <th>{{trans('file.Phone Number')}}</th>
-                    <th>{{trans('file.Tax Number')}}</th>
-                    <th>{{trans('file.Address')}}</th>
-                    <th>{{trans('file.Reward Points')}}</th>
-                    <th>{{trans('file.Balance')}}</th>
+                    {{-- <th>{{trans('file.Tax Number')}}</th> --}}
+                    {{-- <th>{{trans('file.Address')}}</th> --}}
+                    {{-- <th>{{trans('file.Reward Points')}}</th> --}}
+                    {{-- <th>{{trans('file.Balance')}}</th> --}}
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
             </thead>
@@ -45,13 +45,13 @@
                         {{  $customer_group->name }}
                     </td>
                     <td>{{ $customer->name }}</td>
-                    <td>{{ $customer->company_name}}</td>
+                    {{-- <td>{{ $customer->company_name}}</td> --}}
                     <td>{{ $customer->email}}</td>
                     <td>{{ $customer->phone_number}}</td>
-                    <td>{{ $customer->tax_no}}</td>
-                    <td>{{ $customer->address}}, {{ $customer->city}}@if($customer->country) {{','. $customer->country}}@endif</td>
-                    <td>{{$customer->points}}</td>
-                    <td>{{ number_format($customer->deposit - $customer->expense, 2) }}</td>
+                    {{-- <td>{{ $customer->tax_no}}</td> --}}
+                    {{-- <td>{{ $customer->address}}, {{ $customer->city}}@if($customer->country) {{','. $customer->country}}@endif</td> --}}
+                    {{-- <td>{{$customer->points}}</td> --}}
+                    {{-- <td>{{ number_format($customer->deposit - $customer->expense, 2) }}</td> --}}
                     <td>
                         <div class="btn-group">
                             <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
@@ -64,12 +64,12 @@
                                     <a href="{{ route('customer.edit', $customer->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
                                 </li>
                                 @endif
-                                <li>
+                                {{-- <li>
                                     <button type="button" data-id="{{$customer->id}}" class="deposit btn btn-link" data-toggle="modal" data-target="#depositModal" ><i class="dripicons-plus"></i> {{trans('file.Add Deposit')}}</button>
-                                </li>
+                                </li> 
                                 <li>
                                     <button type="button" data-id="{{$customer->id}}" class="getDeposit btn btn-link"><i class="fa fa-money"></i> {{trans('file.View Deposit')}}</button>
-                                </li>
+                                </li> --}}
                                 <li class="divider"></li>
                                 @if(in_array("customers-delete", $all_permission))
                                 {{ Form::open(['route' => ['customer.destroy', $customer->id], 'method' => 'DELETE'] ) }}
