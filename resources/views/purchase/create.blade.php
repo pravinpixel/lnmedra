@@ -72,6 +72,7 @@
                                 </div>
                                 <div class="row mt-4">
                                     <div class="col-md-12">
+                                        <br>
                                         <h5>{{trans('file.Order Table')}} *</h5>
                                         <div class="table-responsive mt-3">
                                             <table id="myTable" class="table table-hover order-list">
@@ -180,8 +181,10 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-primary" id="submit-btn">{{trans('file.submit')}}</button>
+                                <div class="form-group row">
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-primary" id="submit-btn">{{trans('file.submit')}}</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>

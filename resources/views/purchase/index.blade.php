@@ -8,13 +8,11 @@
 
 <section>
     <div class="container-fluid">
-        <div class="card">
-            <div class="card-header mt-2">
-                <h3 class="text-center">{{trans('file.Purchase List')}}</h3>
-            </div>
+        <h3 class="mb-3">{{trans('file.Purchase List')}}</h3>
+        <div class="card border">
             {!! Form::open(['route' => 'purchases.index', 'method' => 'get']) !!}
-            <div class="row mb-3">
-                <div class="col-md-4 offset-md-2 mt-3">
+            <div class="d-flex justify-content-center card-body">
+                <div class="mx-3">
                     <div class="form-group row">
                         <label class="d-tc mt-2"><strong>{{trans('file.Choose Your Date')}}</strong> &nbsp;</label>
                         <div class="d-tc">
@@ -28,7 +26,7 @@
                 </div>
                 <?php $outletId = Auth::user()->warehouse_id ?>
                 
-                <div class="col-md-4 mt-3 @if(\Auth::user()->role_id > 2){{'d-none'}}@endif">
+                <div class="mx-3 @if(\Auth::user()->role_id > 2){{'d-none'}}@endif">
                     <div class="form-group row outletStore" id="outletStore">
                         <label class="d-tc mt-2"><strong>{{trans('file.Choose Outlet')}}</strong> &nbsp;</label>
                         <div class="d-tc">
@@ -42,10 +40,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2 mt-3">
-                    <div class="form-group">
-                        <button class="btn btn-primary" id="filter-btn" type="submit">{{trans('file.submit')}}</button>
-                    </div>
+                <div>
+                    <button class="btn btn-primary" id="filter-btn" type="submit">{{trans('file.submit')}}</button>
                 </div>
             </div>
             {!! Form::close() !!}
