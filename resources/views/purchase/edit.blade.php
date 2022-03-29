@@ -79,6 +79,7 @@
                                 </div>
                                 <div class="row mt-5">
                                     <div class="col-md-12">
+                                        <br>
                                         <h5>{{trans('file.Order Table')}} *</h5>
                                         <div class="table-responsive mt-3">
                                             <table id="myTable" class="table table-hover order-list">
