@@ -47,7 +47,6 @@
 <?php $defaultWarehouse =Auth::user()->warehouse_id ?>
    
     var defaultWarehouse = {{$defaultWarehouse}};
-    alert(defaultWarehouse)
     var auth_id = {{$id}};
     if(auth_id != 1)
     {
