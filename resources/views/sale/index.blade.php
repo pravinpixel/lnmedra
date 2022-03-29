@@ -72,12 +72,12 @@
         <div class="card">
             <div class="card-header">
                 @if(in_array("sales-add", $all_permission))
-                    <div class="text-right">
+                    {{-- <div class="text-right">
                         <div class="btn-group">
                             <a href="{{route('sales.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Sale')}}</a>
                             <a href="{{url('sales/sale_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Sale')}}</a>
                         </div>
-                    </div>
+                    </div> --}}
                 @endif
             </div>
             <div class="card-body">

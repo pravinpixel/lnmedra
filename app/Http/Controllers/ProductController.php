@@ -447,9 +447,9 @@ class ProductController extends Controller
                 $lims_product_data->attribute = json_encode($request['attribute']);
             $data['product_details'] = str_replace('"', '@', $data['product_details']);
             $data['product_details'] = $data['product_details'];
-            if($data['starting_date'])
+            if(!empty($data['starting_date']))
                 $data['starting_date'] = date('Y-m-d', strtotime($data['starting_date']));
-            if($data['last_date'])
+            if(!empty($data['last_date']))
                 $data['last_date'] = date('Y-m-d', strtotime($data['last_date']));
 
             $previous_images = [];
@@ -535,35 +535,35 @@ class ProductController extends Controller
             //         $product_variant->delete();
             //     }
             // }
-            if(isset($data['is_diffPrice'])) {
-                foreach ($data['diff_price'] as $key => $diff_price) {
-                    if($diff_price) {
-                        $lims_product_warehouse_data = Product_Warehouse::FindProductWithoutVariant($lims_product_data->id, $data['warehouse_id'][$key])->first();
-                        if($lims_product_warehouse_data) {
-                            $lims_product_warehouse_data->price = $diff_price;
-                            $lims_product_warehouse_data->save();
-                        }
-                        else {
-                            Product_Warehouse::create([
-                                "product_id" => $lims_product_data->id,
-                                "warehouse_id" => $data["warehouse_id"][$key],
-                                "qty" => 0,
-                                "price" => $diff_price
-                            ]);
-                        }
-                    }
-                }
-            }
-            else {
-                $data['is_diffPrice'] = false;
-                foreach ($data['warehouse_id'] as $key => $warehouse_id) {
-                    $lims_product_warehouse_data = Product_Warehouse::FindProductWithoutVariant($lims_product_data->id, $warehouse_id)->first();
-                    if($lims_product_warehouse_data) {
-                        $lims_product_warehouse_data->price = null;
-                        $lims_product_warehouse_data->save();
-                    }
-                }
-            }
+            // if(isset($data['is_diffPrice'])) {
+            //     foreach ($data['diff_price'] as $key => $diff_price) {
+            //         if($diff_price) {
+            //             $lims_product_warehouse_data = Product_Warehouse::FindProductWithoutVariant($lims_product_data->id, $data['warehouse_id'][$key])->first();
+            //             if($lims_product_warehouse_data) {
+            //                 $lims_product_warehouse_data->price = $diff_price;
+            //                 $lims_product_warehouse_data->save();
+            //             }
+            //             else {
+            //                 Product_Warehouse::create([
+            //                     "product_id" => $lims_product_data->id,
+            //                     "warehouse_id" => $data["warehouse_id"][$key],
+            //                     "qty" => 0,
+            //                     "price" => $diff_price
+            //                 ]);
+            //             }
+            //         }
+            //     }
+            // }
+            // else {
+            //     $data['is_diffPrice'] = false;
+            //     foreach ($data['warehouse_id'] as $key => $warehouse_id) {
+            //         $lims_product_warehouse_data = Product_Warehouse::FindProductWithoutVariant($lims_product_data->id, $warehouse_id)->first();
+            //         if($lims_product_warehouse_data) {
+            //             $lims_product_warehouse_data->price = null;
+            //             $lims_product_warehouse_data->save();
+            //         }
+            //     }
+            // }
             $lims_product_data->update($data);
             // \Session::flash('edit_message', 'Product updated successfully');
             // return redirect('/products/index')->with('edit_message', 'Product updated successfully');

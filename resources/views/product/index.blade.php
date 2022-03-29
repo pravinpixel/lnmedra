@@ -35,7 +35,7 @@
                     <th>{{trans('file.Unit')}}</th>
                     <th>{{trans('file.Price')}}</th>
                     <th>{{trans('file.Cost')}}</th>
-                    <th>Stock Worth</th>
+                    {{-- <th>Stock Worth</th> --}}
                     <th>{{trans('file.status')}}</th>
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
@@ -164,7 +164,7 @@ var baseUrl = $('#baseUrl').val();
         }
     });
 
-    $(document).on("click", "tr.product-link td:not(:first-child, :last-child,:nth-child(12))", function() {
+    $(document).on("click", "tr.product-link td:not(:first-child, :last-child,:nth-child(11))", function() {
         productDetails( $(this).parent().data('product'), $(this).parent().data('imagedata') );
     });
 
@@ -342,7 +342,7 @@ var baseUrl = $('#baseUrl').val();
                 {"data": "unit"},
                 {"data": "price"},
                 {"data": "cost"},
-                {"data": "stock_worth"},
+                // {"data": "stock_worth"},
                 {"data": "status"},
                 {"data": "options"},
             ],
