@@ -53,9 +53,9 @@
                                 @endif
                                 <li class="divider"></li>
                                 @if(in_array("returns-delete", $all_permission))
-                                {{ Form::open(['route' => ['return-sale.destroy', $return->id], 'method' => 'DELETE'] ) }}
+                                {{ Form::open(['route' => ['return-sale.destroy', $return->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert("warning", this);'] ) }}
                                 <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                    <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
                                 </li>
                                 {{ Form::close() }}
                                 @endif
@@ -268,17 +268,17 @@
                                     returnIdArray: return_id
                                 },
                                 success:function(data){
-                                    alert(data);
+                                    Alert("warning", data);
                                     dt.rows({ page: 'current', selected: true }).remove().draw(false);
                                 }
                             });
                             //dt.rows({ page: 'current', selected: true }).remove().draw(false);
                         }
                         else if(!return_id.length)
-                            alert('Nothing is selected!');
+                            Alert("warning", 'Nothing is selected!');
                     }
                     else
-                        alert('This feature is disable for demo!');
+                        Alert("warning", 'This feature is disable for demo!');
                 }
             },
             {

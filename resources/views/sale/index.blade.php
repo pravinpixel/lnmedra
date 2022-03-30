@@ -806,7 +806,7 @@ else if(auth_id == 1)
             type:"post"
         },
         /*rowId: function(data) {
-              return 'row_'+data['id'];
+            return 'row_'+data['id'];
         },*/
         "createdRow": function( row, data, dataIndex ) {
             //alert(data);
@@ -924,17 +924,17 @@ else if(auth_id == 1)
                                     saleIdArray: sale_id
                                 },
                                 success:function(data){
-                                    alert(data);
+                                    Alert("info", data);
                                     //dt.rows({ page: 'current', selected: true }).deselect();
                                     dt.rows({ page: 'current', selected: true }).remove().draw(false);
                                 }
                             });
                         }
                         else if(!sale_id.length)
-                            alert('Nothing is selected!');
+                            Alert('warning','Nothing is selected!');
                     }
                     else
-                        alert('This feature is disable for demo!');
+                        Alert('warning','This feature is disable for demo!');
                 }
             },
             {

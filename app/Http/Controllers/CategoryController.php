@@ -105,9 +105,9 @@ class CategoryController extends Controller
                                     <button type="button" data-id="'.$category->id.'" class="open-EditCategoryDialog btn btn-link" data-toggle="modal" data-target="#editModal" ><i class="dripicons-document-edit"></i> '.trans("file.edit").'</button>
                                 </li>
                                 <li class="divider"></li>'.
-                                \Form::open(["route" => ["category.destroy", $category->id], "method" => "DELETE"] ).'
+                                \Form::open(["route" => ["category.destroy", $category->id], "method" => "DELETE",'onsubmit' => 'return confirmDeleteAlert(this);'] ).'
                                 <li>
-                                  <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> '.trans("file.delete").'</button> 
+                                  <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> '.trans("file.delete").'</button> 
                                 </li>'.\Form::close().'
                             </ul>
                         </div>';

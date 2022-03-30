@@ -476,11 +476,11 @@
 
     $('input[name="amount"]').on("input", function() {
         if( $(this).val() > parseFloat($('input[name="paying_amount"]').val()) ) {
-            alert('Paying amount cannot be bigger than recieved amount');
+            Alert( "warning" , 'Paying amount cannot be bigger than recieved amount');
             $(this).val('');
         }
         else if( $(this).val() > parseFloat($('input[name="balance"]').val()) ) {
-            alert('Paying amount cannot be bigger than due amount');
+            Alert( "warning" , 'Paying amount cannot be bigger than due amount');
             $(this).val('');
         }
         $(".change").text(parseFloat($('input[name="paying_amount"]').val() - $(this).val()).toFixed(2));
@@ -507,7 +507,7 @@
 
     $('input[name="edit_amount"]').on("input", function() {
         if( $(this).val() > parseFloat($('input[name="edit_paying_amount"]').val()) ) {
-            alert('Paying amount cannot be bigger than recieved amount');
+            Alert( "warning" , 'Paying amount cannot be bigger than recieved amount');
             $(this).val('');
         }
         $(".change").text(parseFloat($('input[name="edit_paying_amount"]').val() - $(this).val()).toFixed(2));
@@ -653,17 +653,17 @@
                                         purchaseIdArray: purchase_id
                                     },
                                     success:function(data) {
-                                        alert(data);
+                                        Alert( "warning" , data);
                                         //dt.rows({ page: 'current', selected: true }).deselect();
                                         dt.rows({ page: 'current', selected: true }).remove().draw(false);
                                     }
                                 });
                             }
                             else if(!purchase_id.length)
-                                alert('Nothing is selected!');
+                                Alert( "warning" , 'Nothing is selected!');
                         }
                         else
-                            alert('This feature is disable for demo!');
+                            Alert( "warning" , 'This feature is disable for demo!');
                     }
                 },
                 {
@@ -787,13 +787,13 @@
 
     $(document).on('submit', '.payment-form', function(e) {
         if( $('input[name="paying_amount"]').val() < parseFloat($('#amount').val()) ) {
-            alert('Paying amount cannot be bigger than recieved amount');
+            Alert( "warning" , 'Paying amount cannot be bigger than recieved amount');
             $('input[name="amount"]').val('');
             $(".change").text(parseFloat( $('input[name="paying_amount"]').val() - $('#amount').val() ).toFixed(2));
             e.preventDefault();
         }
         else if( $('input[name="edit_paying_amount"]').val() < parseFloat($('input[name="edit_amount"]').val()) ) {
-            alert('Paying amount cannot be bigger than recieved amount');
+            Alert( "warning" , 'Paying amount cannot be bigger than recieved amount');
             $('input[name="edit_amount"]').val('');
             $(".change").text(parseFloat( $('input[name="edit_paying_amount"]').val() - $('input[name="edit_amount"]').val() ).toFixed(2));
             e.preventDefault();
