@@ -173,7 +173,7 @@
              
               success: function(res) {
                   $('#attribute_img').html('');
-            //   alert(res.data.length)
+            //   Alert('warning' , res.data.length)
               if(res.data.length){
                 $('#attribute_div').show();
                     for(var i=0;i<res.data.length;i++)
@@ -291,7 +291,7 @@
                     var flag = 1;
                     $(".product-id").each(function() {
                         if ($(this).val() == data[8]) {
-                            alert('Duplicate input is not allowed!')
+                            Alert('warning' ,'Duplicate input is not allowed!')
                             flag = 0;
                         }
                     });
@@ -390,7 +390,7 @@
     $("input[name='variant']").on("input", function () {
         if($("#code").val() == ''){
             $("input[name='variant']").val('');
-            alert('Please fillup above information first.');
+            Alert('warning' , 'Please fillup above information first.');
         }
         else if($(this).val().indexOf(',') > -1) {
             var variant_name = $(this).val().slice(0, -1);
@@ -488,20 +488,20 @@
         var exp = /^\d+$/;
 
         if(!(product_code.match(exp)) && (barcode_symbology == 'UPCA' || barcode_symbology == 'UPCE' || barcode_symbology == 'EAN8' || barcode_symbology == 'EAN13') ) {
-            alert('Product code must be numeric.');
+            Alert('warning' , 'Product code must be numeric.');
             return false;
         }
         else if(product_code.match(exp)) {
             if(barcode_symbology == 'UPCA' && product_code.length > 11){
-                alert('Product code length must be less than 12');
+                Alert('warning' , 'Product code length must be less than 12');
                 return false;
             }
             else if(barcode_symbology == 'EAN8' && product_code.length > 7){
-                alert('Product code length must be less than 8');
+                Alert('warning' , 'Product code length must be less than 8');
                 return false;
             }
             else if(barcode_symbology == 'EAN13' && product_code.length > 12){
-                alert('Product code length must be less than 13');
+                Alert('warning' , 'Product code length must be less than 13');
                 return false;
             }
         }
@@ -509,14 +509,14 @@
         if( $("#type").val() == 'combo' ) {
             var rownumber = $('table.order-list tbody tr:last').index();
             if (rownumber < 0) {
-                alert("Please insert product to table!")
+                Alert('warning' , "Please insert product to table!")
                 return false;
             }
         }
         if($("#is-variant").is(":checked")) {
             rowindex = $("table#variant-table tbody tr:last").index();
             if (rowindex < 0) {
-                alert('This product has variant. Please insert variant to table');
+                Alert('warning' , 'This product has variant. Please insert variant to table');
                 return false;
             }
         }
@@ -587,7 +587,7 @@
                             data: $("#product-form").serialize(),
                             success:function(response){
                                 //console.log(response);
-                                location.href = '../vendorproducts';
+                                location.href = '{{ route('vendorproducts.index') }}';
                             },
                             error:function(response) {
                               if(response.responseJSON.errors.name) {
@@ -647,7 +647,7 @@
             }
         },
         successmultiple: function (file, response) {
-            location.href = '../vendorproducts';
+            location.href = '{{ route('vendorproducts.index') }}';
             //console.log(file, response);
         },
         completemultiple: function (file, response) {

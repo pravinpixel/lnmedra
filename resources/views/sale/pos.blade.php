@@ -2315,11 +2315,12 @@ if(keyboard_active==1){
         temp_data = $('#lims_productcodeSearch').val();
         if(!customer_id){
             $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
-            alert('Please select Customer!');
+          
+            Alert('warning', 'Please select Customer!')
         }
         else if(!warehouse_id){
             $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
-            alert('Please select Outlet!');
+            Alert('warning','Please select Outlet!');
         }
     });
 }
@@ -2330,11 +2331,11 @@ else{
         temp_data = $('#lims_productcodeSearch').val();
         if(!customer_id){
             $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
-            alert('Please select Customer!');
+            Alert( 'warning','Please select Customer!');
         }
         else if(!warehouse_id){
             $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
-            alert('Please select Outlet!');
+            Alert( 'warning','Please select Outlet!');
         }
 
     });
@@ -2504,7 +2505,11 @@ $('#myTable').keyboard({
 $("#myTable").on('click', '.plus', function() {
     rowindex = $(this).closest('tr').index();
     var qty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val();
-
+    var actualQty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text();
+    if(parseFloat(qty) >= parseFloat(actualQty)){
+        Alert('warning', `Product out of stock`);
+        return false;
+    }
     if(!qty)
       qty = 1;
     else
@@ -2533,7 +2538,7 @@ $("#myTable").on("change", ".batch-no", function () {
     $.get('check-batch-availability/' + product_id + '/' + $(this).val() + '/' + warehouse_id, function(data) {
         console.log(data);
         if(data['message'] != 'ok') {
-            alert(data['message']);
+            Alert("warning" , data['message']);
             $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.batch-no').val('');
             $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.product-batch-id').val('');
         }
@@ -2551,7 +2556,7 @@ $("#myTable").on('input', '.qty', function() {
     rowindex = $(this).closest('tr').index();
     if($(this).val() < 0 && $(this).val() != '') {
       $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(1);
-      alert("Quantity can't be less than 0");
+      Alert("warning", "Quantity can't be less than 0");
     }
     checkQuantity($(this).val(), true);
 });
@@ -2573,15 +2578,15 @@ $(document).on('click', '.product-img', function() {
     var customer_id = $('#customer_id').val();
     var warehouse_id = $('select[name="warehouse_id"]').val();
     if(!customer_id)
-        alert('Please select Customer!');
+        Alert('warning', 'Please select Customer!');
     else if(!warehouse_id)
-        alert('Please select Outlet!');
+        Alert('warning', 'Please select Outlet!');
     else{
         var data = $(this).data('product');
         data = data.split(" ");
         pos = product_code.indexOf(data[0]);
         if(pos < 0)
-            alert('Product is not avaialable in the selected warehouse');
+            Alert('warning', 'Product is not avaialable in the selected outlet !');
         else{
             productSearch(data[0]);
         }
@@ -2657,14 +2662,14 @@ $('button[name="update_btn"]').on("click", function() {
     var edit_unit_price = $('input[name="edit_unit_price"]').val();
 
     if (parseFloat(edit_discount) > parseFloat(edit_unit_price)) {
-        alert('Invalid Discount Input!');
+        Alert('warning', 'Invalid Discount Input!');
         return;
     }
 
     if(edit_qty < 1) {
         $('input[name="edit_qty"]').val(1);
         edit_qty = 1;
-        alert("Quantity can't be less than 1");
+        Alert('warning', "Quantity can't be less than 1");
     }
 
     var tax_rate_all = <?php echo json_encode($tax_rate_all) ?>;
@@ -2741,7 +2746,7 @@ $("#draft-btn").on("click",function(){
     $('input[name="paid_amount"]').prop('required',false);
     var rownumber = $('table.order-list tbody tr:last').index();
     if (rownumber < 0) {
-        alert("Please insert product to order table!")
+        Alert('warning', "Please insert product to order table!")
     }
     else
         $('.payment-form').submit();
@@ -2844,7 +2849,7 @@ $('#add-payment select[name="gift_card_id_select"]').on("change", function() {
     var balance = gift_card_amount[$(this).val()] - gift_card_expense[$(this).val()];
     $('#add-payment input[name="gift_card_id"]').val($(this).val());
     if($('input[name="paid_amount"]').val() > balance){
-        alert('Amount exceeds card balance! Gift Card balance: '+ balance);
+        Alert('warning', 'Amount exceeds card balance! Gift Card balance: '+ balance);
     }
 });
 
@@ -2854,11 +2859,11 @@ $('#add-payment input[name="paying_amount"]').on("input", function() {
 
 $('input[name="paid_amount"]').on("input", function() {
     if( $(this).val() > parseFloat($('input[name="paying_amount"]').val()) ) {
-        alert('Paying amount cannot be bigger than recieved amount');
+        Alert('warning', 'Paying amount cannot be bigger than recieved amount');
         $(this).val('');
     }
     else if( $(this).val() > parseFloat($('#grand-total').text()) ){
-        alert('Paying amount cannot be bigger than grand total');
+        Alert('warning', 'Paying amount cannot be bigger than grand total');
         $(this).val('');
     }
 
@@ -2867,11 +2872,11 @@ $('input[name="paid_amount"]').on("input", function() {
     if(id == 2){
         var balance = gift_card_amount[$("#gift_card_id_select").val()] - gift_card_expense[$("#gift_card_id_select").val()];
         if($(this).val() > balance)
-            alert('Amount exceeds card balance! Gift Card balance: '+ balance);
+            Alert('warning', 'Amount exceeds card balance! Gift Card balance: '+ balance);
     }
     else if(id == 6){
         if( $('input[name="paid_amount"]').val() > deposit[$('#customer_id').val()] )
-            alert('Amount exceeds customer deposit! Customer deposit : '+ deposit[$('#customer_id').val()]);
+            Alert('warning', 'Amount exceeds customer deposit! Customer deposit : '+ deposit[$('#customer_id').val()]);
     }
 });
 
@@ -3090,7 +3095,7 @@ function edit(){
 function couponDiscount() {
     var rownumber = $('table.order-list tbody tr:last').index();
     if (rownumber < 0) {
-        alert("Please insert product to order table!")
+        Alert('warning', "Please insert product to order table!")
     }
     else if($("#coupon-code").val() != ''){
         valid = 0;
@@ -3099,9 +3104,9 @@ function couponDiscount() {
                 valid = 1;
                 todyDate = <?php echo json_encode(date('Y-m-d'))?>;
                 if(parseFloat(value['quantity']) <= parseFloat(value['used']))
-                    alert('This Coupon is no longer available');
+                    Alert('warning', 'This Coupon is no longer available');
                 else if(todyDate > value['expired_date'])
-                    alert('This Coupon has expired!');
+                    Alert('warning', 'This Coupon has expired!');
                 else if(value['type'] == 'fixed'){
                     if(parseFloat($('input[name="grand_total"]').val()) >= value['minimum_amount']) {
                         $('input[name="grand_total"]').val($('input[name="grand_total"]').val() - value['amount']);
@@ -3117,7 +3122,7 @@ function couponDiscount() {
                         $('#coupon-text').text(parseFloat(value['amount']).toFixed(2));
                     }
                     else
-                        alert('Grand Total is not sufficient for discount! Required '+value['minimum_amount']+' '+currency);
+                        Alert('warning', 'Grand Total is not sufficient for discount! Required '+value['minimum_amount']+' '+currency);
                 }
                 else{
                     var grand_total = $('input[name="grand_total"]').val();
@@ -3126,7 +3131,7 @@ function couponDiscount() {
                     $('input[name="grand_total"]').val(grand_total);
                     $('#grand-total').text(parseFloat(grand_total).toFixed(2));
                     if(!$('input[name="coupon_active"]').val())
-                            alert('Congratulation! You got '+value['amount']+'% discount');
+                    Alert('success','Congratulation! You got '+value['amount']+'% discount');
                     $(".coupon-check").prop("disabled",true);
                     $("#coupon-code").prop("disabled",true);
                     $('input[name="coupon_active"]').val(1);
@@ -3138,7 +3143,7 @@ function couponDiscount() {
             }
         });
         if(!valid)
-            alert('Invalid coupon code!');
+            Alert('warning', 'Invalid coupon code!');
     }
 }
 
@@ -3151,6 +3156,13 @@ function checkQuantity(sale_qty, flag) {
     } else {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.stock-count').addClass('badge badge-success');
     }
+    var actualQty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text();
+    var currentQty = sale_qty -1;
+    if(parseFloat(currentQty) >= parseFloat(actualQty)){
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(currentQty);
+        Alert('warning', `Product out of stock`);
+        return false;
+    }
     localStorageQty[rowindex] = sale_qty;
     localStorage.setItem("localStorageQty", localStorageQty);
     if(product_type[pos] == 'standard') {
@@ -3161,7 +3173,7 @@ function checkQuantity(sale_qty, flag) {
         else if(operator[0] == '/')
             total_qty = sale_qty / operation_value[0];
         if (total_qty > parseFloat(product_qty[pos])) {
-            alert('Quantity exceeds stock quantity!');
+            Alert( 'warning','Quantity exceeds stock quantity!');
             if (flag) {
                 sale_qty = sale_qty.substring(0, sale_qty.length - 1);
                 $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.qty').val(sale_qty);
@@ -3182,7 +3194,7 @@ function checkQuantity(sale_qty, flag) {
         $(child_id).each(function(index) {
             var position = product_id.indexOf(parseInt(child_id[index]));
             if( parseFloat(sale_qty * child_qty[index]) > product_qty[position] ) {
-                alert('Quantity exceeds stock quantity!');
+                Alert( 'warning','Quantity exceeds stock quantity!');
                 if (flag) {
                     sale_qty = sale_qty.substring(0, sale_qty.length - 1);
                     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.qty').val(sale_qty);
@@ -3306,7 +3318,7 @@ function calculateGrandTotal() {
     var total_qty = parseFloat($('input[name="total_qty"]').val());
     var subtotal = parseFloat($('input[name="total_price"]').val());
     var order_tax = parseFloat($('select[name="order_tax_rate_select"]').val());
-    //alert(order_tax);
+    //Alert( 'warning',order_tax);
     localStorage.setItem("order-tax-rate-select", order_tax);
     var order_discount = parseFloat($('input[name="order_discount"]').val());
     if (!order_discount)
@@ -3388,7 +3400,7 @@ function creditCard() {
 
 function deposits() {
     if($('input[name="paid_amount"]').val() > deposit[$('#customer_id').val()]){
-        alert('Amount exceeds customer deposit! Customer deposit : '+ deposit[$('#customer_id').val()]);
+        Alert( 'warning','Amount exceeds customer deposit! Customer deposit : '+ deposit[$('#customer_id').val()]);
     }
     $('input[name="cheque_no"]').attr('required', false);
     $('#add-payment select[name="gift_card_id_select"]').attr('required', false);
@@ -3398,7 +3410,7 @@ function pointCalculation() {
     paid_amount = $('input[name=paid_amount]').val();
     required_point = Math.ceil(paid_amount / reward_point_setting['per_point_amount']);
     if(required_point > points[$('#customer_id').val()]) {
-      alert('Customer does not have sufficient points. Available points: '+points[$('#customer_id').val()]);
+      Alert( 'warning','Customer does not have sufficient points. Available points: '+points[$('#customer_id').val()]);
     }
     else {
       $("input[name=used_points]").val(required_point);
@@ -3436,11 +3448,11 @@ function confirmCancel() {
 $(document).on('submit', '.payment-form', function(e) {
     var rownumber = $('table.order-list tbody tr:last').index();
     if (rownumber < 0) {
-        alert("Please insert product to order table!")
+        Alert( 'warning',"Please insert product to order table!")
         e.preventDefault();
     }
     else if( parseFloat( $('input[name="paying_amount"]').val() ) < parseFloat( $('input[name="paid_amount"]').val() ) ){
-        alert('Paying amount cannot be bigger than recieved amount');
+        Alert( 'warning','Paying amount cannot be bigger than recieved amount');
         e.preventDefault();
     }
     $('input[name="paid_by_id"]').val($('select[name="paid_by_id_select"]').val());

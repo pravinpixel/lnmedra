@@ -462,10 +462,12 @@ var baseUrl = $('#baseUrl').val();
                                 });
                             }
                             else if(!product_id.length)
-                                alert('No product is selected!');
+                                
+                                Alert("warning", "No product is selected!")
                         }
                         else
-                            alert('This feature is disable for demo!');
+                             
+                            Alert("warning", "This feature is disable for demo!")
                     }
                 },
                 {
@@ -480,40 +482,33 @@ var baseUrl = $('#baseUrl').val();
 
 
     function vendorProductId(e) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: 'want to change this status!',
+          icon: 'info',
+          showCancelButton: true,
+          confirmButtonColor: '#0095ff',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, Change it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "POST",
+                    url:'products/vendor-product-status',
+                data: {
+                    id:e
+                },                         
+                }).then(function (response) {
+                    $('#product-data-table').DataTable().clear().draw();
+                    Alert('success',"Status to be Changed!");
+                }, function (error) {
+                    Alert('success',"Somthing wround Try Again Later");
+                });
 
-					swal({
-						title: "Are you sure?",
-						text: "you want to change a status!",
-						icon: "warning",
-						buttons: true,
-						dangerMode: true,
-					}).then((willDelete) => {
-                        // alert(willDelete)
-						if (willDelete) {
-							$.ajax({
-                                type: "POST",
-                                url:'products/vendor-product-status',
-                        data: {
-                            id:e
-                        },                         
-							}).then(function (response) {
-								 
-								// alert(response.status);
-                                $('#product-data-table').DataTable().clear().draw();
-                                    
-							}, function (error) {
-								console.log(error);
-                                Message('warning',response.data.msg);
-								console.log('Unable to delete');
-							});
-
-						} else {
-                            $('#product-data-table').DataTable().clear().draw();
-							swal("Your Data is safe!");
-						}
-                        // $('#estimate-datatable').DataTable().clear().draw();
- 
-					});
+            } else {
+                $('#product-data-table').DataTable().clear().draw();
+            }
+        }) 
     };
 
     if(all_permission.indexOf("products-delete") == -1)

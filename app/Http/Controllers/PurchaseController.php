@@ -234,9 +234,9 @@ class PurchaseController extends Controller
                         <button type="button" class="get-payment btn btn-link" data-id = "'.$purchase->id.'"><i class="fa fa-money"></i> '.trans('file.View Payment').'</button>
                     </li>';
                 if(in_array("purchases-delete", $request['all_permission']))
-                    $nestedData['options'] .= \Form::open(["route" => ["purchases.destroy", $purchase->id], "method" => "DELETE"] ).'
+                    $nestedData['options'] .= \Form::open(["route" => ["purchases.destroy", $purchase->id], "method" => "DELETE" , 'onsubmit' => 'return confirmDeleteAlert(this);'] ).'
                             <li>
-                              <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> '.trans("file.delete").'</button> 
+                              <button type="submit" class="btn btn-link"><i class="dripicons-trash"></i> '.trans("file.delete").'</button> 
                             </li>'.\Form::close().'
                         </ul>
                     </div>';

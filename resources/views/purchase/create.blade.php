@@ -368,7 +368,7 @@
          
          if(!$('#supplier_id').val())
          {
-            alert("Please select supplier..");
+            Alert("warning","Please select supplier..");
             return false;
          }
         console.log(lims_product_code)
@@ -408,7 +408,7 @@
         // alert($(this).val())
         if($(this).val() < 1 && $(this).val() != '') {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(1);
-        alert("Quantity can't be less than 1");
+        Alert("warning","Quantity can't be less than 1");
         }
         checkQuantity($(this).val(), true);
     });
@@ -475,7 +475,7 @@
         // alert($(this).val())
         if($(this).val() < 1 && $(this).val() != '') {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val(1);
-        alert("Net cost should not e empty");
+        Alert("warning","Net cost should not e empty");
         }
         product_cost[rowindex] = parseInt($(this).val());
         // checkQuantity($(this).val(), true); parseInt($(this).val());
@@ -495,7 +495,7 @@
         // alert($(this).val())
         if($(this).val() < 1 && $(this).val() != '') {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val(1);
-        alert("Quantity can't be less than 1");
+        Alert("warning","Quantity can't be less than 1");
         }
         product_discount[rowindex] = parseInt($(this).val());
         // checkQuantity($(this).val(), true);
@@ -528,7 +528,7 @@
         if(edit_qty < 1) {
             $('input[name="edit_qty"]').val(1);
             edit_qty = 1;
-            alert("Quantity can't be less than 1");
+            Alert("warning","Quantity can't be less than 1");
         }
 
         var row_unit_operator = unit_operator[rowindex].slice(0, unit_operator[rowindex].indexOf(","));
@@ -596,7 +596,7 @@
                 }
                 else(data.length)
                 {
-                    alert("Product is not avaialable in the selected supplier")
+                    Alert("warning","Product is not avaialable in the selected supplier")
                 }
                 
                
@@ -606,6 +606,7 @@
     
     function productSearch(data) {
         // alert(data)
+       var _product = data;
        var supplier_id= $('#supplier_id').val();
         // alert(supplier_id)
         $.ajax({
@@ -723,10 +724,9 @@
                         }
                     }
                 }else{
-                    alert("Product data not filling properly..!")
+                    Alert("warning",`${_product} Product data not filling properly..!`)
                 } 
                 checkQuantity(data[5], flag) 
-               
             }
         });
     }
@@ -902,7 +902,7 @@
     $('#purchase-form').on('submit',function(e){
     var rownumber = $('table.order-list tbody tr:last').index();
     if (rownumber < 0) {
-        alert("Please insert product to order table!")
+        Alert("warning","Please insert product to order table!")
         e.preventDefault();
     }
 

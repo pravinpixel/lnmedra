@@ -65,18 +65,18 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('file.Tax Number')}}</label>
                                     <input type="text" name="tax_no" class="form-control" value="{{$lims_customer_data->tax_no}}">
                                 </div>
-                            </div>
-                            <div class="col-md-6">
+                            </div> --}}
+                            {{-- <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('file.Address')}} </label>
                                     <input type="text" name="address" value="{{$lims_customer_data->address}}" class="form-control">
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('file.City')}} </label>
@@ -102,15 +102,15 @@
                                 </div>
                             </div>
                             @if(!$lims_customer_data->user_id)
-                            <div class="col-md-6 mt-3">
+                            {{-- <div class="col-md-6 mt-3">
                                 <div class="form-group">
                                     <label>{{trans('file.Add User')}}</label>&nbsp;
                                     <input type="checkbox" name="user" value="1" />
                                 </div>
-                            </div>
+                            </div> --}}
                             @endif
                            
-                            <div class="col-md-6 user-input">
+                            {{-- <div class="col-md-6 user-input">
                                 <div class="form-group">
                                     <label>{{trans('file.UserName')}} *</label>
                                     <input type="text" name="name" class="form-control">
@@ -126,7 +126,7 @@
                                     <label>{{trans('file.Password')}} *</label>
                                     <input type="password" name="password" class="form-control">
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="col-md-12">
                                 <div class="form-group mt-3">
                                     <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">

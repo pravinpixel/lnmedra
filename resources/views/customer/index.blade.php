@@ -72,10 +72,10 @@
                                 </li> --}}
                                 <li class="divider"></li>
                                 @if(in_array("customers-delete", $all_permission))
-                                {{ Form::open(['route' => ['customer.destroy', $customer->id], 'method' => 'DELETE'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
+                                {{ Form::open(['route' => ['customer.destroy', $customer->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+                                    <li>
+                                        <button class="btn btn-link"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                    </li>
                                 {{ Form::close() }}
                                 @endif
                             </ul>
@@ -206,12 +206,12 @@
     $("ul#customer_management").addClass("show");
     $("ul#customer_management #customer-list-menu").addClass("active");
 
-    function confirmDelete() {
-      if (confirm("Are you sure want to delete?")) {
-          return true;
-      }
-      return false;
-    }
+    // function confirmDelete() {
+    //   if (confirm("dsgsdgdsg")) {
+    //       return true;
+    //   }
+    //   return false;
+    // }
 
     var customer_id = [];
     var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
@@ -337,7 +337,7 @@
                                 customer_id[i-1] = $(this).closest('tr').data('id');
                             }
                         });
-                        if(customer_id.length && confirm("Are you sure want to delete?")) {
+                        if(customer_id.length && confirm("Are you sure want to delete ? this")) {
                             $.ajax({
                                 type:'POST',
                                 url:'customer/deletebyselection',

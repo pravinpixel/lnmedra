@@ -446,7 +446,7 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-4 mt-3">
                                     <input type="hidden" name="promotion_hidden" value="{{$lims_product_data->promotion}}">
                                     <input name="promotion" type="checkbox" id="promotion" value="1">&nbsp;
@@ -471,7 +471,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <input type="button" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-btn">

@@ -170,7 +170,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
         return false;
     }
     // function validateProduct(){
-    //     alert()
+    //     Alert("warning", )
     // var values=[];
     // $('input[name="is_approve_row_data[]"]:checked').each(function () {
     // values[values.length] = (this.checked ? $(this).closest("tr") : "");
@@ -205,7 +205,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
           val[i] = $(this).val();
         //   product_id =i;
         });
-            // alert(val)
+            // Alert("warning", val)
     
             if(val.length && confirmDelete()) {
                 $.ajax({
@@ -215,7 +215,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                         productIdArray: val
                     },
                     success:function(data){
-                        // alert()
+                        // Alert("warning", )
                         //dt.rows({ page: 'current', selected: true }).deselect();
                         // dt.rows({ page: 'current', selected: true }).remove().draw(false);
                         location.reload();
@@ -223,10 +223,10 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                 });
             }
             else if(!product_id.length)
-                alert('No product is selected!');
+                Alert("warning", 'No product is selected!');
         }
         else
-            alert('This feature is disable for demo!');
+            Alert("warning", 'This feature is disable for demo!');
                 
     }
     function resetVendor(){
@@ -255,7 +255,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                         
                     },
                     success: function( msg ) {
-                    // alert(JSON.stringify(msg))
+                    // Alert("warning", JSON.stringify(msg))
                     }
                 });
     });
@@ -281,7 +281,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                         
                     },
                     success: function( msg ) {
-                    // alert(JSON.stringify(msg))
+                    // Alert("warning", JSON.stringify(msg))
                     }
                     });
     });
@@ -322,10 +322,10 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                 });
             }
             else if(!product_id.length)
-                alert('No product is selected!');
+                Alert("warning", 'No product is selected!');
         }
         else
-            alert('This feature is disable for demo!');                 
+            Alert("warning", 'This feature is disable for demo!');                 
     }
     $.ajaxSetup({
         headers: {
@@ -671,10 +671,10 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                                 });
                             }
                             else if(!product_id.length)
-                                alert('No product is selected!');
+                                Alert("warning", 'No product is selected!');
                         }
                         else
-                            alert('This feature is disable for demo!');
+                            Alert("warning", 'This feature is disable for demo!');
                     }
                 },
                 {
@@ -709,21 +709,21 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
     function checkformvalidation(){      
         let roleChecked = $("input:checked").length;
         if (!roleChecked) {
-            alert("Please check at least one checkbox");
+            Alert("warning", "Please check at least one checkbox");
             return false;
         }
       }
         /*  $('input[type="checkbox"]').click(function(){
             //$('.checkbox').change( function () {
-            alert("check")
+            Alert("warning", "check")
             if($(this).prop("checked") == true){
                var classname = $(this).attr("id");
-               alert(classname + ' in')
+               Alert("warning", classname + ' in')
     $('#'+classname+'text').prop('required',true);
                 }
                 else if($(this).prop("checked") == false){
                 var classname = $(this).attr("id");
-                alert(classname + ' not')
+                Alert("warning", classname + ' not')
     $('#'+classname+'text').prop('required',false);
                 }
             });

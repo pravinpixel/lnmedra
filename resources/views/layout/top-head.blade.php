@@ -56,7 +56,42 @@
       <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap-rtl.min.css') ?>" type="text/css">
       <link rel="stylesheet" href="<?php echo asset('css/custom-rtl.css') ?>" type="text/css" id="custom-style">
     @endif
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      function Alert(type, text) {
+        Swal.fire({
+          title: text,
+          icon: type, 
+          customClass: {
+            confirmButton: 'btn btn-primary px-4',
+          },
+          confirmButtonText: 'Okey !',
+          buttonsStyling: false
+        }); 
+      }
+      function confirmDeleteAlert(form) {
+        Swal.fire({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#0095ff',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Alert("success", "Deleted Successfully !")
+            form.submit();
+          } 
+        })
+        return false;
+      }
+    </script>
     <style>
+      .swal2-title {
+        font-size: 20px !important;
+        padding: 0.8em 4em 0 !important
+      }
       .table th{
         background: #0095ff !important;
         color: white !important;
@@ -486,4 +521,5 @@
       });
     </script>
   </body>
+   
 </html>

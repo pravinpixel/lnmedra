@@ -455,10 +455,10 @@
                                 });
                             }
                             else if(!product_id.length)
-                                alert('No product is selected!');
+                                Alert( "warning",'No product is selected!');
                         }
                         else
-                            alert('This feature is disable for demo!');
+                            Alert( "warning",'This feature is disable for demo!');
                     }
                 },
                 {

@@ -304,10 +304,10 @@
                             });
                         }
                         else if(!category_id.length)
-                            alert('No category is selected!');
+                            Alert("warning",'No category is selected!');
                     }
                     else
-                        alert('This feature is disable for demo!');
+                        Alert("warning",'This feature is disable for demo!');
                 }
             },
             {
