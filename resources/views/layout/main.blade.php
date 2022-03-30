@@ -1324,7 +1324,7 @@
             <div class="navbar-holder d-flex align-items-center justify-content-between">
               <a id="toggle-btn" href="#" class="btn-pos rounded-pill"><i class="fa fa-bars"> </i></a>
               <span class="brand-big">
-                <a href="{{url('/')}}"><h2>L & N Group | Sales & POS Management</h2></a>
+                <a href="{{url('/')}}"><h2>L & N Medra | Sales & POS Management</h2></a>
               </span>
            
               <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
