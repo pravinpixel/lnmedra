@@ -2586,7 +2586,7 @@ $(document).on('click', '.product-img', function() {
         data = data.split(" ");
         pos = product_code.indexOf(data[0]);
         if(pos < 0)
-            Alert('warning', 'Product is not available in the selected outlet !');
+            Alert('warning', 'Product is not avaialable in the selected outlet !');
         else{
             productSearch(data[0]);
         }
@@ -2731,6 +2731,7 @@ $(".coupon-check").on("click",function() {
 });
 
 $(".payment-btn").on("click", function() {
+    $('#change').text('0.00');
     var audio = $("#mysoundclip2")[0];
     audio.play();
     $('input[name="paid_amount"]').val($("#grand-total").text());

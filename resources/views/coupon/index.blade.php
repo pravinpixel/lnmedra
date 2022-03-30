@@ -118,7 +118,7 @@
                       </div>
                       <div class="col-md-6 form-group">
                           <label>{{trans('file.Type')}} *</label>
-                          <select class="form-control" name="type">
+                          <select class="form-control" name="type" title="Select Type">
                             <option value="percentage">Percentage</option>
                             <option value="fixed">Fixed Amount</option>
                           </select>
@@ -142,7 +142,7 @@
                       </div>
                       <div class="col-md-6 form-group">
                           <label>{{trans('file.Expired Date')}}</label>
-                          <input type="text" name="expired_date" class="expired_date form-control">
+                          <input type="date" name="expired_date" class="expired_date form-control">
                       </div>
                   </div>
                   <div class="form-group">
@@ -232,7 +232,7 @@
         }
     });
 
-    $("#create-modal .expired_date").val($.datepicker.formatDate('yy-mm-dd', new Date()));
+    // $("#create-modal .expired_date").val($.datepicker.formatDate('yy-mm-dd', new Date()));
     $(".minimum-amount").hide();
 
     $("#create-modal select[name='type']").on("change", function() {
@@ -390,7 +390,9 @@ function confirmDelete() {
                                     couponIdArray: coupon_id
                                 },
                                 success:function(data){
+                                    location.reload();
                                     alert(data);
+                                    
                                 }
                             });
                             dt.rows({ page: 'current', selected: true }).remove().draw(false);
