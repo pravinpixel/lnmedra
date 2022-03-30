@@ -2505,7 +2505,11 @@ $('#myTable').keyboard({
 $("#myTable").on('click', '.plus', function() {
     rowindex = $(this).closest('tr').index();
     var qty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val();
-
+    var actualQty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text();
+    if(parseFloat(qty) >= parseFloat(actualQty)){
+        Alert('warning', `Product out of stock`);
+        return false;
+    }
     if(!qty)
       qty = 1;
     else
@@ -3151,6 +3155,13 @@ function checkQuantity(sale_qty, flag) {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.stock-count').addClass('badge badge-danger');
     } else {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.stock-count').addClass('badge badge-success');
+    }
+    var actualQty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text();
+    var currentQty = sale_qty -1;
+    if(parseFloat(currentQty) >= parseFloat(actualQty)){
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(currentQty);
+        Alert('warning', `Product out of stock`);
+        return false;
     }
     localStorageQty[rowindex] = sale_qty;
     localStorage.setItem("localStorageQty", localStorageQty);
