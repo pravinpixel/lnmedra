@@ -30,8 +30,8 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.Supplier')}}</label>
-                                            <select name="supplier_id" class="selectpicker form-control" id="supplier_id" data-live-search="true" data-live-search-style="begins" title="Select supplier...">
+                                            <label>{{trans('file.Supplier')}} *</label>
+                                            <select name="supplier_id" class="selectpicker form-control" id="supplier_id" data-live-search="true" data-live-search-style="begins" title="Select supplier..." required>
                                                 @foreach($lims_supplier_list as $supplier)
                                                 <option value="{{$supplier->id}}">{{$supplier->name .' ('. $supplier->company_name .')'}}</option>
                                                 @endforeach

@@ -180,6 +180,7 @@
                                     </div> -->
 
                                     <ul class="list-group field_wrapper" id="warehouseId">
+                                        <label><strong>{{trans('file.Add Store Outlet')}} *</strong></label>
                                         <li class="list-group-item border-0 p-0 mb-3">
                                             <a  class="btn btn-primary add_button" title="Add field" >Add</a>
                                         </li>
