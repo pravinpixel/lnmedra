@@ -29,7 +29,7 @@ Route::post('vendor/vendor-register-form', 'VendorController@vendorRegister')->n
 
 Route::group(['middleware' => ['auth', 'active']], function() {
 
-	Route::get('/', 'HomeController@index');
+	Route::get('/', 'HomeController@index')->name("welcome_dashboard");
 	Route::get('/dashboard-filter/{start_date}/{end_date}', 'HomeController@dashboardFilter');
 	Route::get('check-batch-availability/{product_id}/{batch_no}/{warehouse_id}', 'ProductController@checkBatchAvailability');
 

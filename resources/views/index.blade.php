@@ -9,10 +9,10 @@
   @endif
 
   <div class="row ">
-    <div class="container-fluid my-4 mt-5">
+    <div class="container-fluid  mb-3">
       <div class="col-md-12 d-flex align-items-center justify-content-between">
         <div class="brand-text float-left">
-            <h3 class="m-0">{{trans('file.welcome')}} <span>{{Auth::user()->name}}</span> </h3>
+            <h3 class="m-0">Dashboard</h3>
         </div>
         <div class="filter-toggle btn-group shadow border rounded-pill m-0">
           <button class="btn btn-light  date-btn" data-start_date="{{date('Y-m-d')}}" data-end_date="{{date('Y-m-d')}}">{{trans('file.Today')}}</button>

@@ -1861,7 +1861,13 @@
         <!-- end supplier modal -->
 
         <div style="display:none" id="content" class="animate-bottom">
-            @yield('content')
+
+          {{--======= Page Navigator =======--}}
+            @include('breadcrumb')
+          {{--======== Page Navigator =======--}}
+
+          @yield('content')
+
         </div>
 
       
