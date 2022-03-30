@@ -1116,6 +1116,15 @@ class PermissionsTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
-        )));
+            ),
+            137 => 
+            array (
+                'id' => 146,
+                'name' => 'role_permission',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            )
+    ));
     }
 }

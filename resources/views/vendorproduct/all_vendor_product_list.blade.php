@@ -35,12 +35,13 @@
                 <button class="btn-sm btn-danger btn"  onclick="resetVendor()" >Reset Vendor</button>
             </div>
         </div>
+        
     <div class="table-responsive ">
     {!! Form::open(['route' => 'vendorproducts.row-data','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true,'onsubmit' => 'return checkformvalidation()'],) !!}
 
         <div class="m-3 ml-4">
             <button class="btn-sm btn-success btn" id="btnClick" type="submit">Approve</button>
-            <button class="btn-sm btn-danger btn"  onclick="rejectProduct()" >Reject</button>
+            <a class="btn-sm btn-danger btn"  onclick="rejectProduct()" >Reject</a>
         </div>
        
         <!-- <div class="m-3 ml-4">
@@ -296,37 +297,8 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
     var product_id = [];
     var all_permission = <?php echo json_encode($all_permission) ?>;
     var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
-    function ddd()
-    {
-       var i=1;
-        if(user_verified == '1') {
-           
-            product_id.length = 0;
-            $(':checkbox:checked').each(function(i){
-                if(i){
-                    var product_data = $(this).closest('tr').data('product');
-                    product_id[i-1] = product_data[7];
-                }
-            });
-            if(product_id.length && confirmDelete()) {
-                $.ajax({
-                    type:'POST',
-                    url:'vendorproducts/vendorProductDeny',
-                    data:{
-                        productIdArray: product_id
-                    },
-                    success:function(data){
-                        //dt.rows({ page: 'current', selected: true }).deselect();
-                        dt.rows({ page: 'current', selected: true }).remove().draw(false);
-                    }
-                });
-            }
-            else if(!product_id.length)
-                Alert("warning", 'No product is selected!');
-        }
-        else
-            Alert("warning", 'This feature is disable for demo!');                 
-    }
+  
+    
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

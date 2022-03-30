@@ -1266,6 +1266,18 @@
 								                </div>
 								            </div>
 						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("role_permission", $all_permission))
+							                    	<input type="checkbox" value="1" id="role_permission" name="role_permission" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="role_permission" name="role_permission">
+							                    	@endif
+								                    <label for="role_permission" class="padding05">{{trans('file.Role Permission')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
 						                <span>
 								            <div aria-checked="false" aria-disabled="false">
 								                <div class="checkbox">

@@ -1180,18 +1180,26 @@
                       ['permission_id', $accounts_permission->id],
                       ['role_id', $role->id]
                   ])->first();
+                  $role_permission = DB::table('permissions')->where('name', 'role_permission')->first();
+                  $role_permission_active = DB::table('role_has_permissions')->where([
+                      ['permission_id', $role_permission->id],
+                      ['role_id', $role->id]
+                  ])->first();
                   
                   ?>
-                  @if($mail_setting_permission_active||$send_notification_permission_active||$warehouse_permission_active||$customer_group_permission_active)
+                  @if($mail_setting_permission_active||$send_notification_permission_active||$warehouse_permission_active||$customer_group_permission_active||$role_permission_active)
               <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-gear"></i><span>{{trans('file.settings')}}</span></a>
                 <ul id="setting" class="collapse list-unstyled ">
                   
                   @if($mail_setting_permission_active)
                   <li id="mail-setting-menu"><a href="{{route('setting.mail')}}">{{trans('file.Mail Setting')}}</a></li>
                   @endif
-                  @if($role->id <= 2)
+                  <!-- @if($role->id <= 2) -->
+                  @if($role_permission_active)
                   <li id="role-menu"><a href="{{route('role.index')}}">{{trans('file.Role Permission')}}</a></li>
                   @endif
+                  <!-- @endif -->
+                  
                   @if($send_notification_permission_active)
                   <li id="notification-menu">
                     <a href="" id="send-notification">{{trans('file.Send Notification')}}</a>

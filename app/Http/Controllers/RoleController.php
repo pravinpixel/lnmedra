@@ -1133,6 +1133,15 @@ class RoleController extends Controller
         else
             $role->revokePermissionTo('customer_group');
 
+        if($request->has('role_permission')){
+            $permission = Permission::firstOrCreate(['name' => 'role_permission']);
+            if(!$role->hasPermissionTo('role_permission')){
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('role_permission');
+
         if($request->has('brand')){
             $permission = Permission::firstOrCreate(['name' => 'brand']);
             if(!$role->hasPermissionTo('brand')){
@@ -1240,7 +1249,7 @@ class RoleController extends Controller
         if(!env('USER_VERIFIED'))
             return redirect()->back()->with('not_permitted', 'This feature is disable for demo!');
         $lims_role_data = Roles::find($id);
-        $lims_role_data->is_active = false;
+        $lims_role_data->is_active = 2;
         $lims_role_data->save();
         return redirect('role')->with('not_permitted', 'Data deleted successfully');
     }

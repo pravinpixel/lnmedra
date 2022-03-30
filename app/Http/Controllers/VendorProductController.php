@@ -82,12 +82,23 @@ class VendorProductController extends Controller
                $totalData= $totalFiltered;
                 
             }
+            else if(Auth::user()->role_id == 2){
+                $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', true)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalFiltered = count($products);
+                $totalData= $totalFiltered;
+              }
           else if(Auth::user()->role_id == 1){
             $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
             ->where('is_active', true)
             ->limit($limit)
             ->orderBy($order,$dir)
             ->get();
+            $totalFiltered = count($products);
+            $totalData= $totalFiltered;
           }
             
         }
@@ -803,22 +814,7 @@ class VendorProductController extends Controller
             }
             return 'Product deleted successfully!';
         }
-        public function vendorProductDeny(Request $request)
-        {
-           $product_id = $request['productIdArray'];
-           foreach ((array)$product_id as $id) {
-            if($id !="on")
-            {
-                $lims_product_data =VendorProduct::where('id',$id)->first();
-                // return $lims_product_data;
-                $lims_product_data->is_approve = 2;
-                $lims_product_data->save();
-            }
-           
-        }
-        return redirect('vendorproducts')->with('message', 'Product deleted successfully');
        
-        }
         public function destroy($id)
         {
             $lims_product_data = VendorProduct::findOrFail($id);
@@ -1053,6 +1049,13 @@ class VendorProductController extends Controller
                         $nestedData['ln_price'] = '<div class="btn-group">
                     
                         <input type="number" name="ln_price[]" id="ln_price'.$product->id.'" min="0" class="form-control ln_price check'.$product->id.'text" data-price_row_id="'.$product->id.'" value="'.$product->ln_price.'" style="width:70px;">
+    
+                        <div>';
+                    } 
+                    elseif($product->is_approve == 2) {
+                        $nestedData['ln_price'] = '<div class="btn-group">
+                    
+                        <input type="number" name="ln_price[]" id="ln_price'.$product->id.'" min="0" class="form-control ln_price check'.$product->id.'text" data-price_row_id="'.$product->id.'" value="'.$product->ln_price.'" style="width:70px;" readonly>
     
                         <div>';
                     }
@@ -1426,6 +1429,23 @@ class VendorProductController extends Controller
             $res = $data->update();
            
             return true;
+        }
+         public function vendorProductDeny(Request $request)
+        {
+            // return 1;
+           $product_id = $request['productIdArray'];
+           foreach ((array)$product_id as $id) {
+            if($id !="on")
+            {
+                $lims_product_data =VendorProduct::where('id',$id)->first();
+                // return $lims_product_data;
+                $lims_product_data->is_approve = 2;
+                $lims_product_data->save();
+            }
+           
+        }
+        return redirect('vendorproducts')->with('message', 'Product deleted successfully');
+       
         }
         public function rowDataStore(Request $request)
         {
