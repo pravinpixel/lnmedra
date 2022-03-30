@@ -44,9 +44,9 @@
                                     </button>
                                 </li>
                                 <li class="divider"></li>
-                                {{ Form::open(['route' => ['customer_group.destroy', $customer_group->id], 'method' => 'DELETE'] ) }}
+                                {{ Form::open(['route' => ['customer_group.destroy', $customer_group->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
                                 <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                    <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
                                 </li>
                                 {{ Form::close() }}
                             </ul>
@@ -267,16 +267,16 @@
                                     customer_groupIdArray: customer_group_id
                                 },
                                 success:function(data){
-                                    alert(data);
+                                    Alert("warning", data);
                                 }
                             });
                             dt.rows({ page: 'current', selected: true }).remove().draw(false);
                         }
                         else if(!customer_group_id.length)
-                            alert('No customer group is selected!');
+                            Alert("warning", 'No customer group is selected!');
                     }
                     else
-                        alert('This feature is disable for demo!');
+                        Alert("warning", 'This feature is disable for demo!');
                 }
             },
             {
@@ -315,7 +315,7 @@
             customer_groupArray: customer_group
         },
        success:function(data){
-         alert('Exported to CSV file successfully! Click Ok to download file');
+         Alert("warning", 'Exported to CSV file successfully! Click Ok to download file');
          window.location.href = data;
        }
     });

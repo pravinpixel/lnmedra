@@ -49,9 +49,9 @@
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                 <li><button type="button" data-id="{{$brand->id}}" class="open-EditbrandDialog btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</button></li>
                                 <li class="divider"></li>
-                                {{ Form::open(['route' => ['brand.destroy', $brand->id], 'method' => 'DELETE'] ) }}
+                                {{ Form::open(['route' => ['brand.destroy', $brand->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
                                 <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirm('Are you sure want to delete?')"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                    <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
                                 </li>
                                 {{ Form::close() }}
                             </ul>
@@ -324,16 +324,16 @@
                                     brandIdArray: brand_id
                                 },
                                 success:function(data){
-                                    alert(data);
+                                    Alert("warning" , data);
                                 }
                             });
                             dt.rows({ page: 'current', selected: true }).remove().draw(false);
                         }
                         else if(!brand_id.length)
-                            alert('No brand is selected!');
+                            Alert("warning" , 'No brand is selected!');
                     }
                     else
-                        alert('This feature is disable for demo!');
+                        Alert("warning" , 'This feature is disable for demo!');
                 }
             },
             {

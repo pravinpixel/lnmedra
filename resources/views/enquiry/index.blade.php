@@ -54,9 +54,9 @@
                                 </li>
                                 <li class="divider"></li>
                                 @if(in_array("enquiry-delete", $all_permission))
-                                {{ Form::open(['route' => ['enquiry.destroy', $enquiry->id], 'method' => 'DELETE'] ) }}
+                                {{ Form::open(['route' => ['enquiry.destroy', $enquiry->id], 'method' => 'DELETE','onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
                                 <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                    <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
                                 </li>
                                 {{ Form::close() }}
                                 @endif
@@ -231,16 +231,16 @@
                                     supplierIdArray: supplier_id
                                 },
                                 success:function(data){
-                                    alert(data);
+                                    Alert("warning",data);
                                 }
                             });
                             location.reload();
                         }
                         else if(!supplier_id.length)
-                            alert('No supplier is selected!');
+                            Alert("warning",'No supplier is selected!');
                     }
                     else
-                        alert('This feature is disable for demo!');
+                        Alert("warning",'This feature is disable for demo!');
                 }
             },
             {

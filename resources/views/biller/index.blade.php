@@ -62,9 +62,9 @@
                                 <li class="divider"></li>
                                 @if(in_array("billers-delete", $all_permission))
 
-                                {{ Form::open(['route' => ['biller.destroy', $biller->id], 'method' => 'DELETE'] ) }}
+                                {{ Form::open(['route' => ['biller.destroy', $biller->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
                                 <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                    <button type="submit" class="btn btn-link"  ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
                                 </li>
                                 {{ Form::close() }}
                                 @endif
@@ -138,6 +138,7 @@
         }
         return false;
     }
+    
     var table = $('#biller-table').DataTable( {
         "order": [],
         'language': {
@@ -247,16 +248,16 @@
                                     billerIdArray: biller_id
                                 },
                                 success:function(data){
-                                    alert(data);
+                                    Alert("warning", data);
                                 }
                             });
                             dt.rows({ page: 'current', selected: true }).remove().draw(false);
                         }
                         else if(!biller_id.length)
-                            alert('No biller is selected!');
+                            Alert("warning", 'No biller is selected!');
                     }
                     else
-                        alert('This feature is disable for demo!');
+                        Alert("warning", 'This feature is disable for demo!');
                 }
             },
             {
@@ -284,7 +285,7 @@
                 billerArray: biller
             },
            success:function(data){
-            alert('Exported to CSV file successfully! Click Ok to download file');
+            Alert("warning", 'Exported to CSV file successfully! Click Ok to download file');
             window.location.href = data;
            }
         });

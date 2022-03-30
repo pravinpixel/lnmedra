@@ -260,6 +260,7 @@
                                 return_id[i-1] = returns[13];
                             }
                         });
+                        
                         if(return_id.length && confirm("Are you sure want to delete?")) {
                             $.ajax({
                                 type:'POST',
@@ -274,6 +275,7 @@
                             });
                             //dt.rows({ page: 'current', selected: true }).remove().draw(false);
                         }
+
                         else if(!return_id.length)
                             Alert("warning", 'Nothing is selected!');
                     }
