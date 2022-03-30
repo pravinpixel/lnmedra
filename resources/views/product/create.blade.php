@@ -358,11 +358,11 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-md-4 mt-3">
                                     <input name="promotion" type="checkbox" id="promotion" value="1">&nbsp;
                                     <label><h5> {{trans('file.Add Promotional Price')}}</h5></label>
-                                </div> --}}
+                                </div>
                                 <div class="col-md-12">
                                     <div class="row">
                                         <div class="col-md-4" id="promotion_price">
