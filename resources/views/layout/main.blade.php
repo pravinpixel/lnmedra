@@ -1880,7 +1880,7 @@
           customClass: {
             confirmButton: 'btn btn-primary px-4',
           },
-          confirmButtonText: 'Okey !',
+          confirmButtonText: 'Okay !',
           buttonsStyling: false
         }); 
       }

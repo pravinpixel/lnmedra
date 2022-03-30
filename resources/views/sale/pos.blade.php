@@ -2586,7 +2586,7 @@ $(document).on('click', '.product-img', function() {
         data = data.split(" ");
         pos = product_code.indexOf(data[0]);
         if(pos < 0)
-            Alert('warning', 'Product is not avaialable in the selected outlet !');
+            Alert('warning', 'Product is not available in the selected outlet !');
         else{
             productSearch(data[0]);
         }
