@@ -587,7 +587,7 @@
                             data: $("#product-form").serialize(),
                             success:function(response){
                                 //console.log(response);
-                                location.href = '../vendorproducts';
+                                location.href = '{{ route('vendorproducts.index') }}';
                             },
                             error:function(response) {
                               if(response.responseJSON.errors.name) {
@@ -647,7 +647,7 @@
             }
         },
         successmultiple: function (file, response) {
-            location.href = '../vendorproducts';
+            location.href = '{{ route('vendorproducts.index') }}';
             //console.log(file, response);
         },
         completemultiple: function (file, response) {
