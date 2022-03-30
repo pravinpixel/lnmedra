@@ -606,6 +606,7 @@
     
     function productSearch(data) {
         // alert(data)
+       var _product = data;
        var supplier_id= $('#supplier_id').val();
         // alert(supplier_id)
         $.ajax({
@@ -723,10 +724,9 @@
                         }
                     }
                 }else{
-                    Alert("warning","Product data not filling properly..!")
+                    Alert("warning",`${_product} Product data not filling properly..!`)
                 } 
                 checkQuantity(data[5], flag) 
-               
             }
         });
     }
