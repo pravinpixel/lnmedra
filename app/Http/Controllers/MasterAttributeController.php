@@ -138,7 +138,7 @@ class MasterAttributeController extends Controller
     public function create()
     {
         $role = Role::firstOrCreate(['id' => Auth::user()->role_id]);
-        if ($role->hasPermissionTo('products-add')){
+        if ($role->hasPermissionTo('attribute-index')){
             $product_type = ProductType::where('is_active', true)->get();
             return view('master_attribute.create',compact('product_type'));
         }

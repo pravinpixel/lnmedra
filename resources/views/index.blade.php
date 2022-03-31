@@ -224,28 +224,18 @@
                     <tr>
                         <th> Heads</th>
                         <th> Total Sales</th>
-                        <th> Rental</th>
-                        <th> Salary</th>
-                        <th> Electricity</th>
-                        <th> Internet & telephones</th>
-                        <th> Staf welfare</th>
-                        <th> Transports</th>
-                        <th> Maintenance</th>
-                        <th> In Petty</th>
+                        @foreach($accountData as $key=>$val)
+                        <th> {{ $val['accounts_date_name'] }}</th>
+                        @endforeach
                     </tr>
                   </thead>
                   <tbody>
                       <tr>
                       <td> Allocated %</td>
-                      <td> 10000</td>
-                      <td> 100</td>
-                      <td> 300</td>
-                      <td> 450</td>
-                      <td> 360</td>
-                      <td> 400</td>
-                      <td> 100</td>
-                      <td> 200</td>
-                      <td> 8090</td>
+                      <td class="revenue-data" > 10000</td>
+                      @foreach($accountData as $key=>$val)
+                      <td class="<?php echo(str_replace([' ','&'], '', $val['accounts_date_name']))?>" >0.00</td>
+                      @endforeach
                       </tr>
                   </tbody>
                 </table>
@@ -478,6 +468,11 @@
     });
 
     function dashboardFilter(data){
+      console.log(data.percentagecal);
+      $.each( data.percentagecal, function( key, value ) {
+        console.log( key + ": " + value + "===");
+        $('.'+key).html(parseFloat(value).toFixed(2));
+      });
         $('.revenue-data').hide();
         $('.revenue-data').html(parseFloat(data[0]).toFixed(2));
         $('.revenue-data').show(500);

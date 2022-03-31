@@ -17,6 +17,7 @@ use App\Product_Sale;
 use App\Customer;
 use Session;
 use App\Product;
+use App\AccountsDate;
 use App\VendorProduct;
 use App\RewardPointSetting;
 use DB;
@@ -89,7 +90,7 @@ class HomeController extends Controller
 
     public function index()
     {
-// dd(Auth::user()->role_id);
+            // dd(Auth::user()->role_id);
         //return phpinfo();
         //return Printing::printers();
         /*$printerId = '69993185';
@@ -357,6 +358,8 @@ class HomeController extends Controller
             $start = strtotime("+1 month", $start);
         }
         //return $month;
+        $accountData = AccountsDate::where('is_active',true)->get();
+        // print_r($accountData);die();
         if(Auth::user()->role_id == 3) {
            
             $role = Role::find(Auth::user()->role_id);
@@ -371,50 +374,51 @@ class HomeController extends Controller
        if(Auth::user()->role_id == 6) {
 
        
-        $saleTotal = 0;
-          $saleData = DB::table('purchases')->where('vendor_id',Auth::user()->id)
-        ->join('product_purchases', 'product_purchases.purchase_id', '=', 'purchases.id')
-        ->get();
-        foreach($saleData as $val)
-        {
-            $saleTotal += $val->qty * $val->net_unit_cost;
+            $saleTotal = 0;
+            $saleData = DB::table('purchases')->where('vendor_id',Auth::user()->id)
+            ->join('product_purchases', 'product_purchases.purchase_id', '=', 'purchases.id')
+            ->get();
+            foreach($saleData as $val)
+            {
+                $saleTotal += $val->qty * $val->net_unit_cost;
+            }
+        
+            $paymentReceived = DB::table('purchases')
+            ->where('supplier_id',Auth::user()->vendor_id)
+            
+            // ->select('item')
+            ->sum('paid_amount');
+            $toBePaid = DB::table('purchases')
+            ->where('supplier_id',Auth::user()->vendor_id)
+            ->where('payment_status',1)
+            ->sum('total_cost');
+            $role = Role::find(Auth::user()->role_id);
+            $sale = Sale::sum('grand_total');
+            $sale = round($sale);
+            
+            
+            $purchase = Purchase::sum('grand_total');
+            $purchase = round($purchase);
+            $expense = Expense::sum('amount');
+            $expense = round($expense);
+       
+            if($role->hasPermissionTo('vendor-dashboard-index')){
+            
+                $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '=',1)->count();
+                $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
+                $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
+                $pending = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
+                $permissions = Role::findByName($role->name)->permissions;
+                foreach ($permissions as $permission)
+                    $all_permission[] = $permission->name;
+                if(empty($all_permission))
+                    $all_permission[] = 'dummy text';
+                return view('vendor-dashboard', compact('all_permission','sale','purchase','expense','project','approved','rejected','pending','toBePaid','paymentReceived','saleTotal'));
+            }
+       
         }
-       
-        $paymentReceived = DB::table('purchases')
-        ->where('supplier_id',Auth::user()->vendor_id)
-        
-        // ->select('item')
-        ->sum('paid_amount');
-        $toBePaid = DB::table('purchases')
-        ->where('supplier_id',Auth::user()->vendor_id)
-        ->where('payment_status',1)
-        ->sum('total_cost');
-        $role = Role::find(Auth::user()->role_id);
-        $sale = Sale::sum('grand_total');
-        $sale = round($sale);
-        
-        
-        $purchase = Purchase::sum('grand_total');
-        $purchase = round($purchase);
-        $expense = Expense::sum('amount');
-        $expense = round($expense);
-       
-        if($role->hasPermissionTo('vendor-dashboard-index')){
-           
-            $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '=',1)->count();
-            $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
-            $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
-            $pending = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
-            $permissions = Role::findByName($role->name)->permissions;
-            foreach ($permissions as $permission)
-                $all_permission[] = $permission->name;
-            if(empty($all_permission))
-                $all_permission[] = 'dummy text';
-            return view('vendor-dashboard', compact('all_permission','sale','purchase','expense','project','approved','rejected','pending','toBePaid','paymentReceived','saleTotal'));
-        }
-       
-        }else{
-        return view('index', compact('revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price'));
+        else{
+        return view('index', compact('revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit','accountData', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price'));
         }
     }
 
@@ -580,12 +584,25 @@ class HomeController extends Controller
             $revenue -= $return;
             $profit = $revenue + $purchase_return - $product_cost - $expense;
 
+            $accountData = AccountsDate::where('is_active',true)->get();
+            foreach($accountData as $key=>$val)
+            {
+                // print_r($val['percentage']."=");
+                // print_r((int)($revenue/100) * ($val['percentage'])."|");
+               $amountCal[str_replace([' ','&'], '', $val['accounts_date_name'])] = (int)($revenue/100) * ($val['percentage']);
+            
+               
+            }
+            // die();
+            // print_r($amountCal);die();
+
             $data[0] = $revenue;
             $data[1] = $return;
             $data[2] = $profit;
             $data[3] = $purchase_return;
             $data['purchase'] = $purchase;
             $data['expense'] = $expense;
+            $data['percentagecal'] = $amountCal;
         }
         
         return $data;

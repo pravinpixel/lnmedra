@@ -10,6 +10,6 @@ class AccountsDate extends Model
     use HasFactory;
     protected $fillable =[
 
-        "accounts_date_name", "percentage", "is_active","description"
+        "accounts_date_name", "percentage", "is_active","description","slug"
     ];
 }
