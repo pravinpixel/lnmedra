@@ -110,8 +110,8 @@
 
 @push('scripts')
 <script type="text/javascript">
-    $("ul#people").siblings('a').attr('aria-expanded','true');
-    $("ul#people").addClass("show");
-    $("ul#people #biller-create-menu").addClass("active");
+    $("ul#biller").siblings('a').attr('aria-expanded','true');
+    $("ul#biller").addClass("show");
+    $("ul#biller #biller-create-menu").addClass("active");
 </script>
 @endpush

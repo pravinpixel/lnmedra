@@ -65,16 +65,22 @@
         </div>
         
         <div class="card border pb-4">
-            {{-- <div class="card-header">
-                @if(in_array("sales-add", $all_permission))
+            <div class="card-header">
+               
+                
                     <div class="text-right">
-                        <div class="btn-group">
+                        <div class="text-right mt-4">
+                            
+                            @if(userHasAccess('sales-add'))
                             <a href="{{route('sales.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Sale')}}</a>
-                            <a href="{{url('sales/sale_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Sale')}}</a>
+                            @endif
+                            @if(userHasAccess('sale_import'))
+                             <a href="{{url('sales/sale_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Sale')}}</a>
+                            @endif
                         </div>
                     </div>
-                @endif
-            </div> --}}
+               
+            </div> 
       
             <table id="sale-table" class="table border-0  m-0 sale-list" style="width: 100%; box-shadow: none !important">
                 <thead>

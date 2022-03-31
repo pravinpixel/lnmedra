@@ -2,9 +2,12 @@
  
 <section>
     <div class="container-fluid">
-        @if(in_array("suppliers-add", $all_permission))
+        
+        @if(userHasAccess('suppliers-add'))
         <a href="{{route('supplier.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Supplier')}}</a>
-        <!-- <a href="#" data-toggle="modal" data-target="#importSupplier" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Supplier')}}</a> -->
+        @endif
+        @if(userHasAccess('supplier_import'))
+        <a href="#" data-toggle="modal" data-target="#importSupplier" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Supplier')}}</a>
         @endif
     </div>
     <div class="table-responsive">

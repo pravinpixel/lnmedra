@@ -2,9 +2,13 @@
  
 <section>
     <div class="container-fluid">
-        @if(in_array("products-add", $all_permission))
+        
+        @if(userHasAccess('products-add'))
             <a href="{{route('products.create')}}" class="btn btn-info rounded-pill"><i class="dripicons-plus"></i> {{__('file.add_product')}}</a>
-            <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary rounded-pill ml-auto"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a>
+            
+        @endif
+        @if(userHasAccess('product_import'))
+        <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary rounded-pill ml-auto"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a>
         @endif
     </div>
     <div class="table-responsive">

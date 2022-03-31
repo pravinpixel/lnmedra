@@ -1240,7 +1240,130 @@ class RoleController extends Controller
         }
         else
             $role->revokePermissionTo('today_profit');
+            
+        if($request->has('customer_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'customer_import']);
+            if(!$role->hasPermissionTo('customer_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('customer_import');
 
+        if($request->has('sale_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'sale_import']);
+            if(!$role->hasPermissionTo('sale_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('sale_import');
+
+
+        if($request->has('category_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'category_import']);
+            if(!$role->hasPermissionTo('category_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('category_import');
+             
+           
+        if($request->has('product_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'product_import']);
+            if(!$role->hasPermissionTo('product_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('product_import');
+
+        if($request->has('supplier_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'supplier_import']);
+            if(!$role->hasPermissionTo('supplier_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('supplier_import');
+
+        if($request->has('purchases_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'purchases_import']);
+            if(!$role->hasPermissionTo('purchases_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('purchases_import');
+       
+        if($request->has('transfers_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'transfers_import']);
+            if(!$role->hasPermissionTo('transfers_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('transfers_import');
+        
+        if($request->has('biller_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'biller_import']);
+            if(!$role->hasPermissionTo('biller_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('biller_import');
+            
+            
+        if($request->has('outlet_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'outlet_import']);
+            if(!$role->hasPermissionTo('outlet_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('outlet_import');
+        
+        if($request->has('customer_group_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'customer_group_import']);
+            if(!$role->hasPermissionTo('customer_group_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('customer_group_import');
+          
+        if($request->has('brand_import')) {
+            $permission = Permission::firstOrCreate(['name' => 'brand_import']);
+            if(!$role->hasPermissionTo('brand_import')) {
+                $role->givePermissionTo($permission);
+            }
+        }
+        else
+            $role->revokePermissionTo('brand_import');
+           
+            if($request->has('unit_import')) {
+                $permission = Permission::firstOrCreate(['name' => 'unit_import']);
+                if(!$role->hasPermissionTo('unit_import')) {
+                    $role->givePermissionTo($permission);
+                }
+            }
+            else
+                $role->revokePermissionTo('unit_import');
+
+                if($request->has('tax_import')) {
+                    $permission = Permission::firstOrCreate(['name' => 'tax_import']);
+                    if(!$role->hasPermissionTo('tax_import')) {
+                        $role->givePermissionTo($permission);
+                    }
+                }
+                else
+                    $role->revokePermissionTo('tax_import');
+                
+            
+            
+            
         return redirect('role')->with('message', 'Permission updated successfully');
     }
 

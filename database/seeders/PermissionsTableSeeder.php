@@ -1124,7 +1124,118 @@ class PermissionsTableSeeder extends Seeder
                 'guard_name' => 'web',
                 'created_at' => NULL,
                 'updated_at' => NULL,
-            )
+            ),
+            138 => 
+            array (
+                'id' => 147,
+                'name' => 'customer_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            139 => 
+            array (
+                'id' => 148,
+                'name' => 'sale_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            140 => 
+            array (
+                'id' => 149,
+                'name' => 'category_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            141 => 
+            array (
+                'id' => 150,
+                'name' => 'product_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            142 => 
+            array (
+                'id' => 151,
+                'name' => 'supplier_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            143 => 
+            array (
+                'id' => 152,
+                'name' => 'purchases_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            144 => 
+            array (
+                'id' => 153,
+                'name' => 'transfers_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            145 => 
+            array (
+                'id' => 154,
+                'name' => 'biller_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            146 => 
+            array (
+                'id' => 155,
+                'name' => 'outlet_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            147 => 
+            array (
+                'id' => 156,
+                'name' => 'customer_group_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+
+            148 => 
+            array (
+                'id' => 157,
+                'name' => 'brand_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            149 => 
+            array (
+                'id' => 158,
+                'name' => 'unit_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            150 => 
+            array (
+                'id' => 159,
+                'name' => 'tax_import',
+                'guard_name' => 'web',
+                'created_at' => NULL,
+                'updated_at' => NULL,
+            ),
+            
+            
+            
+            
+
+            
     ));
     }
 }

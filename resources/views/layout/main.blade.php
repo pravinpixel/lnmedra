@@ -211,11 +211,13 @@
                     <li id="sale-list-menu"><a href="{{route('sales.index')}}">{{trans('file.Sale List')}}</a></li>
                     @if($sale_add_permission_active)
                     <li><a href="{{route('sale.pos')}}">POS</a></li>
-                    <!-- <li id="sale-create-menu"><a href="{{route('sales.create')}}">{{trans('file.Add Sale')}}</a></li> -->
-                    <!-- <li id="sale-import-menu"><a href="{{url('sales/sale_by_csv')}}">{{trans('file.Import Sale By CSV')}}</a></li> -->
+                    <li id="sale-create-menu"><a href="{{route('sales.create')}}">{{trans('file.Add Sale')}}</a></li>
+                    
                     @endif
                   @endif
-
+                  @if(userHasAccess('sale_import'))
+                  <li id="sale-import-menu"><a href="{{url('sales/sale_by_csv')}}">{{trans('file.Import Sale By CSV')}}</a></li>
+                  @endif
                   <!-- @if($gift_card_permission_active)
                   <li id="gift-card-menu"><a href="{{route('gift_cards.index')}}">{{trans('file.Gift Card List')}}</a> </li>
                   @endif -->
@@ -1183,10 +1185,11 @@
                 <li><a href="#enquiry_management" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.enquiry_management')}}</span><span></a>
                 @endif
                 <ul id="enquiry_management" class="collapse list-unstyled ">
+                  <li id="enquiry-list-menu"><a href="{{route('enquiry.index')}}">{{__('file.enquiry_list')}}</a></li>
                   @if($add_enquiry_permission_active)
                   <li id="enquiry-create-menu"><a href="{{route('enquiry.create')}}">{{__('file.add_enquiry')}}</a></li>
                   @endif
-                  <li id="enquiry-list-menu"><a href="{{route('enquiry.index')}}">{{__('file.enquiry_list')}}</a></li>
+                  
                 </ul>
               </li>
               @endif

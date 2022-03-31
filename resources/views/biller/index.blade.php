@@ -2,8 +2,11 @@
  
 <section>
     <div class="container-fluid">
-        @if(in_array("billers-add", $all_permission))
+
+        @if(userHasAccess('billers-add'))
         <a href="{{route('biller.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Biller')}}</a>&nbsp;
+        @endif
+        @if(userHasAccess('biller_import'))
         <a href="#" data-toggle="modal" data-target="#importbiller" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Biller')}}</a>
         @endif
     </div>
@@ -113,9 +116,9 @@
 @push('scripts')
 <script type="text/javascript">
 
-    $("ul#people").siblings('a').attr('aria-expanded','true');
-    $("ul#people").addClass("show");
-    $("ul#people #biller-list-menu").addClass("active");
+    $("ul#biller").siblings('a').attr('aria-expanded','true');
+    $("ul#biller").addClass("show");
+    $("ul#biller #biller-list-menu").addClass("active");
 
     var biller_id = [];
     var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;

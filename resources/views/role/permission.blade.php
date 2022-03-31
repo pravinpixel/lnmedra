@@ -1688,6 +1688,180 @@
 						                </span>
 						            </td>
 						        </tr>
+							
+								<tr>
+						            <td>{{trans('file.Import')}}</td>
+						            <td class="report-permissions" colspan="5">
+						                <span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("customer_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="customer_import" name="customer_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="customer_import" name="customer_import">
+							                    	@endif
+								                    <label for="customer_import" class="padding05">{{trans('file.customer')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("sale_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="sale_import" name="sale_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="sale_import" name="sale_import">
+							                    	@endif
+								                    <label for="sale_import" class="padding05">{{trans('file.Sale')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("category_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="category_import" name="category_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="category_import" name="category_import">
+							                    	@endif
+								                    <label for="category_import" class="padding05">{{trans('file.category')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("product_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="product_import" name="product_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="product_import" name="product_import">
+							                    	@endif
+								                    <label for="product_import" class="padding05">{{trans('file.product')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("supplier_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="supplier_import" name="supplier_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="supplier_import" name="supplier_import">
+							                    	@endif
+								                    <label for="supplier_import" class="padding05">{{trans('file.Supplier')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("purchases_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="purchases_import" name="purchases_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="purchases_import" name="purchases_import">
+							                    	@endif
+								                    <label for="purchases_import" class="padding05">{{trans('file.Purchase')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("transfers_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="transfers_import" name="transfers_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="transfers_import" name="transfers_import">
+							                    	@endif
+								                    <label for="transfers_import" class="padding05">{{trans('file.transfers')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("biller_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="biller_import" name="biller_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="biller_import" name="biller_import">
+							                    	@endif
+								                    <label for="biller_import" class="padding05">{{trans('file.biller')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("outlet_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="outlet_import" name="outlet_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="outlet_import" name="outlet_import">
+							                    	@endif
+								                    <label for="outlet_import" class="padding05">{{trans('file.Outlet')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("customer_group_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="customer_group_import" name="customer_group_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="customer_group_import" name="customer_group_import">
+							                    	@endif
+								                    <label for="customer_group_import" class="padding05">{{trans('file.Customer Group Import')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("brand_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="brand_import" name="brand_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="brand_import" name="brand_import">
+							                    	@endif
+								                    <label for="brand_import" class="padding05">{{trans('file.Brand')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("unit_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="unit_import" name="unit_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="unit_import" name="unit_import">
+							                    	@endif
+								                    <label for="unit_import" class="padding05">{{trans('file.Unit')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("tax_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="tax_import" name="tax_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="tax_import" name="tax_import">
+							                    	@endif
+								                    <label for="tax_import" class="padding05">{{trans('file.Tax')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
+										
+										
+										
+						              
+						            </td>
+						        </tr>
+								<tr>
+						            <td>{{trans('file.Export')}}</td>
+						            <td class="report-permissions" colspan="5">
+						               
+										
+						            </td>
+						        </tr>
+								
 						        </tbody>
 						    </table>
 						</div>
