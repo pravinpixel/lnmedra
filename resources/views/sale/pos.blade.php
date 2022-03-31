@@ -3440,9 +3440,22 @@ function cancel(rownumber) {
 function confirmCancel() {
     var audio = $("#mysoundclip2")[0];
     audio.play();
-    if (confirm("Are you sure want to cancel?")) {
-        cancel($('table.order-list tbody tr:last').index());
-    }
+    // if (confirm("Are you sure want to cancel?")) {
+    //     cancel($('table.order-list tbody tr:last').index());
+    // }
+    Swal.fire({
+          title: 'Are you sure?',
+          text: "You want to delete this record !",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#0095ff',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            cancel($('table.order-list tbody tr:last').index());
+        } 
+    })
     return false;
 }
 

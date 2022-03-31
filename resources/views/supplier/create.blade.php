@@ -7,18 +7,19 @@
             color: red;
         }
 </style>
-<section class="forms">
+<div class="forms">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <h4><strong>{{trans('file.Add Supplier')}}</strong></h4>
-                        </div>
+                       
                         <div class="card-body">
                             <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                             {!! Form::open(['route' => 'supplier.store','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true]) !!}
                             <div class="row">
+                                <div class="col-12">
+                                    <h4 class="mb-4"><strong>{{trans('file.Add Supplier')}}</strong></h4>
+                                </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.name')}} *</strong> </label>
@@ -117,9 +118,7 @@
                                 </div>
                                 
                                 <div  class="col-md-12">
-                                <div class="card-header d-flex align-items-center">
-                                    <h4><strong>{{trans('file.Company Info')}}</strong></h4>
-                                </div>
+                                    <h4 class="my-4"><strong>{{trans('file.Company Info')}}</strong></h4>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -156,9 +155,7 @@
                                     </div>
                                 </div>
                                 <div  class="col-md-12">
-                                <div class="card-header d-flex align-items-center">
-                                    <h4><strong>{{trans('file.Bank Info')}}</strong></h4>
-                                </div>
+                                    <h4 class="my-4"><strong>{{trans('file.Bank Info')}}</strong></h4>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group">

@@ -1,7 +1,7 @@
 @extends('layout.main')
 
 @section('content')
-<section class="forms">
+<div class="forms">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -13,7 +13,7 @@
                         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                         <form id="product-form">
                             <div class="row">
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">                                        
                                         <input type="hidden" name="vendoruserid" id="vendoruserid" value="{{ Auth::id() }}">
                                         <label>{{trans('file.Product Type')}} *</strong> </label>
@@ -28,14 +28,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.Product Name')}} *</strong> </label>
                                         <input type="text" name="name" class="form-control" id="name" aria-describedby="name" required>
                                         <span class="validation-msg" id="name-error"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.Product Code')}} *</strong> </label>
                                         <div class="input-group">
@@ -49,7 +49,7 @@
                                 </div>
                               
                               
-                                <div class="col-md-4" id="attribute_div">
+                                <div class="col-md-6" id="attribute_div">
                                     <div class="form-group">
                                         <label>{{trans('file.Attribute')}} *</strong> </label>
                                         
@@ -58,7 +58,7 @@
                                         </div> 
                                     </div>
                                 </div>
-                                <div class="col-md-3">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.Brand')}}</strong> </label>
                                         <div class="input-group">
@@ -70,7 +70,7 @@
                                       </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.category')}} *</strong> </label>
                                         <div class="input-group">
@@ -90,7 +90,7 @@
                                       <span class="validation-msg"></span>
                                     </div>
                                 </div>
-                                <div id="alert-qty" class="col-md-2">
+                                <div id="alert-qty" class="col-md-3">
                                     <div class="form-group">
                                         <label>{{trans('file.Quantity')}}</strong> </label>
                                         <input type="number" name="qty" class="form-control noscroll" min="0" step="any">

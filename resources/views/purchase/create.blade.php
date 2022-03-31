@@ -640,16 +640,16 @@
                         var newRow = $("<tr>");
                         var cols = '';
                         temp_unit_name = (data[6]).split(',');
-                        cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target=""> </button></td>';
+                        cols += '<td style="padding: 0 !important; text-align:center !important">' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target=""> </button></td>';
                         // cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
-                        cols += '<td>' + data[1] + '</td>';
-                        cols += '<td><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
+                        cols += '<td style="padding: 0 !important; text-align:center !important">' + data[1] + '</td>';
+                        cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
                         if($('select[name="status"]').val() == 1)
-                            cols += '<td class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
+                            cols += '<td style="padding: 0 !important; text-align:center !important" class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
                         else if($('select[name="status"]').val() == 2)
-                            cols += '<td class="recieved-product-qty"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
+                            cols += '<td style="padding: 0 !important; text-align:center !important" class="recieved-product-qty"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
                         else
-                            cols += '<td class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="0" step="any"/></td>';
+                            cols += '<td style="padding: 0 !important; text-align:center !important" class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="0" step="any"/></td>';
                         // if(data[10]) {
                         //     cols += '<td><input type="text" class="form-control batch-no" name="batch_no[]" required/></td>';
                         //     cols += '<td><input type="text" class="form-control expired-date" name="expired_date[]" required/></td>';
@@ -662,7 +662,7 @@
                         // cols += '<td><input type="number" class="form-control qty" name="edit_discount" value="0" step="any" required/></td>';
                         
                             
-                        cols += `<td>
+                        cols += `<td style="padding: 0 !important; text-align:center !important"> 
                                 <select name="edit_tax_rate[]" class="form-control">
                                 @foreach($tax_name_all as $key => $name)
                                 <option value="{{$key}}">{{$name}}</option>
@@ -682,7 +682,7 @@
                         console.log(data[6]);
                         console.log(srr);
                          console.log(typeof(srr));
-                        cols += '<td><select name="edit_unit[]" class="form-control">';
+                        cols += '<td style="padding: 0 !important; text-align:center !important"><select name="edit_unit[]" class="form-control">';
                         
                         $.each( srr, function( key, value ) {                                
                                 cols += '<option value="key">'+value+'</option>';
@@ -691,11 +691,11 @@
                             
                         cols +='</select></td>'
 
-                        cols += '<td class=""><input type="text" class="net_unit_cost form-control" min="0" value="1" name="net_unit_cost[]" /></td>';
-                        cols += '<td class=""><input type="text" class="discount-value form-control" min="0" name="discount[]" /></td>';
-                        cols += '<td class="tax"></td>';
-                        cols += '<td class="sub-total"></td>';
-                        cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">{{trans("file.delete")}}</button></td>';
+                        cols += '<td style="padding: 0 !important; text-align:center !important" class=""><input type="text" class="net_unit_cost form-control" min="0" value="1" name="net_unit_cost[]" /></td>';
+                        cols += '<td style="padding: 0 !important; text-align:center !important" class=""><input type="text" class="discount-value form-control" min="0" name="discount[]" /></td>';
+                        cols += '<td style="padding: 0 !important; text-align:center !important" class="tax"></td>';
+                        cols += '<td style="padding: 0 !important; text-align:center !important" class="sub-total"></td>';
+                        cols += '<td style="padding: 0 !important; text-align:center !important"><button type="button" class="ibtnDel btn btn-sm  text-danger"> <i class="fa fa-times"></i></button></td>';
                         cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data[1] + '"/>';
                         cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[9] + '"/>';
                         cols += '<input type="hidden" class="purchase-unit" name="purchase_unit[]" value="' + temp_unit_name[0] + '"/>';

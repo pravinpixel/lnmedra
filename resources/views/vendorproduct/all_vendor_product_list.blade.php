@@ -41,7 +41,7 @@
 
         <div class="m-3 ml-4">
             <button class="btn-sm btn-success btn" id="btnClick" type="submit">Approve</button>
-            <a class="btn-sm btn-danger btn"  onclick="rejectProduct()" >Reject</a>
+            <button class="btn-sm btn-danger btn"  onclick="rejectProduct()" >Reject</button>
         </div>
        
         <!-- <div class="m-3 ml-4">

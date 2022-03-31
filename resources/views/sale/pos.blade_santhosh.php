@@ -3687,9 +3687,11 @@ function cancel(rownumber) {
 function confirmCancel() {
     var audio = $("#mysoundclip2")[0];
     audio.play();
+
     if (confirm("Are you sure want to cancel?")) {
-        cancel($('table.order-list tbody tr:last').index());
+        
     }
+    
     return false;
 }
 
