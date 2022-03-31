@@ -112,11 +112,11 @@ class AccountsDateController extends Controller
                             ';
                             
                          
-                if(in_array("attribute-edit", $request['all_permission']))
+                if(in_array("attribute-index", $request['all_permission']))
                     $nestedData['options'] .= '<li>
                             <a href="'.route('accounts-date.edit', $product['id']).'" class="btn btn-link"><i class="fa fa-edit"></i> '.trans('file.edit').'</a>
                         </li>';
-                if(in_array("attribute-delete", $request['all_permission']))
+                if(in_array("attribute-index", $request['all_permission']))
                     $nestedData['options'] .= \Form::open(["route" => ["accounts-date.destroy", $product['id']], "method" => "DELETE"] ).'
                             <li>
                               <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="fa fa-trash"></i> '.trans("file.delete").'</button> 
@@ -168,7 +168,7 @@ class AccountsDateController extends Controller
     public function edit($id)
     {
         $role = Role::firstOrCreate(['id' => Auth::user()->role_id]);
-        if ($role->hasPermissionTo('attribute-edit')) {
+        if ($role->hasPermissionTo('attribute-index')) {
           
             $data = AccountsDate::where('id',$id)->where('is_active',true)->first();
             // $product_type  = AccountsDate::where('is_active',true)->get();

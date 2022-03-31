@@ -106,11 +106,11 @@ class MasterAttributeController extends Controller
                             // <li>
                             //     <button="type" class="btn btn-link view"><i class="fa fa-eye"></i> '.trans('file.View').'</button>
                             // </li>
-                if(in_array("attribute-edit", $request['all_permission']))
+                if(in_array("attribute-index", $request['all_permission']))
                     $nestedData['options'] .= '<li>
                             <a href="'.route('master-attribute.edit', $product->id).'" class="btn btn-link"><i class="fa fa-edit"></i> '.trans('file.edit').'</a>
                         </li>';
-                if(in_array("attribute-delete", $request['all_permission']))
+                if(in_array("attribute-index", $request['all_permission']))
                     $nestedData['options'] .= \Form::open(["route" => ["master-attribute.destroy", $product->id], "method" => "DELETE"] ).'
                             <li>
                               <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="fa fa-trash"></i> '.trans("file.delete").'</button> 
@@ -173,7 +173,7 @@ class MasterAttributeController extends Controller
     public function edit($id)
     {
         $role = Role::firstOrCreate(['id' => Auth::user()->role_id]);
-        if ($role->hasPermissionTo('attribute-edit')) {
+        if ($role->hasPermissionTo('attribute-index')) {
           
             $data = MasterAttribute::where('id',$id)->first();
             // $productType = ProductType::where('is_active',true)->where('id','=',$data->product_type)->first();

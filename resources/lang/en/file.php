@@ -13,7 +13,7 @@ return [
 	'user_management'=>'User management',
 	'vendor_login'=>'Vendor Login',
 	'User Name'=>'User Name',
-	'Accounts Date'=>'Accounts Date',
+	'Accounts Heads'=>'Accounts Heads',
 	'Vendor Name'=>'Vendor Name',
 	'secure_login'=>'Secure Login',
 	'provision_manage_the_products'=>'Provision To Manage The Products',

@@ -16,10 +16,10 @@
 @endif
 <section>
     <div class="container-fluid">
-        @if(in_array("accounts-date-add", $all_permission))
+        
             <a href="{{route('accounts-date.create')}}" class="btn btn-info rounded-pill"><i class="dripicons-plus"></i> {{__('file.add_accounts')}}</a>
             <!-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary rounded-pill ml-auto"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> -->
-        @endif
+        
     </div>
     <div class="table-responsive">
         <table id="product-data-table" class="table custom table-hover table-centered" style="width: 100%">

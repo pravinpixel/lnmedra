@@ -1209,7 +1209,7 @@
 							                    	@else
 							                    	<input type="checkbox" value="1" id="supplier-report" name="supplier-report">
 							                    	@endif
-								                    <label for="Supplier-report" class="padding05">{{trans('file.Supplier Report')}} &nbsp;&nbsp;</label>
+								                    <label for="supplier-report" class="padding05">{{trans('file.Supplier Report')}} &nbsp;&nbsp;</label>
 								                </div>
 								            </div>
 						                </span>
@@ -1422,6 +1422,31 @@
 								                </div>
 								            </div>
 						                </span>
+										<span>
+											<div aria-checked="false" aria-disabled="false">
+												<div class="checkbox">
+													@if(in_array("attribute-index", $all_permission))
+													<input type="checkbox" value="1" id="attribute-index" name="attribute-index" checked />
+													@else
+													<input type="checkbox" value="1" id="attribute-index" name="attribute-index">
+													@endif
+													<label for="attribute-index" class="padding05">{{trans('file.Master Attribute')}} &nbsp;&nbsp;</label>
+												</div>
+											</div>
+										</span>
+										<span>
+											<div aria-checked="false" aria-disabled="false">
+												<div class="checkbox">
+													@if(in_array("accounts-date-index", $all_permission))
+													<input type="checkbox" value="1" id="accounts-date-index" name="accounts-date-index" checked />
+													@else
+													<input type="checkbox" value="1" id="accounts-date-index" name="accounts-date-index">
+													@endif
+													<!-- <label for="accounts-date-index"></label> -->
+													<label for="accounts-date-index" class="padding05">{{trans('file.Accounts Heads')}} &nbsp;&nbsp;</label>
+												</div>
+											</div>
+										</span>
 						                <span>
 						                    <div aria-checked="false" aria-disabled="false">
 								                <div class="checkbox">
@@ -1436,7 +1461,7 @@
 						                </span>
 						            </td>
 						        </tr>
-								<tr>
+								<!-- <tr>
 						            <td>{{trans('file.Master Attribute')}}</td>
 						            <td class="text-center">
 						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
@@ -1486,8 +1511,8 @@
 								            </div>
 						            	</div>
 						            </td>
-						        </tr>
-								<tr>
+						        </tr> -->
+								<!-- <tr>
 						            <td>{{trans('file.Accounts Date')}}</td>
 						            <td class="text-center">
 						                <div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
@@ -1537,7 +1562,7 @@
 								            </div>
 						            	</div>
 						            </td>
-						        </tr>
+						        </tr> -->
 						        <tr>
 						            <td>{{trans('file.Miscellaneous')}}</td>
 						            <td class="report-permissions" colspan="5">
