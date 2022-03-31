@@ -113,13 +113,16 @@
       }
     </style>
   </head>
+  
   <body onload="myFunction()">
+    {{--======= Alert Session =======--}}
+    @include('__sections.alert_notification')
+    {{--======== Alert Session =======--}}
+
+      
     <div id="loader"></div>
     <div class="pos-page">
-
-      <div style="display:none;" id="content" class="animate-bottom">
-          @yield('content')
-      </div>
+       @yield('content')
     </div>
 
     <!-- notification modal -->
@@ -376,6 +379,9 @@
             </div>
         </div>
     </div>
+
+
+    
     <!-- end supplier modal -->
     <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery.min.js') ?>"></script>
     <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery-ui.min.js') ?>"></script>

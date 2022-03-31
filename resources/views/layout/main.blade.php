@@ -14,7 +14,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap.css') ?>" type="text/css">
 
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="preload" href="<?php echo asset('vendor/bootstrap-toggle/css/bootstrap-toggle.min.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="<?php echo asset('vendor/bootstrap-toggle/css/bootstrap-toggle.min.css') ?>" rel="stylesheet"></noscript>
     <link rel="preload" href="<?php echo asset('vendor/bootstrap/css/bootstrap-datepicker.min.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -66,114 +66,20 @@
       <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap-rtl.min.css') ?>" type="text/css">
       <link rel="stylesheet" href="<?php echo asset('css/custom-rtl.css') ?>" type="text/css" id="custom-style">
     @endif
-
-    <style>
-      .swal2-title {
-        font-size: 20px !important;
-        padding: 0.8em 4em 0 !important
-      }
-      .table th{
-        background: #0095ff !important;
-        color: white !important;
-        border-bottom: 1px solid #3b9970 !important;
-        text-align: center !important
-      }
-      .table th,td {
-        vertical-align: middle !important
-      }
-      .top-0 {
-        top:  0 !important
-      }
-      .switch {
-        display: inline-block;
-        height: 24px;
-        position: relative;
-        width: 50px;
-      }
-
-      .switch input {
-        display:none;
-      }
-
-      .slider {
-        background-color: #ccc;
-        bottom: 0;
-        cursor: pointer;
-        left: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
-        transition: .4s;
-      }
-
-      .slider:before {
-        background-color: #fff;
-        bottom: 4px;
-        content: "";
-        height: 16px;
-        left: 4px;
-        position: absolute;
-        transition: .4s;
-        width: 16px;
-      }
-
-      input:checked + .slider {
-        background-color: #2395FC;
-      }
-
-      input:checked + .slider:before {
-        transform: translateX(26px);
-      }
-
-      .slider.round {
-        border-radius: 34px;
-      }
-
-      .slider.round:before {
-        border-radius: 50%;
-      }
-        
-      .alert {
-        position: fixed !important;
-        top: 0%;
-        left: 50%;
-        transform: translateX(-50%);
-        max-width: 350px !important;
-        box-shadow: 0px 0px 20px gray
-      }
-      #header-top.active {
-        padding-left: 0 !important;
-        transition:all .5s !important
-      }
-      #header-top {
-        transition:all .5s !important
-      }
-      input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-        }
-        .dt-checkboxes-cell {
-            text-align: center !important
-        }
-        .checkbox label {
-            padding: 0 !important;
-            margin: 0 !important
-        }
-        table img {
-            height: 30px !important;
-            width: 40px !important;
-            object-fit: cover ;
-            border: 1px solid #1EA964;
-            background: #1EA964
-        }
-        .row {
-          margin: 0 !important
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset("css/style.css") }}">
+ 
   </head>
 
+  @if(session()->has('not_permitted'))
+    <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
+  @endif 
+
   <body onload="myFunction()">
+
+     {{--======= Alert Session =======--}}
+     @include('__sections.alert_notification')
+     {{--======== Alert Session =======--}}
+
    
     <main>
       <div id="loader"></div>
@@ -1859,7 +1765,7 @@
         <div style="display:none" id="content" class="animate-bottom">
 
           {{--======= Page Navigator =======--}}
-            @include('breadcrumb')
+            @include('__sections.breadcrumb')
           {{--======== Page Navigator =======--}}
 
           @yield('content')
@@ -1874,6 +1780,7 @@
     </main>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
     <script>
       function Alert(type, text) {
         Swal.fire({
@@ -1922,6 +1829,9 @@
     <script type="text/javascript" src="<?php echo asset('js/charts-custom.js') ?>"></script>
     <script type="text/javascript" src="<?php echo asset('vendor/jquery-validation/jquery.validate.min.js') ?>"></script>
     <script type="text/javascript" src="<?php echo asset('vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js')?>"></script>
+    
+    
+
     @if( Config::get('app.locale') == 'ar' || $general_setting->is_rtl)
       <script type="text/javascript" src="<?php echo asset('js/front_rtl.js') ?>"></script>
     @else
@@ -2100,7 +2010,6 @@
                 return false;
             return true;
         }
-    </script>
-  
+    </script> 
   </body>
 </html>

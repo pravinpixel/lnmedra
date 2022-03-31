@@ -12,80 +12,88 @@
         ->where([
         ['permissions.name', 'customers-add'],
         ['role_id', \Auth::user()->role_id] ])->first();
-        $role = DB::table('roles')->find(Auth::user()->role_id);
-
-    // =========== Index Permission  ====== ======
-
-        $index_permission = DB::table('permissions')->where('name', 'products-index')->first();
-        $index_permission_active = DB::table('role_has_permissions')->where([
-            ['permission_id', $index_permission->id],
-            ['role_id', $role->id]
-        ])->first();
-
-        $print_barcode = DB::table('permissions')->where('name', 'print_barcode')->first();
-        $print_barcode_active = DB::table('role_has_permissions')->where([
-            ['permission_id', $print_barcode->id],
-            ['role_id', $role->id]
-        ])->first();
-
-        $stock_count = DB::table('permissions')->where('name', 'stock_count')->first();
-        $stock_count_active = DB::table('role_has_permissions')->where([
-            ['permission_id', $stock_count->id],
-            ['role_id', $role->id]
-        ])->first();
-
-        $adjustment = DB::table('permissions')->where('name', 'adjustment')->first();
-        $adjustment_active = DB::table('role_has_permissions')->where([
-            ['permission_id', $adjustment->id],
-            ['role_id', $role->id]
-        ])->first();
-
-    // =========== END: Index Permission  ====== ======
-
 @endphp    
-  
+
 <!-- Side Navbar -->
-<header class="header mb-3 bg-white">
-    <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg ">
-            <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ asset('logo/logo-sm.png') }}" height="40">
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div>
-                <a href="{{url('/')}}"><strong>L & N Group | Sales & POS Management</strong></a>
-            </div>
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="dripicons-gear"></i> <b>{{ucfirst(Auth::user()->name)}}</b>
-                        </a>
-                        <div class="dropdown-menu shadow-sm border" aria-labelledby="navbarDropdownMenuLink" style="transform: translateX(-66px);">
-                            <a class="dropdown-item" href="{{route('user.profile', ['id' => Auth::id()])}}">
-                                <i class="dripicons-user"></i> {{trans('file.profile')}}
-                            </a>
-                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                <i class="dripicons-power"></i>
-                                {{trans('file.logout')}}
-                            </a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </nav> 
-    </div>
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
+<header class="header mb-3">
+    <nav class="navbar"  >
+      <div class="container-fluid">
+        <div class="navbar-holder d-flex align-items-center justify-content-between">
+          <a  href="{{ route('home') }}" class="py-1">
+            <img src="{{ asset('logo/logo-sm.svg') }}" alt="" width="230px">
+        </a>
+          
+          <span class="brand-big">
+            <a href="{{url('/')}}"><h2>L & N Group | Sales & POS Management</h2></a>
+          </span>
+
+          <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
+            <li class="nav-item"><a href="{{ route('home') }}"><i class="fa fa-home fa-2x" style="font-size: 20px;"></i></a></li>
+            <li class="nav-item"><a id="btnFullscreen" data-toggle="tooltip" title="Full Screen"><i class="dripicons-expand"></i></a></li>
+            <li class="nav-item">
+              <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-user"></i> <span>{{ucfirst(Auth::user()->name)}}</span> <i class="fa fa-angle-down"></i>
+              </a>
+              <ul class="right-sidebar">
+                  <li>
+                    <a href="{{route('user.profile', ['id' => Auth::id()])}}"><i class="dripicons-user"></i> {{trans('file.profile')}}</a>
+                  </li>
+           
+                  <li>
+                    <a href="{{route('setting.general')}}"><i class="dripicons-gear"></i> {{trans('file.settings')}}</a>
+                  </li> 
+                  <li>
+                    <a href="{{ route('logout') }}"
+                       onclick="event.preventDefault();
+                                     document.getElementById('logout-form').submit();"><i class="dripicons-power"></i>
+                        {{trans('file.logout')}}
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                  </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 </header>
 
 
 <nav class="side-navbar  shrink">
     <div class="side-navbar-wrapper">
+      <!-- Sidebar Header    -->
+      <!-- Sidebar Navigation Menus-->
       <div class="main-menu">
         <ul id="side-main-menu" class="side-menu list-unstyled">
-          <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>  
+          <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
+          <?php
+            $role = DB::table('roles')->find(Auth::user()->role_id);
+            $index_permission = DB::table('permissions')->where('name', 'products-index')->first();
+            $index_permission_active = DB::table('role_has_permissions')->where([
+                ['permission_id', $index_permission->id],
+                ['role_id', $role->id]
+            ])->first();
+
+            $print_barcode = DB::table('permissions')->where('name', 'print_barcode')->first();
+                  $print_barcode_active = DB::table('role_has_permissions')->where([
+                      ['permission_id', $print_barcode->id],
+                      ['role_id', $role->id]
+                  ])->first();
+
+              $stock_count = DB::table('permissions')->where('name', 'stock_count')->first();
+                  $stock_count_active = DB::table('role_has_permissions')->where([
+                      ['permission_id', $stock_count->id],
+                      ['role_id', $role->id]
+                  ])->first();
+
+                $adjustment = DB::table('permissions')->where('name', 'adjustment')->first();
+                $adjustment_active = DB::table('role_has_permissions')->where([
+                    ['permission_id', $adjustment->id],
+                    ['role_id', $role->id]
+                ])->first();
+          ?>
+
           <li><a href="#product" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.product')}}</span><span></a>
             <ul id="product" class="collapse list-unstyled ">
               <li id="category-menu"><a href="{{route('category.index')}}">{{__('file.category')}}</a></li>
@@ -778,8 +786,6 @@
       </div>
     </div>
 </nav>
-
-
 <section class="forms pos-section p-0">
     <div  >
         {!! Form::open(['route' => 'sales.store', 'method' => 'post', 'files' => true, 'class' => 'payment-form']) !!}

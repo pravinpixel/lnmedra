@@ -1,94 +1,82 @@
 @extends('layout.main') @section('content')
-@if(session()->has('create_message'))
-    <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{!! session()->get('create_message') !!}</div>
-@endif
-@if(session()->has('edit_message'))
-    <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('edit_message') }}</div>
-@endif
-@if(session()->has('import_message'))
-    <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{!! session()->get('import_message') !!}</div>
-@endif
-@if(session()->has('not_permitted'))
-  <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
-@endif
-
-
-
-
-
-<section class="container-fluid">
-    <div class="text-right mt-4">
-        @if(in_array("customers-add", $all_permission))
-            <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Customer')}}</a>&nbsp;
-            <!-- <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Customer')}}</a> -->
-        @endif
-    </div>
-    <div>
-        <table id="customer-table" class="table">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Customer Group')}}</th>
-                    <th>{{trans('file.name')}}</th>
-                    {{-- <th>{{trans('file.Company Name')}}</th> --}}
-                    <th>{{trans('file.Email')}}</th>
-                    <th>{{trans('file.Phone Number')}}</th>
-                    {{-- <th>{{trans('file.Tax Number')}}</th> --}}
-                    {{-- <th>{{trans('file.Address')}}</th> --}}
-                    {{-- <th>{{trans('file.Reward Points')}}</th> --}}
-                    {{-- <th>{{trans('file.Balance')}}</th> --}}
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_customer_all as $key=>$customer)
-                <tr data-id="{{$customer->id}}">
-                    <td>{{$key}}</td>
-                    <td>
-                        <?php $customer_group = DB::table('customer_groups')->where('id',$customer->customer_group_id)->first(); ?>
-                        {{  $customer_group->name }}
-                    </td>
-                    <td>{{ $customer->name }}</td>
-                    {{-- <td>{{ $customer->company_name}}</td> --}}
-                    <td>{{ $customer->email}}</td>
-                    <td>{{ $customer->phone_number}}</td>
-                    {{-- <td>{{ $customer->tax_no}}</td> --}}
-                    {{-- <td>{{ $customer->address}}, {{ $customer->city}}@if($customer->country) {{','. $customer->country}}@endif</td> --}}
-                    {{-- <td>{{$customer->points}}</td> --}}
-                    {{-- <td>{{ number_format($customer->deposit - $customer->expense, 2) }}</td> --}}
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                @if(in_array("customers-edit", $all_permission))
-                                <li>
-                                    <a href="{{ route('customer.edit', $customer->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
-                                </li>
-                                @endif
-                                {{-- <li>
-                                    <button type="button" data-id="{{$customer->id}}" class="deposit btn btn-link" data-toggle="modal" data-target="#depositModal" ><i class="dripicons-plus"></i> {{trans('file.Add Deposit')}}</button>
-                                </li> 
-                                <li>
-                                    <button type="button" data-id="{{$customer->id}}" class="getDeposit btn btn-link"><i class="fa fa-money"></i> {{trans('file.View Deposit')}}</button>
-                                </li> --}}
-                                <li class="divider"></li>
-                                @if(in_array("customers-delete", $all_permission))
-                                {{ Form::open(['route' => ['customer.destroy', $customer->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+ 
+<section>
+    <div class="container-fluid">
+        <div class="section-title"> All Customer Lists</div>
+        <div class="text-right mt-4">
+            @if(in_array("customers-add", $all_permission))
+                <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Customer')}}</a>&nbsp;
+                <!-- <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Customer')}}</a> -->
+            @endif
+        </div>
+        <div>
+            <table id="customer-table" class="table">
+                <thead>
+                    <tr>
+                        <th class="not-exported"></th>
+                        <th>{{trans('file.Customer Group')}}</th>
+                        <th>{{trans('file.name')}}</th>
+                        {{-- <th>{{trans('file.Company Name')}}</th> --}}
+                        <th>{{trans('file.Email')}}</th>
+                        <th>{{trans('file.Phone Number')}}</th>
+                        {{-- <th>{{trans('file.Tax Number')}}</th> --}}
+                        {{-- <th>{{trans('file.Address')}}</th> --}}
+                        {{-- <th>{{trans('file.Reward Points')}}</th> --}}
+                        {{-- <th>{{trans('file.Balance')}}</th> --}}
+                        <th class="not-exported">{{trans('file.action')}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($lims_customer_all as $key=>$customer)
+                    <tr data-id="{{$customer->id}}">
+                        <td>{{$key}}</td>
+                        <td>
+                            <?php $customer_group = DB::table('customer_groups')->where('id',$customer->customer_group_id)->first(); ?>
+                            {{  $customer_group->name }}
+                        </td>
+                        <td>{{ $customer->name }}</td>
+                        {{-- <td>{{ $customer->company_name}}</td> --}}
+                        <td>{{ $customer->email}}</td>
+                        <td>{{ $customer->phone_number}}</td>
+                        {{-- <td>{{ $customer->tax_no}}</td> --}}
+                        {{-- <td>{{ $customer->address}}, {{ $customer->city}}@if($customer->country) {{','. $customer->country}}@endif</td> --}}
+                        {{-- <td>{{$customer->points}}</td> --}}
+                        {{-- <td>{{ number_format($customer->deposit - $customer->expense, 2) }}</td> --}}
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn bg-white btn-sm " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                    @if(in_array("customers-edit", $all_permission))
                                     <li>
-                                        <button class="btn btn-link"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        <a href="{{ route('customer.edit', $customer->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
                                     </li>
-                                {{ Form::close() }}
-                                @endif
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                                    @endif
+                                    {{-- <li>
+                                        <button type="button" data-id="{{$customer->id}}" class="deposit btn btn-link" data-toggle="modal" data-target="#depositModal" ><i class="dripicons-plus"></i> {{trans('file.Add Deposit')}}</button>
+                                    </li> 
+                                    <li>
+                                        <button type="button" data-id="{{$customer->id}}" class="getDeposit btn btn-link"><i class="fa fa-money"></i> {{trans('file.View Deposit')}}</button>
+                                    </li> --}}
+                                    <li class="divider"></li>
+                                    @if(in_array("customers-delete", $all_permission))
+                                    {{ Form::open(['route' => ['customer.destroy', $customer->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+                                        <li>
+                                            <button class="btn btn-link"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                    {{ Form::close() }}
+                                    @endif
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 </section>
 
@@ -248,7 +236,7 @@
                 else
                     cols += '<td>N/A</td>';
                 cols += '<td>' + data[4][index] + '<br>' + data[5][index] + '</td>';
-                cols += '<td><div class="btn-group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans("file.action")}}<span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu"><li><button type="button" class="btn btn-link edit-btn" data-id="' + data[0][index] +'" data-toggle="modal" data-target="#edit-deposit"><i class="dripicons-document-edit"></i> {{trans("file.edit")}}</button></li><li class="divider"></li>{{ Form::open(['route' => 'customer.deleteDeposit', 'method' => 'post'] ) }}<li><input type="hidden" name="id" value="' + data[0][index] + '" /> <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans("file.delete")}}</button></li>{{ Form::close() }}</ul></div></td>'
+                cols += '<td><div class="btn-group"><button type="button" class="btn btn-default " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-ellipsis-v" aria-hidden="true"></i><span class="caret"></span><span class="sr-only">Toggle Dropdown</span></button><ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu"><li><button type="button" class="btn btn-link edit-btn" data-id="' + data[0][index] +'" data-toggle="modal" data-target="#edit-deposit"><i class="dripicons-document-edit"></i> {{trans("file.edit")}}</button></li><li class="divider"></li>{{ Form::open(['route' => 'customer.deleteDeposit', 'method' => 'post'] ) }}<li><input type="hidden" name="id" value="' + data[0][index] + '" /> <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans("file.delete")}}</button></li>{{ Form::close() }}</ul></div></td>'
                 newRow.append(cols);
                 newBody.append(newRow);
                 $("table.deposit-list").append(newBody);
