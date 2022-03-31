@@ -1183,7 +1183,7 @@
                   ])->first();
               
                   ?>
-                  @if($mail_setting_permission_active||$send_notification_permission_active||$warehouse_permission_active||$customer_group_permission_active||$role_permission_active)
+                  @if($mail_setting_permission_active||$send_notification_permission_active||$warehouse_permission_active||$customer_group_permission_active)
               <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-gear"></i><span>{{trans('file.settings')}}</span></a>
                 <ul id="setting" class="collapse list-unstyled ">
                   
