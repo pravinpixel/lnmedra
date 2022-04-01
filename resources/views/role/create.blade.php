@@ -11,54 +11,58 @@
 
 <section>
     <div class="container-fluid">
-        <a href="#" data-toggle="modal" data-target="#createModal" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Role')}} </a>
-    </div>
-    <div class="table-responsive">
-        <table id="role-table" class="table table-hover">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.Description')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_role_all as $key=>$role)
-                <tr>
-                    <td>{{$key}}</td>
-                    <td>{{ $role->name }}</td>
-                    <td>{{ $role->description }}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                <li>
-                                    <button type="button" data-id="{{$role->id}}" class="open-EditroleDialog btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}
-                                </button>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a href="{{ route('role.permission', ['id' => $role->id]) }}" class="btn btn-link"><i class="dripicons-lock-open"></i> {{trans('file.Change Permission')}}</a>
-                                </li>
-                                
-                                {{ Form::open(['route' => ['role.destroy', $role->id], 'method' => 'DELETE'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                                <!-- @if($role->id > 2 && $role->id != 5) -->
-                                <!-- @endif -->
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        <div class="text-right my-4">
+            <a href="#" data-toggle="modal" data-target="#createModal" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Role')}} </a>
+        </div>
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="role-table" class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.name')}}</th>
+                            <th>{{trans('file.Description')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_role_all as $key=>$role)
+                        <tr>
+                            <td>{{$key}}</td>
+                            <td>{{ $role->name }}</td>
+                            <td>{{ $role->description }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                        <li>
+                                            <button type="button" data-id="{{$role->id}}" class="open-EditroleDialog btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}
+                                        </button>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="{{ route('role.permission', ['id' => $role->id]) }}" class="btn btn-link"><i class="dripicons-lock-open"></i> {{trans('file.Change Permission')}}</a>
+                                        </li>
+                                        
+                                        {{ Form::open(['route' => ['role.destroy', $role->id], 'method' => 'DELETE'] ) }}
+                                            <li>
+                                                <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                            </li>
+                                        {{ Form::close() }}
+                                        {{-- <!-- @if($role->id > 2 && $role->id != 5) -->
+                                        <!-- @endif --> --}}
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
 

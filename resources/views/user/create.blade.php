@@ -8,7 +8,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header d-flex align-items-center">
+                    <div class="card-header d-flex align-items-center bg-success text-white">
                         <h4>{{trans('file.Add User')}}</h4>
                     </div>
                     <div class="card-body">

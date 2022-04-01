@@ -2,46 +2,51 @@
  
 <section>
     <div class="container-fluid">
-        <button class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans('file.Add Holiday')}} </button>
+        <div class="my-4 text-right">
+            <button class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans('file.Add Holiday')}} </button>
+        </div>
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="holiday-table" class="table">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.date')}}</th>
+                            <th>{{trans('file.Employee')}}</th>
+                            <th>{{trans('file.From')}}</th>
+                            <th>{{trans('file.To')}}</th>
+                            <th>{{trans('file.Note')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_holiday_list as $key=>$holiday)
+                        <tr data-id="{{$holiday->id}}">
+                            <td>{{$key}}</td>
+                            <td>{{ date($general_setting->date_format, strtotime($holiday->created_at->toDateString())) }}</td>
+                            <td>{{ $holiday->user->name }}</td>
+                            <td>{{ date($general_setting->date_format, strtotime($holiday->from_date)) }}</td>
+                            <td>{{ date($general_setting->date_format, strtotime($holiday->to_date)) }}</td>
+                            <td>{{$holiday->note}}</td>
+                            <td>
+                                <div class="btn-group">
+                                    @if(!$holiday->is_approved && $approve_permission)
+                                    <button type="button" class="btn btn-sm btn-success btn-approve" title="{{trans('file.Approve')}}" data-id="{{$holiday->id}}"><i class="fa fa-check"></i></button>
+                                    @endif
+                                    <button type="button" class="btn btn-sm btn-primary btn-edit" title="{{trans('file.edit')}}" data-id="{{$holiday->id}}" data-from="{{date($general_setting->date_format, strtotime($holiday->from_date))}}" data-to="{{date($general_setting->date_format, strtotime($holiday->to_date))}}" data-note="{{$holiday->note}}" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i></button>
+                                    {{ Form::open(['route' => ['holidays.destroy', $holiday->id], 'method' => 'DELETE'] ) }}
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirmDelete()" title="{{trans('file.delete')}}"><i class="dripicons-trash"></i></button>
+                                    {{ Form::close() }}
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="table-responsive">
-        <table id="holiday-table" class="table">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.date')}}</th>
-                    <th>{{trans('file.Employee')}}</th>
-                    <th>{{trans('file.From')}}</th>
-                    <th>{{trans('file.To')}}</th>
-                    <th>{{trans('file.Note')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_holiday_list as $key=>$holiday)
-                <tr data-id="{{$holiday->id}}">
-                    <td>{{$key}}</td>
-                    <td>{{ date($general_setting->date_format, strtotime($holiday->created_at->toDateString())) }}</td>
-                    <td>{{ $holiday->user->name }}</td>
-                    <td>{{ date($general_setting->date_format, strtotime($holiday->from_date)) }}</td>
-                    <td>{{ date($general_setting->date_format, strtotime($holiday->to_date)) }}</td>
-                    <td>{{$holiday->note}}</td>
-                    <td>
-                        <div class="btn-group">
-                        	@if(!$holiday->is_approved && $approve_permission)
-                        	<button type="button" class="btn btn-sm btn-success btn-approve" title="{{trans('file.Approve')}}" data-id="{{$holiday->id}}"><i class="fa fa-check"></i></button>
-                        	@endif
-                        	<button type="button" class="btn btn-sm btn-primary btn-edit" title="{{trans('file.edit')}}" data-id="{{$holiday->id}}" data-from="{{date($general_setting->date_format, strtotime($holiday->from_date))}}" data-to="{{date($general_setting->date_format, strtotime($holiday->to_date))}}" data-note="{{$holiday->note}}" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i></button>
-                            {{ Form::open(['route' => ['holidays.destroy', $holiday->id], 'method' => 'DELETE'] ) }}
-                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirmDelete()" title="{{trans('file.delete')}}"><i class="dripicons-trash"></i></button>
-                            {{ Form::close() }}
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+    
 </section>
 
 <div id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">

@@ -2,72 +2,76 @@
 
  
 <section>
-    @if(in_array("employees-add", $all_permission))
     <div class="container-fluid">
-        <a href="{{route('employees.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Employee')}}</a>
-    </div>
-    @endif
-    <div class="table-responsive">
-        <table id="employee-table" class="table">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Image')}}</th>
-                    <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.Email')}}</th>
-                    <th>{{trans('file.Phone Number')}}</th>
-                    <th>{{trans('file.Department')}}</th>
-                    <th>{{trans('file.Address')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_employee_all as $key=>$employee)
-                @php $department = \App\Department::find($employee->department_id); @endphp
-                <tr data-id="{{$employee->id}}">
-                    <td>{{$key}}</td>
-                    @if($employee->image)
-                    <td> <img src="{{url('public/images/employee',$employee->image)}}" height="80" width="80">
-                    </td>
-                    @else
-                    <td>No Image</td>
-                    @endif
-                    <td>{{ $employee->name }}</td>
-                    <td>{{ $employee->email}}</td>
-                    <td>{{ $employee->phone_number}}</td>
-                    <td>{{ $department->name }}</td>
-                    <td>{{ $employee->address}}
-                            @if($employee->city){{ ', '.$employee->city}}@endif
-                            @if($employee->state){{ ', '.$employee->state}}@endif
-                            @if($employee->postal_code){{ ', '.$employee->postal_code}}@endif
-                            @if($employee->country){{ ', '.$employee->country}}@endif</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                @if(in_array("employees-edit", $all_permission))
-                                <li>
-                                    <button type="button" data-id="{{$employee->id}}" data-name="{{$employee->name}}" data-email="{{$employee->email}}" data-phone_number="{{$employee->phone_number}}" data-department_id="{{$employee->department_id}}" data-address="{{$employee->address}}" data-city="{{$employee->city}}" data-country="{{$employee->country}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</button>
-                                </li>
-                                @endif
-                                <li class="divider"></li>
-                                @if(in_array("employees-delete", $all_permission))
-                                {{ Form::open(['route' => ['employees.destroy', $employee->id], 'method' => 'DELETE','onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                                @endif
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+        @if(in_array("employees-add", $all_permission))
+            <div class="text-right my-4">
+                <a href="{{route('employees.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Employee')}}</a>
+            </div>
+        @endif
+        <div class="pb-3 card">
+            <div class="table-responsive ">
+                <table id="employee-table" class="table">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Image')}}</th>
+                            <th>{{trans('file.name')}}</th>
+                            <th>{{trans('file.Email')}}</th>
+                            <th>{{trans('file.Phone Number')}}</th>
+                            <th>{{trans('file.Department')}}</th>
+                            <th>{{trans('file.Address')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_employee_all as $key=>$employee)
+                        @php $department = \App\Department::find($employee->department_id); @endphp
+                        <tr data-id="{{$employee->id}}">
+                            <td>{{$key}}</td>
+                            @if($employee->image)
+                            <td> <img src="{{url('public/images/employee',$employee->image)}}" height="80" width="80">
+                            </td>
+                            @else
+                            <td>No Image</td>
+                            @endif
+                            <td>{{ $employee->name }}</td>
+                            <td>{{ $employee->email}}</td>
+                            <td>{{ $employee->phone_number}}</td>
+                            <td>{{ $department->name }}</td>
+                            <td>{{ $employee->address}}
+                                    @if($employee->city){{ ', '.$employee->city}}@endif
+                                    @if($employee->state){{ ', '.$employee->state}}@endif
+                                    @if($employee->postal_code){{ ', '.$employee->postal_code}}@endif
+                                    @if($employee->country){{ ', '.$employee->country}}@endif</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                        @if(in_array("employees-edit", $all_permission))
+                                        <li>
+                                            <button type="button" data-id="{{$employee->id}}" data-name="{{$employee->name}}" data-email="{{$employee->email}}" data-phone_number="{{$employee->phone_number}}" data-department_id="{{$employee->department_id}}" data-address="{{$employee->address}}" data-city="{{$employee->city}}" data-country="{{$employee->country}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</button>
+                                        </li>
+                                        @endif
+                                        <li class="divider"></li>
+                                        @if(in_array("employees-delete", $all_permission))
+                                        {{ Form::open(['route' => ['employees.destroy', $employee->id], 'method' => 'DELETE','onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+                                        <li>
+                                            <button type="submit" class="btn btn-link"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                        {{ Form::close() }}
+                                        @endif
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
 

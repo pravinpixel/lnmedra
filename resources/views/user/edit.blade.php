@@ -5,10 +5,10 @@
 @endif
 <section class="forms">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row m-0">
+            <div class="col-md-12  p-0">
                 <div class="card">
-                    <div class="card-header d-flex align-items-center">
+                    <div class="card-header d-flex align-items-center bg-success text-white">
                         <h4>{{trans('file.Update User')}}</h4>
                     </div>
                     <div class="card-body">
@@ -124,7 +124,7 @@
                                     <ul class="list-group field_wrapper" id="warehouseId">
                                        
                                         <li class="list-group-item border-0 p-0 mb-3">
-                                            <a  class="btn btn-primary add_button" title="Add field" >Add</a>
+                                            <button  class="btn btn-primary add_button" title="Add field" >Add</button>
                                         </li>
                                        
                                         @foreach($outlet_data  as $key=>$val)

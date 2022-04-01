@@ -3,74 +3,82 @@
 <section>
     <div class="container-fluid">
         @if(in_array("returns-add", $all_permission))
-            <a href="{{route('return-sale.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Return')}}</a>
+            <div class="text-right my-4">
+                <a href="{{route('return-sale.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Return')}}</a>
+            </div>
         @endif
+
+        <div class="card pb-3 shadow">
+            <div class="table-responsive">
+                <table id="return-table" class="table return-list">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Date')}}</th>
+                            <th>{{trans('file.reference')}}</th>
+                            <th>{{trans('file.Biller')}}</th>
+                            <th>{{trans('file.customer')}}</th>
+                            <th>{{trans('file.Warehouse')}}</th>
+                            <th>{{trans('file.grand total')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_return_all as $key=>$return)
+                        <tr class="return-link" data-return='["{{date($general_setting->date_format, strtotime($return->created_at->toDateString()))}}", "{{$return->reference_no}}", "{{$return->warehouse->name}}", "{{$return->biller->name}}", "{{$return->biller->company_name}}","{{$return->biller->email}}", "{{$return->biller->phone_number}}", "{{$return->biller->address}}", "{{$return->biller->city}}", "{{$return->customer->name}}", "{{$return->customer->phone_number}}", "{{$return->customer->address}}", "{{$return->customer->city}}", "{{$return->id}}", "{{$return->total_tax}}", "{{$return->total_discount}}", "{{$return->total_price}}", "{{$return->order_tax}}", "{{$return->order_tax_rate}}", "{{$return->grand_total}}", "{{$return->return_note}}", "{{$return->staff_note}}", "{{$return->user->name}}", "{{$return->user->email}}"]'>
+                            <td>{{$key}}</td>
+                            <td>{{ date($general_setting->date_format, strtotime($return->created_at->toDateString())) . ' '. $return->created_at->toTimeString() }}</td>
+                            <td>{{ $return->reference_no }}</td>
+                            <td>{{ $return->biller->name }}</td>
+                            <td>{{ $return->customer->name }}</td>
+                            <td>{{$return->warehouse->name}}</td>
+                            <td class="grand-total">{{ $return->grand_total }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                        <li>
+                                            <button type="button" class="btn btn-link view"><i class="fa fa-eye"></i> {{trans('file.View')}}</button>
+                                        </li>
+                                        @if(in_array("returns-edit", $all_permission))
+                                        <li>
+                                            <a href="{{ route('return-sale.edit', $return->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
+                                        </li>
+                                        @endif
+                                        <li class="divider"></li>
+                                        @if(in_array("returns-delete", $all_permission))
+                                        {{ Form::open(['route' => ['return-sale.destroy', $return->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert("warning", this);'] ) }}
+                                        <li>
+                                            <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                        {{ Form::close() }}
+                                        @endif
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot class="tfoot active">
+                        <th></th>
+                        <th>{{trans('file.Total')}}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+
     </div>
-    <div class="table-responsive">
-        <table id="return-table" class="table return-list">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Date')}}</th>
-                    <th>{{trans('file.reference')}}</th>
-                    <th>{{trans('file.Biller')}}</th>
-                    <th>{{trans('file.customer')}}</th>
-                    <th>{{trans('file.Warehouse')}}</th>
-                    <th>{{trans('file.grand total')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_return_all as $key=>$return)
-                <tr class="return-link" data-return='["{{date($general_setting->date_format, strtotime($return->created_at->toDateString()))}}", "{{$return->reference_no}}", "{{$return->warehouse->name}}", "{{$return->biller->name}}", "{{$return->biller->company_name}}","{{$return->biller->email}}", "{{$return->biller->phone_number}}", "{{$return->biller->address}}", "{{$return->biller->city}}", "{{$return->customer->name}}", "{{$return->customer->phone_number}}", "{{$return->customer->address}}", "{{$return->customer->city}}", "{{$return->id}}", "{{$return->total_tax}}", "{{$return->total_discount}}", "{{$return->total_price}}", "{{$return->order_tax}}", "{{$return->order_tax_rate}}", "{{$return->grand_total}}", "{{$return->return_note}}", "{{$return->staff_note}}", "{{$return->user->name}}", "{{$return->user->email}}"]'>
-                    <td>{{$key}}</td>
-                    <td>{{ date($general_setting->date_format, strtotime($return->created_at->toDateString())) . ' '. $return->created_at->toTimeString() }}</td>
-                    <td>{{ $return->reference_no }}</td>
-                    <td>{{ $return->biller->name }}</td>
-                    <td>{{ $return->customer->name }}</td>
-                    <td>{{$return->warehouse->name}}</td>
-                    <td class="grand-total">{{ $return->grand_total }}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                <li>
-                                    <button type="button" class="btn btn-link view"><i class="fa fa-eye"></i> {{trans('file.View')}}</button>
-                                </li>
-                                @if(in_array("returns-edit", $all_permission))
-                                <li>
-                                    <a href="{{ route('return-sale.edit', $return->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
-                                </li>
-                                @endif
-                                <li class="divider"></li>
-                                @if(in_array("returns-delete", $all_permission))
-                                {{ Form::open(['route' => ['return-sale.destroy', $return->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert("warning", this);'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                                @endif
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-            <tfoot class="tfoot active">
-                <th></th>
-                <th>{{trans('file.Total')}}</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tfoot>
-        </table>
-    </div>
+    
     <div id="return-details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
         <div role="document" class="modal-dialog">
           <div class="modal-content">

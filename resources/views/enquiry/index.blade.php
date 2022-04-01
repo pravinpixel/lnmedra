@@ -3,70 +3,73 @@
 <section>
     <div class="container-fluid">
         @if(in_array("enquiry-add", $all_permission))
-        <a href="{{route('enquiry.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.add_enquiry')}}</a>
-        <!-- <a href="#" data-toggle="modal" data-target="#importSupplier" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Enquiry')}}</a> -->
+            <div class="my-4 text-right">
+                <a href="{{route('enquiry.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.add_enquiry')}}</a>
+            </div>
         @endif
-    </div>
-    <div class="table-responsive">
-        <table id="supplier-table" class="table">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    
-                    <th>{{trans('file.name')}}</th>
-                    
-                    <th>{{trans('file.Email')}}</th>
-                    <th>{{trans('file.Phone Number')}}</th>
-                   
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_supplier_all as $key=>$enquiry)
-                <tr data-id="{{$enquiry->id}}">
-                    <td>{{$key}}</td>
-                   
-                    <td>{{ $enquiry->name }}</td>
-                   
-
-                    <td>{{ $enquiry->email}}</td>
-                    <td>{{ $enquiry->mobile}}</td>
-                   
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                @if(userHasAccess('enquiry-edit'))
-                                <li>
-                                	<a href="{{ route('enquiry.edit', $enquiry->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
-                                </li>
-                                @endif
-                                
-                                @if(userHasAccess('enquiry_mail'))
-                                <li>
-                                	<a href="{{ route('enquiry.mail', $enquiry->id) }}" class="btn btn-link"><i class="dripicons-mail"></i> {{trans('file.Mail')}}</a>
-                                </li>
-                                @endif
-                                <li class="divider"></li>
-                                @if(userHasAccess('enquiry-delete'))
-                                {{ Form::open(['route' => ['enquiry.destroy', $enquiry->id], 'method' => 'DELETE','onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                                @endif
-                               
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="supplier-table" class="table">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            
+                            <th>{{trans('file.name')}}</th>
+                            
+                            <th>{{trans('file.Email')}}</th>
+                            <th>{{trans('file.Phone Number')}}</th>
+                           
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_supplier_all as $key=>$enquiry)
+                        <tr data-id="{{$enquiry->id}}">
+                            <td>{{$key}}</td>
+                           
+                            <td>{{ $enquiry->name }}</td>
+                           
+        
+                            <td>{{ $enquiry->email}}</td>
+                            <td>{{ $enquiry->mobile}}</td>
+                           
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                        @if(userHasAccess('enquiry-edit'))
+                                        <li>
+                                            <a href="{{ route('enquiry.edit', $enquiry->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
+                                        </li>
+                                        @endif
+                                        
+                                        @if(userHasAccess('enquiry_mail'))
+                                        <li>
+                                            <a href="{{ route('enquiry.mail', $enquiry->id) }}" class="btn btn-link"><i class="dripicons-mail"></i> {{trans('file.Mail')}}</a>
+                                        </li>
+                                        @endif
+                                        <li class="divider"></li>
+                                        @if(userHasAccess('enquiry-delete'))
+                                        {{ Form::open(['route' => ['enquiry.destroy', $enquiry->id], 'method' => 'DELETE','onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+                                        <li>
+                                            <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                        {{ Form::close() }}
+                                        @endif
+                                       
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> 
 </section>
 
 <div id="importSupplier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">

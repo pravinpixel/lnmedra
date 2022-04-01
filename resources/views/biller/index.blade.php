@@ -3,77 +3,82 @@
 <section>
     <div class="container-fluid">
 
-        @if(userHasAccess('billers-add'))
-        <a href="{{route('biller.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Biller')}}</a>&nbsp;
-        @endif
-        @if(userHasAccess('biller_import'))
-        <a href="#" data-toggle="modal" data-target="#importbiller" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Biller')}}</a>
-        @endif
-    </div>
-    <div class="table-responsive">
-        <table id="biller-table" class="table">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Image')}}</th>
-                    <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.Company Name')}}</th>
-                    <th>{{trans('file.VAT Number')}}</th>
-                    <th>{{trans('file.Email')}}</th>
-                    <th>{{trans('file.Phone Number')}}</th>
-                    <th>{{trans('file.Address')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_biller_all as $key=>$biller)
-                <tr data-id="{{$biller->id}}">
-                    <td>{{$key}}</td>
-                    @if($biller->image)
-                    <td> <img src="{{url('public/images/biller',$biller->image)}}" height="80" width="80">
-                    </td>
-                    @else
-                    <td>No Image</td>
-                    @endif
-                    <td>{{ $biller->name }}</td>
-                    <td>{{ $biller->company_name}}</td>
-                    <td>{{ $biller->vat_number}}</td>
-                    <td>{{ $biller->email}}</td>
-                    <td>{{ $biller->phone_number}}</td>
-                    <td>{{ $biller->address}}
-                            @if($biller->city){{ ', '.$biller->city}}@endif
-                            @if($biller->state){{ ', '.$biller->state}}@endif
-                            @if($biller->postal_code){{ ', '.$biller->postal_code}}@endif
-                            @if($biller->country){{ ', '.$biller->country}}@endif</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                @if(in_array("billers-edit", $all_permission))
-                                <li>
-                                    <a href="{{ route('biller.edit', $biller->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
-                                </li>
-                                @endif
-                                <li class="divider"></li>
-                                @if(in_array("billers-delete", $all_permission))
+        <div class="text-right">
+            @if(userHasAccess('billers-add'))
+                <a href="{{route('biller.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Biller')}}</a>&nbsp;
+            @endif
+            @if(userHasAccess('biller_import'))
+                <a href="#" data-toggle="modal" data-target="#importbiller" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Biller')}}</a>
+            @endif
+        </div>
 
-                                {{ Form::open(['route' => ['biller.destroy', $biller->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link"  ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                                @endif
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+        <div class="card pb-3 shadow">
+            <div class="table-responsive">
+                <table id="biller-table" class="table">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Image')}}</th>
+                            <th>{{trans('file.name')}}</th>
+                            <th>{{trans('file.Company Name')}}</th>
+                            <th>{{trans('file.VAT Number')}}</th>
+                            <th>{{trans('file.Email')}}</th>
+                            <th>{{trans('file.Phone Number')}}</th>
+                            <th>{{trans('file.Address')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_biller_all as $key=>$biller)
+                        <tr data-id="{{$biller->id}}">
+                            <td>{{$key}}</td>
+                            @if($biller->image)
+                            <td> <img src="{{url('public/images/biller',$biller->image)}}" height="80" width="80">
+                            </td>
+                            @else
+                            <td>No Image</td>
+                            @endif
+                            <td>{{ $biller->name }}</td>
+                            <td>{{ $biller->company_name}}</td>
+                            <td>{{ $biller->vat_number}}</td>
+                            <td>{{ $biller->email}}</td>
+                            <td>{{ $biller->phone_number}}</td>
+                            <td>{{ $biller->address}}
+                                    @if($biller->city){{ ', '.$biller->city}}@endif
+                                    @if($biller->state){{ ', '.$biller->state}}@endif
+                                    @if($biller->postal_code){{ ', '.$biller->postal_code}}@endif
+                                    @if($biller->country){{ ', '.$biller->country}}@endif</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                        @if(in_array("billers-edit", $all_permission))
+                                        <li>
+                                            <a href="{{ route('biller.edit', $biller->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
+                                        </li>
+                                        @endif
+                                        <li class="divider"></li>
+                                        @if(in_array("billers-delete", $all_permission))
+        
+                                        {{ Form::open(['route' => ['biller.destroy', $biller->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+                                        <li>
+                                            <button type="submit" class="btn btn-link"  ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                        {{ Form::close() }}
+                                        @endif
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> 
 </section>
 
 <div id="importbiller" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">

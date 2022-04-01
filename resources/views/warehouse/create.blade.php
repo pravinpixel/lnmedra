@@ -11,73 +11,78 @@
 
 <section>
     <div class="container-fluid">
-        <a href="#" data-toggle="modal" data-target="#createModal" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Outlet')}}</a>
-        @if(userHasAccess('outlet_import'))
-        <a href="#" data-toggle="modal" data-target="#importWarehouse" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Outlet')}}</a>
-        @endif
-      </div>
-    <div class="table-responsive">
-        <table id="warehouse-table" class="table">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Outlet')}}</th>
-                    <th>{{trans('file.Phone Number')}}</th>
-                    <th>{{trans('file.Email')}}</th>
-                    <th>{{trans('file.Address')}}</th>
-                    <th>{{trans('file.Number of Product')}}</th>
-                    <th>{{trans('file.Stock Quantity')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_warehouse_all as $key=>$warehouse)
-                <?php
-                    $number_of_product = App\Product_Warehouse::
-                    join('products', 'product_warehouse.product_id', '=', 'products.id')
-                    ->where([ ['product_warehouse.warehouse_id', $warehouse->id],
-                              ['products.is_active', true]
-                    ])->count();
-
-                    $stock_qty = App\Product_Warehouse::
-                    join('products', 'product_warehouse.product_id', '=', 'products.id')
-                    ->where([ ['product_warehouse.warehouse_id', $warehouse->id],
-                              ['products.is_active', true]
-                    ])->sum('product_warehouse.qty');
-                ?>
-                <tr data-id="{{$warehouse->id}}">
-                    <td>{{$key}}</td>
-                    <td>{{ $warehouse->name }}</td>
-                    <td>{{ $warehouse->phone}}</td>
-                    <td>{{ $warehouse->email}}</td>
-                    <td>{{ $warehouse->address}}</td>
-                    <td>{{$number_of_product}}</td>
-                    <td>{{$stock_qty}}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                <li>
-                                	<button type="button" data-id="{{$warehouse->id}}" class="open-EditWarehouseDialog btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}
+        <div class="text-right my-4">
+          <a href="#" data-toggle="modal" data-target="#createModal" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Outlet')}}</a>
+          @if(userHasAccess('outlet_import'))
+          <a href="#" data-toggle="modal" data-target="#importWarehouse" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Outlet')}}</a>
+          @endif
+        </div>
+        <div class="card pb-3">
+          <div class="table-responsive">
+            <table id="warehouse-table" class="table">
+                <thead>
+                    <tr>
+                        <th class="not-exported"></th>
+                        <th>{{trans('file.Outlet')}}</th>
+                        <th>{{trans('file.Phone Number')}}</th>
+                        <th>{{trans('file.Email')}}</th>
+                        <th>{{trans('file.Address')}}</th>
+                        <th>{{trans('file.Number of Product')}}</th>
+                        <th>{{trans('file.Stock Quantity')}}</th>
+                        <th class="not-exported">{{trans('file.action')}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($lims_warehouse_all as $key=>$warehouse)
+                    <?php
+                        $number_of_product = App\Product_Warehouse::
+                        join('products', 'product_warehouse.product_id', '=', 'products.id')
+                        ->where([ ['product_warehouse.warehouse_id', $warehouse->id],
+                                  ['products.is_active', true]
+                        ])->count();
+    
+                        $stock_qty = App\Product_Warehouse::
+                        join('products', 'product_warehouse.product_id', '=', 'products.id')
+                        ->where([ ['product_warehouse.warehouse_id', $warehouse->id],
+                                  ['products.is_active', true]
+                        ])->sum('product_warehouse.qty');
+                    ?>
+                    <tr data-id="{{$warehouse->id}}">
+                        <td>{{$key}}</td>
+                        <td>{{ $warehouse->name }}</td>
+                        <td>{{ $warehouse->phone}}</td>
+                        <td>{{ $warehouse->email}}</td>
+                        <td>{{ $warehouse->address}}</td>
+                        <td>{{$number_of_product}}</td>
+                        <td>{{$stock_qty}}</td>
+                        <td>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                    <span class="caret"></span>
+                                    <span class="sr-only">Toggle Dropdown</span>
                                 </button>
-                                </li>
-                                <li class="divider"></li>
-                                {{ Form::open(['route' => ['warehouse.destroy', $warehouse->id], 'method' => 'DELETE','onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                                <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                    <li>
+                                      <button type="button" data-id="{{$warehouse->id}}" class="open-EditWarehouseDialog btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}
+                                    </button>
+                                    </li>
+                                    <li class="divider"></li>
+                                    {{ Form::open(['route' => ['warehouse.destroy', $warehouse->id], 'method' => 'DELETE','onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+                                    <li>
+                                        <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                    </li>
+                                    {{ Form::close() }}
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        </div>
     </div>
+    
 </section>
 
 <div id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">

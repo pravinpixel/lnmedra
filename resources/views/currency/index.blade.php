@@ -7,57 +7,59 @@
 <div class="alert alert-danger alert-dismissible text-center">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ $errors->first('code') }}</div>
 @endif
-
-@if(session()->has('not_permitted'))
-  <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
-@endif
+ 
 
 <section>
     <div class="container-fluid">
-        <button class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans('file.Add Currency')}} </button>&nbsp;
+        <div class="text-right my-4">
+            <button class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans('file.Add Currency')}} </button>&nbsp;
+        </div>
+        <div class="card">
+            <div class="table-responsive">
+                <table id="currency-table" class="table">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Currency Name')}}</th>
+                            <th>{{trans('file.Currency Code')}}</th>
+                            <th>{{trans('file.Exchange Rate')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_currency_all as $key=>$currency)
+                        <tr data-id="{{$currency->id}}">
+                            <td>{{$key}}</td>
+                            <td>{{ $currency->name }}</td>
+                            <td>{{ $currency->code }}</td>
+                            <td>{{ $currency->exchange_rate }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                        <li><button type="button" data-id="{{$currency->id}}" data-name="{{$currency->name}}" data-code="{{$currency->code}}" data-exchange_rate="{{$currency->exchange_rate}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</button></li>
+                                        @if($currency->exchange_rate != 1)
+                                        <li class="divider"></li>
+                                        {{ Form::open(['route' => ['currency.destroy', $currency->id], 'method' => 'DELETE'] ) }}
+                                        <li>
+                                            <button type="submit" class="btn btn-link" onclick="return confirm('Are you sure want to delete?')"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                        {{ Form::close() }}
+                                        @endif
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="table-responsive">
-        <table id="currency-table" class="table">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Currency Name')}}</th>
-                    <th>{{trans('file.Currency Code')}}</th>
-                    <th>{{trans('file.Exchange Rate')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_currency_all as $key=>$currency)
-                <tr data-id="{{$currency->id}}">
-                    <td>{{$key}}</td>
-                    <td>{{ $currency->name }}</td>
-                    <td>{{ $currency->code }}</td>
-                    <td>{{ $currency->exchange_rate }}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                <li><button type="button" data-id="{{$currency->id}}" data-name="{{$currency->name}}" data-code="{{$currency->code}}" data-exchange_rate="{{$currency->exchange_rate}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</button></li>
-                                @if($currency->exchange_rate != 1)
-                                <li class="divider"></li>
-                                {{ Form::open(['route' => ['currency.destroy', $currency->id], 'method' => 'DELETE'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirm('Are you sure want to delete?')"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                                @endif
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+    
 </section>
 
 <div id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">

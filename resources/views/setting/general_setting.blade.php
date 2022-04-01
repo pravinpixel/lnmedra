@@ -6,10 +6,10 @@
 @endif
 <section class="forms">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row m-0">
+            <div class="col-md-12 p-0">
                 <div class="card">
-                    <div class="card-header d-flex align-items-center">
+                    <div class="card-header d-flex align-items-center bg-success text-white">
                         <h4>{{trans('file.General Setting')}}</h4>
                     </div>
                     <div class="card-body">
@@ -165,7 +165,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group text-right">
                                 <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                             </div>
                         {!! Form::close() !!}

@@ -1,14 +1,15 @@
 @extends('layout.main') @section('content')
 <section class="forms">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
+        <div class="row mx-0">
+            <div class="col-md-12 p-0">
+                <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
+
                 <div class="card">
-                    <div class="card-header d-flex align-items-center">
+                    <div class="card-header d-flex align-items-center bg-success text-white">
                         <h4>{{trans('file.Add Biller')}}</h4>
                     </div>
                     <div class="card-body">
-                        <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
                         {!! Form::open(['route' => 'biller.store', 'method' => 'post', 'files' => true]) !!}
                         <div class="row">
                             <div class="col-md-6">
@@ -93,7 +94,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <div class="form-group mt-4">
+                                <div class="form-group mt-4 text-right">
                                     <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                                 </div>
                             </div>

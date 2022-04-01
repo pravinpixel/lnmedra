@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header d-flex align-items-center">
+                        <div class="card-header d-flex align-items-center bg-success text-white">
                             <h4><strong>{{trans('file.add_enquiry')}}</strong></h4>
                         </div>
                         <div class="card-body">
@@ -75,7 +75,7 @@
                                 </div> -->
                                 
                                 <div class="col-md-12">
-                                    <div class="form-group mt-4">
+                                    <div class="form-group mt-4 text-right ">
                                         <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                                     </div>
                                 </div>

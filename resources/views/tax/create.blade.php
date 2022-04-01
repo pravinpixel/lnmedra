@@ -15,52 +15,57 @@
 
 <section>
     <div class="container-fluid">
-        <a href="#" data-toggle="modal" data-target="#createModal" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Tax')}}</a>
-        @if(userHasAccess('tax_import'))
-        <a href="#" data-toggle="modal" data-target="#importTax" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Tax')}}</a>
-        @endif
+        <div class="text-right my-4">
+            <a href="#" data-toggle="modal" data-target="#createModal" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Tax')}}</a>
+            @if(userHasAccess('tax_import'))
+            <a href="#" data-toggle="modal" data-target="#importTax" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Tax')}}</a>
+            @endif
+        </div>
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="tax-table" class="table">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.name')}}</th>
+                            <th>{{trans('file.Rate')}}(%)</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_tax_all as $key=>$tax)
+                        <tr data-id="{{$tax->id}}">
+                            <td>{{$key}}</td>
+                            <td>{{ $tax->name }}</td>
+                            <td>{{ $tax->rate }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                        <li>
+                                            <button type="button" data-id="{{$tax->id}}" class="open-EdittaxDialog btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}
+                                        </button>
+                                        </li>
+                                        <li class="divider"></li>
+                                        {{ Form::open(['route' => ['tax.destroy', $tax->id], 'method' => 'DELETE','onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+                                        <li>
+                                            <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                        {{ Form::close() }}
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="table-responsive">
-        <table id="tax-table" class="table">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.Rate')}}(%)</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_tax_all as $key=>$tax)
-                <tr data-id="{{$tax->id}}">
-                    <td>{{$key}}</td>
-                    <td>{{ $tax->name }}</td>
-                    <td>{{ $tax->rate }}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                <li>
-                                    <button type="button" data-id="{{$tax->id}}" class="open-EdittaxDialog btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}
-                                </button>
-                                </li>
-                                <li class="divider"></li>
-                                {{ Form::open(['route' => ['tax.destroy', $tax->id], 'method' => 'DELETE','onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+    
 </section>
 
 <div id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
