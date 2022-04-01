@@ -44,7 +44,7 @@
             <li class="breadcrumb-item"><a href="#" onclick="history.back()"><i class="text-success fa fa-angle-double-left"></i> Back</a></li>
         </ol>
     </nav>
-    <div class="section-title {{ Route::is('welcome_dashboard') ? "d-none" : ''}}" style="text-transform: capitalsize">
+    <div class="section-title {{ Route::is('welcome_dashboard') ? "d-none" : ''}}" style="text-transform: capitalize">
         <i class="dripicons-chevron-right"></i> {{ Route::is('welcome_dashboard') ? "" : $title }}
     </div>
 </div>
