@@ -20,14 +20,14 @@ use App\Product;
 use App\AccountsDate;
 use App\VendorProduct;
 use App\RewardPointSetting;
-use DB;
 use Auth; 
 use DNS1D;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Printing;
 use Rawilk\Printing\Contracts\Printer;
-
+use Yajra\DataTables\DataTables;
 
 /*use vendor\autoload;
 use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
@@ -113,7 +113,7 @@ class HomeController extends Controller
         // print_r($default_outlet);die();
         // $ff= session()->put('default_outlet',$default_outlet);
         // dd(session()->get('default_outlet'));
-
+    
         if(Auth::user()->role_id == 5) {
             $customer = Customer::select('id', 'points')->where('user_id', Auth::id())->first();
             $lims_sale_data = Sale::with('warehouse')->where('customer_id', $customer->id)->orderBy('created_at', 'desc')->get();
@@ -127,6 +127,7 @@ class HomeController extends Controller
 
             $lims_return_data = Returns::with('warehouse', 'customer', 'biller')->where('customer_id', $customer->id)->orderBy('created_at', 'desc')->get();
             $lims_reward_point_setting_data = RewardPointSetting::select('per_point_amount')->latest()->first();
+        
             return view('customer_index', compact('customer', 'lims_sale_data', 'lims_payment_data', 'lims_quotation_data', 'lims_return_data', 'lims_reward_point_setting_data'));
         }
 
@@ -300,11 +301,11 @@ class HomeController extends Controller
             $recent_payment = Payment::orderBy('id', 'desc')->take(5)->get();
         }
 
-        $best_selling_qty = Product_Sale::select(DB::raw('product_id, sum(qty) as sold_qty'))->whereDate('created_at', '>=' , $start_date)->whereDate('created_at', '<=' , $end_date)->groupBy('product_id')->orderBy('sold_qty', 'desc')->take(5)->get();
+        $best_selling_qty = Product_Sale::select(DB::raw('product_id, sum(qty) as sold_qty'))->whereDate('created_at', '>=' , $start_date)->whereDate('created_at', '<=' , $end_date)->groupBy('product_id')->orderBy('sold_qty', 'desc')->take(10)->get();
 
-        $yearly_best_selling_qty = Product_Sale::select(DB::raw('product_id, sum(qty) as sold_qty'))->whereDate('created_at', '>=' , date("Y").'-01-01')->whereDate('created_at', '<=' , date("Y").'-12-31')->groupBy('product_id')->orderBy('sold_qty', 'desc')->take(5)->get();
+        $yearly_best_selling_qty = Product_Sale::with('product')->select(DB::raw('product_id, sum(qty) as sold_qty'))->whereDate('created_at', '>=' , date("Y").'-01-01')->whereDate('created_at', '<=' , date("Y").'-12-31')->groupBy('product_id')->orderBy('sold_qty', 'desc')->take(10)->get();
 
-        $yearly_best_selling_price = Product_Sale::select(DB::raw('product_id, sum(total) as total_price'))->whereDate('created_at', '>=' , date("Y").'-01-01')->whereDate('created_at', '<=' , date("Y").'-12-31')->groupBy('product_id')->orderBy('total_price', 'desc')->take(5)->get();
+        $yearly_best_selling_price = Product_Sale::select(DB::raw('product_id, sum(total) as total_price'))->whereDate('created_at', '>=' , date("Y").'-01-01')->whereDate('created_at', '<=' , date("Y").'-12-31')->groupBy('product_id')->orderBy('total_price', 'desc')->take(10)->get();
 
         //cash flow of last 6 months
         $start = strtotime(date('Y-m-01', strtotime('-6 month', strtotime(date('Y-m-d') ))));
@@ -416,9 +417,9 @@ class HomeController extends Controller
                 return view('vendor-dashboard', compact('all_permission','sale','purchase','expense','project','approved','rejected','pending','toBePaid','paymentReceived','saleTotal'));
             }
        
-        }
-        else{
-        return view('index', compact('revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit','accountData', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price'));
+        }else{
+        $customers = Customer::latest(10)->get();
+        return view('index', compact('revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price','customers','accountData',));
         }
     }
 
@@ -604,7 +605,6 @@ class HomeController extends Controller
             $data['expense'] = $expense;
             $data['percentagecal'] = $amountCal;
         }
-        
         return $data;
     }
 

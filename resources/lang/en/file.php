@@ -96,6 +96,7 @@ return [
 	'sale qty' => 'Sale Quantity',
 	'yearly report' => 'Yearly Report',
 	'sale amount' => 'Sale Amount',
+	'amount' => 'Amount',
 	'recent sales' => 'Recent Sales',
 	'latest' => 'Latest',
 	'best selling product' => 'Best Selling Product',

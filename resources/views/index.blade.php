@@ -107,45 +107,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
-          <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-              <h4>{{trans('file.Best Seller').' '.date('Y'). '('.trans('file.qty').')'}}</h4>
-              <div class="right-column">
-                
-              </div>
-            </div>
-            <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>SL No</th>
-                      <th>{{trans('file.Product Details')}}</th>
-                      <th>{{trans('file.qty')}}</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {{-- @foreach($yearly_best_selling_qty as $key => $sale)
-                      <?php $product = DB::table('products')->find($sale->product_id); ?>
-                      <tr>
-                        <td>{{$key + 1}}</td>
-                        <td>{{$product->name}}<br>[{{$product->code}}]</td>
-                        <td>{{$sale->sold_qty}}</td>
-                      </tr>
-                    @endforeach --}}
-                    @for($i=0;$i<6;$i++)
-                      <tr>
-                        <td>{{$i + 1}}</td>
-                        <td>Ada Lovelace</td>
-                        <td>124</td>
-                      </tr>
-                    @endfor
-                  </tbody>
-                </table>
-              </div>
-          </div>
-        </div>
-      
+        @include('best-seller');
         <div class="col-md-8 ">
           <div class="card">
             <div class="card-header d-flex align-items-center">
@@ -409,14 +371,16 @@
                     </tr>
                   </thead>
                   <tbody>
-                      @for ($i=0;$i<7;$i++)
+                    @forelse($customers as $key => $customer)
                       <tr>
-                      <td>Ada Lovelace</td>
-                      <td>1234567890</td>
-                      <td>5</td>
-                      <td>1520</td>
-                    </tr>
-                      @endfor
+                        <td>{{ $customer->name }}</td>
+                        <td>{{ $customer->phone_number }}</td>
+                        <td> </td>
+                        <td> </td>
+                      </tr>
+                    @empty
+                      <p> No data found</p>
+                    @endforelse
                   </tbody>
                 </table>
               </div>
@@ -429,7 +393,11 @@
 @endsection
 
 @push('scripts')
+
 <script type="text/javascript">
+    $(document).ready(function(){
+        let bestSeller = $("#best-seller-table").DataTable({searching: false, paging: false, info: false});
+    });
   $(document).ready(function(){
     $.get('dashboard-filter/' + $("#this-month-start-date").val() + '/' + $("#this-month-end-date").val(), function(data) {
             dashboardFilter(data);
