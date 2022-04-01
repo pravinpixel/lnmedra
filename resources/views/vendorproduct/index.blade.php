@@ -3,29 +3,37 @@
 
 <section>
     <div class="container-fluid">
-        @if(in_array("vendorproducts-add", $all_permission))
-            <a href="{{route('vendorproducts.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> Vendor {{__('file.add_product')}}</a>
-            {{-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> --}}
-        @endif
-    </div>
-    <div class="table-responsive">
-        <table id="product-data-table" class="table" style="width: 100%">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Image')}}</th>
-                    <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.Code')}}</th>
-                    <th>{{trans('file.Brand')}}</th>
-                    <th>{{trans('file.category')}}</th>
-                    <th>{{trans('file.Qty')}}</th>
-                    <th>{{trans('file.Price')}}</th>                    
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
+    
+        <div class="my-4 text-right">
+            @if(in_array("vendorproducts-add", $all_permission))
+                <a href="{{route('vendorproducts.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> Vendor {{__('file.add_product')}}</a>
+                {{-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> --}}
+            @endif
+        </div>
 
-        </table>
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="product-data-table" class="table" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Image')}}</th>
+                            <th>{{trans('file.name')}}</th>
+                            <th>{{trans('file.Code')}}</th>
+                            <th>{{trans('file.Brand')}}</th>
+                            <th>{{trans('file.category')}}</th>
+                            <th>{{trans('file.Qty')}}</th>
+                            <th>{{trans('file.Price')}}</th>                    
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+        
+                </table>
+            </div>
+        </div>
+
     </div>
+    
 </section>
 
 <div id="importProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">

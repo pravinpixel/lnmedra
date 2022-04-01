@@ -3,88 +3,93 @@
  
 <section>
     <div class="container-fluid">
-        <button class="btn btn-info" data-toggle="modal" data-target="#create-modal"><i class="dripicons-plus"></i> {{trans('file.Add Coupon')}}</button>
+        <div class="my-4 text-right">
+            <button class="btn btn-info" data-toggle="modal" data-target="#create-modal"><i class="dripicons-plus"></i> {{trans('file.Add Coupon')}}</button>
+        </div>
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="coupon-table" class="table" style="width: 100% !important">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Coupon Code')}}</th>
+                            <th>{{trans('file.Type')}}</th>
+                            <th>{{trans('file.Amount')}}</th>
+                            <th>{{trans('file.Minimum Amount')}}</th>
+                            <th>Qty</th>
+                            <th>{{trans('file.Available')}}</th>
+                            <th>{{trans('file.Expired Date')}}</th>
+                            <th>{{trans('file.Created By')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_coupon_all as $key=>$coupon)
+                        <?php
+                            $created_by = DB::table('users')->find($coupon->user_id);
+                        ?>
+                        <tr data-id="{{$coupon->id}}">
+                            <td>{{$key}}</td>
+                            <td>{{ $coupon->code }}</td>
+                            @if($coupon->type == 'percentage')
+                            <td><div class="badge badge-primary">{{$coupon->type}}</div></td>
+                            @else
+                            <td><div class="badge badge-info">{{$coupon->type}}</div></td>
+                            @endif
+                            <td>{{ $coupon->amount }}</td>
+                            @if($coupon->minimum_amount)
+                            <td>{{ $coupon->minimum_amount }}</td>
+                            @else
+                            <td>N/A</td>
+                            @endif
+                            <td>{{ $coupon->quantity }}</td>
+                            @if($coupon->quantity - $coupon->used)
+                            <td class="text-center"><div class="badge badge-success">{{ $coupon->quantity - $coupon->used }}</div></td>
+                            @else
+                            <td class="text-center"><div class="badge badge-danger">{{ $coupon->quantity - $coupon->used }}</div></td>
+                            @endif
+                            @if($coupon->expired_date >= date("Y-m-d"))
+                              <td><div class="badge badge-success">{{date('d-m-Y', strtotime($coupon->expired_date))}}</div></td>
+                            @else
+                              <td><div class="badge badge-danger">{{date('d-m-Y', strtotime($coupon->expired_date))}}</div></td>
+                            @endif
+                            <td>{{ $created_by->name }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                        <li><button type="button" data-id="{{$coupon->id}}" data-code="{{$coupon->code}}" data-type="{{$coupon->type}}" data-amount="{{$coupon->amount}}" data-minimum_amount="{{$coupon->minimum_amount}}" data-quantity="{{$coupon->quantity}}" data-expired_date="{{$coupon->expired_date}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</button></li>
+                                        {{ Form::open(['route' => ['coupons.destroy', $coupon->id], 'method' => 'DELETE'] ) }}
+                                        <li>
+                                            <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                        {{ Form::close() }}
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot class="tfoot active">
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
-    <div class="table-responsive">
-        <table id="coupon-table" class="table" style="width: 100% !important">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Coupon Code')}}</th>
-                    <th>{{trans('file.Type')}}</th>
-                    <th>{{trans('file.Amount')}}</th>
-                    <th>{{trans('file.Minimum Amount')}}</th>
-                    <th>Qty</th>
-                    <th>{{trans('file.Available')}}</th>
-                    <th>{{trans('file.Expired Date')}}</th>
-                    <th>{{trans('file.Created By')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_coupon_all as $key=>$coupon)
-                <?php
-                    $created_by = DB::table('users')->find($coupon->user_id);
-                ?>
-                <tr data-id="{{$coupon->id}}">
-                    <td>{{$key}}</td>
-                    <td>{{ $coupon->code }}</td>
-                    @if($coupon->type == 'percentage')
-                    <td><div class="badge badge-primary">{{$coupon->type}}</div></td>
-                    @else
-                    <td><div class="badge badge-info">{{$coupon->type}}</div></td>
-                    @endif
-                    <td>{{ $coupon->amount }}</td>
-                    @if($coupon->minimum_amount)
-                    <td>{{ $coupon->minimum_amount }}</td>
-                    @else
-                    <td>N/A</td>
-                    @endif
-                    <td>{{ $coupon->quantity }}</td>
-                    @if($coupon->quantity - $coupon->used)
-                    <td class="text-center"><div class="badge badge-success">{{ $coupon->quantity - $coupon->used }}</div></td>
-                    @else
-                    <td class="text-center"><div class="badge badge-danger">{{ $coupon->quantity - $coupon->used }}</div></td>
-                    @endif
-                    @if($coupon->expired_date >= date("Y-m-d"))
-                      <td><div class="badge badge-success">{{date('d-m-Y', strtotime($coupon->expired_date))}}</div></td>
-                    @else
-                      <td><div class="badge badge-danger">{{date('d-m-Y', strtotime($coupon->expired_date))}}</div></td>
-                    @endif
-                    <td>{{ $created_by->name }}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                <li><button type="button" data-id="{{$coupon->id}}" data-code="{{$coupon->code}}" data-type="{{$coupon->type}}" data-amount="{{$coupon->amount}}" data-minimum_amount="{{$coupon->minimum_amount}}" data-quantity="{{$coupon->quantity}}" data-expired_date="{{$coupon->expired_date}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</button></li>
-                                {{ Form::open(['route' => ['coupons.destroy', $coupon->id], 'method' => 'DELETE'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-            <tfoot class="tfoot active">
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tfoot>
-        </table>
-    </div>
+    
 </section>
 
 <div id="create-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">

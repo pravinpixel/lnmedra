@@ -2,35 +2,38 @@
  
 <section>
     <div class="container-fluid">
-        <div class="section-title mb-3">Products Listing</div>
-        @if(userHasAccess('products-add'))
-            <a href="{{route('products.create')}}" class="btn btn-info rounded-pill"><i class="dripicons-plus"></i> {{__('file.add_product')}}</a>
-        @endif
-        @if(userHasAccess('product_import'))
-            <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary rounded-pill ml-auto"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a>
-        @endif
-    </div>
-    <div class="table-responsive">
-        <table id="product-data-table" class="table custom table-hover table-centered" style="width: 100%">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Image')}}</th>
-                    <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.Code')}}</th>
-                    <th>{{trans('file.Brand')}}</th>
-                    <th>{{trans('file.category')}}</th>
-                    <th>{{trans('file.Quantity')}}</th>
-                    <th>{{trans('file.Unit')}}</th>
-                    <th>{{trans('file.Price')}}</th>
-                    <th>{{trans('file.Cost')}}</th>
-                    {{-- <th>Stock Worth</th> --}}
-                    <th>{{trans('file.status')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-
-        </table>
+        <div class="my-4 text-right">
+            @if(userHasAccess('products-add'))
+                <a href="{{route('products.create')}}" class="btn btn-info "><i class="dripicons-plus"></i> {{__('file.add_product')}}</a>
+            @endif
+            @if(userHasAccess('product_import'))
+                <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary  ml-auto"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a>
+            @endif 
+        </div>
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="product-data-table" class="table custom table-hover table-centered" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Image')}}</th>
+                            <th>{{trans('file.name')}}</th>
+                            <th>{{trans('file.Code')}}</th>
+                            <th>{{trans('file.Brand')}}</th>
+                            <th>{{trans('file.category')}}</th>
+                            <th>{{trans('file.Quantity')}}</th>
+                            <th>{{trans('file.Unit')}}</th>
+                            <th>{{trans('file.Price')}}</th>
+                            <th>{{trans('file.Cost')}}</th>
+                            {{-- <th>Stock Worth</th> --}}
+                            <th>{{trans('file.status')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+        
+                </table>
+            </div>
+        </div>
     </div>
 </section>
 

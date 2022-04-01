@@ -6,109 +6,112 @@
 
 <section>
     <div class="container-fluid">
-        <div class="section-title mb-3">Stock-Count Listing</div>
-        <button class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans('file.Count Stock')}} </button>
-    </div>
-    <div class="table-responsive">
-        <table id="stock-count-table" class="table stock-count-list">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Date')}}</th>
-                    <th>{{trans('file.reference')}}</th>
-                    <th>{{trans('file.Warehouse')}}</th>
-                    <th>{{trans('file.category')}}</th>
-                    <th>{{trans('file.Brand')}}</th>
-                    <th>{{trans('file.Type')}}</th>
-                    <th class="not-exported">{{trans('file.Initial File')}}</th>
-                    <th class="not-exported">{{trans('file.Final File')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_stock_count_all as $key => $stock_count)
-                <?php
-                    $warehouse = DB::table('warehouses')->find($stock_count->warehouse_id);
-                    $category_name = [];
-                    $brand_name = [];
-                    $initial_file = 'public/stock_count/' . $stock_count->initial_file;
-                    $final_file = 'public/stock_count/' . $stock_count->final_file;
-                ?>
-                <tr>
-                    <td>{{$key}}</td>
-                    <td>{{ date($general_setting->date_format, strtotime($stock_count->created_at->toDateString())) . ' '. $stock_count->created_at->toTimeString() }}</td>
-                    <td>{{ $stock_count->reference_no }}</td>
-                    <td>{{ $warehouse->name }}</td>
-                    <td>
-                        @if($stock_count->category_id)
-                            @foreach(explode(",",$stock_count->category_id) as $cat_key=>$category_id)
-                            @php
-                                $category = \DB::table('categories')->find($category_id);
-                                $category_name[] = $category->name;
-                            @endphp
-                                @if($cat_key)
-                                    {{', ' . $category->name}}
-                                @else
-                                    {{$category->name}}
+        <div class="text-right">
+            <button class="btn btn-info my-4" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans('file.Count Stock')}} </button>
+        </div>
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="stock-count-table" class="table stock-count-list">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Date')}}</th>
+                            <th>{{trans('file.reference')}}</th>
+                            <th>{{trans('file.Warehouse')}}</th>
+                            <th>{{trans('file.category')}}</th>
+                            <th>{{trans('file.Brand')}}</th>
+                            <th>{{trans('file.Type')}}</th>
+                            <th class="not-exported">{{trans('file.Initial File')}}</th>
+                            <th class="not-exported">{{trans('file.Final File')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_stock_count_all as $key => $stock_count)
+                        <?php
+                            $warehouse = DB::table('warehouses')->find($stock_count->warehouse_id);
+                            $category_name = [];
+                            $brand_name = [];
+                            $initial_file = 'public/stock_count/' . $stock_count->initial_file;
+                            $final_file = 'public/stock_count/' . $stock_count->final_file;
+                        ?>
+                        <tr>
+                            <td>{{$key}}</td>
+                            <td>{{ date($general_setting->date_format, strtotime($stock_count->created_at->toDateString())) . ' '. $stock_count->created_at->toTimeString() }}</td>
+                            <td>{{ $stock_count->reference_no }}</td>
+                            <td>{{ $warehouse->name }}</td>
+                            <td>
+                                @if($stock_count->category_id)
+                                    @foreach(explode(",",$stock_count->category_id) as $cat_key=>$category_id)
+                                    @php
+                                        $category = \DB::table('categories')->find($category_id);
+                                        $category_name[] = $category->name;
+                                    @endphp
+                                        @if($cat_key)
+                                            {{', ' . $category->name}}
+                                        @else
+                                            {{$category->name}}
+                                        @endif
+                                    @endforeach
                                 @endif
-                            @endforeach
-                        @endif
-                    </td>
-                    <td>
-                        @if($stock_count->brand_id)
-                            @foreach(explode(",",$stock_count->brand_id) as $brand_key=>$brand_id)
-                            @php
-                                $brand = \DB::table('brands')->find($brand_id);
-                                $brand_name[] = $brand->title;
-                            @endphp
-                                @if($brand_key)
-                                    {{', '.$brand->title}}
-                                @else
-                                    {{$brand->title}}
+                            </td>
+                            <td>
+                                @if($stock_count->brand_id)
+                                    @foreach(explode(",",$stock_count->brand_id) as $brand_key=>$brand_id)
+                                    @php
+                                        $brand = \DB::table('brands')->find($brand_id);
+                                        $brand_name[] = $brand->title;
+                                    @endphp
+                                        @if($brand_key)
+                                            {{', '.$brand->title}}
+                                        @else
+                                            {{$brand->title}}
+                                        @endif
+                                    @endforeach
                                 @endif
-                            @endforeach
-                        @endif
-                    </td>
-                    @if($stock_count->type == 'full')
-                        @php $type = trans('file.Full') @endphp
-                        <td><div class="badge badge-primary">{{trans('file.Full')}}</div></td>
-                    @else
-                        @php $type = trans('file.Partial') @endphp
-                        <td><div class="badge badge-info">{{trans('file.Partial')}}</div></td>
-                    @endif
-                    <td class="text-center">
-                        <a download href="{{'public/stock_count/'.$stock_count->initial_file}}" title="{{trans('file.Download')}}"><i class="dripicons-copy"></i></a>
-                    </td>
-                    <td class="text-center">
-                        @if($stock_count->final_file)
-                        <a download href="{{'public/stock_count/'.$stock_count->final_file}}" title="{{trans('file.Download')}}"><i class="dripicons-copy"></i></a>
-                        @endif
-                    </td>
-                    <td>
-                        @if($stock_count->final_file)
-                            <div class="badge badge-success final-report" data-stock_count='["{{date($general_setting->date_format, strtotime($stock_count->created_at->toDateString()))}}", "{{$stock_count->reference_no}}", "{{$warehouse->name}}", "{{$type}}", "{{implode(", ", $category_name)}}", "{{implode(", ", $brand_name)}}", "{{$initial_file}}", "{{$final_file}}", "{{$stock_count->id}}"]'>{{trans('file.Final Report')}}
-                            </div>
-                        @else
-                            <div style="cursor: pointer;" class="badge badge-primary finalize" data-id="{{$stock_count->id}}">{{trans('file.Finalize')}}
-                            </div>
-                        @endif
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-            <tfoot class="tfoot active">
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tfoot>
-        </table>
+                            </td>
+                            @if($stock_count->type == 'full')
+                                @php $type = trans('file.Full') @endphp
+                                <td><div class="badge badge-primary">{{trans('file.Full')}}</div></td>
+                            @else
+                                @php $type = trans('file.Partial') @endphp
+                                <td><div class="badge badge-info">{{trans('file.Partial')}}</div></td>
+                            @endif
+                            <td class="text-center">
+                                <a download href="{{'public/stock_count/'.$stock_count->initial_file}}" title="{{trans('file.Download')}}"><i class="dripicons-copy"></i></a>
+                            </td>
+                            <td class="text-center">
+                                @if($stock_count->final_file)
+                                <a download href="{{'public/stock_count/'.$stock_count->final_file}}" title="{{trans('file.Download')}}"><i class="dripicons-copy"></i></a>
+                                @endif
+                            </td>
+                            <td>
+                                @if($stock_count->final_file)
+                                    <div class="badge badge-success final-report" data-stock_count='["{{date($general_setting->date_format, strtotime($stock_count->created_at->toDateString()))}}", "{{$stock_count->reference_no}}", "{{$warehouse->name}}", "{{$type}}", "{{implode(", ", $category_name)}}", "{{implode(", ", $brand_name)}}", "{{$initial_file}}", "{{$final_file}}", "{{$stock_count->id}}"]'>{{trans('file.Final Report')}}
+                                    </div>
+                                @else
+                                    <div style="cursor: pointer;" class="badge badge-primary finalize" data-id="{{$stock_count->id}}">{{trans('file.Finalize')}}
+                                    </div>
+                                @endif
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot class="tfoot active">
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
 

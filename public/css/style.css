@@ -301,3 +301,6 @@ a.ui-button:active,
 	font-weight: normal;
 	color: #ffffff;
 }
+section {
+  padding-top:  0 !important;
+}

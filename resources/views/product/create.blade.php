@@ -3,7 +3,7 @@
 @section('content')
 <section class="forms">
     <div class="container-fluid">
-        <div class="section-title mb-3">Add Product</div>
+    
         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
             <div class="card">
                 <div class="card-header bg-success text-white fw-bold">

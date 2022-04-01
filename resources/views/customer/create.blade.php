@@ -2,7 +2,7 @@
  
 <section class="forms">
     <div class="container-fluid">
-        <div class="section-title">+ {{trans('file.Add Customer')}}</div>
+ 
        
         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
 

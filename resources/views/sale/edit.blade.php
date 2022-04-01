@@ -2,9 +2,7 @@
 
 <section class="forms">
     <div class="container-fluid">
-        <div class="section-title">
-            {{trans('file.Update Sale')}}
-        </div>
+ 
         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
         
         {!! Form::open(['route' => ['sales.update', $lims_sale_data->id], 'method' => 'put', 'files' => true, 'id' => 'payment-form']) !!}

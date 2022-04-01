@@ -3,12 +3,12 @@
  
 
   <div class="row ">
-    <div class="container-fluid  my-3">
+    <div class="container-fluid  my-4 ">
       <div class="col-md-12 d-flex align-items-center justify-content-between">
         <div class="brand-text float-left">
             <h3 class="m-0">Dashboard</h3>
         </div>
-        <div class="filter-toggle btn-group shadow border rounded-pill m-0">
+        <div class="filter-toggle btn-group shadow border rounded-pill m-0" style="overflow: hidden">
           <button class="btn btn-light  date-btn" data-start_date="{{date('Y-m-d')}}" data-end_date="{{date('Y-m-d')}}">{{trans('file.Today')}}</button>
           <button class="btn btn-light  date-btn" data-start_date="{{date('Y-m-d', strtotime(' -7 day'))}}" data-end_date="{{date('Y-m-d')}}">{{trans('file.Last 7 Days')}}</button>
           <button class="btn btn-light  date-btn active" data-start_date="{{date('Y').'-'.date('m').'-'.'01'}}" data-end_date="{{date('Y-m-d')}}">{{trans('file.This Month')}}</button>
@@ -19,7 +19,7 @@
       </div>
     </div>
   </div> 
-  
+  <br>
   <section class="dashboard-counts">
     <div class="container-fluid">
       <div class="row m-0">
@@ -29,14 +29,14 @@
             <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-graph-bar" style="color: #0095ff"></i></div>
-                <div class="name"><strong style="color: #0095ff">Sales</strong></div>
+                <div class="name"><strong style="color: #14AB69">Sales</strong></div>
                 <div class="count-number revenue-data">00.00</div>
               </div>
             </div>
              <!-- Count item widget-->
              <div class="col">
               <div class="wrapper count-title text-center">
-                <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div>
+                <div class="icon"><i class="dripicons-media-loop" style="color: #14AB69"></i></div>
                 <div class="name"><strong style="color: #0095ff">Purchase</strong></div>
                 <div class="count-number purchase-data">00.00</div>
               </div>
@@ -46,7 +46,7 @@
             <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div>
-                <div class="name"><strong style="color: #0095ff">Expense</strong></div>
+                <div class="name"><strong style="color: #14AB69">Expense</strong></div>
                 <div class="count-number expense-data">00.00</div>
               </div>
             </div>
@@ -54,7 +54,7 @@
             <!-- Count item widget-->
             <div class="col">
               <div class="wrapper count-title text-center">
-                <div class="icon"><i class="dripicons-return" style="color: #0095ff"></i></div>
+                <div class="icon"><i class="dripicons-return" style="color: #14AB69"></i></div>
                 <div class="name"><strong style="color: #0095ff">Sale Return</strong></div>
                 <div class="count-number return-data">00.00</div>
               </div>
@@ -63,7 +63,7 @@
             <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div>
-                <div class="name"><strong style="color: #0095ff">Purchase Return</strong></div>
+                <div class="name"><strong style="color: #14AB69">Purchase Return</strong></div>
                 <div class="count-number purchase_return-data">00.00</div>
               </div>
             </div>
@@ -72,7 +72,7 @@
             <!-- Count item widget-->
             <div class="col">
               <div class="wrapper count-title text-center">
-                <div class="icon"><i class="dripicons-trophy" style="color: #0095ff"></i></div>
+                <div class="icon"><i class="dripicons-trophy" style="color: #14AB69"></i></div>
                 <div class="name"><strong style="color: #0095ff">Profit</strong></div>
                 <div class="count-number profit-data">00.00</div>
               </div>

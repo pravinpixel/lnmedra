@@ -4,7 +4,7 @@
 @endif
 <section class="forms">
     <div class="container-fluid">
-        <div class="section-title">{{trans('file.Update Customer')}}</div>
+     
         {!! Form::open(['route' => ['customer.update',$lims_customer_data->id], 'method' => 'put', 'files' => true]) !!}
             <div class="card">
                 <div class="card-body">

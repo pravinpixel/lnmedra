@@ -1284,12 +1284,14 @@
                             <tbody>
                                 @for ($i=0; $i < ceil($product_number/5); $i++)
                                     <tr>
-                                        <td class="product-img sound-btn" title="{{$lims_product_list[0+$i*5]->name}}" data-product ="{{$lims_product_list[0+$i*5]->code . ' (' . $lims_product_list[0+$i*5]->name . ')'}}"><img  src="{{url('public/images/product',$lims_product_list[0+$i*5]->base_image)}}" width="100%" />
+                                        <td class="product-img sound-btn" title="{{$lims_product_list[0+$i*5]->name}}" data-product ="{{$lims_product_list[0+$i*5]->code . ' (' . $lims_product_list[0+$i*5]->name . ')'}}">
+                                            {{-- <img  src="{{url('public/images/product',$lims_product_list[0+$i*5]->base_image)}}" width="100%" /> --}}
                                             <p>{{$lims_product_list[0+$i*5]->name}}</p>
                                             <span>{{$lims_product_list[0+$i*5]->code}}</span>
                                         </td>
                                         @if(!empty($lims_product_list[1+$i*5]))
-                                        <td class="product-img sound-btn" title="{{$lims_product_list[1+$i*5]->name}}" data-product ="{{$lims_product_list[1+$i*5]->code . ' (' . $lims_product_list[1+$i*5]->name . ')'}}"><img  src="{{url('public/images/product',$lims_product_list[1+$i*5]->base_image)}}" width="100%" />
+                                        <td class="product-img sound-btn" title="{{$lims_product_list[1+$i*5]->name}}" data-product ="{{$lims_product_list[1+$i*5]->code . ' (' . $lims_product_list[1+$i*5]->name . ')'}}">
+                                            {{-- <img  src="{{url('public/images/product',$lims_product_list[1+$i*5]->base_image)}}" width="100%" /> --}}
                                             <p>{{$lims_product_list[1+$i*5]->name}}</p>
                                             <span>{{$lims_product_list[1+$i*5]->code}}</span>
                                         </td>
@@ -1297,7 +1299,8 @@
                                         <td style="border:none;"></td>
                                         @endif
                                         @if(!empty($lims_product_list[2+$i*5]))
-                                        <td class="product-img sound-btn" title="{{$lims_product_list[2+$i*5]->name}}" data-product ="{{$lims_product_list[2+$i*5]->code . ' (' . $lims_product_list[2+$i*5]->name . ')'}}"><img  src="{{url('public/images/product',$lims_product_list[2+$i*5]->base_image)}}" width="100%" />
+                                        <td class="product-img sound-btn" title="{{$lims_product_list[2+$i*5]->name}}" data-product ="{{$lims_product_list[2+$i*5]->code . ' (' . $lims_product_list[2+$i*5]->name . ')'}}">
+                                            {{-- <img  src="{{url('public/images/product',$lims_product_list[2+$i*5]->base_image)}}" width="100%" /> --}}
                                             <p>{{$lims_product_list[2+$i*5]->name}}</p>
                                             <span>{{$lims_product_list[2+$i*5]->code}}</span>
                                         </td>
@@ -1305,7 +1308,8 @@
                                         <td style="border:none;"></td>
                                         @endif
                                         @if(!empty($lims_product_list[3+$i*5]))
-                                        <td class="product-img sound-btn" title="{{$lims_product_list[3+$i*5]->name}}" data-product ="{{$lims_product_list[3+$i*5]->code . ' (' . $lims_product_list[3+$i*5]->name . ')'}}"><img  src="{{url('public/images/product',$lims_product_list[3+$i*5]->base_image)}}" width="100%" />
+                                        <td class="product-img sound-btn" title="{{$lims_product_list[3+$i*5]->name}}" data-product ="{{$lims_product_list[3+$i*5]->code . ' (' . $lims_product_list[3+$i*5]->name . ')'}}">
+                                            {{-- <img  src="{{url('public/images/product',$lims_product_list[3+$i*5]->base_image)}}" width="100%" /> --}}
                                             <p>{{$lims_product_list[3+$i*5]->name}}</p>
                                             <span>{{$lims_product_list[3+$i*5]->code}}</span>
                                         </td>
@@ -1313,7 +1317,8 @@
                                         <td style="border:none;"></td>
                                         @endif
                                         @if(!empty($lims_product_list[4+$i*5]))
-                                        <td class="product-img sound-btn" title="{{$lims_product_list[4+$i*5]->name}}" data-product ="{{$lims_product_list[4+$i*5]->code . ' (' . $lims_product_list[4+$i*5]->name . ')'}}"><img  src="{{url('public/images/product',$lims_product_list[4+$i*5]->base_image)}}" width="100%" />
+                                        <td class="product-img sound-btn" title="{{$lims_product_list[4+$i*5]->name}}" data-product ="{{$lims_product_list[4+$i*5]->code . ' (' . $lims_product_list[4+$i*5]->name . ')'}}">
+                                            {{-- <img  src="{{url('public/images/product',$lims_product_list[4+$i*5]->base_image)}}" width="100%" /> --}}
                                             <p>{{$lims_product_list[4+$i*5]->name}}</p>
                                             <span>{{$lims_product_list[4+$i*5]->code}}</span>
                                         </td>

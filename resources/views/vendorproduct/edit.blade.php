@@ -1,184 +1,183 @@
 @extends('layout.main')
 
 @section('content')
+
 <section class="forms">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header d-flex align-items-center">
-                        <h4>{{trans('file.Update Product')}}</h4>
-                    </div>
-                    <div class="card-body">
-                        <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
-                        <form id="product-form">
-                            <input type="hidden" name="id" value="{{$lims_product_data->id}}" >
-                            <input type="hidden" name="dashboardView" value="{{$lims_product_data->dashboardView}}" >
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                         <input type="hidden" name="vendoruserid" id="vendoruserid" value="{{ Auth::id() }}">
-                                        <label>{{trans('file.Product Type')}} *</strong> </label>
-                                        <div class="input-group">
-                                        <select name="type" required class="form-control selectpicker"  data-live-search="true" data-live-search-style="begins" id="productType">
-                                            <option value="">--Select--</option>
-                                                @foreach($productType as $product)
-                                                <option value="{{ $product->id }}" >{{ $product->name }}</option>
-                                                @endforeach
-                                                <!-- <option value="standard">Standard</option>
-                                                <option value="combo">Combo</option>
-                                                <option value="digital">Digital</option>
-                                                <option value="service">Service</option> -->
-                                            </select>
-                                            <input type="hidden" name="type_hidden" value="{{$lims_product_data->type}}">
-                                        </div>
-                                    </div>
-                                </div>
-                                <input type="hidden" name="attributeInput" value="{{$lims_product_data->attribute}}"  id="attributeInput" >
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Name')}} *</strong> </label>
-                                        <input type="text" name="name" value="{{$lims_product_data->name}}" required class="form-control">
-                                        <span class="validation-msg" id="name-error"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Code')}} *</strong> </label>
-                                        <div class="input-group">
-                                            <input type="text" name="code" id="code" value="{{$lims_product_data->code}}" class="form-control" required>
-                                            <div class="input-group-append">
-                                                <button id="genbutton" type="button" class="btn btn-sm btn-default" title="{{trans('file.Generate')}}"><i class="fa fa-refresh"></i></button>
-                                            </div>
-                                        </div>
-                                        <span class="validation-msg" id="code-error"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4" id="attribute_div">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Attribute')}} *</strong> </label>
-                                        
-                                        <div id="attribute_img" >
-                                            
-                                        </div> 
-                                    </div>
-                                </div>
-                                <div id="digital" class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Attach File')}}</strong> </label>
-                                        <div class="input-group">
-                                            <input type="file" name="file" class="form-control">
-                                        </div>
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                </div>
-                             
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Brand')}}</strong> </label>
-                                        <div class="input-group">
-                                            <input type="hidden" name="brand" value="{{ $lims_product_data->brand_id}}">
-                                          <select name="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
-                                            @foreach($lims_brand_list as $brand)
-                                                <option value="{{$brand->id}}">{{$brand->title}}</option>
-                                            @endforeach
-                                          </select>
-                                      </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <input type="hidden" name="category" value="{{$lims_product_data->category_id}}">
-                                        <label>{{trans('file.category')}} *</strong> </label>
-                                        <div class="input-group">
-                                          <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
-                                           
-                                            @foreach($lims_category_list as $category)
-                                                @if($category->parent_id == '' || null)
-                                                    <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
-                                                    @foreach($lims_category_list as $subcategory)
-                                                    @if($category->id == $subcategory->parent_id)
-                                                    <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
-                                                    @endif    
-                                                    @endforeach
-                                                @endif
-                                            @endforeach
-                                          </select>
-                                      </div>
-                                    </div>
-                                </div>
-                             
-                                <div id="alert-qty" class="col-md-2">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Quantity')}}</strong> </label>
-                                        <input type="number" name="qty" value="{{ $lims_product_data->qty }}" class="form-control" step="any">
-                                    </div>
-                                </div>
-                                
-                                <div class="col-md-3">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Price')}} *</strong> </label>
-                                        <input type="number" name="price" value="{{$lims_product_data->price}}" required class="form-control" step="any">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                    
-                                </div>
-                                
-                               
-                               
-                                
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Image')}}</strong> </label> <i class="dripicons-question" data-toggle="tooltip" title="{{trans('file.You can upload multiple image. Only .jpeg, .jpg, .png, .gif file can be uploaded. First image will be base image.')}}"></i>
-                                        <div id="imageUpload" class="dropzone"></div>
-                                        <span class="validation-msg" id="image-error"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></th>
-                                                    <th>Image</th>
-                                                    <th>Remove</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php $images = explode(",", $lims_product_data->image)?>
-                                                @foreach($images as $key => $image)
-                                                <tr>
-                                                    <td><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></i></td>
-                                                    <td>
-                                                        <img src="{{url('public/images/product', $image)}}" height="60" width="60">
-                                                        <input type="hidden" name="prev_img[]" value="{{$image}}">
-                                                    </td>
-                                                    <td><button type="button" class="btn btn-sm btn-danger remove-img">X</button></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Details')}}</label>
-                                        <textarea name="product_details" class="form-control" rows="5">{{str_replace('@', '"', $lims_product_data->product_details)}}</textarea>
-                                    </div>
-                                </div>
-                                
- 
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <input type="button" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-btn">
-                                    </div>
+        <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
+         
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4>{{trans('file.Update Product')}}</h4>
+            </div>
+            <div class="card-body">
+                <form id="product-form">
+                    <input type="hidden" name="id" value="{{$lims_product_data->id}}" >
+                    <input type="hidden" name="dashboardView" value="{{$lims_product_data->dashboardView}}" >
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                    <input type="hidden" name="vendoruserid" id="vendoruserid" value="{{ Auth::id() }}">
+                                <label>{{trans('file.Product Type')}} *</strong> </label>
+                                <div class="input-group">
+                                <select name="type" required class="form-control selectpicker"  data-live-search="true" data-live-search-style="begins" id="productType">
+                                    <option value="">--Select--</option>
+                                        @foreach($productType as $product)
+                                        <option value="{{ $product->id }}" >{{ $product->name }}</option>
+                                        @endforeach
+                                        <!-- <option value="standard">Standard</option>
+                                        <option value="combo">Combo</option>
+                                        <option value="digital">Digital</option>
+                                        <option value="service">Service</option> -->
+                                    </select>
+                                    <input type="hidden" name="type_hidden" value="{{$lims_product_data->type}}">
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                        <input type="hidden" name="attributeInput" value="{{$lims_product_data->attribute}}"  id="attributeInput" >
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Name')}} *</strong> </label>
+                                <input type="text" name="name" value="{{$lims_product_data->name}}" required class="form-control">
+                                <span class="validation-msg" id="name-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Code')}} *</strong> </label>
+                                <div class="input-group">
+                                    <input type="text" name="code" id="code" value="{{$lims_product_data->code}}" class="form-control" required>
+                                    <div class="input-group-append">
+                                        <button id="genbutton" type="button" class="btn btn-sm btn-default" title="{{trans('file.Generate')}}"><i class="fa fa-refresh"></i></button>
+                                    </div>
+                                </div>
+                                <span class="validation-msg" id="code-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="attribute_div">
+                            <div class="form-group">
+                                <label>{{trans('file.Attribute')}} *</strong> </label>
+                                
+                                <div id="attribute_img" >
+                                    
+                                </div> 
+                            </div>
+                        </div>
+                        <div id="digital" class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Attach File')}}</strong> </label>
+                                <div class="input-group">
+                                    <input type="file" name="file" class="form-control">
+                                </div>
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>{{trans('file.Brand')}}</strong> </label>
+                                <div class="input-group">
+                                    <input type="hidden" name="brand" value="{{ $lims_product_data->brand_id}}">
+                                    <select name="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
+                                    @foreach($lims_brand_list as $brand)
+                                        <option value="{{$brand->id}}">{{$brand->title}}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="hidden" name="category" value="{{$lims_product_data->category_id}}">
+                                <label>{{trans('file.category')}} *</strong> </label>
+                                <div class="input-group">
+                                    <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
+                                    
+                                    @foreach($lims_category_list as $category)
+                                        @if($category->parent_id == '' || null)
+                                            <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                                            @foreach($lims_category_list as $subcategory)
+                                            @if($category->id == $subcategory->parent_id)
+                                            <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
+                                            @endif    
+                                            @endforeach
+                                        @endif
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div id="alert-qty" class="col-md-2">
+                            <div class="form-group">
+                                <label>{{trans('file.Quantity')}}</strong> </label>
+                                <input type="number" name="qty" value="{{ $lims_product_data->qty }}" class="form-control" step="any">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Price')}} *</strong> </label>
+                                <input type="number" name="price" value="{{$lims_product_data->price}}" required class="form-control" step="any">
+                                <span class="validation-msg"></span>
+                            </div>
+                            
+                        </div>
+                        
+                        
+                        
+                        
+                        <div class="col-md-12">
+                            <div class="form-groups">
+                                <label>{{trans('file.Product Image')}}</strong> </label> <i class="dripicons-question" data-toggle="tooltip" title="{{trans('file.You can upload multiple image. Only .jpeg, .jpg, .png, .gif file can be uploaded. First image will be base image.')}}"></i>
+                                <div id="imageUpload" class="dropzone"></div>
+                                <span class="validation-msg" id="image-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></th>
+                                            <th>Image</th>
+                                            <th>Remove</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $images = explode(",", $lims_product_data->image)?>
+                                        @foreach($images as $key => $image)
+                                        <tr>
+                                            <td class="text-center"><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></i></td>
+                                            <td class="text-center">
+                                                <img src="{{url('public/images/product', $image)}}" height="60" width="60">
+                                                <input type="hidden" name="prev_img[]" value="{{$image}}">
+                                            </td>
+                                            <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-img">X</button></td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Details')}}</label>
+                                <textarea name="product_details" class="form-control" rows="5">{{str_replace('@', '"', $lims_product_data->product_details)}}</textarea>
+                            </div>
+                        </div>
+                        
+
+                        <div class="col-md-12">
+                            <div class="text-right mt-3">
+                                <input type="button" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-btn">
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
+                
     </div>
 </section>
 

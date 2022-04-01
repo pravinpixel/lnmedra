@@ -2,84 +2,87 @@
  
 <section>
     <div class="container-fluid">
-        
+       <div class="text-right mb-4">
         @if(userHasAccess('suppliers-add'))
         <a href="{{route('supplier.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Supplier')}}</a>
         @endif
         @if(userHasAccess('supplier_import'))
         <a href="#" data-toggle="modal" data-target="#importSupplier" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Supplier')}}</a>
         @endif
-    </div>
-    <div class="table-responsive">
-        <table id="supplier-table" class="table">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <!-- <th>{{trans('file.Image')}}</th> -->
-                    <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.Company Name')}}</th>
-                    <!-- <th>{{trans('file.VAT Number')}}</th> -->
-                    <th>{{trans('file.Email')}}</th>
-                    <th>{{trans('file.Phone Number')}}</th>
-                    <th>Status</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_supplier_all as $key=>$supplier)
-                <tr data-id="{{$supplier->id}}">
-                    <td>{{$key}}</td>
-                    <!-- @if($supplier->image)
-                    <td> <img src="{{url('public/images/supplier',$supplier->image)}}" height="80" width="80">
-                    </td>
-                    @else
-                    <td>No Image</td>
-                    @endif -->
-                    <td>{{ $supplier->name }}</td>
-                    <td>{{ $supplier->company_name}}</td>
-                    <!-- <td>{{ $supplier->vat_number}}</td> -->
-                    <td>{{ $supplier->email}}</td>
-                    <td>{{ $supplier->phone_number}}</td>
-                    <td>
-                        <!-- {{$supplier['id']}} -->
-                        @if($supplier->is_active)
-                            <a href="#" class="badge badge-success " onclick="vendorStatus({{$supplier->id}})">{{trans('file.Active')}}</a>
-                        
-                        @else
-                            <a href="#" class="badge badge-danger " onclick="vendorStatus({{$supplier->id}})">{{trans('file.InActive')}}</a>
-                        
-                        @endif
-                    
-                        
-                    </td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                @if(in_array("suppliers-edit", $all_permission))
-                                <li>
-                                	<a href="{{ route('supplier.edit', $supplier->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
-                                </li>
+       </div>
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="supplier-table" class="table">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <!-- <th>{{trans('file.Image')}}</th> -->
+                            <th>{{trans('file.name')}}</th>
+                            <th>{{trans('file.Company Name')}}</th>
+                            <!-- <th>{{trans('file.VAT Number')}}</th> -->
+                            <th>{{trans('file.Email')}}</th>
+                            <th>{{trans('file.Phone Number')}}</th>
+                            <th>Status</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_supplier_all as $key=>$supplier)
+                        <tr data-id="{{$supplier->id}}">
+                            <td>{{$key}}</td>
+                            <!-- @if($supplier->image)
+                            <td> <img src="{{url('public/images/supplier',$supplier->image)}}" height="80" width="80">
+                            </td>
+                            @else
+                            <td>No Image</td>
+                            @endif -->
+                            <td>{{ $supplier->name }}</td>
+                            <td>{{ $supplier->company_name}}</td>
+                            <!-- <td>{{ $supplier->vat_number}}</td> -->
+                            <td>{{ $supplier->email}}</td>
+                            <td>{{ $supplier->phone_number}}</td>
+                            <td>
+                                <!-- {{$supplier['id']}} -->
+                                @if($supplier->is_active)
+                                    <a href="#" class="badge badge-success " onclick="vendorStatus({{$supplier->id}})">{{trans('file.Active')}}</a>
+                                
+                                @else
+                                    <a href="#" class="badge badge-danger " onclick="vendorStatus({{$supplier->id}})">{{trans('file.InActive')}}</a>
+                                
                                 @endif
-                                <li class="divider"></li>
-                                @if(in_array("suppliers-delete", $all_permission))
-                                {{ Form::open(['route' => ['supplier.destroy', $supplier->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                                @endif
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+                            
+                                
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                        @if(in_array("suppliers-edit", $all_permission))
+                                        <li>
+                                            <a href="{{ route('supplier.edit', $supplier->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
+                                        </li>
+                                        @endif
+                                        <li class="divider"></li>
+                                        @if(in_array("suppliers-delete", $all_permission))
+                                        {{ Form::open(['route' => ['supplier.destroy', $supplier->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+                                        <li>
+                                            <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                        {{ Form::close() }}
+                                        @endif
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> 
 </section>
 
 <div id="importSupplier" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">

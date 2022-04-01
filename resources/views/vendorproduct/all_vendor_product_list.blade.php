@@ -7,56 +7,51 @@
             <!-- <a href="{{route('vendorproducts.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> Vendor {{__('file.add_product')}}</a> -->
             {{-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> --}}
         @endif
-    </div>
-    <div class="col-md-6 mx-auto">
-            <div class="d-flex align-items-center">
-                <div class="col-3 text-right">
-                    <label class=" me-2"><strong>{{trans('file.Vendor Name')}}</strong> </label>
+        <div>
+           <div class="col-8 mx-auto">
+                <div class="d-flex align-items-center my-4">
+                    <div class="col-3 text-right">
+                        <label class=" me-2"><strong>{{trans('file.Vendor Name')}}</strong> </label>
+                    </div>
+                    <select name="vendorName" id="vendorName" class="selectpicker form-control mr-3" title="Select vendor name.." autocomplete="type" data-live-search="true" >
+                        @foreach($lims_supplier_list as $key=>$val)
+                            <option value="{{$val['id']}}" >{{$val['name']}}</option>
+                        @endforeach
+                    </select>
+                    <button class="btn-sm btn-danger btn"  onclick="resetVendor()" >Reset Vendor</button>
                 </div>
-                <select name="vendorName" id="vendorName" class="selectpicker form-control mr-3" title="Select vendor name.." autocomplete="type" data-live-search="true" >
-                    @foreach($lims_supplier_list as $key=>$val)
-                        <option value="{{$val['id']}}" >{{$val['name']}}</option>
-                    @endforeach
-                </select>
-                <button class="btn-sm btn-danger btn"  onclick="resetVendor()" >Reset Vendor</button>
+           </div>
+            <div class="card pb-3">
+                <div class="table-responsive ">
+                    {!! Form::open(['route' => 'vendorproducts.row-data','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true,'onsubmit' => 'return checkformvalidation()'],) !!}
+                
+                        <div class="m-3 ml-4 text-center">
+                            <button class="btn-sm btn-success btn" id="btnClick" type="submit">Approve</button>
+                            <button class="btn-sm btn-danger btn"  onclick="rejectProduct()" >Reject</button>
+                        </div> 
+                        <table id="product-data-table" class="table m-0" style="width: 100%">
+                            <thead>
+                                <tr>
+                                    <th class="not-exported"></th>
+                                    <th>{{trans('file.Image')}}</th>
+                                    <th>{{trans('file.name')}}</th>
+                                    <th>{{trans('file.Vendor Name')}}</th>
+                                    <th>{{trans('file.Code')}}</th>
+                                    <th>{{trans('file.Brand')}}</th>
+                                    <th>{{trans('file.category')}}</th>
+                                    <th>{{ trans('file.L&N Quantity')  }}</th>
+                                    <th>{{trans('file.Qty')}}</th>
+                                    <th>{{ trans('file.L&N Price')  }}</th>
+                                    <th>{{trans('file.Price')}}</th>                    
+                                    <th class="not-exported">{{trans('file.action')}}</th>
+                                </tr>
+                            </thead> 
+                        </table> 
+                    {!! Form::close() !!}
+                    </div>
             </div>
-        </div>
-        
-    <div class="table-responsive ">
-    {!! Form::open(['route' => 'vendorproducts.row-data','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true,'onsubmit' => 'return checkformvalidation()'],) !!}
-
-        <div class="m-3 ml-4">
-            <button class="btn-sm btn-success btn" id="btnClick" type="submit">Approve</button>
-            <button class="btn-sm btn-danger btn"  onclick="rejectProduct()" >Reject</button>
-        </div>
-       
-        <!-- <div class="m-3 ml-4">
-            <button class="btn-sm btn-success btn" id="btnClick" type="submit">Approve</button>
-            <button class="btn-sm btn-danger btn" id="btnClick" onclick="rejectProduct()" type="submit">Reject</button>
-            
-           
-        </div> -->
-
-        <table id="product-data-table" class="table m-0" style="width: 100%">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Image')}}</th>
-                    <th>{{trans('file.name')}}</th>
-                    <th>{{trans('file.Vendor Name')}}</th>
-                    <th>{{trans('file.Code')}}</th>
-                    <th>{{trans('file.Brand')}}</th>
-                    <th>{{trans('file.category')}}</th>
-                    <th>{{ trans('file.L&N Quantity')  }}</th>
-                    <th>{{trans('file.Qty')}}</th>
-                    <th>{{ trans('file.L&N Price')  }}</th>
-                    <th>{{trans('file.Price')}}</th>                    
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead> 
-        </table> 
-    {!! Form::close() !!}
-    </div>
+        </div> 
+    </div> 
 </section>
 
 <div id="importProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">

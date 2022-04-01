@@ -13,29 +13,31 @@
  
 <section>
     <div class="container-fluid">
-        <!-- Trigger the modal with a button -->
-        <div class="section-title mb-3"> Category Listing</div>
-
-        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans("file.Add Category")}}</button>&nbsp;
-        @if(userHasAccess('category_import'))
-        <button class="btn btn-primary" data-toggle="modal" data-target="#importCategory"><i class="dripicons-copy"></i> {{trans('file.Import Category')}}</button>
-        @endif
-    </div>
-    <div class="table-responsive">
-        <table id="category-table" class="table text-center" style="width: 100%">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Image')}}</th>
-                    <th>{{trans('file.category')}}</th>
-                    <th>{{trans('file.Parent Category')}}</th>
-                    <th>{{trans('file.Number of Product')}}</th>
-                    <th>{{trans('file.Stock Quantity')}}</th>
-                    <th>{{trans('file.Stock Worth (Price/Cost)')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-        </table>
+        <div class="my-4 text-right">
+            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans("file.Add Category")}}</button>&nbsp;
+            @if(userHasAccess('category_import'))
+            <button class="btn btn-primary" data-toggle="modal" data-target="#importCategory"><i class="dripicons-copy"></i> {{trans('file.Import Category')}}</button>
+            @endif
+        </div>
+   
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="category-table" class="table text-center" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Image')}}</th>
+                            <th>{{trans('file.category')}}</th>
+                            <th>{{trans('file.Parent Category')}}</th>
+                            <th>{{trans('file.Number of Product')}}</th>
+                            <th>{{trans('file.Stock Quantity')}}</th>
+                            <th>{{trans('file.Stock Worth (Price/Cost)')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
 

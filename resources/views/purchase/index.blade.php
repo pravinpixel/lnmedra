@@ -6,7 +6,6 @@
 
 <section>
     <div class="container-fluid">
-        <h3 class="mb-3">{{trans('file.Purchase List')}}</h3>
         <div class="card border">
             {!! Form::open(['route' => 'purchases.index', 'method' => 'get']) !!}
             <div class="d-flex justify-content-center card-body">
@@ -45,43 +44,47 @@
             {!! Form::close() !!}
         </div>
         
-        @if(userHasAccess('purchases-add'))
-            <a href="{{route('purchases.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Purchase')}}</a>&nbsp;
-        @endif
-        @if(userHasAccess('purchases_import'))
-        <a href="{{url('purchases/purchase_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Purchase')}}</a>
-        @endif
-    </div>
-    <div class="table-responsive">
-        <table id="purchase-table" class="table purchase-list" style="width: 100%">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Date')}}</th>
-                    <th>{{trans('file.reference')}}</th>
-                    <th>{{trans('file.Supplier')}}</th>
-                    <th>{{trans('file.Purchase Status')}}</th>
-                    <th>{{trans('file.grand total')}}</th>
-                    <th>{{trans('file.Paid')}}</th>
-                    <th>{{trans('file.Due')}}</th>
-                    <th>{{trans('file.Payment Status')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-
-            <tfoot class="tfoot active">
-                <th></th>
-                <th>{{trans('file.Total')}}</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tfoot>
-        </table>
+        <div class="text-right mb-3">
+            @if(userHasAccess('purchases-add'))
+                <a href="{{route('purchases.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Purchase')}}</a>&nbsp;
+            @endif
+            @if(userHasAccess('purchases_import'))
+            <a href="{{url('purchases/purchase_by_csv')}}" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Purchase')}}</a>
+            @endif
+        </div> 
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="purchase-table" class="table purchase-list" style="width: 100%">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Date')}}</th>
+                            <th>{{trans('file.reference')}}</th>
+                            <th>{{trans('file.Supplier')}}</th>
+                            <th>{{trans('file.Purchase Status')}}</th>
+                            <th>{{trans('file.grand total')}}</th>
+                            <th>{{trans('file.Paid')}}</th>
+                            <th>{{trans('file.Due')}}</th>
+                            <th>{{trans('file.Payment Status')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+        
+                    <tfoot class="tfoot active">
+                        <th></th>
+                        <th>{{trans('file.Total')}}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
 

@@ -3,7 +3,7 @@
 @section('content')
 <section class="forms">
     <div class="container-fluid">
-        <div class="section-title">Update Product</div>
+   
         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
         <div class="card">
             <div class="card-header bg-success text-white">
@@ -470,7 +470,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="form-group">
+                            <div class="text-right">
                                 <input type="button" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-btn">
                             </div>
                         </div>

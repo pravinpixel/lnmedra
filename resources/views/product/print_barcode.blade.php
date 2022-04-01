@@ -32,7 +32,7 @@
 </style>
 <section class="forms">
     <div class="container-fluid">
-        <div class="section-title">Product PrintBarcode</div>
+        
         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
         <div class="row m-0">
             <div class="col-md-12 p-0">
