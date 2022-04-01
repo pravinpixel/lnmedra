@@ -92,26 +92,52 @@
         font-size: 20px !important;
         padding: 0.8em 4em 0 !important
       }
-      .table th{
-        background: #0095ff !important;
-        color: white !important;
-        border-bottom: 1px solid #3b9970 !important;
-        text-align: center !important
-      }
-      .table th,td {
-        vertical-align: middle !important
-      }
-      td.col-sm-2,     td.col-sm-3 {
-        text-align:  center !important;
-        vertical-align: middle !important
-      }
-      td.col-sm-3 .input-group  {
-        justify-content: center !important
-      }
-      .top-0 {
+          .top-0 {
         top:  0 !important
       }
-    </style>
+   
+      .card-img-top {
+          object-fit: cover !important
+      }
+      
+      .paginate_button 
+      {
+      display: inline-block;
+      font-weight: 400;
+      line-height: 1;
+      color: #212529;
+      text-align: center;
+      text-decoration: none;
+      vertical-align: middle;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+      background-color: transparent;
+      border: 1px solid transparent;
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      border-radius: 0.25rem;
+      transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      border: 1px solid #14AB69;
+      margin: 5px;
+      }
+  
+      .paginate_button.current {
+      color: #fff;
+      background-color: #14AB69;
+      border-color: #198754;
+      }
+  
+      #product-table_paginate {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 20px auto;
+      width: 100%;
+      padding: 0;
+      }
+  </style>
   </head>
   
   <body onload="myFunction()">

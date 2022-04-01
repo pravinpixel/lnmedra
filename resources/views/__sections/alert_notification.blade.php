@@ -109,3 +109,17 @@
     <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ $errors->first('phone_number') }}</div>
 @endif
  
+
+@if($errors->has('reference_no'))
+    <div class="alert alert-dismissible text-center">
+        <div class="alert-icon text-danger">
+            <i class="fa fa-times-circle"></i>
+        </div>
+        <div class="alert-text">
+            {{ $errors->first('reference_no') }}
+        </div>
+        <div class="alert-cancel">
+            <i class="fa fa-times" data-dismiss="alert" aria-label="Close"></i>
+        </div>
+    </div>
+@endif

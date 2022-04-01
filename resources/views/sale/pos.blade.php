@@ -42,25 +42,60 @@
 
     // =========== END: Index Permission  ====== ======
 
+   $outletId = Auth::user()->warehouse_id ;
+
+
+   if($lims_pos_setting_data)
+        $keybord_active = $lims_pos_setting_data->keybord_active;
+    else
+        $keybord_active = 0;
+
+    $customer_active = DB::table('permissions')->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')->where([['permissions.name', 'customers-add'],['role_id', \Auth::user()->role_id] ])->first();
+
+    $general_setting_permission = DB::table('permissions')->where('name', 'general_setting')->first();
+    $general_setting_permission_active = DB::table('role_has_permissions')->where([
+                ['permission_id', $general_setting_permission->id],
+                ['role_id', Auth::user()->role_id]
+            ])->first();
+
+    $pos_setting_permission = DB::table('permissions')->where('name', 'pos_setting')->first();
+
+    $pos_setting_permission_active = DB::table('role_has_permissions')->where([
+        ['permission_id', $pos_setting_permission->id],
+        ['role_id', Auth::user()->role_id]
+    ])->first();
+    $today_sale_permission = DB::table('permissions')->where('name', 'today_sale')->first();
+    $today_sale_permission_active = DB::table('role_has_permissions')->where([
+                ['permission_id', $today_sale_permission->id],
+                ['role_id', Auth::user()->role_id]
+            ])->first();
+
+    $today_profit_permission = DB::table('permissions')->where('name', 'today_profit')->first();
+    $today_profit_permission_active = DB::table('role_has_permissions')->where([
+                ['permission_id', $today_profit_permission->id],
+                ['role_id', Auth::user()->role_id]
+            ])->first();
 @endphp    
-  
+
+
+
 <!-- Side Navbar -->
-<header class="header mb-3 bg-white">
+<header class="header m-0 bg-primary text-white " style="border-bottom: 2px solid #272524">
     <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg ">
+        <nav class="navbar navbar-expand-lg bg-primary text-white">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ asset('logo/logo-sm.png') }}" height="40">
+                <img src="{{ asset('logo/logo-sm.png') }}" height="40" style="filter:brightness(50)">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
             </button>
             <div>
-                <a href="{{url('/')}}"><strong>L & N Group | Sales & POS Management</strong></a>
+                <a href="{{url('/')}}" class="text-white"><strong>L & N Group | Sales & POS Management</strong></a>
             </div>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <li class="nav-item dropdown text-white">
+                        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <i class="dripicons-gear"></i> <b>{{ucfirst(Auth::user()->name)}}</b>
                         </a>
                         <div class="dropdown-menu shadow-sm border" aria-labelledby="navbarDropdownMenuLink" style="transform: translateX(-66px);">
@@ -79,8 +114,7 @@
     </div>
     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
 </header>
-
-
+ 
 <nav class="side-navbar  shrink">
     <div class="side-navbar-wrapper">
       <div class="main-menu">
@@ -311,7 +345,7 @@
 
           ?>
           @if($index_permission_active || $balance_sheet_permission_active || $account_statement_permission_active)
-          <li class=""><a href="#account" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-briefcase"></i><span>{{trans('file.Accounting')}}</span></a>
+          <li><a href="#account" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-briefcase"></i><span>{{trans('file.Accounting')}}</span></a>
             <ul id="account" class="collapse list-unstyled ">
               @if($index_permission_active)
               <li id="account-list-menu"><a href="{{route('accounts.index')}}">{{trans('file.Account List')}}</a></li>
@@ -352,7 +386,7 @@
                 ])->first();
           ?>
 
-          <li class=""><a href="#hrm" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-user-group"></i><span>HRM</span></a>
+          <li><a href="#hrm" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-user-group"></i><span>HRM</span></a>
             <ul id="hrm" class="collapse list-unstyled ">
               @if($department_active)
               <li id="dept-menu"><a href="{{route('departments.index')}}">{{trans('file.Department')}}</a></li>
@@ -779,116 +813,100 @@
     </div>
 </nav>
 
+<audio id="mysoundclip1" preload="auto"><source src="{{url('public/beep/beep-timber.mp3')}}"></source></audio>
+<audio id="mysoundclip2" preload="auto"><source src="{{url('public/beep/beep-07.mp3')}}"></source></audio>
 
 <section class="forms pos-section p-0">
-    <div  >
+    <div>
         {!! Form::open(['route' => 'sales.store', 'method' => 'post', 'files' => true, 'class' => 'payment-form']) !!}
         <div class="row m-0">
-            <audio id="mysoundclip1" preload="auto">
-                <source src="{{url('public/beep/beep-timber.mp3')}}"></source>
-            </audio>
-            <audio id="mysoundclip2" preload="auto">
-                <source src="{{url('public/beep/beep-07.mp3')}}"></source>
-            </audio>
-            <div class="col-12  mb-3">
-                <div class="row card-header shadow border m-0">
-                    {{-- <div class="col px-1"> --}}
-                        {{-- <div class="form-group">
-                            <label for="">Enter Mobile No</label>
-                            <input type="text" id="reference-no" name="reference_no" class="form-control" placeholder="Type Mobile number" onkeyup='saveValue(this);'/>
-                        </div> --}}
-                        @if($errors->has('reference_no'))
-                        <span>
-                            <strong>{{ $errors->first('reference_no') }}</strong>
-                        </span>
-                        @endif
-                    {{-- </div> --}}
-                    <?php $outletId = Auth::user()->warehouse_id  ?>
-                    <div class="col px-1">
-                        <div class="form-group" id="warehouse_dev">
-                            <label for="">Enter Outlet</label>
-                            @if($lims_pos_setting_data)
-                            <input type="hidden" name="warehouse_id_hidden" value="{{$outletId}}">
-                            @endif
-                            <select required id="warehouse_id" name="warehouse_id" class="selectpicker form-control outletStore" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
-                                @foreach($lims_warehouse_list as $warehouse)
-                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col px-1" id="biller_dev">
-                        <div class="form-group">
-                            <label for="">Biller</label>
-                            @if($lims_pos_setting_data)
-                            <input type="hidden" name="biller_id_hidden" value="{{$lims_pos_setting_data->biller_id}}">
-                            @endif
-                            <select required id="biller_id" name="biller_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Biller...">
-                            @foreach($lims_biller_list as $biller)
-                            <option value="{{$biller->id}}">{{$biller->name . ' (' . $biller->company_name . ')'}}</option>
-                            @endforeach
-                            </select>
-                        </div>
-                    </div> 
-                    <div class="col px-1">
-                        <div class="form-group">
-                            <label for="">Sales Person Code</label>
-                            <input type="text" name="salesPersonCode" class="form-control" onkeyup='saveValue(this);'  placeholder="Type sales person code.." >
-                        </div>
-                    </div>
-                    <div class="col px-1">
-                        <label for="">Enter Customer</label>
-                        <div class="form-group">
-
-                            @if($lims_pos_setting_data)
-                            <input type="hidden" name="customer_id" value="{{$lims_pos_setting_data->customer_id}}">
-                            @endif
-                            <div class="input-group pos">
-                                @if($customer_active)
-                                    <div class="btn-group w-100 d-flex">
-                                        <select required name="customer_id" id="customer_id" class="selectpicker form-control w-100"  data-live-search="true" title="Select customer..." style="width: 100px">
-                                            <?php
-                                            $deposit = [];
-                                            $points = [];
-                                            ?>
-                                        @foreach($lims_customer_list as $customer)
-                                            @php
-                                            $deposit[$customer->id] = $customer->deposit - $customer->expense;
-
-                                            $points[$customer->id] = $customer->points;
-                                            @endphp
-                                            <option  data-tokens="{{$customer->name . ' (' . $customer->phone_number . ')'}}" value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
-                                        @endforeach
-                                        </select>
-                                        <button type="button" title="Add Customers" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addCustomer">
-                                            <i class="dripicons-plus mr-1"></i> Add 
-                                        </button>
-                                    </div>
-                                @else
-                                <?php
-                                    $deposit = [];
-                                    $points = [];
-                                ?>
-                                
-                                <select required name="customer_id" id="customer_id" class="selectpicker form-control"   data-live-search="true"  title="Select customer...">
-                                @foreach($lims_customer_list as $customer)
-                                    @php
-                                        $deposit[$customer->id] = $customer->deposit - $customer->expense;
-
-                                        $points[$customer->id] = $customer->points;
-                                    @endphp
-                                    <option data-tokens="{{$customer->name . ' (' . $customer->phone_number . ')'}}" value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
-                                @endforeach
-                                </select>
+            <div class="col-12 bg-white shadow-sm border-bottom ">
+                <div class="p-2">
+                    <div class="row m-0"> 
+                        <div class="col pr-1 pl-0">
+                            <div class="form-group m-0" id="warehouse_dev">
+                                <small class="text-dark fw-bold">Enter Outlet</small>
+                                @if($lims_pos_setting_data)
+                                    <input type="hidden" name="warehouse_id_hidden" value="{{$outletId}}">
                                 @endif
+                                <select required id="warehouse_id" name="warehouse_id" class="selectpicker form-control outletStore" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
+                                    @foreach($lims_warehouse_list as $warehouse)
+                                        <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
+                        <div class="col px-1" id="biller_dev">
+                            <div class="form-group m-0">
+                                <small class="text-dark fw-bold">Biller</small>
+                                @if($lims_pos_setting_data)
+                                <input type="hidden" name="biller_id_hidden" value="{{$lims_pos_setting_data->biller_id}}">
+                                @endif
+                                <select required id="biller_id" name="biller_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Biller...">
+                                @foreach($lims_biller_list as $biller)
+                                <option value="{{$biller->id}}">{{$biller->name . ' (' . $biller->company_name . ')'}}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                        </div> 
+                        <div class="col px-1">
+                            <div class="form-group m-0">
+                                <small class="text-dark fw-bold">Sales Person Code</small>
+                                <input type="text" name="salesPersonCode" class="form-control" onkeyup='saveValue(this);'  placeholder="Type sales person code.." >
+                            </div>
+                        </div>
+                        <div class="col pl-1 pr-0">
+                            <small class="text-dark fw-bold">Enter Customer</small>
+                            <div class="form-group m-0">
+    
+                                @if($lims_pos_setting_data)
+                                <input type="hidden" name="customer_id" value="{{$lims_pos_setting_data->customer_id}}">
+                                @endif
+                                <div class="input-group pos">
+                                    @if($customer_active)
+                                        <div class="btn-group w-100 d-flex">
+                                            <select required name="customer_id" id="customer_id" class="selectpicker form-control w-100"  data-live-search="true" title="Select customer..." style="width: 100px">
+                                                <?php
+                                                $deposit = [];
+                                                $points = [];
+                                                ?>
+                                            @foreach($lims_customer_list as $customer)
+                                                @php
+                                                $deposit[$customer->id] = $customer->deposit - $customer->expense;
+    
+                                                $points[$customer->id] = $customer->points;
+                                                @endphp
+                                                <option  data-tokens="{{$customer->name . ' (' . $customer->phone_number . ')'}}" value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
+                                            @endforeach
+                                            </select>
+                                            <button type="button" title="Add Customers" class="btn btn-light border btn-sm" data-toggle="modal" data-target="#addCustomer">
+                                                <i class="dripicons-plus mr-1"></i> 
+                                            </button>
+                                        </div>
+                                    @else
+                                    <?php
+                                        $deposit = [];
+                                        $points = [];
+                                    ?>
+                                    
+                                    <select required name="customer_id" id="customer_id" class="selectpicker form-control"   data-live-search="true"  title="Select customer...">
+                                    @foreach($lims_customer_list as $customer)
+                                        @php
+                                            $deposit[$customer->id] = $customer->deposit - $customer->expense;
+    
+                                            $points[$customer->id] = $customer->points;
+                                        @endphp
+                                        <option data-tokens="{{$customer->name . ' (' . $customer->phone_number . ')'}}" value="{{$customer->id}}">{{$customer->name . ' (' . $customer->phone_number . ')'}}</option>
+                                    @endforeach
+                                    </select>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                       
                     </div>
-                   
-                </div>
+                </div> 
             </div>
-          
-            
             <!-- payment modal -->
             <div id="add-payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
                 <div role="document" class="modal-dialog">
@@ -1053,39 +1071,27 @@
             </div>
 
             {!! Form::close() !!}
-            
-
-            <div class="col-md-6 ">
-                <div class="">
-                    <div style="padding-bottom: 0">
-                      
-                        @php
-                            if($lims_pos_setting_data)
-                                $keybord_active = $lims_pos_setting_data->keybord_active;
-                            else
-                                $keybord_active = 0;
-
-                            $customer_active = DB::table('permissions')
-                              ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                              ->where([
-                                ['permissions.name', 'customers-add'],
-                                ['role_id', \Auth::user()->role_id] ])->first();
-                        @endphp
-                        
+             
+            <div class="col-md-6 p-0">
+                <div>
+                    <div class="p-3">  
                         <div class="m-0 card form-group border-0">
-                            <div class="table-responsive ">
-                                <table id="myTable" class="table shadow border rounded table-hover mb-0 table-striped order-list table-fixed">
+                            <div class="border border-info border-top-0" style="min-height: 58vh;background:linear-gradient(#fffffff8, #fffffff8) , url('{{ asset('public/logo/logo_bg.png') }}');background-size: cover;background-position-y: -135px;">
+                                <table id="myTable" class="table order-list m-0 border-0" style="border: none !important">
                                     <thead>
+                                        <tr class="text-white bg-info border border-info">
+                                            <td colspan="6" style="padding: 0 !important" class="text-center"><b>Order Table</b></td>
+                                        </tr>
                                         <tr>
-                                            <th class="col-sm-2">{{trans('file.product')}}</th>
-                                            <th class="col-sm-2">{{trans('file.Batch No')}}</th>
-                                            <th class="col-sm-2">{{trans('file.Price')}}</th>
-                                            <th class="col-sm-3">{{trans('file.Quantity')}}</th>
-                                            <th class="col-sm-3">{{trans('file.Subtotal')}}</th>
+                                            <th class="text-left">{{trans('file.product')}}</th>
+                                            <th>Stock</th>
+                                            <th>{{trans('file.Price')}}</th>
+                                            <th>{{trans('file.Quantity')}}</th>
+                                            <th>{{trans('file.Subtotal')}}</th>
+                                            <th><i class="fa fa-trash"></i></th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tbody-id" class="transaction-list">
-                                    </tbody>
+                                    <tbody id="tbody-id" ></tbody>
                                 </table>
                             </div>
                         </div>
@@ -1134,244 +1140,143 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 totals card   border mt-3 p-2 shadow" >
+                        <div class="col-12 mb-4 totals p-0 shadow" >
                             <div class="row m-0">
-                                <div class="col-sm-4">
-                                    <span class="totals-title">{{trans('file.Items')}}</span><span id="item">0</span>
+                                <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0 border-right-0">
+                                    <span class="totals-title">{{trans('file.Items')}}</span><b id="item">0</b>
                                 </div>
-                                <div class="col-sm-4">
-                                    <span class="totals-title">{{trans('file.Total')}}</span><span id="subtotal">0.00</span>
+                                <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0 border-right-0">
+                                    <span class="totals-title">{{trans('file.Total')}}</span><b id="subtotal">0.00</b>
                                 </div>
-                                <div class="col-sm-4">
-                                    <span class="totals-title">{{trans('file.Discount')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#order-discount-modal"> <i class="dripicons-document-edit"></i></button></span><span id="discount">0.00</span>
+                                <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0">
+                                    <span class="totals-title">{{trans('file.Discount')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#order-discount-modal"> <i class="dripicons-document-edit"></i></button></span><b id="discount">0.00</b>
                                 </div>
-                                <div class="col-sm-4">
-                                    <span class="totals-title">{{trans('file.Coupon')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#coupon-modal"><i class="dripicons-document-edit"></i></button></span><span id="coupon-text">0.00</span>
+                                <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0 border-right-0">
+                                    <span class="totals-title">{{trans('file.Coupon')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#coupon-modal"><i class="dripicons-document-edit"></i></button></span><b id="coupon-text">0.00</b>
                                 </div>
-                                <div class="col-sm-4">
-                                    <span class="totals-title">{{trans('file.Tax')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#order-tax"><i class="dripicons-document-edit"></i></button></span><span id="tax">0.00</span>
+                                <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0 border-right-0">
+                                    <span class="totals-title">{{trans('file.Tax')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#order-tax"><i class="dripicons-document-edit"></i></button></span><b id="tax">0.00</b>
                                 </div>
-                                <div class="col-sm-4">
-                                    <span class="totals-title">{{trans('file.Shipping')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#shipping-cost-modal"><i class="dripicons-document-edit"></i></button></span><span id="shipping-cost">0.00</span>
+                                <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0">
+                                    <span class="totals-title">{{trans('file.Shipping')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#shipping-cost-modal"><i class="dripicons-document-edit"></i></button></span><b id="shipping-cost">0.00</b>
                                 </div>
                             </div>
                         </div>
-                             
-                    </div>
-                    <div class="payment-options d-flex justify-content-between align-items-center" style="background: #0c324c !important">
-                    <div class="payment-optionsx">
-                        <div class="column-5">
-                            <button type="button" class="btn btn-primary payment-btn" data-toggle="modal" data-target="#add-payment" id="credit-card-btn"><i class="fa fa-credit-card"></i> <b>{{trans('file.Card')}}</b></button>
-                        </div>
-                        <div class="column-5">
-                            <button type="button" class="btn btn-warning payment-btn" data-toggle="modal" data-target="#add-payment" id="cash-btn"><i class="fa fa-money"></i> <b>{{trans('file.Cash')}}</b></button>
-                        </div>
-                        <div class="column-5">
-                            <button type="button" class="btn btn-info payment-btn" data-toggle="modal" data-target="#add-payment" id="paypal-btn"><i class="fa fa-paypal"></i> <b>UPI</b></button>
-                        </div> 
                         
-                        <div class="column-5">
-                            <button   type="button" class="btn btn-outline-danger" id="cancel-btn" onclick="return confirmCancel()"><i class="fa fa-close"></i> {{trans('file.Cancel')}}</button>
-                        </div> 
-                    </div>
-                        <div>
-                            <h1 class="m-0 "><span style="font-weight: normal !important"  class="text-light h2 mr-2">{{trans('file.grand total')}} : </span><span class="text-white" id="grand-total">0.00</span></h1>
+                        <div class="row mx-0 shadow align-items-center" style="background: #0c324c !important">
+                            <div class="row m-0 col-8 p-0 ">
+                                <div class="col-6 p-0">
+                                    <button type="button" class="h-100 w-100 h3 text-white rounded-0 btn btn-primary payment-btn" data-toggle="modal" data-target="#add-payment" id="credit-card-btn">
+                                        <i class="fa fa-credit-card"></i> <b>{{trans('file.Card')}}</b>
+                                    </button>
+                                </div>
+                                <div class="col-6 p-0">
+                                    <button type="button" class="h-100 h3 text-white w-100 rounded-0 btn btn-warning payment-btn" data-toggle="modal" data-target="#add-payment" id="cash-btn">
+                                        <i class="fa fa-money"></i> <b>{{trans('file.Cash')}}</b>
+                                    </button>
+                                </div>
+                                <div class="col-6 p-0">
+                                    <button type="button" class="h-100 h3 text-white w-100  rounded-0 btn btn-info payment-btn" data-toggle="modal" data-target="#add-payment" id="paypal-btn">
+                                        <i class="fa fa-paypal"></i> <b>UPI</b>
+                                    </button>
+                                </div> 
+                                
+                                <div class="col-6 p-0">
+                                    <button type="button" class="h-100 w-100 h3 text-white rounded-0 btn btn-danger" id="cancel-btn" onclick="return confirmCancel()">
+                                        <i class="fa fa-close"></i> {{trans('file.Cancel')}}
+                                    </button>
+                                </div> 
+                            </div>
+                            <div class="col-4 text-right">
+                                <span class="text-light mb-2">
+                                    {{trans('file.grand total')}} 
+                                </span>
+                                <div class="text-white h1" id="grand-total">0.00</div>
+                            </div>
                         </div>
-                    </div>
+                    </div> 
                 </div>
             </div>
 
             <!-- product list -->
-            <div class="col-md-6  ">
-                <div class="col-12  px-1">
-                    <div class="search-box form-group m-0">
-                        <label for="">Scan Barcode / Product name</label>
-                        <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Scan/Search product by name/code" class="form-control form-control-lg rounded-pill mb-3 active"  />
+            <div class="col-md-6 mt-3 card p-0">
+                <div class="card-header bg-light text-white shadow-sm border-bottom">
+                    <div class="search-box m-0">
+                        <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Scan/Search product by name/code" class="form-control form-control-lg rounded-pill active"  />
                     </div>
-                </div>
-                <!-- {{-- <header class="header">
-                    <nav class="navbar">
-                      <div class="container-fluid">
-                        <div class="navbar-holder d-flex align-items-center justify-content-end">
-                           
-                          <div class="navbar-header">
-
-                          <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">
-
-                            <li class="nav-item"><a href="{{ route('home') }}"><i class="dripicons-home"></i></a></li>
-                            <li class="nav-item"><a id="btnFullscreen" data-toggle="tooltip" title="Full Screen"><i class="dripicons-expand"></i></a></li>
-                            
-                            <?php
-                                $general_setting_permission = DB::table('permissions')->where('name', 'general_setting')->first();
-                                $general_setting_permission_active = DB::table('role_has_permissions')->where([
-                                            ['permission_id', $general_setting_permission->id],
-                                            ['role_id', Auth::user()->role_id]
-                                        ])->first();
-
-                                $pos_setting_permission = DB::table('permissions')->where('name', 'pos_setting')->first();
-
-                                $pos_setting_permission_active = DB::table('role_has_permissions')->where([
-                                    ['permission_id', $pos_setting_permission->id],
-                                    ['role_id', Auth::user()->role_id]
-                                ])->first();
-                            ?>
-                            @if($pos_setting_permission_active)
-                            <li class="nav-item"><a class="dropdown-item" data-toggle="tooltip" href="{{route('setting.pos')}}" title="{{trans('file.POS Setting')}}"><i class="dripicons-gear"></i></a> </li>
-                            @endif
-                            <li class="nav-item">
-                                <a href="{{route('sales.printLastReciept')}}" data-toggle="tooltip" title="{{trans('file.Print Last Reciept')}}"><i class="dripicons-print"></i></a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="" id="register-details-btn" data-toggle="tooltip" title="{{trans('file.Cash Register Details')}}"><i class="dripicons-briefcase"></i></a>
-                            </li>
-                            <?php
-                                $today_sale_permission = DB::table('permissions')->where('name', 'today_sale')->first();
-                                $today_sale_permission_active = DB::table('role_has_permissions')->where([
-                                            ['permission_id', $today_sale_permission->id],
-                                            ['role_id', Auth::user()->role_id]
-                                        ])->first();
-
-                                $today_profit_permission = DB::table('permissions')->where('name', 'today_profit')->first();
-                                $today_profit_permission_active = DB::table('role_has_permissions')->where([
-                                            ['permission_id', $today_profit_permission->id],
-                                            ['role_id', Auth::user()->role_id]
-                                        ])->first();
-                            ?>
-
-                            @if($today_sale_permission_active)
-                            <li class="nav-item">
-                                <a href="" id="today-sale-btn" data-toggle="tooltip" title="{{trans('file.Today Sale')}}"><i class="dripicons-shopping-bag"></i></a>
-                            </li>
-                            @endif
-                            @if($today_profit_permission_active)
-                            
-                            @endif
-                            @if(($alert_product + count(\Auth::user()->unreadNotifications)) > 0)
-                            <li class="nav-item" id="notification-icon">
-                                  <a rel="nofollow" data-toggle="tooltip" title="{{__('Notifications')}}" class="nav-link dropdown-item"><i class="dripicons-bell"></i><span class="badge badge-danger notification-number">{{$alert_product + count(\Auth::user()->unreadNotifications)}}</span>
-                                      <span class="caret"></span>
-                                      <span class="sr-only">Toggle Dropdown</span>
-                                  </a>
-                                  <ul class="right-sidebar" user="menu">
-                                      <li class="notifications">
-                                        <a href="{{route('report.qtyAlert')}}" class="btn btn-link">{{$alert_product}} product exceeds alert quantity</a>
-                                      </li>
-                                      @foreach(\Auth::user()->unreadNotifications as $key => $notification)
-                                          <li class="notifications">
-                                              <a href="#" class="btn btn-link">{{ $notification->data['message'] }}</a>
-                                          </li>
-                                      @endforeach
-                                  </ul>
-                            </li>
-                            @endif
-                           
-                            <li class="nav-item">
-                                  <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-user"></i> <span>{{ucfirst(Auth::user()->name)}}</span> <i class="fa fa-angle-down"></i>
-                                  </a>
-                                  <ul class="right-sidebar">
-                                      <li>
-                                        <a href="{{route('user.profile', ['id' => Auth::id()])}}"><i class="dripicons-user"></i> {{trans('file.profile')}}</a>
-                                      </li>
-                                      @if($general_setting_permission_active)
-                                      <li>
-                                        <a href="{{route('setting.general')}}"><i class="dripicons-gear"></i> {{trans('file.settings')}}</a>
-                                      </li>
-                                      @endif
-                                      <li>
-                                        <a href="{{url('my-transactions/'.date('Y').'/'.date('m'))}}"><i class="dripicons-swap"></i> {{trans('file.My Transaction')}}</a>
-                                      </li>
-                                      <li>
-                                        <a href="{{url('holidays/my-holiday/'.date('Y').'/'.date('m'))}}"><i class="dripicons-vibrate"></i> {{trans('file.My Holiday')}}</a>
-                                      </li>
-                                      <li>
-                                        <a href="{{ route('logout') }}"
-                                           onclick="event.preventDefault();
-                                                         document.getElementById('logout-form').submit();"><i class="dripicons-power"></i>
-                                            {{trans('file.logout')}}
-                                        </a>
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            @csrf
-                                        </form>
-                                      </li>
-                                  </ul>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </nav>
-                </header> --}} -->
-                <div class="px-2 border pt-4 card">
+                    <div class="btn-group w-100 mt-3">
+                        <button class="btn w-100 btn-primary" id="category-filter">{{trans('file.category')}}</button>
+                        <button class="btn w-100 btn-info" id="brand-filter">{{trans('file.Brand')}}</button>
+                        <button class="btn w-100 btn-danger" id="featured-filter">{{trans('file.Featured')}}</button>
+                    </div>
+                </div> 
+                <div class="card-body p-0">
                     <div class="filter-window">
                         <div class="category ">
-                            <div class="row m-0 ml-2 mr-2 px-2">
-                                <div class="col-7">Choose category</div>
+                            <div class="row m-0 ml-2 mr-2 px-2 p-3">
+                                <div class="col-7 h3">Choose category</div>
                                 <div class="col-5 text-right">
                                     <span class="btn btn-default btn-sm">
                                         <i class="dripicons-cross"></i>
                                     </span>
                                 </div>
                             </div>
-                            <div class="row m-0 ml-2">
+                            <div class="row m-0 ml-2 p-3">
                                 @foreach($lims_category_list as $category)
-                                <div class="col-md-3 category-img text-center" data-category="{{$category->id}}">
-                                    @if($category->image)
-                                        <img  src="{{url('public/images/category', $category->image)}}" />
-                                    @else
-                                        <img  src="{{url('public/images/product/zummXD2dvAtI.png')}}" />
-                                    @endif
-                                    <p class="text-center">{{$category->name}}</p>
-                                </div>
+                                    <div class="col-md-3 category-img" data-category="{{$category->id}}">
+                                        <div class="card shadow" style="overflow: hidden">
+                                            @if($category->image)
+                                            <img src="{{url('public/images/category', $category->image)}}" class="card-img-top"/>
+                                            @else
+                                                <img  src="{{url('public/images/product/zummXD2dvAtI.png')}}" class="card-img-top"/>
+                                            @endif
+                                            <div class="card-body p-2 text-center">
+                                                <h5 class="card-title m-0">{{$category->name}}</h5> 
+                                            </div>
+                                        </div>
+                                    </div>
                                 @endforeach
                             </div>
                         </div>
                         <div class="brand">
-                            <div class="row m-0 ml-2 mr-2 px-2">
-                                <div class="col-7">Choose brand</div>
+                            <div class="row m-0 ml-2 mr-2 px-2 p-3">
+                                <div class="col-7 h3">Choose brand</div>
                                 <div class="col-5 text-right">
                                     <span class="btn btn-default btn-sm">
                                         <i class="dripicons-cross"></i>
                                     </span>
                                 </div>
                             </div>
-                            <div class="row m-0 ml-2 mt-3">
+                            <div class="row m-0 ml-2 mt-3 p-3">
                                 @foreach($lims_brand_list as $brand)
-                                @if($brand->image)
-                                    <div class="col-md-3 brand-img text-center" data-brand="{{$brand->id}}">
-                                        <img  src="{{url('public/images/brand',$brand->image)}}" />
-                                        <p class="text-center">{{$brand->title}}</p>
-                                    </div>
-                                @else
                                     <div class="col-md-3 brand-img" data-brand="{{$brand->id}}">
-                                        <img  src="{{url('public/images/product/zummXD2dvAtI.png')}}" />
-                                        <p class="text-center">{{$brand->title}}</p>
+                                        <div class="card shadow" style="overflow: hidden">
+                                            @if($brand->image)
+                                                <img src="{{url('public/images/brand', $brand->image)}}" class="card-img-top"/>
+                                            @else
+                                                <img  src="{{url('public/images/product/zummXD2dvAtI.png')}}" class="card-img-top"/>
+                                            @endif
+                                            <div class="card-body p-2 text-center">
+                                                <h5 class="card-title m-0">{{$brand->title}}</h5> 
+                                            </div>
+                                        </div>
                                     </div>
-                                @endif
                                 @endforeach
                             </div>
                         </div>
                     </div>
-                    <div class="row m-0  ">
-                        <div class="col-md-4">
-                            <button class="btn btn-block btn-primary" id="category-filter">{{trans('file.category')}}</button>
-                        </div>
-                        <div class="col-md-4">
-                            <button class="btn btn-block btn-info" id="brand-filter">{{trans('file.Brand')}}</button>
-                        </div>
-                        <div class="col-md-4">
-                            <button class="btn btn-block btn-danger" id="featured-filter">{{trans('file.Featured')}}</button>
-                        </div>
-                        <div class="col-md-12 mt-1 table-container">
-                            <table id="product-table" class="table no-shadow product-list">
-                                <thead class="d-none">
-                                    <tr>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
+                    <div class="p-0 m-0 table-container" >
+                        <table id="product-table" class="table no-shadow product-list m-0 border-0" style="margin: 0 !important; border:none !important">
+                            <thead class="d-none">
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
                                 @for ($i=0; $i < ceil($product_number/5); $i++)
                                     <tr>
                                         <td class="product-img sound-btn" title="{{$lims_product_list[0+$i*5]->name}}" data-product ="{{$lims_product_list[0+$i*5]->code . ' (' . $lims_product_list[0+$i*5]->name . ')'}}"><img  src="{{url('public/images/product',$lims_product_list[0+$i*5]->base_image)}}" width="100%" />
@@ -1412,9 +1317,8 @@
                                         @endif
                                     </tr>
                                 @endfor
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -1511,7 +1415,7 @@
                        
                         <div class="form-group">
                             <label>{{trans('file.requirement')}}</strong> </label>
-                            <div class="input-group">
+                            <div class="btn-group">
                                 <select name="requirement" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('requirement')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" required>
                                     <option value="1" {{old ('requirement') == 1 ? 'selected' : ''}}>Landscape Design</option>
                                     <option value="2" {{old ('requirement') == 2 ? 'selected' : ''}}>Execution</option>
@@ -2562,7 +2466,7 @@ $(document).on('click', '.product-img', function() {
         data = data.split(" ");
         pos = product_code.indexOf(data[0]);
         if(pos < 0)
-            Alert('warning', 'Product is not avaialable in the selected outlet !');
+            Alert('warning', 'Product is not available in the selected outlet !');
         else{
             productSearch(data[0]);
         }
@@ -2940,17 +2844,28 @@ function addNewProduct(data){
     var cols = '';
     temp_unit_name = (data[6]).split(',');
     pos = product_code.indexOf(data[1]);
-    cols += '<td class="col-sm-2 product-title"><button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"><strong>' + data[0] + '</strong></button><br>' + data[1] + '<p class="stock-count text-white">In Stock: <span class="in-stock"></span></p></td>';
-    if(data[12]) {
-        cols += '<td class="col-sm-2"><input type="text" class="form-control form-control-sm batch-no" value="'+batch_no[pos]+'" required/> <input type="hidden" class="product-batch-id" name="product_batch_id[]" value="'+product_batch_id[pos]+'"/> </td>';
-    }
-    else {
-        cols += '<td class="col-sm-2"><input type="text" class="form-control form-control-sm batch-no" disabled/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
-    }
-    cols += '<td class="col-sm-2 product-price"></td>';
-    cols += '<td class="col-sm-3"><div class="input-group"><span class="input-group-btn"><button type="button" class="btn btn-default minus"><span class="dripicons-minus"></span></button></span><input type="text" name="qty[]" class="form-control qty numkey input-number" step="any" required><span class="input-group-btn"><button type="button" class="btn btn-default plus"><span class="dripicons-plus"></span></button></span></div></td>';
-    cols += '<td class="col-sm-2 sub-total"></td>';
-    cols += '<td class="col-sm-1"><button type="button" class="ibtnDel btn btn-danger btn-sm"><i class="dripicons-cross"></i></button></td>';
+    cols += `
+        <td style="text-align:center;padding:0 !important" class=" product-title">
+            <button type="button" class="edit-product btn btn-sm text-info btn-link" data-toggle="modal" data-target="#editModal">
+                <strong >${data[0]}</strong>
+            </button> - ${data[1]} 
+        </td>
+    `;
+    cols += `
+        <td style="text-align:center;padding:0 !important">
+            <small class="stock-count text-white"><b class="text-white fw-bold in-stock"></b></small>
+        </td>
+    `;
+    // if(data[12]) {
+    //     cols += '<td style="text-align:center;padding:0 !important"><input type="text" class="form-control form-control-sm batch-no" value="'+batch_no[pos]+'" required/> <input type="hidden" class="product-batch-id" name="product_batch_id[]" value="'+product_batch_id[pos]+'"/> </td>';
+    // }
+    // else {
+    //     cols += '<td style="text-align:center;padding:0 !important"><input type="text" class="form-control form-control-sm batch-no" disabled/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
+    // }
+    cols += '<td style="text-align:center;padding:0 !important" class="product-price fw-bold"></td>';
+    cols += '<td style="text-align:center;padding:0 !important"><div class="btn-group"><span class="btn-group-btn"><button type="button" class="btn btn-default minus"><span class="dripicons-minus"></span></button></span><input type="text" name="qty[]" class="form-control qty numkey input-number" step="any" required><span class="btn-group-btn"><button type="button" class="btn btn-default plus"><span class="dripicons-plus"></span></button></span></div></td>';
+    cols += '<td style="text-align:center;padding:0 !important" class="sub-total"></td>';
+    cols += '<td style="text-align:center;padding:0 !important"> <i class="dripicons-cross ibtnDel text-danger btn"></i> </td>';
     cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data[1] + '"/>';
     cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[9] + '"/>';
     cols += '<input type="hidden" class="product_price" />';
@@ -3463,4 +3378,13 @@ $('#product-table').DataTable( {
 });
 </script>
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
+<script>
+$(document).ready(function(){
+    var docEl = doc.documentElement;
+    var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+    requestFullScreen.call(docEl);
+});
+   
+</script>
+ 
 @endpush

@@ -3,7 +3,7 @@
  
 
   <div class="row ">
-    <div class="container-fluid  mb-3">
+    <div class="container-fluid  my-3">
       <div class="col-md-12 d-flex align-items-center justify-content-between">
         <div class="brand-text float-left">
             <h3 class="m-0">Dashboard</h3>
