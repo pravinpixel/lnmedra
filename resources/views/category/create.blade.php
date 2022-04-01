@@ -14,6 +14,8 @@
 <section>
     <div class="container-fluid">
         <!-- Trigger the modal with a button -->
+        <div class="section-title mb-3"> Category Listing</div>
+
         <button type="button" class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans("file.Add Category")}}</button>&nbsp;
         @if(userHasAccess('category_import'))
         <button class="btn btn-primary" data-toggle="modal" data-target="#importCategory"><i class="dripicons-copy"></i> {{trans('file.Import Category')}}</button>

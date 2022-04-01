@@ -6,6 +6,7 @@
 
 <section>
     <div class="container-fluid">
+        <div class="section-title mb-3">Stock-Count Listing</div>
         <button class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans('file.Count Stock')}} </button>
     </div>
     <div class="table-responsive">

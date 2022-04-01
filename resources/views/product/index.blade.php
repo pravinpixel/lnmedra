@@ -2,13 +2,12 @@
  
 <section>
     <div class="container-fluid">
-        
+        <div class="section-title mb-3">Products Listing</div>
         @if(userHasAccess('products-add'))
             <a href="{{route('products.create')}}" class="btn btn-info rounded-pill"><i class="dripicons-plus"></i> {{__('file.add_product')}}</a>
-            
         @endif
         @if(userHasAccess('product_import'))
-        <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary rounded-pill ml-auto"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a>
+            <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary rounded-pill ml-auto"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a>
         @endif
     </div>
     <div class="table-responsive">

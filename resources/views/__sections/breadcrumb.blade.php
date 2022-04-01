@@ -3,8 +3,8 @@
         <li class="breadcrumb-item"><a href="{{ route('welcome_dashboard') }}">Dashboard</a></li>
         <li class="breadcrumb-item active" aria-current="page">
             @php
-                $find       =  [ "sales.edit","all-vendor-products-list", "welcome_dashboard",".create", ".index", "vendorproducts " , "customer_group ", "setting.general" , "master-attribute"];
-                $replace    =  [ "Sales / Edit","vendor / all products list", "Weolcome ".Auth::user()->name." !"," / Add", " / List", "vendor products ", "customer group ", "general setting" , "master attribute"];
+                $find       =  [ "product.printBarcode","sales.edit","all-vendor-products-list", "welcome_dashboard",".create", ".index", "vendorproducts " , "customer_group ", "setting.general" , "master-attribute"];
+                $replace    =  [ "Product / Print Barcode","Sales / Edit","vendor / all products list", "Weolcome ".Auth::user()->name." !"," / Add", " / List", "vendor products ", "customer group ", "general setting" , "master attribute"];
                 $route      =  str_replace($find, $replace, Route::currentRouteName()  );
             @endphp
             <strong style="text-transform: capitalize">

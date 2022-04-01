@@ -32,62 +32,56 @@
 </style>
 <section class="forms">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
+        <div class="section-title">Product PrintBarcode</div>
+        <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
+        <div class="row m-0">
+            <div class="col-md-12 p-0">
                 <div class="card">
-                    <div class="card-header d-flex align-items-center">
+                    <div class="card-header text-white bg-success">
                         <h4>{{trans('file.print_barcode')}}</h4>
                     </div>
                     <div class="card-body">
-                        <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <label>{{trans('file.add_product')}} *</label>
-                                        <div class="search-box input-group">
+                        
+                        <div class="row m-0">
+                            <div class="col-md-12 p-0">
+                           
+                                <label>{{trans('file.add_product')}} *</label>
+                                <div class="search-box input-group">
 
-                                            <button type="button" class="btn btn-secondary btn-lg"><i class="fa fa-barcode"></i></button>
-                                            <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Please type product code and select..." class="form-control" />
-                                        </div>
-                                    </div>
+                                    <button type="button" class="btn btn-secondary btn-lg"><i class="fa fa-barcode"></i></button>
+                                    <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Please type product code and select..." class="form-control" />
                                 </div>
-                                <div class="row mt-3">
-                                    <div class="col-md-12">
-                                        <div class="table-responsive mt-3">
-                                            <table id="myTable" class="table table-hover order-list">
-                                                <thead>
-                                                    <tr>
-                                                        <th>{{trans('file.name')}}</th>
-                                                        <th>{{trans('file.Code')}}</th>
-                                                        <th>{{trans('file.Quantity')}}</th>
-                                                        <th><i class="dripicons-trash"></i></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                      
+                                <div class="table-responsive mt-3">
+                                    <table id="myTable" class="table table-hover order-list">
+                                        <thead>
+                                            <tr>
+                                                <th>{{trans('file.name')}}</th>
+                                                <th>{{trans('file.Code')}}</th>
+                                                <th>{{trans('file.Quantity')}}</th>
+                                                <th><i class="dripicons-trash"></i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
                                 </div>
+                            </div>
+                            <div class="col-12">
                                 <div class="form-group mt-2">
                                     <strong>{{trans('file.Print')}}: </strong>&nbsp;
                                     <strong><input type="checkbox" name="name" checked /> {{trans('file.Product Name')}}</strong>&nbsp;
                                     <strong><input type="checkbox" name="price" checked/> {{trans('file.Price')}}</strong>&nbsp;
                                     <strong><input type="checkbox" name="promo_price"/> {{trans('file.Promotional Price')}}</strong>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <label><strong>Paper Size *</strong></label>
-                                        <select class="form-control" name="paper_size" required id="paper-size">
-                                            <option value="0">Select paper size...</option>
-                                            <option value="36">36 mm (1.4 inch)</option>
-                                            <option value="24">24 mm (0.94 inch)</option>
-                                            <option value="18">18 mm (0.7 inch)</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="form-group mt-3">
+                                <div class="d-flex mt-4 align-items-center">
+                                    <label class="col-2"><strong>Paper Size *</strong></label>
+                                    <select class="form-control mr-2" name="paper_size" required id="paper-size">
+                                        <option value="0">Select paper size...</option>
+                                        <option value="36">36 mm (1.4 inch)</option>
+                                        <option value="24">24 mm (0.94 inch)</option>
+                                        <option value="18">18 mm (0.7 inch)</option>
+                                    </select>
                                     <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-button">
                                 </div>
                             </div>
@@ -161,7 +155,7 @@
                 var flag = 1;
                 $(".product-code").each(function() {
                     if ($(this).text() == data[1]) {
-                        alert('duplicate input is not allowed!')
+                        Alert("warning",'Duplicate Entry is not Allowed!')
                         flag = 0;
                     }
                 });
@@ -169,10 +163,10 @@
                 if(flag){
                     var newRow = $('<tr data-imagedata="'+data[3]+'" data-price="'+data[2]+'" data-promo-price="'+data[4]+'" data-currency="'+data[5]+'" data-currency-position="'+data[6]+'">');
                     var cols = '';
-                    cols += '<td>' + data[0] + '</td>';
-                    cols += '<td class="product-code">' + data[1] + '</td>';
-                    cols += '<td><input type="number" min="0" onkeypress="return isNumber(event)" class="form-control qty" name="qty[]" value="1" /></td>';
-                    cols += '<td><button type="button" class="ibtnDel btn btn-md btn-danger">Delete</button></td>';
+                    cols += '<td class="text-center">' + data[0] + '</td>';
+                    cols += '<td class="text-center product-code">' + data[1] + '</td>';
+                    cols += '<td class="text-center"><input type="number" min="0" onkeypress="return isNumber(event)" class="form-control text-center qty" name="qty[]" value="1" /></td>';
+                    cols += '<td class="text-center"><button type="button" class="ibtnDel btn btn-md btn-danger">X</button></td>';
 
                     newRow.append(cols);
                     $("table.order-list tbody").append(newRow);
@@ -276,7 +270,7 @@
             $('#print-barcode').modal('show');
         }
         else
-            alert('Please select paper size');
+            Alert("warning",'Dlease select paper size');
     });
 
     /*$("#print-btn").on("click", function(){

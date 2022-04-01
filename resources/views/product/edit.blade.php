@@ -3,484 +3,479 @@
 @section('content')
 <section class="forms">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header d-flex align-items-center">
-                        <h4>{{trans('file.Update Product')}}</h4>
-                    </div>
-                    <div class="card-body">
-                        <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
-                        <form id="product-form">
-                            <input type="hidden" name="type_id" value="{{$lims_product_data->id}}" id="type_id" />
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <!-- //sssssss -->
-                                        <label>{{trans('file.Product Type')}} *</strong> </label>
-                                        <div class="input-group">
-                                            <input type="hidden" name="types_id" value="{{$lims_product_data->type}}">
-                                            <select name="type" required class="form-control selectpicker"  data-live-search="true" data-live-search-style="begins" id="productType">
-                                            <option value="">--Select--</option>
-                                                @foreach($productType as $product)
-                                                <option value="{{ $product->id }}" >{{ $product->name }}</option>
-                                                @endforeach
-                                                <!-- <option value="standard">Standard</option>
-                                                <option value="combo">Combo</option>
-                                                <option value="digital">Digital</option>
-                                                <option value="service">Service</option> -->
-                                            </select>
-                                        </div>
-                                       
+        <div class="section-title">Update Product</div>
+        <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h4>{{trans('file.Update Product')}}</h4>
+            </div> 
+            <div class="card-body">
+                <form id="product-form">
+                    <input type="hidden" name="type_id" value="{{$lims_product_data->id}}" id="type_id" />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                       
+                                <label>{{trans('file.Product Type')}} *</strong> </label>
+                                <div class="input-group">
+                                    <input type="hidden" name="types_id" value="{{$lims_product_data->type}}">
+                                    <select name="type" required class="form-control selectpicker"  data-live-search="true" data-live-search-style="begins" id="productType">
+                                    <option value="">--Select--</option>
+                                        @foreach($productType as $product)
+                                        <option value="{{ $product->id }}" >{{ $product->name }}</option>
+                                        @endforeach
+                                        <!-- <option value="standard">Standard</option>
+                                        <option value="combo">Combo</option>
+                                        <option value="digital">Digital</option>
+                                        <option value="service">Service</option> -->
+                                    </select>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <input type="hidden" name="attributeInput" value="{{$lims_product_data->attribute}}"  id="attributeInput" >
+                        
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Name')}} *</strong> </label>
+                                <input type="text" name="name" value="{{$lims_product_data->name}}" required class="form-control">
+                                <span class="validation-msg" id="name-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Code')}} *</strong> </label>
+                                <div class="input-group">
+                                    <input type="text" name="code" id="code" value="{{$lims_product_data->code}}" class="form-control" required>
+                                    <div class="input-group-append">
+                                        <button id="genbutton" type="button" class="btn btn-sm btn-default" title="{{trans('file.Generate')}}"><i class="fa fa-refresh"></i></button>
                                     </div>
                                 </div>
-                                <input type="hidden" name="attributeInput" value="{{$lims_product_data->attribute}}"  id="attributeInput" >
-                               
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Name')}} *</strong> </label>
-                                        <input type="text" name="name" value="{{$lims_product_data->name}}" required class="form-control">
-                                        <span class="validation-msg" id="name-error"></span>
-                                    </div>
+                                <span class="validation-msg" id="code-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4" id="attribute_div">
+                            <div class="form-group">
+                                <label>{{trans('file.Attribute')}} *</strong> </label> 
+                                <div id="attribute_img" class="row m-0">
+                                    
+                                </div>  
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Barcode Symbology')}} *</strong> </label>
+                                <div class="input-group">
+                                    <input type="hidden" name="barcode_symbology_hidden" value="{{$lims_product_data->barcode_symbology}}">
+                                    <select name="barcode_symbology" required class="form-control selectpicker">
+                                        <option value="UPCE">UPC-E</option>
+                                        <option value="C128">Code 128</option>
+                                        <option value="C39">Code 39</option>
+                                        <option value="UPCA">UPC-A</option>
+                                        <option value="EAN8">EAN-8</option>
+                                        <option value="EAN13">EAN-13</option>
+                                    </select>
                                 </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Code')}} *</strong> </label>
-                                        <div class="input-group">
-                                            <input type="text" name="code" id="code" value="{{$lims_product_data->code}}" class="form-control" required>
-                                            <div class="input-group-append">
-                                                <button id="genbutton" type="button" class="btn btn-sm btn-default" title="{{trans('file.Generate')}}"><i class="fa fa-refresh"></i></button>
-                                            </div>
-                                        </div>
-                                        <span class="validation-msg" id="code-error"></span>
-                                    </div>
+                            </div>
+                        </div>
+                        <div id="digital" class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Attach File')}}</strong> </label>
+                                <div class="input-group">
+                                    <input type="file" name="file" class="form-control">
                                 </div>
-                                <div class="col-md-4" id="attribute_div">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Attribute')}} *</strong> </label>
-                                        
-                                        <div id="attribute_img" >
-                                            
-                                        </div> 
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Barcode Symbology')}} *</strong> </label>
-                                        <div class="input-group">
-                                            <input type="hidden" name="barcode_symbology_hidden" value="{{$lims_product_data->barcode_symbology}}">
-                                            <select name="barcode_symbology" required class="form-control selectpicker">
-                                                <option value="UPCE">UPC-E</option>
-                                                <option value="C128">Code 128</option>
-                                                <option value="C39">Code 39</option>
-                                                <option value="UPCA">UPC-A</option>
-                                                <option value="EAN8">EAN-8</option>
-                                                <option value="EAN13">EAN-13</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div id="digital" class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Attach File')}}</strong> </label>
-                                        <div class="input-group">
-                                            <input type="file" name="file" class="form-control">
-                                        </div>
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                </div>
-                                <div id="combo" class="col-md-9 mb-1">
-                                    <label>{{trans('file.add_product')}}</label>
-                                    <div class="search-box input-group mb-3">
-                                        <button class="btn btn-secondary"><i class="fa fa-barcode"></i></button>
-                                        <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Please type product code and select..." class="form-control" />
-                                    </div>
-                                    <label>{{trans('file.Combo Products')}}</label>
-                                    <div class="table-responsive">
-                                        <table id="myTable" class="table table-hover order-list">
-                                            <thead>
-                                                <tr>
-                                                    <th>{{trans('file.product')}}</th>
-                                                    <th>{{trans('file.Quantity')}}</th>
-                                                    <th>{{trans('file.Unit Price')}}</th>
-                                                    <th><i class="dripicons-trash"></i></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if($lims_product_data->type == 'combo')
-                                                <?php
-                                                    $product_list = explode(",", $lims_product_data->product_list);
-                                                    $qty_list = explode(",", $lims_product_data->qty_list);
-                                                    $variant_list = explode(",", $lims_product_data->variant_list);
-                                                    $price_list = explode(",", $lims_product_data->price_list);
-                                                ?>
-                                                @foreach($product_list as $key=>$id)
-                                                <tr>
-                                                    <?php
-                                                        $product = App\Product::find($id);
-                                                        if($variant_list[$key]) {
-                                                            $product_variant_data = App\ProductVariant::select('item_code')->FindExactProduct($id, $variant_list[$key])->first();
-                                                            $product->code = $product_variant_data->item_code;
-                                                        }
-                                                    ?>
-                                                    <td>{{$product->name}} [{{$product->code}}]</td>
-                                                    <td><input type="number" class="form-control qty" name="product_qty[]" value="{{$qty_list[$key]}}" step="any"></td>
-                                                    <td><input type="number" class="form-control unit_price" name="unit_price[]" value="{{$price_list[$key]}}" step="any"/></td>
-                                                    <td><button type="button" class="ibtnDel btn btn-danger btn-sm">X</button></td>
-                                                    <input type="hidden" class="product-id" name="product_id[]" value="{{$id}}"/>
-                                                    <input type="hidden" class="variant-id" name="variant_id[]" value="{{$variant_list[$key]}}"/>
-                                                </tr>
-                                                @endforeach
-                                                @endif
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Brand')}}</strong> </label>
-                                        <div class="input-group">
-                                            <input type="hidden" name="brand" value="{{ $lims_product_data->brand_id}}">
-                                          <select name="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
-                                            @foreach($lims_brand_list as $brand)
-                                                <option value="{{$brand->id}}">{{$brand->title}}</option>
-                                            @endforeach
-                                          </select>
-                                      </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <input type="hidden" name="category" value="{{$lims_product_data->category_id}}">
-                                        <label>{{trans('file.category')}} *</strong> </label>
-                                        <div class="input-group">
-                                          <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
-                                            @foreach($lims_category_list as $category)
-                                                <option value="{{$category->id}}">{{$category->name}}</option>
-                                            @endforeach
-                                          </select>
-                                      </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.sku')}} *</strong> </label>
-                                        <input type="text" name="sku" value="{{ $lims_product_data->sku}}" required class="form-control">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Family {{trans('file.name')}} *</strong> </label>
-                                        <input type="text" name="family_name" value="{{ $lims_product_data->family_name}}"  required class="form-control">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                </div>
-                                <div id="unit" class="col-md-12">
-                                    <div class="row ">
-                                        <div class="col-md-4">
-                                                <label>{{trans('file.Product Unit')}} *</strong> </label>
-                                                <div class="input-group">
-                                                  <select required class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="Select unit..." name="unit_id">
-                                                    @foreach($lims_unit_list as $unit)
-                                                        @if($unit->base_unit==null)
-                                                            <option value="{{$unit->id}}">{{$unit->unit_name}}</option>
-                                                        @endif
-                                                    @endforeach
-                                                  </select>
-                                                  <input type="hidden" name="unit" value="{{ $lims_product_data->unit_id}}">
-                                              </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                                <label>{{trans('file.Sale Unit')}}</strong> </label>
-                                                <div class="input-group">
-                                                  <select class="form-control selectpicker" name="sale_unit_id" id="sale-unit">
-                                                  </select>
-                                                  <input type="hidden" name="sale_unit" value="{{ $lims_product_data->sale_unit_id}}">
-                                              </div>
-                                        </div>
-                                        <div class="col-md-4 mt-2">
-                                                <div class="form-group">
-                                                    <label>{{trans('file.Purchase Unit')}}</strong> </label>
-                                                    <div class="input-group">
-                                                      <select class="form-control selectpicker" name="purchase_unit_id">
-                                                      </select>
-                                                      <input type="hidden" name="purchase_unit" value="{{ $lims_product_data->purchase_unit_id}}">
-                                                  </div>
-                                                </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>Common {{trans('file.name')}} *</strong> </label>
-                                        <input type="text" name="common_name" value="{{ $lims_product_data->common_name}}"  required class="form-control">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                     <div class="form-group">
-                                        <label>{{trans('file.size')}} *</strong> </label> 
-                                        <input type="number" min="0" onkeypress="return isNumber(event)" value="{{ $lims_product_data->size}}" name="size" required class="form-control" step="any">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                </div>
-                                <!-- <div id="cost" class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Cost')}} *</strong> </label>
-                                        <input type="number" name="cost" value="{{$lims_product_data->cost}}" required class="form-control" step="any">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Price')}} *</strong> </label>
-                                        <input type="number" name="price" value="{{$lims_product_data->price}}" required class="form-control" step="any">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="hidden" name="qty" value="{{ $lims_product_data->qty }}" class="form-control">
-                                    </div>
-                                </div> -->
-                                <div id="cost" class="col-md-4">
-                                     <div class="form-group">
-                                        <label>{{trans('file.Purchase Price')}} *</strong> </label>
-                                        <input type="number" min="0" onkeypress="return isNumber(event)"  value="{{ $lims_product_data->cost}}" name="cost" required class="form-control" step="any">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Sales Price')}} *</strong> </label>
-                                        <input type="number" min="0" onkeypress="return isNumber(event)"  value="{{ $lims_product_data->price}}" name="price" required class="form-control" step="any">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="hidden" name="qty" value="0.00">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Markup')}}% *</strong> </label>
-                                        <input type="text" name="markup"  value="{{ $lims_product_data->markup}}" required class="form-control">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                   
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Max Discount')}} *</strong> </label>
-                                        <input type="text"  name="max_discount"  value="{{ $lims_product_data->max_discount}}" required class="form-control">
-                                        <span class="validation-msg"></span>
-                                    </div>
-                                   
-                                </div>
-                                <div id="alert-qty" class="col-md-4">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Alert Quantity')}}</strong> </label>
-                                        <input type="number" name="alert_quantity" value="{{$lims_product_data->alert_quantity}}" class="form-control" step="any">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <input type="hidden" name="tax" value="{{$lims_product_data->tax_id}}">
-                                        <label>{{trans('file.product')}} {{trans('file.Tax')}}</strong> </label>
-                                        <select name="tax_id" class="form-control selectpicker">
-                                            <option value="">No Tax</option>
-                                            @foreach($lims_tax_list as $tax)
-                                                <option value="{{$tax->id}}">{{$tax->name}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group">
-                                        <input type="hidden" name="tax_method_id" value="{{$lims_product_data->tax_method}}">
-                                        <label>{{trans('file.Tax Method')}}</strong> </label>
-                                        <select name="tax_method" class="form-control selectpicker">
-                                            <option value="1">{{trans('file.Exclusive')}}</option>
-                                            <option value="2">{{trans('file.Inclusive')}}</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group mt-3">
-                                        @if($lims_product_data->featured)
-                                            <input type="checkbox" name="featured" value="1" checked>
-                                        @else
-                                            <input type="checkbox" name="featured" value="1">
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
+                        <div id="combo" class="col-md-9 mb-1">
+                            <label>{{trans('file.add_product')}}</label>
+                            <div class="search-box input-group mb-3">
+                                <button class="btn btn-secondary"><i class="fa fa-barcode"></i></button>
+                                <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Please type product code and select..." class="form-control" />
+                            </div>
+                            <label>{{trans('file.Combo Products')}}</label>
+                            <div class="table-responsive">
+                                <table id="myTable" class="table table-hover order-list">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">{{trans('file.product')}}</th>
+                                            <th class="text-center">{{trans('file.Quantity')}}</th>
+                                            <th class="text-center">{{trans('file.Unit Price')}}</th>
+                                            <th class="text-center"><i class="dripicons-trash"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @if($lims_product_data->type == 'combo')
+                                        <?php
+                                            $product_list = explode(",", $lims_product_data->product_list);
+                                            $qty_list = explode(",", $lims_product_data->qty_list);
+                                            $variant_list = explode(",", $lims_product_data->variant_list);
+                                            $price_list = explode(",", $lims_product_data->price_list);
+                                        ?>
+                                        @foreach($product_list as $key=>$id)
+                                        <tr>
+                                            <?php
+                                                $product = App\Product::find($id);
+                                                if($variant_list[$key]) {
+                                                    $product_variant_data = App\ProductVariant::select('item_code')->FindExactProduct($id, $variant_list[$key])->first();
+                                                    $product->code = $product_variant_data->item_code;
+                                                }
+                                            ?>
+                                            <td class="text-center">{{$product->name}} [{{$product->code}}]</td>
+                                            <td class="text-center"><input type="number" class="form-control qty" name="product_qty[]" value="{{$qty_list[$key]}}" step="any"></td>
+                                            <td class="text-center"><input type="number" class="form-control unit_price" name="unit_price[]" value="{{$price_list[$key]}}" step="any"/></td>
+                                            <td class="text-center"><button type="button" class="ibtnDel btn btn-danger btn-sm">X</button></td>
+                                            <input type="hidden" class="product-id" name="product_id[]" value="{{$id}}"/>
+                                            <input type="hidden" class="variant-id" name="variant_id[]" value="{{$variant_list[$key]}}"/>
+                                        </tr>
+                                        @endforeach
                                         @endif
-                                        <label>{{trans('file.Featured')}}</label>
-                                        <p class="italic">{{trans('file.Featured product will be displayed in POS')}}</p>
-                                    </div>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Brand')}}</strong> </label>
+                                <div class="input-group">
+                                    <input type="hidden" name="brand" value="{{ $lims_product_data->brand_id}}">
+                                    <select name="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
+                                    @foreach($lims_brand_list as $brand)
+                                        <option value="{{$brand->id}}">{{$brand->title}}</option>
+                                    @endforeach
+                                    </select>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Image')}}</strong> </label> <i class="dripicons-question" data-toggle="tooltip" title="{{trans('file.You can upload multiple image. Only .jpeg, .jpg, .png, .gif file can be uploaded. First image will be base image.')}}"></i>
-                                        <div id="imageUpload" class="dropzone"></div>
-                                        <span class="validation-msg" id="image-error"></span>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="hidden" name="category" value="{{$lims_product_data->category_id}}">
+                                <label>{{trans('file.category')}} *</strong> </label>
+                                <div class="input-group">
+                                    <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
+                                    @foreach($lims_category_list as $category)
+                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                    @endforeach
+                                    </select>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></th>
-                                                    <th>Image</th>
-                                                    <th>Remove</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <?php $images = explode(",", $lims_product_data->image)?>
-                                                @foreach($images as $key => $image)
-                                                <tr>
-                                                    <td><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></i></td>
-                                                    <td>
-                                                        <img src="{{url('public/images/product', $image)}}" height="60" width="60">
-                                                        <input type="hidden" name="prev_img[]" value="{{$image}}">
-                                                    </td>
-                                                    <td><button type="button" class="btn btn-sm btn-danger remove-img">X</button></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.sku')}} *</strong> </label>
+                                <input type="text" name="sku" value="{{ $lims_product_data->sku}}" required class="form-control">
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Family {{trans('file.name')}} *</strong> </label>
+                                <input type="text" name="family_name" value="{{ $lims_product_data->family_name}}"  required class="form-control">
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
+                        <div id="unit" class="col-md-12">
+                            <div class="row ">
+                                <div class="col-md-4">
+                                        <label>{{trans('file.Product Unit')}} *</strong> </label>
+                                        <div class="input-group">
+                                            <select required class="form-control selectpicker" data-live-search="true" data-live-search-style="begins" title="Select unit..." name="unit_id">
+                                            @foreach($lims_unit_list as $unit)
+                                                @if($unit->base_unit==null)
+                                                    <option value="{{$unit->id}}">{{$unit->unit_name}}</option>
+                                                @endif
+                                            @endforeach
+                                            </select>
+                                            <input type="hidden" name="unit" value="{{ $lims_product_data->unit_id}}">
+                                        </div>
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label>{{trans('file.Product Details')}}</label>
-                                        <textarea name="product_details" class="form-control" rows="5">{{str_replace('@', '"', $lims_product_data->product_details)}}</textarea>
-                                    </div>
+                                <div class="col-md-4">
+                                        <label>{{trans('file.Sale Unit')}}</strong> </label>
+                                        <div class="input-group">
+                                            <select class="form-control selectpicker" name="sale_unit_id" id="sale-unit">
+                                            </select>
+                                            <input type="hidden" name="sale_unit" value="{{ $lims_product_data->sale_unit_id}}">
+                                        </div>
                                 </div>
-                                {{-- <div class="col-md-12 mt-2" id="diffPrice-option">
-                                    @if($lims_product_data->is_diffPrice)
-                                        <h5><input name="is_diffPrice" type="checkbox" id="is-diffPrice" value="1" checked>{{trans('file.This product has different price for different warehouse')}}</h5>
-                                    @else
-                                        <h5><input name="is_diffPrice" type="checkbox" id="is-diffPrice" value="1">{{trans('file.This product has different price for different warehouse')}}</h5>
-                                    @endif
+                                <div class="col-md-4 mt-2">
+                                        <div class="form-group">
+                                            <label>{{trans('file.Purchase Unit')}}</strong> </label>
+                                            <div class="input-group">
+                                                <select class="form-control selectpicker" name="purchase_unit_id">
+                                                </select>
+                                                <input type="hidden" name="purchase_unit" value="{{ $lims_product_data->purchase_unit_id}}">
+                                            </div>
+                                        </div>
                                 </div>
-                                <div class="col-md-6" id="diffPrice-section">
-                                    <div class="table-responsive ml-2">
-                                        <table id="diffPrice-table" class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>{{trans('file.Warehouse')}}</th>
-                                                    <th>{{trans('file.Price')}}</th>
-                                                </tr>
-                                                @foreach($lims_warehouse_list as $warehouse)
-                                                <tr>
-                                                    <td>
-                                                        <input type="hidden" name="warehouse_id[]" value="{{$warehouse->id}}">
-                                                        {{$warehouse->name}}
-                                                    </td>
-                                                    <td>
-                                                         
-                                                        <?php
-                                                            $product_warehouse = \App\Product_Warehouse::FindProductWithoutVariant($lims_product_data->id, $warehouse->id)->first();
-                                                        ?>
-                                                        @if($product_warehouse)
-                                                            <input type="number" name="diff_price[]" class="form-control" value="{{$product_warehouse->price}}">
-                                                        @else
-                                                            <input type="number" name="diff_price[]" class="form-control">
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                                @endforeach
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 mt-3" id="batch-option">
-                                    @if($lims_product_data->is_batch)
-                                        <h5><input name="is_batch" type="checkbox" id="is-batch" value="1" checked>{{trans('file.This product has batch and expired date')}}</h5>
-                                    @else
-                                        <h5><input name="is_batch" type="checkbox" id="is-batch" value="1">{{trans('file.This product has batch and expired date')}}</h5>
-                                    @endif
-                                </div>
-                                <div class="col-md-12 mt-3" id="imei-option">
-                                    @if($lims_product_data->is_imei)
-                                    <h5><input name="is_imei" type="checkbox" id="is-imei" value="1" checked>{{trans('file.This product has IMEI or Serial numbers')}}</h5>
-                                    @else
-                                    <h5><input name="is_imei" type="checkbox" id="is-imei" value="1">{{trans('file.This product has IMEI or Serial numbers')}}</h5>
-                                    @endif
-                                </div>
-                                <div class="col-md-12 mt-3" id="variant-option">
-                                    @if($lims_product_data->is_variant)
-                                    <h5><input name="is_variant" type="checkbox" id="is-variant" value="1" checked>{{trans('file.This product has variant')}}</h5>
-                                    @else
-                                    <h5><input name="is_variant" type="checkbox" id="is-variant" value="1">{{trans('file.This product has variant')}}</h5>
-                                    @endif
-                                </div>
-                                <div class="col-md-12" id="variant-section">
-                                    <div class="col-md-6 form-group mt-2">
-                                        <input type="text" name="variant" class="form-control" placeholder="{{trans('file.Enter variant seperated by comma')}}">
-                                    </div>
-                                    <div class="table-responsive ml-2">
-                                        <table id="variant-table" class="table table-hover variant-list">
-                                            <thead>
-                                                <tr>
-                                                    <th><i class="dripicons-view-apps"></i></th>
-                                                    <th>{{trans('file.name')}}</th>
-                                                    <th>{{trans('file.Item Code')}}</th>
-                                                    <th>{{trans('file.Additional Price')}}</th>
-                                                    <th><i class="dripicons-trash"></i></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach($lims_product_variant_data as $key=> $variant)
-                                                <tr>
-                                                    <td style="cursor:grab">
-                                                        <i class="dripicons-view-apps"></i>
-                                                        <input type="hidden" name="product_variant_id[]" value="{{$variant->pivot['id']}}">
-                                                        <input type="hidden" name="variant_id[]" value="{{$variant->pivot['variant_id']}}">
-                                                    </td>
-                                                    <td><input type="text" class="form-control" name="variant_name[]" value="{{$variant->name}}" /></td>
-                                                    <td><input type="text" class="form-control" name="item_code[]" value="{{$variant->pivot['item_code']}}" /></td>
-                                                    <td><input type="number" class="form-control" name="additional_price[]" value="{{$variant->pivot['additional_price']}}" step="any" /></td>
-                                                    <td><button type="button" class="vbtnDel btn btn-sm btn-danger">X</button></td>
-                                                </tr>
-                                                @endforeach
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div> --}}
-                                <div class="col-md-4 mt-3">
-                                    <input type="hidden" name="promotion_hidden" value="{{$lims_product_data->promotion}}">
-                                    <input name="promotion" type="checkbox" id="promotion" value="1">&nbsp;
-                                    <label><h5>{{trans('file.Add Promotional Price')}}</h5></label>
-                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Common {{trans('file.name')}} *</strong> </label>
+                                <input type="text" name="common_name" value="{{ $lims_product_data->common_name}}"  required class="form-control">
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                                <div class="form-group">
+                                <label>{{trans('file.size')}} *</strong> </label> 
+                                <input type="number" min="0" onkeypress="return isNumber(event)" value="{{ $lims_product_data->size}}" name="size" required class="form-control" step="any">
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
+                        <!-- <div id="cost" class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Cost')}} *</strong> </label>
+                                <input type="number" name="cost" value="{{$lims_product_data->cost}}" required class="form-control" step="any">
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Price')}} *</strong> </label>
+                                <input type="number" name="price" value="{{$lims_product_data->price}}" required class="form-control" step="any">
+                                <span class="validation-msg"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="qty" value="{{ $lims_product_data->qty }}" class="form-control">
+                            </div>
+                        </div> -->
+                        <div id="cost" class="col-md-4">
+                                <div class="form-group">
+                                <label>{{trans('file.Purchase Price')}} *</strong> </label>
+                                <input type="number" min="0" onkeypress="return isNumber(event)"  value="{{ $lims_product_data->cost}}" name="cost" required class="form-control" step="any">
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Sales Price')}} *</strong> </label>
+                                <input type="number" min="0" onkeypress="return isNumber(event)"  value="{{ $lims_product_data->price}}" name="price" required class="form-control" step="any">
+                                <span class="validation-msg"></span>
+                            </div>
+                            <div class="form-group">
+                                <input type="hidden" name="qty" value="0.00">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Markup')}}% *</strong> </label>
+                                <input type="text" name="markup"  value="{{ $lims_product_data->markup}}" required class="form-control">
+                                <span class="validation-msg"></span>
+                            </div> 
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Max Discount')}} *</strong> </label>
+                                <input type="text"  name="max_discount"  value="{{ $lims_product_data->max_discount}}" required class="form-control">
+                                <span class="validation-msg"></span>
+                            </div>
+                            
+                        </div>
+                        <div id="alert-qty" class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Alert Quantity')}}</strong> </label>
+                                <input type="number" name="alert_quantity" value="{{$lims_product_data->alert_quantity}}" class="form-control" step="any">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="hidden" name="tax" value="{{$lims_product_data->tax_id}}">
+                                <label>{{trans('file.product')}} {{trans('file.Tax')}}</strong> </label>
+                                <select name="tax_id" class="form-control selectpicker">
+                                    <option value="">No Tax</option>
+                                    @foreach($lims_tax_list as $tax)
+                                        <option value="{{$tax->id}}">{{$tax->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="hidden" name="tax_method_id" value="{{$lims_product_data->tax_method}}">
+                                <label>{{trans('file.Tax Method')}}</strong> </label>
+                                <select name="tax_method" class="form-control selectpicker">
+                                    <option value="1">{{trans('file.Exclusive')}}</option>
+                                    <option value="2">{{trans('file.Inclusive')}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mt-3">
+                                @if($lims_product_data->featured)
+                                    <input type="checkbox" name="featured" value="1" checked>
+                                @else
+                                    <input type="checkbox" name="featured" value="1">
+                                @endif
+                                <label>{{trans('file.Featured')}}</label>
+                                <p class="italic">{{trans('file.Featured product will be displayed in POS')}}</p>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Image')}}</strong> </label> <i class="dripicons-question" data-toggle="tooltip" title="{{trans('file.You can upload multiple image. Only .jpeg, .jpg, .png, .gif file can be uploaded. First image will be base image.')}}"></i>
+                                <div id="imageUpload" class="dropzone"></div>
+                                <span class="validation-msg" id="image-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center"><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></th>
+                                            <th class="text-center">Image</th>
+                                            <th class="text-center">Remove</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php $images = explode(",", $lims_product_data->image)?>
+                                        @foreach($images as $key => $image)
+                                        <tr>
+                                            <td class="text-center"><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></i></td>
+                                            <td class="text-center">
+                                                <img src="{{url('public/images/product', $image)}}" height="60" width="60">
+                                                <input type="hidden" name="prev_img[]" value="{{$image}}">
+                                            </td>
+                                            <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-img">X</button></td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Details')}}</label>
+                                <textarea name="product_details" class="form-control" rows="5">{{str_replace('@', '"', $lims_product_data->product_details)}}</textarea>
+                            </div>
+                        </div>
+                        {{-- <div class="col-md-12 mt-2" id="diffPrice-option">
+                            @if($lims_product_data->is_diffPrice)
+                                <h5><input name="is_diffPrice" type="checkbox" id="is-diffPrice" value="1" checked>{{trans('file.This product has different price for different warehouse')}}</h5>
+                            @else
+                                <h5><input name="is_diffPrice" type="checkbox" id="is-diffPrice" value="1">{{trans('file.This product has different price for different warehouse')}}</h5>
+                            @endif
+                        </div>
+                        <div class="col-md-6" id="diffPrice-section">
+                            <div class="table-responsive ml-2">
+                                <table id="diffPrice-table" class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>{{trans('file.Warehouse')}}</th>
+                                            <th>{{trans('file.Price')}}</th>
+                                        </tr>
+                                        @foreach($lims_warehouse_list as $warehouse)
+                                        <tr>
+                                            <td>
+                                                <input type="hidden" name="warehouse_id[]" value="{{$warehouse->id}}">
+                                                {{$warehouse->name}}
+                                            </td>
+                                            <td>
+                                                    
+                                                <?php
+                                                    $product_warehouse = \App\Product_Warehouse::FindProductWithoutVariant($lims_product_data->id, $warehouse->id)->first();
+                                                ?>
+                                                @if($product_warehouse)
+                                                    <input type="number" name="diff_price[]" class="form-control" value="{{$product_warehouse->price}}">
+                                                @else
+                                                    <input type="number" name="diff_price[]" class="form-control">
+                                                @endif
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt-3" id="batch-option">
+                            @if($lims_product_data->is_batch)
+                                <h5><input name="is_batch" type="checkbox" id="is-batch" value="1" checked>{{trans('file.This product has batch and expired date')}}</h5>
+                            @else
+                                <h5><input name="is_batch" type="checkbox" id="is-batch" value="1">{{trans('file.This product has batch and expired date')}}</h5>
+                            @endif
+                        </div>
+                        <div class="col-md-12 mt-3" id="imei-option">
+                            @if($lims_product_data->is_imei)
+                            <h5><input name="is_imei" type="checkbox" id="is-imei" value="1" checked>{{trans('file.This product has IMEI or Serial numbers')}}</h5>
+                            @else
+                            <h5><input name="is_imei" type="checkbox" id="is-imei" value="1">{{trans('file.This product has IMEI or Serial numbers')}}</h5>
+                            @endif
+                        </div>
+                        <div class="col-md-12 mt-3" id="variant-option">
+                            @if($lims_product_data->is_variant)
+                            <h5><input name="is_variant" type="checkbox" id="is-variant" value="1" checked>{{trans('file.This product has variant')}}</h5>
+                            @else
+                            <h5><input name="is_variant" type="checkbox" id="is-variant" value="1">{{trans('file.This product has variant')}}</h5>
+                            @endif
+                        </div>
+                        <div class="col-md-12" id="variant-section">
+                            <div class="col-md-6 form-group mt-2">
+                                <input type="text" name="variant" class="form-control" placeholder="{{trans('file.Enter variant seperated by comma')}}">
+                            </div>
+                            <div class="table-responsive ml-2">
+                                <table id="variant-table" class="table table-hover variant-list">
+                                    <thead>
+                                        <tr>
+                                            <th><i class="dripicons-view-apps"></i></th>
+                                            <th>{{trans('file.name')}}</th>
+                                            <th>{{trans('file.Item Code')}}</th>
+                                            <th>{{trans('file.Additional Price')}}</th>
+                                            <th><i class="dripicons-trash"></i></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($lims_product_variant_data as $key=> $variant)
+                                        <tr>
+                                            <td style="cursor:grab">
+                                                <i class="dripicons-view-apps"></i>
+                                                <input type="hidden" name="product_variant_id[]" value="{{$variant->pivot['id']}}">
+                                                <input type="hidden" name="variant_id[]" value="{{$variant->pivot['variant_id']}}">
+                                            </td>
+                                            <td><input type="text" class="form-control" name="variant_name[]" value="{{$variant->name}}" /></td>
+                                            <td><input type="text" class="form-control" name="item_code[]" value="{{$variant->pivot['item_code']}}" /></td>
+                                            <td><input type="number" class="form-control" name="additional_price[]" value="{{$variant->pivot['additional_price']}}" step="any" /></td>
+                                            <td><button type="button" class="vbtnDel btn btn-sm btn-danger">X</button></td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div> --}}
+                        <div class="col-md-4 mt-3">
+                            <input type="hidden" name="promotion_hidden" value="{{$lims_product_data->promotion}}">
+                            <input name="promotion" type="checkbox" id="promotion" value="1">&nbsp;
+                            <label><h5>{{trans('file.Add Promotional Price')}}</h5></label>
+                        </div>
 
-                                <div class="col-md-12">
-                                    <div class="row">
-                                        <div class="col-md-4" id="promotion_price">   <label>{{trans('file.Promotional Price')}}</label>
-                                            <input type="number" name="promotion_price" value="{{$lims_product_data->promotion_price}}" class="form-control" step="any" />
-                                        </div>
-                                        <div id="start_date" class="col-md-4">
-                                            <div class="form-group">
-                                                <label>{{trans('file.Promotion Starts')}}</label>
-                                                <input type="text" name="starting_date" value="{{$lims_product_data->starting_date}}" id="starting_date" class="form-control" />
-                                            </div>
-                                        </div>
-                                        <div id="last_date" class="col-md-4">
-                                            <div class="form-group">
-                                                <label>{{trans('file.Promotion Ends')}}</label>
-                                                <input type="text" name="last_date" value="{{$lims_product_data->last_date}}" id="ending_date" class="form-control" />
-                                            </div>
-                                        </div>
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-4" id="promotion_price">   <label>{{trans('file.Promotional Price')}}</label>
+                                    <input type="number" name="promotion_price" value="{{$lims_product_data->promotion_price}}" class="form-control" step="any" />
+                                </div>
+                                <div id="start_date" class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Promotion Starts')}}</label>
+                                        <input type="text" name="starting_date" value="{{$lims_product_data->starting_date}}" id="starting_date" class="form-control" />
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div id="last_date" class="col-md-4">
                                     <div class="form-group">
-                                        <input type="button" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-btn">
+                                        <label>{{trans('file.Promotion Ends')}}</label>
+                                        <input type="text" name="last_date" value="{{$lims_product_data->last_date}}" id="ending_date" class="form-control" />
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="button" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-btn">
+                            </div>
+                        </div>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -622,6 +617,7 @@ var baseUrl = $('#baseUrl').val();
                  data:$('#attributeInput').val()
              },
               success: function(res) {
+                  console.log(res.data)
                   $('#attribute_img').html('');
                   
               // alert(res.data.length)
@@ -631,8 +627,7 @@ var baseUrl = $('#baseUrl').val();
                   let att = res.data[i];
                   console.log(res.data[i].id);
                   $('#attribute_img').append(`
-                  ${res.data[i].checkbox} 
-                  ${res.data[i].image}     
+                    ${res.data[i].checkbox_image} 
                   `)
                  }  
                 }

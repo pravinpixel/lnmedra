@@ -902,10 +902,14 @@ class ProductController extends Controller
        {
         $attribute_image = explode(",", $val->image);
         $attribute_image = htmlspecialchars($attribute_image[0]);
-        $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.' required>
-        <span class="validation-msg"></span>
+        $val['checkbox_image'] = '
+            <div class="border col-3 p-0 m-2">
+                <div class="d-flex" style="background: url("'.url('public/images/attribute', $attribute_image).'"); height:60px;width:60px;background-size: cover;" >
+                    <input type="checkbox" name="attribute[]" value="'.$val->id.'" required>
+                </div> 
+                <span class="validation-msg"></span>
+            </div>
         ';
-        $val['image'] = '<img src="'.url('public/images/attribute', $attribute_image).'" height="60" width="60">';
        }
         // dd($data);
         
@@ -919,18 +923,30 @@ class ProductController extends Controller
         $data = MasterAttribute::where('product_type',$id)->get();
         foreach($data as $key=>$val)
         {
-         $attribute_image = explode(",", $val->image);
-         $attribute_image = htmlspecialchars($attribute_image[0]);
-         if(in_array("$val->id",$dd))
-         {
-            $val['checkbox'] = '<input type="checkbox" name="attribute[]" checked value='.$val->id.' required>
-            ';
-         }
-         else{
-            $val['checkbox'] = '<input type="checkbox" name="attribute[]" value='.$val->id.' required>';
-         }
-        
-         $val['image'] = '<img src="'.url('public/images/attribute', $attribute_image).'" height="60" width="60">';
+            $attribute_image = explode(",", $val->image);
+            $attribute_image = htmlspecialchars($attribute_image[0]);
+            if(in_array("$val->id",$dd))
+            {
+                $val['checkbox_image'] = '
+                    <div class="border col-3 p-0 m-2">
+                        <div class="d-flex" style="background: url('.asset('public/images/attribute/', $attribute_image).'); height:60px;width:60px;background-size: cover;" >
+                            <input type="checkbox" name="attribute[]" checked value="'.$val->id.'" required>
+                        </div> 
+                        <span class="validation-msg"></span>
+                    </div>
+                ';
+            }
+            else{
+                $val['checkbox_image'] = '
+                        <div class="border col-3 p-0 m-2">
+                            <div class="d-flex" style="background: url('.asset('public/images/attribute/', $attribute_image).'); height:60px;width:60px;background-size: cover;" >
+                                <input type="checkbox" name="attribute[]" value="'.$val->id.'" required>
+                            </div> 
+                            <span class="validation-msg"></span>
+                        </div>
+                    ';
+            } 
+
         }
          // dd($data);
          
