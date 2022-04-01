@@ -188,7 +188,7 @@
                   <tbody>
                       <tr>
                       <td> Allocated %</td>
-                      <td class="revenue-data" > 10000</td>
+                      <td class="revenue-data" > 0.00</td>
                       @foreach($accountData as $key=>$val)
                       <td class="<?php echo(str_replace([' ','&'], '', $val['accounts_date_name']))?>" >0.00</td>
                       @endforeach
