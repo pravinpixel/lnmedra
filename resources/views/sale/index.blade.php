@@ -3,7 +3,6 @@
 
 <section>
     <div class="container-fluid">
-        
         <div class="card"> 
             <div class="card-body">
                 {!! Form::open(['route' => 'sales.index', 'method' => 'get']) !!}

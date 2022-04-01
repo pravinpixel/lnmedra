@@ -12,55 +12,77 @@
         <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Customer')}}</a>
         @endif
     </div>
-    <div class="card">  
-        <div class="card-body">
-  
-                <div class="row m-0">
-                    <div class="col-5 d-flex align-items-center">
-                        <div class="mr-3">{{trans('file.Date')}}</div>
-                        <input type="text" class="daterangepicker-field form-control w-100" value="{{ now()->format('Y-m-d') }} To {{ now()->format('Y-m-d') }}" required />
-                        <input type="hidden" name="starting_date" id="starting_date" value="{{now()}}" />
-                        <input type="hidden" name="ending_date" id="ending_date" value="{{now()}}" />
-                    </div>
-             
-                    <div class="d-flex align-items-center">
-                        <div class="mr-3">{{trans('file.Outlet')}}</div>
-                        <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" >
-                            <option value="0">{{trans('file.All Outlet')}}</option>
-                            @foreach($lims_warehouse_list as $warehouse)
-                     
-                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                           
-                            @endforeach
-                        </select>
-                    </div>
-                
-                    <div class="col-2">
-                        <button class="btn btn-primary w-100" onclick="filter()" id="filter-btn" type="submit">{{trans('file.search')}}</button>
-                    </div>
-                </div>
-          
-        </div>
-    </div>
     <div>
         <table id="customer-table" class="table">
             <thead>
                 <tr>
-              
+                    <th class="not-exported"></th>
                     <th>{{trans('file.Customer Group')}}</th>
                     <th>{{trans('file.name')}}</th>
                     {{-- <th>{{trans('file.Company Name')}}</th> --}}
-                   <th>{{trans('file.Email')}}</th>
-                     {{-- <th>{{trans('file.Phone Number')}}</th> --}}
-                    <th>{{trans('file.Total transaction')}}</th>
-                    <th>{{trans('file.Total Value')}}</th>
-                    <th>{{trans('file.Last Visited')}}</th>
-                    <th>{{trans('file.Customer since')}}</th>
+                    <th>{{trans('file.Email')}}</th>
+                    <th>{{trans('file.Phone Number')}}</th>
+                    {{-- <th>{{trans('file.Tax Number')}}</th> --}}
+                    {{-- <th>{{trans('file.Address')}}</th> --}}
+                    {{-- <th>{{trans('file.Reward Points')}}</th> --}}
+                    {{-- <th>{{trans('file.Balance')}}</th> --}}
                     <th class="not-exported">{{trans('file.action')}}</th>
                 </tr>
             </thead>
-                <tbody>
-                
+            <tbody>
+                @foreach($lims_customer_all as $key=>$customer)
+                <tr data-id="{{$customer->id}}">
+                    <td>{{$key}}</td>
+                    <td>
+                        <?php $customer_group = DB::table('customer_groups')->where('id',$customer->customer_group_id)->first(); ?>
+                        {{  $customer_group->name }}
+                    </td>
+                    <td>{{ $customer->name }}</td>
+                    {{-- <td>{{ $customer->company_name}}</td> --}}
+                    <td>{{ $customer->email}}</td>
+                    <td>{{ $customer->phone_number}}</td>
+                    {{-- <td>{{ $customer->tax_no}}</td> --}}
+                    {{-- <td>{{ $customer->address}}, {{ $customer->city}}@if($customer->country) {{','. $customer->country}}@endif</td> --}}
+                    {{-- <td>{{$customer->points}}</td> --}}
+                    {{-- <td>{{ number_format($customer->deposit - $customer->expense, 2) }}</td> --}}
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                <span class="caret"></span>
+                                <span class="sr-only">Toggle Dropdown</span>
+                            </button>
+                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                @if(in_array("customers-edit", $all_permission))
+                                <li>
+                                    <a href="{{ route('customer.edit', $customer->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
+                                </li>
+                                @endif
+                                <!-- <li>
+                                    <button type="button" data-id="{{$customer->id}}" class="deposit btn btn-link" data-toggle="modal" data-target="#depositModal" ><i class="dripicons-plus"></i> {{trans('file.Add Deposit')}}</button>
+                                </li> 
+                                <li>
+                                    <button type="button" data-id="{{$customer->id}}" class="getDeposit btn btn-link"><i class="fa fa-money"></i> {{trans('file.View Deposit')}}</button>
+                                </li> -->
+                                <li class="divider"></li>
+                                @if(in_array("customers-delete", $all_permission))
+                                {{ Form::open(['route' => ['customer.destroy', $customer->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+                                    <!-- <li>
+                                        <a href="{{ route('customer.edit', $customer->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
+                                    </li> -->
+                                    @endif
+                                    <li class="divider"></li>
+                                    @if(in_array("customers-delete", $all_permission))
+                                    {{ Form::open(['route' => ['customer.destroy', $customer->id], 'method' => 'DELETE', 'onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
+                                        <li>
+                                            <button class="btn btn-link"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                    {{ Form::close() }}
+                                    @endif
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -181,7 +203,6 @@
 
 @push('scripts')
 <script type="text/javascript">
-  
     $("ul#customer_management").siblings('a').attr('aria-expanded','true');
     $("ul#customer_management").addClass("show");
     $("ul#customer_management #customer-list-menu").addClass("active");
@@ -248,35 +269,102 @@
     });
 
     var table = $('#customer-table').DataTable( {
-        aaSorting     : [[0, 'desc']],
-        responsive: true,
-        processing: true,    
-        lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        serverSide: true, pageLength: 10,
-        ajax          : {
-            url     : '{!! route('customer.list') !!}',
-            dataType: 'json',
-            data :  function(d) {
-             d.start_date = $("#starting_date").val();
-             d.end_date = $("#ending_date").val();
+        "order": [],
+        'language': {
+            'lengthMenu': '_MENU_ {{trans("file.records per page")}}',
+             "info":      '<small>{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)</small>',
+            "search":  '{{trans("file.Search")}}',
+            'paginate': {
+                    'previous': '<i class="dripicons-chevron-left"></i>',
+                    'next': '<i class="dripicons-chevron-right"></i>'
             }
         },
-        columns       : [
-            { data: 'customerGroupName', name: 'customerGroup.name'},
-            { data: 'full_name', name: 'full_name'},
-            { data: 'email', name: 'email'},
-            { data: 'totalTransaction', name: 'totalTransaction'},
-            { data: 'totalValue', name: 'totalValue'},
-            { data: 'last_visited', name: 'last_visited'},
-            { data: 'created_at', name: 'created_at'},
+        'columnDefs': [
             {
-                data         : 'action', name: 'action', orderable: false, searchable: false,
-                fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
-                    $("a", nTd).tooltip({container: 'body'});
-                }
+                "orderable": false,
+                'targets': [0, 10]
+            },
+            {
+                'render': function(data, type, row, meta){
+                    if(type === 'display'){
+                        data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
+                    }
+
+                   return data;
+                },
+                'checkboxes': {
+                   'selectRow': true,
+                   'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
+                },
+                'targets': [0]
             }
-        ]
-    });
+        ],
+        'select': { style: 'multi',  selector: 'td:first-child'},
+        'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        dom: '<"row"lfB>rtip',
+        buttons: [
+            {
+                extend: 'pdf',
+                text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
+                exportOptions: {
+                    columns: ':visible:Not(.not-exported)',
+                    rows: ':visible'
+                },
+            },
+            {
+                extend: 'csv',
+                text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
+                exportOptions: {
+                    columns: ':visible:Not(.not-exported)',
+                    rows: ':visible'
+                },
+            },
+            {
+                extend: 'print',
+                text: '<i title="print" class="fa fa-print"></i>',
+                exportOptions: {
+                    columns: ':visible:Not(.not-exported)',
+                    rows: ':visible'
+                },
+            },
+            {
+                text: '<i title="delete" class="dripicons-cross"></i>',
+                className: 'buttons-delete',
+                action: function ( e, dt, node, config ) {
+                    if(user_verified == '1') {
+                        customer_id.length = 0;
+                        $(':checkbox:checked').each(function(i){
+                            if(i){
+                                customer_id[i-1] = $(this).closest('tr').data('id');
+                            }
+                        });
+                        if(customer_id.length && confirm("Are you sure want to delete ? this")) {
+                            $.ajax({
+                                type:'POST',
+                                url:'customer/deletebyselection',
+                                data:{
+                                    customerIdArray: customer_id
+                                },
+                                success:function(data){
+                                    alert(data);
+                                }
+                            });
+                            dt.rows({ page: 'current', selected: true }).remove().draw(false);
+                        }
+                        else if(!customer_id.length)
+                            alert('No customer is selected!');
+                    }
+                    else
+                        alert('This feature is disable for demo!');
+                }
+            },
+            {
+                extend: 'colvis',
+                text: '<i title="column visibility" class="fa fa-eye"></i>',
+                columns: ':gt(0)'
+            },
+        ],
+    } );
 
   $.ajaxSetup({
         headers: {
@@ -305,19 +393,5 @@
            }
         });
     });
-    $(".daterangepicker-field").daterangepicker({
-      callback: function(startDate, endDate, period){
-        var starting_date = startDate.format('YYYY-MM-DD');
-        var ending_date = endDate.format('YYYY-MM-DD');
-        var title = starting_date + ' To ' + ending_date;
-        $('.daterangepicker-field').val(title);
-        $('input[name="starting_date"]').val(starting_date);
-        $('input[name="ending_date"]').val(ending_date);
-      }
-    });
-
-    function filter(){
-        $('#customer-table').DataTable().draw();
-    }
 </script>
 @endpush

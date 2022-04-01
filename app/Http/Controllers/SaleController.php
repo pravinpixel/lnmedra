@@ -592,11 +592,13 @@ class SaleController extends Controller
             $message = 'Sale successfully added to draft';
         else
             $message = ' Sale created successfully';
+            $lims_customer_data->last_visited = now();
+            $lims_customer_data->save();
         if($mail_data['email'] && $data['sale_status'] == 1) {
             try {
                 Mail::send( 'mail.sale_details', $mail_data, function( $message ) use ($mail_data)
                 {
-                    $message->to( $mail_data['email'] )->subject( 'Sale Details' );
+                    $message->to( $mail_data['email'] )->subject( 'Sale Details');
                 });
             }
             catch(\Exception $e){
@@ -636,6 +638,7 @@ class SaleController extends Controller
             $lims_payment_data->change = $data['paying_amount'] - $data['paid_amount'];
             $lims_payment_data->paying_method = $paying_method;
             $lims_payment_data->payment_note = $data['payment_note'];
+            $lims_payment_data->customer_id = $data['customer_id'];
             $lims_payment_data->save();
 
             $lims_payment_data = Payment::latest()->first();

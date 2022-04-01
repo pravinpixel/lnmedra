@@ -26,6 +26,8 @@ class CreateCustomersTable extends Migration
             $table->string('postal_code')->nullable();
             $table->string('country')->nullable();
             $table->boolean('is_active')->nullable();
+            $table->string('full_name')->nullable();
+            $table->dateTime('last_visited')->nullable();
             $table->timestamps();
         });
     }

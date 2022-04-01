@@ -26,6 +26,7 @@ class CustomersTableSeeder extends Seeder
                 'customer_group_id' => 1,
                 'user_id' => NULL,
                 'name' => 'walk-in-customer',
+                'full_name' => 'walk-in-customer',
                 'company_name' => NULL,
                 'email' => '',
                 'phone_number' => '01923000001',

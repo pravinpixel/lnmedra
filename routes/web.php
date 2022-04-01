@@ -158,6 +158,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('customer/deleteDeposit', 'CustomerController@deleteDeposit')->name('customer.deleteDeposit');
 	Route::post('customer/deletebyselection', 'CustomerController@deleteBySelection');
 	Route::get('customer/lims_customer_search', 'CustomerController@limsCustomerSearch')->name('customer.search');
+	Route::get('customer/list', 'CustomerController@datatable')->name('customer.list');
 	
 	Route::resource('customer', 'CustomerController');
 	// Route::post('customer/additionalData', 'CustomerController@additionalData')->name('customer.additionalData');

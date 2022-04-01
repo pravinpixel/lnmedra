@@ -12,7 +12,10 @@ use Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Mail\UserNotification;
+use App\Warehouse;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
+use Yajra\DataTables\DataTables;
 
 class CustomerController extends Controller
 {
@@ -26,7 +29,8 @@ class CustomerController extends Controller
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
             $lims_customer_all = Customer::where('is_active', true)->get();
-            return view('customer.index', compact('lims_customer_all', 'all_permission'));
+            $lims_warehouse_list = Warehouse::where('is_active', true)->get();
+            return view('customer.index', compact('lims_customer_all', 'all_permission','lims_warehouse_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -89,7 +93,7 @@ class CustomerController extends Controller
         }
         
         $lims_customer_data['name'] = $lims_customer_data['customer_name'];
-        
+        $lims_customer_data['full_name'] = $lims_customer_data['customer_name'];
         if($lims_customer_data['email']) {
             try{
                 Mail::send( 'mail.customer_create', $lims_customer_data, function( $message ) use ($lims_customer_data)
@@ -167,6 +171,7 @@ class CustomerController extends Controller
         }
         
         $input['name'] = $input['customer_name'];
+        $input['full_name'] = $input['customer_name'];
         $lims_customer_data->update($input);
         return redirect('customer')->with('edit_message', $message);
     }
@@ -324,5 +329,52 @@ class CustomerController extends Controller
         $lims_customer_data->is_active = false;
         $lims_customer_data->save();
         return redirect('customer')->with('not_permitted','Data deleted Successfully');
+    }
+
+    public function datatable(Request $request)
+    {
+        if ($request->ajax() == true) {
+            $start_date = Carbon::parse(request('start_date'))->startOfDay();
+            $end_date = Carbon::parse(request('end_date'))->endOfDay();
+            $dataDb = Customer::with(['customerGroup','payments'])
+            ->where('customers.is_active',1)
+            ->whereBetween('customers.created_at', [$start_date, $end_date]);
+            return DataTables::eloquent($dataDb)
+                ->addColumn('customerGroupName', function($dataDb){
+                    return $dataDb->customerGroup->name;
+                })
+                ->addColumn('totalTransaction', function($dataDb){
+                    return $dataDb->payments()->count();
+                })
+                ->addColumn('totalValue', function($dataDb){
+                    return $dataDb->payments->sum(['amount']);
+                })
+                ->addColumn('action', function($dataDb){
+                    return "";
+                })
+                ->addColumn('action', function($dataDb){
+                    return '
+                        <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                            <li>
+                                <a href="'.route('customer.edit', $dataDb->id) .'" class="btn btn-link"><i class="dripicons-document-edit"></i> edit</a>
+                            </li>
+                            <li>
+                            <form action="'.route('customer.destroy', $dataDb->id).'"  method= "POST" onsubmit="return confirmDeleteAlert(this)">
+                                <input type="hidden" name="_token" value="'.csrf_token().'">
+                                <input type="hidden" name="_method" value="delete" />
+                                <button type="submit" class="btn btn-link"><i class="dripicons-trash"></i> delete </button>
+                            </form>
+                            </li>
+                        </ul>
+                ';
+                })
+            ->rawColumns(['action'])
+            ->make(true);
+        }
     }
 }

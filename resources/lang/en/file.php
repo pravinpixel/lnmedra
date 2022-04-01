@@ -711,6 +711,10 @@ return [
 	"Points" =>"Points",
 	"Cancel" =>"Cancel",
 	"Recent transaction" =>"Recent transaction",
-
+	"Total transaction" => "Total transaction",
+	"Last Visited" => "Last Visited",
+	"Total Value" => "Total Value",
+	"Total transaction" => "Total transaction",
+	"Customer since" => "Customer since"
 ];
 ?>
