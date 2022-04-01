@@ -76,8 +76,7 @@
                 ['role_id', Auth::user()->role_id]
             ])->first();
 @endphp    
-
-
+ 
 
 <!-- Side Navbar -->
 <header class="header m-0 bg-primary text-white " style="border-bottom: 2px solid #272524">
@@ -90,13 +89,19 @@
             <span class="navbar-toggler-icon"></span>
             </button>
             <div>
-                <a href="{{url('/')}}" class="text-white"><strong>L & N Group | Sales & POS Management</strong></a>
+                <a href="{{url('/')}}" class="text-white"><strong>Lnmedra POS Management System</strong></a>
             </div>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="{{ route('home') }}" class="nav-link"><i class="dripicons-home text-white"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link"><i  id="goFS" onclick="toggleFullScreen()" class="text-white dripicons-expand"></i></a>
+                    </li>
                     <li class="nav-item dropdown text-white">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <i class="dripicons-gear"></i> <b>{{ucfirst(Auth::user()->name)}}</b>
+                            <i class="dripicons-gear text-white"></i> <b>{{ucfirst(Auth::user()->name)}}</b>
                         </a>
                         <div class="dropdown-menu shadow-sm border" aria-labelledby="navbarDropdownMenuLink" style="transform: translateX(-66px);">
                             <a class="dropdown-item" href="{{route('user.profile', ['id' => Auth::id()])}}">
@@ -1140,7 +1145,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-12 mb-4 totals p-0 shadow" >
+                        <div class="col-12 totals p-0 shadow" >
                             <div class="row m-0">
                                 <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0 border-right-0">
                                     <span class="totals-title">{{trans('file.Items')}}</span><b id="item">0</b>
@@ -1163,35 +1168,35 @@
                             </div>
                         </div>
                         
-                        <div class="row mx-0 shadow align-items-center" style="background: #0c324c !important">
-                            <div class="row m-0 col-8 p-0 ">
-                                <div class="col-6 p-0">
+                        <div class="mx-0 shadow" style="background: #0c324c !important">
+                            <div class="row m-0  p-0 ">
+                                <div class="col p-0">
                                     <button type="button" class="h-100 w-100 h3 text-white rounded-0 btn btn-primary payment-btn" data-toggle="modal" data-target="#add-payment" id="credit-card-btn">
                                         <i class="fa fa-credit-card"></i> <b>{{trans('file.Card')}}</b>
                                     </button>
                                 </div>
-                                <div class="col-6 p-0">
+                                <div class="col p-0">
                                     <button type="button" class="h-100 h3 text-white w-100 rounded-0 btn btn-warning payment-btn" data-toggle="modal" data-target="#add-payment" id="cash-btn">
                                         <i class="fa fa-money"></i> <b>{{trans('file.Cash')}}</b>
                                     </button>
                                 </div>
-                                <div class="col-6 p-0">
+                                <div class="col p-0">
                                     <button type="button" class="h-100 h3 text-white w-100  rounded-0 btn btn-info payment-btn" data-toggle="modal" data-target="#add-payment" id="paypal-btn">
                                         <i class="fa fa-paypal"></i> <b>UPI</b>
                                     </button>
                                 </div> 
                                 
-                                <div class="col-6 p-0">
+                                <div class="col p-0">
                                     <button type="button" class="h-100 w-100 h3 text-white rounded-0 btn btn-danger" id="cancel-btn" onclick="return confirmCancel()">
                                         <i class="fa fa-close"></i> {{trans('file.Cancel')}}
                                     </button>
                                 </div> 
                             </div>
-                            <div class="col-4 text-right">
-                                <span class="text-light mb-2">
-                                    {{trans('file.grand total')}} 
+                            <div class="text-center p-3">
+                                <span class="text-light ">
+                                    {{trans('file.grand total')}} : 
                                 </span>
-                                <div class="text-white h1" id="grand-total">0.00</div>
+                                <span class="text-white h1" id="grand-total">0.00</span>
                             </div>
                         </div>
                     </div> 
@@ -1201,8 +1206,8 @@
             <!-- product list -->
             <div class="col-md-6 mt-3 card p-0">
                 <div class="card-header bg-light text-white shadow-sm border-bottom">
-                    <div class="search-box m-0">
-                        <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Scan/Search product by name/code" class="form-control form-control-lg rounded-pill active"  />
+                    <div class="search-box m-0 text-dark">
+                        <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Scan/Search product by name/code" class="form-control form-control-lg rounded-pill active text-dark"  />
                     </div>
                     <div class="btn-group w-100 mt-3">
                         <button class="btn w-100 btn-primary" id="category-filter">{{trans('file.category')}}</button>
@@ -2856,12 +2861,12 @@ function addNewProduct(data){
             <small class="stock-count text-white"><b class="text-white fw-bold in-stock"></b></small>
         </td>
     `;
-    // if(data[12]) {
-    //     cols += '<td style="text-align:center;padding:0 !important"><input type="text" class="form-control form-control-sm batch-no" value="'+batch_no[pos]+'" required/> <input type="hidden" class="product-batch-id" name="product_batch_id[]" value="'+product_batch_id[pos]+'"/> </td>';
-    // }
-    // else {
-    //     cols += '<td style="text-align:center;padding:0 !important"><input type="text" class="form-control form-control-sm batch-no" disabled/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
-    // }
+    if(data[12]) {
+        cols += '<td style="display:none !important ;text-align:center;padding:0 !important"><input type="text" class="form-control form-control-sm batch-no" value="'+batch_no[pos]+'" required/> <input type="hidden" class="product-batch-id" name="product_batch_id[]" value="'+product_batch_id[pos]+'"/> </td>';
+    }
+    else {
+        cols += '<td style="display:none !important ;text-align:center;padding:0 !important"><input type="text" class="form-control form-control-sm batch-no" disabled/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
+    }
     cols += '<td style="text-align:center;padding:0 !important" class="product-price fw-bold"></td>';
     cols += '<td style="text-align:center;padding:0 !important"><div class="btn-group"><span class="btn-group-btn"><button type="button" class="btn btn-default minus"><span class="dripicons-minus"></span></button></span><input type="text" name="qty[]" class="form-control qty numkey input-number" step="any" required><span class="btn-group-btn"><button type="button" class="btn btn-default plus"><span class="dripicons-plus"></span></button></span></div></td>';
     cols += '<td style="text-align:center;padding:0 !important" class="sub-total"></td>';
@@ -3386,5 +3391,20 @@ $(document).ready(function(){
 });
    
 </script>
- 
+<script>
+	function toggleFullScreen() {
+	  var doc = window.document;
+	  var docEl = doc.documentElement;
+
+	  var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+	  var cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+
+	  if(!doc.fullscreenElement && !doc.mozFullScreenElement && !doc.webkitFullscreenElement && !doc.msFullscreenElement) {
+		requestFullScreen.call(docEl);
+	  }
+	  else {
+		cancelFullScreen.call(doc);
+	  }
+	}
+</script>
 @endpush

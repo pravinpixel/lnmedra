@@ -256,3 +256,48 @@ td.product-img {
   max-width: 100px !important;
   overflow: hidden !important;
 } 
+ 
+ 
+.ui-menu-item .ui-menu-item-wrapper.ui-state-active  {
+  background: #d2ffe8 !important; 
+  margin: 0 !important; 
+ 
+}
+.ui-autocomplete {
+  background: white !important;
+  font-weight: bold !important;
+  color: #252525 !important;
+  padding:  0 !important;
+  box-shadow: 0 0 5px lightgrey;
+   
+} 
+
+.ui-menu-item {
+  background: white !important;
+  font-weight: bold !important;
+  color: #252525 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+ 
+.ui-menu-item .ui-menu-item-wrapper  {
+  background: white !important;
+  font-weight: bold !important;
+  color: #252525 !important;
+  margin: 0 !important;
+  padding: 5px 10px !important;
+  line-height: 35px;
+} 
+ 
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active,
+.ui-button.ui-state-active:hover {
+	border: none!important;
+	background: grey;
+	font-weight: normal;
+	color: #ffffff;
+}
