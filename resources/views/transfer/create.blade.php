@@ -228,9 +228,9 @@
     {
         $('.outletStore').prop('disabled',false);
     }
-    $("ul#transfer").siblings('a').attr('aria-expanded','true');
-    $("ul#transfer").addClass("show");
-    $("ul#transfer #transfer-create-menu").addClass("active");
+    $("ul#stock_transfer").siblings('a').attr('aria-expanded','true');
+    $("ul#stock_transfer").addClass("show");
+    $("ul#stock_transfer #transfer-create-menu").addClass("active");
 // array data depend on warehouse
 var lims_product_array = [];
 var product_code = [];

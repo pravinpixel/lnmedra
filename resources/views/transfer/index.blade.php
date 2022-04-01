@@ -145,9 +145,9 @@
 
 @push('scripts')
 <script type="text/javascript">
-    $("ul#transfer").siblings('a').attr('aria-expanded','true');
-    $("ul#transfer").addClass("show");
-    $("ul#transfer #transfer-list-menu").addClass("active");
+    $("ul#stock_transfer").siblings('a').attr('aria-expanded','true');
+    $("ul#stock_transfer").addClass("show");
+    $("ul#stock_transfer #transfer-list-menu").addClass("active");
 
     var all_permission = <?php echo json_encode($all_permission) ?>;
     var transfer_id = [];

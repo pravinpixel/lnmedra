@@ -1459,6 +1459,18 @@
 								                </div>
 								            </div>
 						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("expense_categories", $all_permission))
+							                    	<input type="checkbox" value="1" id="expense_categories" name="expense_categories" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="expense_categories" name="expense_categories">
+							                    	@endif
+								                    <label for="expense_categories" class="padding05">{{trans('file.Expense Category')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
 						            </td>
 						        </tr>
 								<!-- <tr>
@@ -1686,6 +1698,18 @@
 								                </div>
 								            </div>
 						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("enquiry_mail", $all_permission))
+							                    	<input type="checkbox" value="1" id="enquiry_mail" name="enquiry_mail" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="enquiry_mail" name="enquiry_mail">
+							                    	@endif
+								                    <label for="enquiry_mail" class="padding05">{{trans('file.Enquiry Mail')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
 						            </td>
 						        </tr>
 							
@@ -1848,10 +1872,19 @@
 								                </div>
 								            </div>
 						                </span>
+										<span>
+						                    <div aria-checked="false" aria-disabled="false">
+								                <div class="checkbox">
+							                    	@if(in_array("expense_categories_import", $all_permission))
+							                    	<input type="checkbox" value="1" id="expense_categories_import" name="expense_categories_import" checked>
+							                    	@else
+							                    	<input type="checkbox" value="1" id="expense_categories_import" name="expense_categories_import">
+							                    	@endif
+								                    <label for="expense_categories_import" class="padding05">{{trans('file.Expense Category')}} &nbsp;&nbsp;</label>
+								                </div>
+								            </div>
+						                </span>
 										
-										
-										
-						              
 						            </td>
 						        </tr>
 								<tr>

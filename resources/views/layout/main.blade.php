@@ -94,12 +94,12 @@
               {{-- <a id="toggle-btn" href="#" class="btn-pos rounded-pill"><i class="fa fa-bars"> </i></a> --}}
             </div>
             <ul id="side-main-menu" class="side-menu list-unstyled">
-          @if(Auth::user()->role_id == 6) 
-          <li id="vendorDashboard-menu"><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
-                      
-          @else
-            <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
-            @endif
+              @if(Auth::user()->role_id == 6) 
+              <li id="vendorDashboard-menu"><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
+                          
+              @else
+                <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
+              @endif
            
 
               <?php
@@ -138,27 +138,7 @@
               </li>
               @endif --}}
               
-              <?php
-                $customer_management_permission = DB::table('permissions')->where('name', 'customer-management')->first();
-                  $customer_management_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $customer_management_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-
-                    
-                  $customer_index_permission = DB::table('permissions')->where('name', 'customers-index')->first();
-
-                  $customer_index_permission_active = DB::table('role_has_permissions')->where([
-                            ['permission_id', $customer_index_permission->id],
-                            ['role_id', $role->id]
-                        ])->first();
-
-                  $customer_add_permission = DB::table('permissions')->where('name', 'customers-add')->first();
-                  $customer_add_permission_active = DB::table('role_has_permissions')->where([
-                      ['permission_id', $customer_add_permission->id],
-                      ['role_id', $role->id]
-                  ])->first();
-              ?>
+             
               @if(userHasAccess('customers-add') || userHasAccess('customers-index'))
               <li><a href="#customer_management" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-card"></i><span>{{trans('file.customer_management')}}</span></a>
                 <ul id="customer_management" class="collapse list-unstyled ">
@@ -173,60 +153,31 @@
               </li>
               @endif
 
-              <?php
-                $sale_index_permission = DB::table('permissions')->where('name', 'sales-index')->first();
-                $sale_index_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $sale_index_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-
-                $gift_card_permission = DB::table('permissions')->where('name', 'gift_card')->first();
-                $gift_card_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $gift_card_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-
-                $coupon_permission = DB::table('permissions')->where('name', 'coupon')->first();
-                $coupon_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $coupon_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-
-                $delivery_permission_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'delivery'],
-                        ['role_id', $role->id] ])->first();
-
-                $sale_add_permission = DB::table('permissions')->where('name', 'sales-add')->first();
-                $sale_add_permission_active = DB::table('role_has_permissions')->where([
-                    ['permission_id', $sale_add_permission->id],
-                    ['role_id', $role->id]
-                ])->first();
-              ?>
-              @if($sale_index_permission_active || $gift_card_permission_active || $coupon_permission_active || $delivery_permission_active)
+             
+              @if(userHasAccess('sales-index') ||  userHasAccess('coupon') || userHasAccess('delivery') || userHasAccess('sales-add'))
               <li><a href="#sale" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.Sale')}}</span></a>
                 <ul id="sale" class="collapse list-unstyled ">
-                  @if($sale_index_permission_active)
+                  @if(userHasAccess('sales-index'))
                     <li id="sale-list-menu"><a href="{{route('sales.index')}}">{{trans('file.Sale List')}}</a></li>
-                    @if($sale_add_permission_active)
-                    <li><a href="{{route('sale.pos')}}">POS</a></li>
+                    
+                  @endif
+                  @if(userHasAccess('sales-add'))
+                    <!-- <li><a href="{{route('sale.pos')}}">POS</a></li> -->
                     <li id="sale-create-menu"><a href="{{route('sales.create')}}">{{trans('file.Add Sale')}}</a></li>
                     
-                    @endif
                   @endif
                   @if(userHasAccess('sale_import'))
                   <li id="sale-import-menu"><a href="{{url('sales/sale_by_csv')}}">{{trans('file.Import Sale By CSV')}}</a></li>
                   @endif
-                  <!-- @if($gift_card_permission_active)
+                  @if(userHasAccess('gift_card'))
                   <li id="gift-card-menu"><a href="{{route('gift_cards.index')}}">{{trans('file.Gift Card List')}}</a> </li>
-                  @endif -->
-                  @if($coupon_permission_active)
+                  @endif
+                  @if(userHasAccess('coupon'))
                   <li id="coupon-menu"><a href="{{route('coupons.index')}}">{{trans('file.Coupon List')}}</a> </li>
                   @endif
-                  <!-- @if($delivery_permission_active)
+                  @if(userHasAccess('delivery'))
                   <li id="delivery-menu"><a href="{{route('delivery.index')}}">{{trans('file.Delivery List')}}</a></li>
-                  @endif -->
+                  @endif
                 </ul>
               </li>
               @endif
@@ -241,28 +192,7 @@
 
                <?php
                   $role = DB::table('roles')->find(Auth::user()->role_id);
-                  $category_permission_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'category'],
-                        ['role_id', $role->id] ])->first();
-                  $index_permission = DB::table('permissions')->where('name', 'products-index')->first();
-                  $index_permission_active = DB::table('role_has_permissions')->where([
-                      ['permission_id', $index_permission->id],
-                      ['role_id', $role->id]
-                  ])->first();
-
-                  $print_barcode = DB::table('permissions')->where('name', 'print_barcode')->first();
-                      $print_barcode_active = DB::table('role_has_permissions')->where([
-                          ['permission_id', $print_barcode->id],
-                          ['role_id', $role->id]
-                      ])->first();
-
-                  $stock_count = DB::table('permissions')->where('name', 'stock_count')->first();
-                      $stock_count_active = DB::table('role_has_permissions')->where([
-                          ['permission_id', $stock_count->id],
-                          ['role_id', $role->id]
-                      ])->first();
+                 
 
                     $adjustment = DB::table('permissions')->where('name', 'adjustment')->first();
                     $adjustment_active = DB::table('role_has_permissions')->where([
@@ -272,168 +202,97 @@
               ?>
               
             
-              @if($index_permission_active)
+              @if(userHasAccess('products-index') || userHasAccess('category') || userHasAccess('print_barcode') )
               <li><a href="#product" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.product')}}</span><span></a>
                 <ul id="product" class="collapse list-unstyled ">
-                  @if($category_permission_active)
+                  @if(userHasAccess('category'))
                   <li id="category-menu"><a href="{{route('category.index')}}">{{__('file.category')}}</a></li>
                   @endif
-                  @if($index_permission_active)
+                  @if(userHasAccess('products-index'))
                   <li id="product-list-menu"><a href="{{route('products.index')}}">{{__('file.product_list')}}</a></li>
-                  <?php
-                    $add_permission = DB::table('permissions')->where('name', 'products-add')->first();
-                    $add_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $add_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                  ?>
-                  @if($add_permission_active)
+                  @endif
+                  @if(userHasAccess('products-add'))
                   <li id="product-create-menu"><a href="{{route('products.create')}}">{{__('file.add_product')}}</a></li>
                   @endif
-                  @endif
-                  @if($print_barcode_active)
+                  @if(userHasAccess('print_barcode'))
                   <li id="printBarcode-menu"><a href="{{route('product.printBarcode')}}">{{__('file.print_barcode')}}</a></li>
                   @endif
                   <!-- @if($adjustment_active)
                     <li id="adjustment-list-menu"><a href="{{route('qty_adjustment.index')}}">{{trans('file.Adjustment List')}}</a></li>
                     <li id="adjustment-create-menu"><a href="{{route('qty_adjustment.create')}}">{{trans('file.Add Adjustment')}}</a></li>
                   @endif
-                  @if($stock_count_active)
-                    <li id="stock-count-menu"><a href="{{route('stock-count.index')}}">{{trans('file.Stock Count')}}</a></li>
-                  @endif -->
+                  -->
                 </ul>
               </li>
               @endif
 
 
-              <?php
-                    // $add_permission = DB::table('permissions')->where('name', 'vendorproducts-index')->first();
-                    // $list_permission_active = DB::table('role_has_permissions')->where([
-                    //     ['permission_id', $add_permission->id],
-                    //     ['role_id', $role->id]
-                    // ])->first();
-                  ?>
+             
                   
-                  <?php
-                    $add_permission = DB::table('permissions')->where('name', 'vendorproducts-add')->first();
-                    $vendoradd_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $add_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                  ?>
-
-              @if($vendoradd_permission_active)
+                 
+              @if(userHasAccess('vendorproducts-index') || userHasAccess('vendorproducts-add'))
               <li><a href="#vendorproduct" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.vendorproduct')}}</span><span></a>
                 <ul id="vendorproduct" class="collapse list-unstyled ">
                  
-                  @if($vendoradd_permission_active)
+                  @if(userHasAccess('vendorproducts-index'))
                   <li id="vendorproduct-list-menu"><a href="{{route('vendorproducts.index')}}">{{__('file.product_list')}}</a></li>
-                  
-                  @if($vendoradd_permission_active)
+                  @endif
+                  @if(userHasAccess('vendorproducts-add'))
                   <li id="vendorproduct-create-menu"><a href="{{route('vendorproducts.create')}}">{{__('file.add_product')}}</a></li>
                   @endif
-                  
-                  @endif
                 </ul>
               </li>
               @endif
-
-              <?php
-                    $supplier_index_permission = DB::table('permissions')->where('name', 'suppliers-index')->first();
-                    $supplier_index_permission_active = DB::table('role_has_permissions')->where([
-                      ['permission_id', $supplier_index_permission->id],
-                      ['role_id', $role->id]
-                  ])->first();
-              ?>
-            
-            <?php
-                    $supplier_add_permission = DB::table('permissions')->where('name', 'suppliers-add')->first();
-                    $supplier_add_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $supplier_add_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                    $index_permission = DB::table('permissions')->where('name', 'vendor-approval-index')->first();
-            
-                    $index_permission_active = DB::table('role_has_permissions')->where([
-                          ['permission_id', $index_permission->id],
-                          ['role_id', $role->id]
-                      ])->first();      
-                  ?>
                  
-                   @if($supplier_index_permission_active )
-              <li><a href="#vendor_supplier" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-card"></i><span>{{trans('file.vendor_supplier_management')}}</span></a>
-                <ul id="vendor_supplier" class="collapse list-unstyled ">
+                  @if(userHasAccess('suppliers-index') || userHasAccess('suppliers-add') || userHasAccess('vendor-approval-index'))
+                  <li><a href="#vendor_supplier" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-card"></i><span>{{trans('file.vendor_supplier_management')}}</span></a>
+                    <ul id="vendor_supplier" class="collapse list-unstyled ">
+                      
+                      @if(userHasAccess('suppliers-index'))
+                        <li id="supplier-list-menu"><a href="{{route('supplier.index')}}">{{trans('file.Supplier List')}}</a></li>
+                      @endif
+                      @if(userHasAccess('suppliers-add'))
+                        <li id="supplier-create-menu"><a href="{{route('supplier.create')}}">{{trans('file.Add Supplier')}}</a></li>
+                      @endif
+
+                      @if(userHasAccess('vendor-approval-index'))
+                      <li id="vendorproduct-product-list-menu"><a href="{{route('all-vendor-products-list')}}">{{__('file.vendor_product_list')}}</a></li>
+                      @endif
                   
-                @if($supplier_index_permission_active)
-                  <li id="supplier-list-menu"><a href="{{route('supplier.index')}}">{{trans('file.Supplier List')}}</a></li>
-                  
-                  @if($supplier_add_permission_active)
-                  <li id="supplier-create-menu"><a href="{{route('supplier.create')}}">{{trans('file.Add Supplier')}}</a></li>
+                    </ul>
+                  </li>
                   @endif
-                 
-                  @endif
-
-                  @if($index_permission_active)
-                  <li id="vendorproduct-product-list-menu"><a href="{{route('all-vendor-products-list')}}">{{__('file.vendor_product_list')}}</a></li>
-
-                  @endif
-              
-                </ul>
-              </li>
-              @endif
-
-
-
-        
 
              
-              <?php
-                $index_permission = DB::table('permissions')->where('name', 'purchases-index')->first();
-                  $index_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $index_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-              ?>
-              @if($index_permission_active)
+             
+              @if(userHasAccess('purchases-index')||userHasAccess('purchases-add'))
               <li><a href="#purchase" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-card"></i><span>{{trans('file.Purchase')}}</span></a>
                 <ul id="purchase" class="collapse list-unstyled ">
+                @if(userHasAccess('purchases-index'))
                   <li id="purchase-list-menu"><a href="{{route('purchases.index')}}">{{trans('file.Purchase List')}}</a></li>
-                  <?php
-                    $add_permission = DB::table('permissions')->where('name', 'purchases-add')->first();
-                    $add_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $add_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                  ?>
-                  @if($add_permission_active)
-                  <li id="purchase-create-menu"><a href="{{route('purchases.create')}}">{{trans('file.Add Purchase')}}</a></li>
-                  {{-- <li id="purchase-import-menu"><a href="{{url('purchases/purchase_by_csv')}}">{{trans('file.Import Purchase By CSV')}}</a></li> --}}
-                  @endif
+                @endif
+                @if(userHasAccess('purchases-add'))
+                <li id="purchase-create-menu"><a href="{{route('purchases.create')}}">{{trans('file.Add Purchase')}}</a></li>
+                @endif
+                @if(userHasAccess('purchases_import'))   
+                <li id="purchase-import-menu"><a href="{{url('purchases/purchase_by_csv')}}">{{trans('file.Import Purchase By CSV')}}</a></li>
+                @endif
                 </ul>
               </li>
               @endif
               
 
-              <?php
-                $index_permission = DB::table('permissions')->where('name', 'expenses-index')->first();
-                $index_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $index_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-              ?>
-              @if($index_permission_active)
+             
+              @if(userHasAccess('expenses-index')||userHasAccess('expenses-add')||userHasAccess('expense_categories'))
               <li><a href="#expense" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-wallet"></i><span>{{trans('file.Expense')}}</span></a>
                 <ul id="expense" class="collapse list-unstyled ">
+                  @if(userHasAccess('expense_categories'))
                   <li id="exp-cat-menu"><a href="{{route('expense_categories.index')}}">{{trans('file.Expense Category')}}</a></li>
+                  @endif
+                  @if(userHasAccess('expenses-index'))
                   <li id="exp-list-menu"><a href="{{route('expenses.index')}}">{{trans('file.Expense List')}}</a></li>
-                  <?php
-                    $add_permission = DB::table('permissions')->where('name', 'expenses-add')->first();
-                    $add_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $add_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                  ?>
-                  @if($add_permission_active)
+                  @endif
+                  @if(userHasAccess('expenses-add'))
                   <li><a id="add-expense" href=""> {{trans('file.Add Expense')}}</a></li>
                   @endif
                 </ul>
@@ -445,78 +304,39 @@
                         ['permission_id', $index_permission->id],
                         ['role_id', $role->id]
                     ])->first();
-                    $index_stock_transfer_permission = DB::table('permissions')->where('name', 'transfers-index')->first();
-                    $index_stock_transfer_permission_active = DB::table('role_has_permissions')->where([
-                            ['permission_id', $index_stock_transfer_permission->id],
-                            ['role_id', $role->id]
-                        ])->first();
+                   
               ?>
-              @if($index_stock_transfer_permission_active)
+              @if(userHasAccess('transfers-index') || userHasAccess('transfers-add'))
               <li><a href="#stock_transfer" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-wallet"></i><span>{{trans('file.stock_transfer')}}</span></a>
                 <ul id="stock_transfer" class="collapse list-unstyled ">
-                <li id="transfer-list-menu"><a href="{{route('transfers.index')}}">{{trans('file.Transfer List')}}</a></li>
-                  <?php
-                    $add_permission = DB::table('permissions')->where('name', 'transfers-add')->first();
-                    $add_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $add_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                  ?>
-                  @if($add_permission_active)
+                  @if(userHasAccess('transfers-index'))
+                  <li id="transfer-list-menu"><a href="{{route('transfers.index')}}">{{trans('file.Transfer List')}}</a></li>
+                  @endif
+                  @if(userHasAccess('transfers-add'))
                   <li id="transfer-create-menu"><a href="{{route('transfers.create')}}">{{trans('file.Add Transfer')}}</a></li>
+                  @endif
+                  @if(userHasAccess('transfers_import'))
+                  <li id="transfer-import-menu"><a href="{{url('transfers/transfer_by_csv')}}">{{trans('file.Import Transfer By CSV')}}</a></li>
                   @endif
                 </ul>
               </li>
               @endif
-              <?php
-                $index_permission = DB::table('permissions')->where('name', 'quotes-index')->first();
-                $index_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $index_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-              ?>
-              @if($index_permission_active)
+              
+              @if(userHasAccess('quotes-index')||userHasAccess('quotes-add'))
               <li><a href="#quotation" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-document"></i><span>{{trans('file.Quotation')}}</span><span></a>
                 <ul id="quotation" class="collapse list-unstyled ">
+                  @if(userHasAccess('quotes-index'))
                   <li id="quotation-list-menu"><a href="{{route('quotations.index')}}">{{trans('file.Quotation List')}}</a></li>
-                  <?php
-                    $add_permission = DB::table('permissions')->where('name', 'quotes-add')->first();
-                    $add_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $add_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                  ?>
-                  @if($add_permission_active)
+                  @endif
+                  
+                  @if(userHasAccess('quotes-add'))
                   <li id="quotation-create-menu"><a href="{{route('quotations.create')}}">{{trans('file.Add Quotation')}}</a></li>
                   @endif
                 </ul>
               </li>
               @endif 
-              <?php
-                $index_permission = DB::table('permissions')->where('name', 'transfers-index')->first();
-                $index_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $index_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-              ?>
-              <!-- @if($index_permission_active)
-              <li><a href="#transfer" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-export"></i><span>{{trans('file.Transfer')}}</span></a>
-                <ul id="transfer" class="collapse list-unstyled ">
-                  <li id="transfer-list-menu"><a href="{{route('transfers.index')}}">{{trans('file.Transfer List')}}</a></li>
-                  <?php
-                    $add_permission = DB::table('permissions')->where('name', 'transfers-add')->first();
-                    $add_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $add_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                  ?>
-                  @if($add_permission_active)
-                  <li id="transfer-create-menu"><a href="{{route('transfers.create')}}">{{trans('file.Add Transfer')}}</a></li>
-                  <li id="transfer-import-menu"><a href="{{url('transfers/transfer_by_csv')}}">{{trans('file.Import Transfer By CSV')}}</a></li>
-                  @endif
-                </ul>
-              </li>
-              @endif -->
+             
+              
 
               <?php
                 $sale_return_index_permission = DB::table('permissions')->where('name', 'returns-index')->first();
@@ -533,13 +353,13 @@
                             ['role_id', $role->id]
                         ])->first();
               ?>
-              @if($sale_return_index_permission_active || $purchase_return_index_permission_active)
+              @if(userHasAccess('returns-index') || userHasAccess('purchase-return-index'))
               <li><a href="#return" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-return"></i><span>{{trans('file.return')}}</span></a>
                 <ul id="return" class="collapse list-unstyled ">
-                  @if($sale_return_index_permission_active)
+                  @if(userHasAccess('returns-index'))
                   <li id="sale-return-menu"><a href="{{route('return-sale.index')}}">{{trans('file.Sale')}}</a></li>
                   @endif
-                  @if($purchase_return_index_permission_active)
+                  @if(userHasAccess('purchase-return-index'))
                   <li id="purchase-return-menu"><a href="{{route('return-purchase.index')}}">{{trans('file.Purchase')}}</a></li>
                   @endif
                 </ul>
@@ -547,17 +367,11 @@
               @endif
 
 
-              <?php
-                  $pos_setting_permission = DB::table('permissions')->where('name', 'pos_setting')->first();
-                  $pos_setting_permission_active = DB::table('role_has_permissions')->where([
-                      ['permission_id', $pos_setting_permission->id],
-                      ['role_id', $role->id]
-                  ])->first();
-              ?>
-               @if($pos_setting_permission_active)
+            
+               @if(userHasAccess('pos_setting'))
               <li><a href="#point_of_sale_setup" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-return"></i><span>{{trans('file.point_of_sale_setup')}}</span></a>
                 <ul id="point_of_sale_setup" class="collapse list-unstyled ">
-                  @if($pos_setting_permission_active)
+                  @if(userHasAccess('pos_setting'))
                   <li id="pos-setting-menu"><a href="{{route('setting.pos')}}">POS {{trans('file.settings')}}</a></li>
                   @endif
                   
@@ -569,93 +383,47 @@
 
 
               
-              <?php
-                $index_permission = DB::table('permissions')->where('name', 'account-index')->first();
-                $index_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $index_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-
-                $money_transfer_permission = DB::table('permissions')->where('name', 'money-transfer')->first();
-                $money_transfer_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $money_transfer_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-
-                $balance_sheet_permission = DB::table('permissions')->where('name', 'balance-sheet')->first();
-                $balance_sheet_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $balance_sheet_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-
-                $account_statement_permission = DB::table('permissions')->where('name', 'account-statement')->first();
-                $account_statement_permission_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $account_statement_permission->id],
-                        ['role_id', $role->id]
-                    ])->first();
-
-              ?>
-              @if($index_permission_active || $balance_sheet_permission_active || $account_statement_permission_active || $money_transfer_permission_active)
+            
+              @if(userHasAccess('account-index') || userHasAccess('money-transfer') || userHasAccess('balance-sheet') || userHasAccess('account-statement'))
               <li class=""><a href="#account" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-briefcase"></i><span>{{trans('file.Accounting')}}</span></a>
                 <ul id="account" class="collapse list-unstyled ">
-                  @if($index_permission_active)
+                  @if(userHasAccess('account-index'))
                   <li id="account-list-menu"><a href="{{route('accounts.index')}}">{{trans('file.Account List')}}</a></li>
                   <li><a id="add-account" href="">{{trans('file.Add Account')}}</a></li>
                   @endif
-                  @if($money_transfer_permission_active)
+                  @if(userHasAccess('money-transfer'))
                   <li id="money-transfer-menu"><a href="{{route('money-transfers.index')}}">{{trans('file.Money Transfer')}}</a></li>
                   @endif
-                  @if($balance_sheet_permission_active)
+                  @if(userHasAccess('balance-sheet'))
                   <li id="balance-sheet-menu"><a href="{{route('accounts.balancesheet')}}">{{trans('file.Balance Sheet')}}</a></li>
                   @endif
-                  @if($account_statement_permission_active)
+                  @if(userHasAccess('account-statement'))
                   <li id="account-statement-menu"><a id="account-statement" href="">{{trans('file.Account Statement')}}</a></li>
                   @endif
                 </ul>
               </li>
               @endif 
-              <?php
-                $department = DB::table('permissions')->where('name', 'department')->first();
-                $department_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $department->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                $index_employee = DB::table('permissions')->where('name', 'employees-index')->first();
-                $index_employee_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $index_employee->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                $attendance = DB::table('permissions')->where('name', 'attendance')->first();
-                $attendance_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $attendance->id],
-                        ['role_id', $role->id]
-                    ])->first();
-                $payroll = DB::table('permissions')->where('name', 'payroll')->first();
-                $payroll_active = DB::table('role_has_permissions')->where([
-                        ['permission_id', $payroll->id],
-                        ['role_id', $role->id]
-                    ])->first();
-              ?>
-              @if($department_active||$index_employee_active||$attendance_active||$payroll_active)
-             @if(Auth::user()->role_id != 5)
+             
+              @if(userHasAccess('department')|| userHasAccess('employees-index') || userHasAccess('attendance') || userHasAccess('payroll'))
+             
               <li class=""><a href="#hrm" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-user-group"></i><span>HRM</span></a>
                 <ul id="hrm" class="collapse list-unstyled ">
-                  @if($department_active)
+                  @if(userHasAccess('department'))
                   <li id="dept-menu"><a href="{{route('departments.index')}}">{{trans('file.Department')}}</a></li>
                   @endif
-                  @if($index_employee_active)
+                  @if(userHasAccess('employees-index'))
                   <li id="employee-menu"><a href="{{route('employees.index')}}">{{trans('file.Employee')}}</a></li>
                   @endif
-                  @if($attendance_active)
+                  @if(userHasAccess('attendance'))
                   <li id="attendance-menu"><a href="{{route('attendance.index')}}">{{trans('file.Attendance')}}</a></li>
                   @endif
-                  @if($payroll_active)
+                  @if(userHasAccess('payroll'))
                   <li id="payroll-menu"><a href="{{route('payroll.index')}}">{{trans('file.Payroll')}}</a></li>
                   @endif
                   <li id="holiday-menu"><a href="{{route('holidays.index')}}">{{trans('file.Holiday')}}</a></li>
                 </ul>
               </li>
-              @endif
+              
               @endif
 
               <?php
@@ -687,22 +455,17 @@
                         ])->first();
               ?>
              
-              @if($biller_index_permission_active)
+              @if(userHasAccess('billers-index') || userHasAccess('billers-add'))
               <li><a href="#biller" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-user"></i><span>{{trans('file.Biller')}}</span></a>
-              <ul id="biller" class="collapse list-unstyled ">
-                <li id="biller-list-menu"><a href="{{route('biller.index')}}">{{trans('file.Biller List')}}</a></li>
-                <?php
-                  $biller_add_permission = DB::table('permissions')->where('name', 'billers-add')->first();
-                  $biller_add_permission_active = DB::table('role_has_permissions')->where([
-                      ['permission_id', $biller_add_permission->id],
-                      ['role_id', $role->id]
-                  ])->first();
-                ?>
-                @if($biller_add_permission_active)
-                <li id="biller-create-menu"><a href="{{route('biller.create')}}">{{trans('file.Add Biller')}}</a></li>
+                <ul id="biller" class="collapse list-unstyled ">
+                  @if(userHasAccess('billers-index'))
+                  <li id="biller-list-menu"><a href="{{route('biller.index')}}">{{trans('file.Biller List')}}</a></li>
+                  @endif
+                  @if(userHasAccess('billers-add'))
+                  <li id="biller-create-menu"><a href="{{route('biller.create')}}">{{trans('file.Add Biller')}}</a></li>
+                  @endif
                 </ul>
               </li>
-                @endif
               @endif
         
               <!-- @if($user_index_permission_active || $customer_index_permission_active || $biller_index_permission_active || $supplier_index_permission_active)
@@ -767,99 +530,11 @@
               </li>
               @endif -->
 
-              <?php
-                $profit_loss_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'profit-loss'],
-                        ['role_id', $role->id] ])->first();
-                $best_seller_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'best-seller'],
-                        ['role_id', $role->id] ])->first();
-                $warehouse_report_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'warehouse-report'],
-                        ['role_id', $role->id] ])->first();
-                $warehouse_stock_report_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'warehouse-stock-report'],
-
-                        ['role_id', $role->id] ])->first();
-                $product_report_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'product-report'],
-                        ['role_id', $role->id] ])->first();
-                $daily_sale_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'daily-sale'],
-                        ['role_id', $role->id] ])->first();
-                $monthly_sale_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'monthly-sale'],
-                        ['role_id', $role->id]])->first();
-                $daily_purchase_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'daily-purchase'],
-                        ['role_id', $role->id] ])->first();
-                $monthly_purchase_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'monthly-purchase'],
-                        ['role_id', $role->id] ])->first();
-                $purchase_report_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'purchase-report'],
-                        ['role_id', $role->id] ])->first();
-                $sale_report_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'sale-report'],
-                        ['role_id', $role->id] ])->first();
-                $payment_report_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'payment-report'],
-                        ['role_id', $role->id] ])->first();
-                $product_qty_alert_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'product-qty-alert'],
-                        ['role_id', $role->id] ])->first();
-                $user_report_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'user-report'],
-                        ['role_id', $role->id] ])->first();
-
-                $customer_report_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'customer-report'],
-                        ['role_id', $role->id] ])->first();
-                $supplier_report_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'supplier-report'],
-                        ['role_id', $role->id] ])->first();
-                $due_report_active = DB::table('permissions')
-                      ->join('role_has_permissions', 'permissions.id', '=', 'role_has_permissions.permission_id')
-                      ->where([
-                        ['permissions.name', 'due-report'],
-                        ['role_id', $role->id] ])->first();
-              ?>
-              @if($profit_loss_active || $best_seller_active || $warehouse_report_active || $warehouse_stock_report_active || $product_report_active || $daily_sale_active || $monthly_sale_active || $daily_purchase_active || $monthly_purchase_active || $purchase_report_active || $sale_report_active || $payment_report_active || $product_qty_alert_active || $user_report_active || $customer_report_active || $supplier_report_active || $due_report_active)
+            
+              @if(userHasAccess('profit-loss') || userHasAccess('best-seller') || userHasAccess('warehouse-report') || userHasAccess('warehouse-stock-report') || userHasAccess('product-report') || userHasAccess('daily-sale') || userHasAccess('monthly-sale') || userHasAccess('daily-purchase') || userHasAccess('monthly-purchase') || userHasAccess('purchase-report') || userHasAccess('sale-report') || userHasAccess('payment-report') || userHasAccess('product-qty-alert') || userHasAccess('user-report') || userHasAccess('customer-report') || userHasAccess('supplier-report') || userHasAccess('due-report'))
               <li><a href="#report" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-document-remove"></i><span>{{trans('file.Reports')}}</span></a>
                 <ul id="report" class="collapse list-unstyled ">
-                  @if($profit_loss_active)
+                  @if(userHasAccess('profit-loss') )
                   <li id="profit-loss-report-menu">
                     {!! Form::open(['route' => 'report.profitLoss', 'method' => 'post', 'id' => 'profitLoss-report-form']) !!}
                     <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
@@ -868,12 +543,12 @@
                     {!! Form::close() !!}
                   </li>
                   @endif
-                  @if($best_seller_active)
+                  @if(userHasAccess('best-seller'))
                   <li id="best-seller-report-menu">
                     <a href="{{url('report/best_seller')}}">{{trans('file.Best Seller')}}</a>
                   </li>
                   @endif
-                  @if($product_report_active)
+                  @if(userHasAccess('product-report'))
                   <li id="product-report-menu">
                     {!! Form::open(['route' => 'report.product', 'method' => 'get', 'id' => 'product-report-form']) !!}
                     <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
@@ -883,27 +558,27 @@
                     {!! Form::close() !!}
                   </li>
                   @endif
-                  @if($daily_sale_active)
+                  @if(userHasAccess('daily-sale'))
                   <li id="daily-sale-report-menu">
                     <a href="{{url('report/daily_sale/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Sale')}}</a>
                   </li>
                   @endif
-                  @if($monthly_sale_active)
+                  @if( userHasAccess('monthly-sale'))
                   <li id="monthly-sale-report-menu">
                     <a href="{{url('report/monthly_sale/'.date('Y'))}}">{{trans('file.Monthly Sale')}}</a>
                   </li>
                   @endif
-                  @if($daily_purchase_active)
+                  @if(userHasAccess('daily-purchase'))
                   <li id="daily-purchase-report-menu">
                     <a href="{{url('report/daily_purchase/'.date('Y').'/'.date('m'))}}">{{trans('file.Daily Purchase')}}</a>
                   </li>
                   @endif
-                  @if($monthly_purchase_active)
+                  @if(userHasAccess('monthly-purchase'))
                   <li id="monthly-purchase-report-menu">
                     <a href="{{url('report/monthly_purchase/'.date('Y'))}}">{{trans('file.Monthly Purchase')}}</a>
                   </li>
                   @endif
-                  @if($sale_report_active)
+                  @if(userHasAccess('sale-report'))
                   <li id="sale-report-menu">
                     {!! Form::open(['route' => 'report.sale', 'method' => 'post', 'id' => 'sale-report-form']) !!}
                     <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
@@ -913,7 +588,7 @@
                     {!! Form::close() !!}
                   </li>
                   @endif
-                  @if($payment_report_active)
+                  @if(userHasAccess('payment-report'))
                   <li id="payment-report-menu">
                     {!! Form::open(['route' => 'report.paymentByDate', 'method' => 'post', 'id' => 'payment-report-form']) !!}
                     <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
@@ -922,7 +597,7 @@
                     {!! Form::close() !!}
                   </li>
                   @endif
-                  @if($purchase_report_active)
+                  @if(userHasAccess('purchase-report'))
                   <li id="purchase-report-menu">
                     {!! Form::open(['route' => 'report.purchase', 'method' => 'post', 'id' => 'purchase-report-form']) !!}
                     <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
@@ -932,37 +607,37 @@
                     {!! Form::close() !!}
                   </li>
                   @endif
-                  @if($warehouse_report_active)
+                  @if(userHasAccess('warehouse-report'))
                   <li id="warehouse-report-menu">
                     <a id="warehouse-report-link" href="">{{trans('file.Warehouse Report')}}</a>
                   </li>
                   @endif
-                  @if($warehouse_stock_report_active)
+                  @if( userHasAccess('warehouse-stock-report'))
                   <li id="warehouse-stock-report-menu">
                     <a href="{{route('report.warehouseStock')}}">{{trans('file.Warehouse Stock Chart')}}</a>
                   </li>
                   @endif
-                  @if($product_qty_alert_active)
+                  @if( userHasAccess('product-qty-alert'))
                   <li id="qtyAlert-report-menu">
                     <a href="{{route('report.qtyAlert')}}">{{trans('file.Product Quantity Alert')}}</a>
                   </li>
                   @endif
-                  @if($user_report_active)
+                  @if(userHasAccess('user-report'))
                   <li id="user-report-menu">
                     <a id="user-report-link" href="">{{trans('file.User Report')}}</a>
                   </li>
                   @endif
-                  @if($customer_report_active)
+                  @if( userHasAccess('customer-report'))
                   <li id="customer-report-menu">
                     <a id="customer-report-link" href="">{{trans('file.Customer Report')}}</a>
                   </li>
                   @endif
-                  @if($supplier_report_active)
+                  @if(userHasAccess('supplier-report'))
                   <li id="supplier-report-menu">
                     <a id="supplier-report-link" href="">{{trans('file.Supplier Report')}}</a>
                   </li>
                   @endif
-                  @if($due_report_active)
+                  @if(userHasAccess('due-report'))
                   <li id="due-report-menu">
                     {!! Form::open(['route' => 'report.dueByDate', 'method' => 'post', 'id' => 'due-report-form']) !!}
                     <input type="hidden" name="start_date" value="{{date('Y-m').'-'.'01'}}" />
@@ -974,128 +649,12 @@
                 </ul>
               </li>
               @endif
-              <?php
-                      $send_notification_permission = DB::table('permissions')->where('name', 'send_notification')->first();
-                      $send_notification_permission_active = DB::table('role_has_permissions')->where([
-                                  ['permission_id', $send_notification_permission->id],
-                                  ['role_id', $role->id]
-                              ])->first();
-
-                      $warehouse_permission = DB::table('permissions')->where('name', 'warehouse')->first();
-                      $warehouse_permission_active = DB::table('role_has_permissions')->where([
-                                  ['permission_id', $warehouse_permission->id],
-                                  ['role_id', $role->id]
-                              ])->first();
-
-                      $customer_group_permission = DB::table('permissions')->where('name', 'customer_group')->first();
-                      $customer_group_permission_active = DB::table('role_has_permissions')->where([
-                                  ['permission_id', $customer_group_permission->id],
-                                  ['role_id', $role->id]
-                              ])->first();
-
-                      $brand_permission = DB::table('permissions')->where('name', 'brand')->first();
-                      $brand_permission_active = DB::table('role_has_permissions')->where([
-                                  ['permission_id', $brand_permission->id],
-                                  ['role_id', $role->id]
-                              ])->first();
-
-                      $unit_permission = DB::table('permissions')->where('name', 'unit')->first();
-                      $unit_permission_active = DB::table('role_has_permissions')->where([
-                                  ['permission_id', $unit_permission->id],
-                                  ['role_id', $role->id]
-                              ])->first();
-
-                      $currency_permission = DB::table('permissions')->where('name', 'currency')->first();
-                      $currency_permission_active = DB::table('role_has_permissions')->where([
-                                  ['permission_id', $currency_permission->id],
-                                  ['role_id', $role->id]
-                              ])->first();
-
-                      $tax_permission = DB::table('permissions')->where('name', 'tax')->first();
-                      $tax_permission_active = DB::table('role_has_permissions')->where([
-                                  ['permission_id', $tax_permission->id],
-                                  ['role_id', $role->id]
-                              ])->first();
-
-
-
-                              $user_permission = DB::table('permissions')->where('name', 'user-profile')->first();
-                              $user_permission_active = DB::table('role_has_permissions')->where([
-                                  ['permission_id', $user_permission->id],
-                                  ['role_id', $role->id]
-                              ])->first();
-                              
-                      $general_setting_permission = DB::table('permissions')->where('name', 'general_setting')->first();
-                      $general_setting_permission_active = DB::table('role_has_permissions')->where([
-                                  ['permission_id', $general_setting_permission->id],
-                                  ['role_id', $role->id]
-                              ])->first();
-
-                      $backup_database_permission = DB::table('permissions')->where('name', 'backup_database')->first();
-                      $backup_database_permission_active = DB::table('role_has_permissions')->where([
-                                  ['permission_id', $backup_database_permission->id],
-                                  ['role_id', $role->id]
-                              ])->first();
-
-                      $mail_setting_permission = DB::table('permissions')->where('name', 'mail_setting')->first();
-                      $mail_setting_permission_active = DB::table('role_has_permissions')->where([
-                          ['permission_id', $mail_setting_permission->id],
-                          ['role_id', $role->id]
-                      ])->first();
-
-                      $sms_setting_permission = DB::table('permissions')->where('name', 'sms_setting')->first();
-                      $sms_setting_permission_active = DB::table('role_has_permissions')->where([
-                          ['permission_id', $sms_setting_permission->id],
-                          ['role_id', $role->id]
-                      ])->first();
-
-                      $create_sms_permission = DB::table('permissions')->where('name', 'create_sms')->first();
-                      $create_sms_permission_active = DB::table('role_has_permissions')->where([
-                          ['permission_id', $create_sms_permission->id],
-                          ['role_id', $role->id]
-                      ])->first();
-
-                      $pos_setting_permission = DB::table('permissions')->where('name', 'pos_setting')->first();
-                      $pos_setting_permission_active = DB::table('role_has_permissions')->where([
-                          ['permission_id', $pos_setting_permission->id],
-                          ['role_id', $role->id]
-                      ])->first();
-
-                      $hrm_setting_permission = DB::table('permissions')->where('name', 'hrm_setting')->first();
-                      $hrm_setting_permission_active = DB::table('role_has_permissions')->where([
-                          ['permission_id', $hrm_setting_permission->id],
-                          ['role_id', $role->id]
-                      ])->first();
-
-                      $reward_point_setting_permission = DB::table('permissions')->where('name', 'reward_point_setting')->first();
-                      $reward_point_setting_permission_active = DB::table('role_has_permissions')->where([
-                          ['permission_id', $reward_point_setting_permission->id],
-                          ['role_id', $role->id]
-                      ])->first();
-                      $index_employee = DB::table('permissions')->where('name', 'employees-index')->first();
-                      $index_employee_active = DB::table('role_has_permissions')->where([
-                              ['permission_id', $index_employee->id],
-                              ['role_id', $role->id]
-                          ])->first();
-                        
-                  $attribute_permission = DB::table('permissions')->where('name', 'attribute-index')->first();
-                  $attribute_permission_active = DB::table('role_has_permissions')->where([
-                      ['permission_id', $attribute_permission->id],
-                      ['role_id', $role->id]
-                  ])->first();
-                  $accounts_permission = DB::table('permissions')->where('name', 'accounts-date-index')->first();
-                  // print_r($accounts_permission->id);die();
-                  $accounts_permission_active = DB::table('role_has_permissions')->where([
-                      ['permission_id', $accounts_permission->id],
-                      ['role_id', $role->id]
-                  ])->first();
               
-                  ?>
-                  @if($mail_setting_permission_active||$send_notification_permission_active||$warehouse_permission_active||$customer_group_permission_active)
+                  @if(userHasAccess('mail_setting')|| userHasAccess('send_notification') || userHasAccess('warehouse')|| userHasAccess('customer_group'))
               <li><a href="#setting" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-gear"></i><span>{{trans('file.settings')}}</span></a>
                 <ul id="setting" class="collapse list-unstyled ">
                   
-                  @if($mail_setting_permission_active)
+                  @if(userHasAccess('mail_setting'))
                   <li id="mail-setting-menu"><a href="{{route('setting.mail')}}">{{trans('file.Mail Setting')}}</a></li>
                   @endif
                                    
@@ -1104,89 +663,78 @@
                   @endif
                  
                   
-                  @if($send_notification_permission_active)
+                  @if(userHasAccess('send_notification'))
                   <li id="notification-menu">
                     <a href="" id="send-notification">{{trans('file.Send Notification')}}</a>
                   </li>
                   @endif
-                  @if($warehouse_permission_active)
+                  @if(userHasAccess('warehouse'))
                   <li id="warehouse-menu"><a href="{{route('warehouse.index')}}">{{trans('file.Warehouse')}}</a></li>
                   @endif
-                  @if($customer_group_permission_active)
+                  @if(userHasAccess('customer_group'))
                   <li id="customer-group-menu"><a href="{{route('customer_group.index')}}">{{trans('file.Customer Group')}}</a></li>
                   @endif
-                  @if($brand_permission_active)
+                  @if(userHasAccess('brand') )
                   <li id="brand-menu"><a href="{{route('brand.index')}}">{{trans('file.Brand')}}</a></li>
                   @endif
-                  @if($unit_permission_active)
+                  @if(userHasAccess('unit'))
                   <li id="unit-menu"><a href="{{route('unit.index')}}">{{trans('file.Unit')}}</a></li>
                   @endif
-                  @if($currency_permission_active)
+                  @if(userHasAccess('currency'))
                   <li id="currency-menu"><a href="{{route('currency.index')}}">{{trans('file.Currency')}}</a></li>
                   @endif
-                  @if($tax_permission_active)
+                  @if(userHasAccess('tax'))
                   <li id="tax-menu"><a href="{{route('tax.index')}}">{{trans('file.Tax')}}</a></li>
                   @endif
                   <!-- <li id="user-menu"><a href="{{route('user.profile', ['id' => Auth::id()])}}">{{trans('file.User Profile')}}</a></li> -->
-                  @if($user_permission_active)
+                  @if(userHasAccess('user-profile'))
                   <li id="user-menu"><a href="{{route('user.index')}}">{{trans('file.User Profile')}}</a></li>
                   @endif
-                  @if($create_sms_permission_active)
+                  @if(userHasAccess('create_sms'))
                   <li id="create-sms-menu"><a href="{{route('setting.createSms')}}">{{trans('file.Create SMS')}}</a></li>
                   @endif
-                  @if($backup_database_permission_active)
+                  @if(userHasAccess('backup_database'))
                   <li><a href="{{route('setting.backup')}}">{{trans('file.Backup Database')}}</a></li>
                   @endif
-                  @if($general_setting_permission_active)
+                  @if(userHasAccess('general_setting'))
                   <li id="general-setting-menu"><a href="{{route('setting.general')}}">{{trans('file.General Setting')}}</a></li>
                   @endif
                   
-                  @if($reward_point_setting_permission_active)
+                  @if(userHasAccess('reward_point_setting'))
                   <li id="reward-point-setting-menu"><a href="{{route('setting.rewardPoint')}}">{{trans('file.Reward Point Setting')}}</a></li>
                   @endif 
-                  @if($sms_setting_permission_active)
+                  @if(userHasAccess('sms_setting'))
                   <li id="sms-setting-menu"><a href="{{route('setting.sms')}}">{{trans('file.SMS Setting')}}</a></li>
                   @endif
-                   @if($pos_setting_permission_active)
+                   @if(userHasAccess('pos_setting'))
                   <li id="pos-setting-menu"><a href="{{route('setting.pos')}}">POS {{trans('file.settings')}}</a></li>
                   @endif
-                  @if($hrm_setting_permission_active)
+                  @if(userHasAccess('hrm_setting'))
                   <li id="hrm-setting-menu"><a href="{{route('setting.hrm')}}"> {{trans('file.HRM Setting')}}</a></li>
                   @endif
-                  @if($index_employee_active)
+                  @if(userHasAccess('employees-index'))
                   <li id="employee-menu"><a href="{{route('employees.index')}}">{{trans('file.Employee')}}</a></li>
                   @endif
-                  @if($attribute_permission_active)
+                  @if(userHasAccess('attribute-index'))
                   <li id="master-attribute-menu"><a href="{{route('master-attribute.index')}}"><span>{{__('file.Master Attribute')}}</span></a></li>
                   @endif
-                  @if($accounts_permission_active)
+                  @if( userHasAccess('accounts-date-index'))
                   <li id="accounts-date-menu"><a href="{{route('accounts-date.index')}}"><span>{{__('file.Accounts Heads')}}</span></a></li>
                   @endif
                 </ul>
               </li>
              
               @endif
-              <?php
-                  $role = DB::table('roles')->find(Auth::user()->role_id);
+             
+              @if(userHasAccess('enquiry-index') || userHasAccess('enquiry-add'))
                 
-                  $enquiry_management_permission = DB::table('permissions')->where('name', 'enquiry-index')->first();
-                  $enquiry_management_permission_active = DB::table('role_has_permissions')->where([
-                      ['permission_id', $enquiry_management_permission->id],
-                      ['role_id', $role->id]
-                  ])->first();
-                  $add_enquiry_permission = DB::table('permissions')->where('name', 'enquiry-add')->first();
-                  $add_enquiry_permission_active = DB::table('role_has_permissions')->where([
-                      ['permission_id', $add_enquiry_permission->id],
-                      ['role_id', $role->id]
-                  ])->first();
-              ?>
-              @if($enquiry_management_permission_active || $add_enquiry_permission_active)
-                @if($enquiry_management_permission_active)
                 <li><a href="#enquiry_management" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.enquiry_management')}}</span><span></a>
-                @endif
+               
                 <ul id="enquiry_management" class="collapse list-unstyled ">
+                  @if(userHasAccess('enquiry-index'))
                   <li id="enquiry-list-menu"><a href="{{route('enquiry.index')}}">{{__('file.enquiry_list')}}</a></li>
-                  @if($add_enquiry_permission_active)
+                  @endif
+                  @if(userHasAccess('enquiry-add'))
                   <li id="enquiry-create-menu"><a href="{{route('enquiry.create')}}">{{__('file.add_enquiry')}}</a></li>
                   @endif
                   
@@ -1254,7 +802,8 @@
                 @if(\Auth::user()->role_id <= 2)
                  <!-- <li class="nav-item"><a href="{{route('cashRegister.index')}}" data-toggle="tooltip" title="{{trans('file.Cash Register List')}}"><i class="dripicons-archive"></i></a></li>-->
                 @endif
-                @if($product_qty_alert_active)
+                @if(userHasAccess('product-qty-alert'))
+
                   @if(($alert_product + count(\Auth::user()->unreadNotifications)) > 0)
                   <li class="nav-item" id="notification-icon">
                         <a rel="nofollow" data-toggle="tooltip" title="{{__('Notifications')}}" class="nav-link dropdown-item"><i class="dripicons-bell"></i><span class="badge badge-danger notification-number">{{$alert_product + count(\Auth::user()->unreadNotifications)}}</span>
@@ -1354,7 +903,7 @@
                       <li>
                         <a href="{{route('user.profile', ['id' => Auth::id()])}}"><i class="dripicons-user"></i> {{trans('file.profile')}}</a>
                       </li>
-                      @if($general_setting_permission_active)
+                      @if(userHasAccess('general_setting'))
                       <li>
                         <a href="{{route('setting.general')}}"><i class="dripicons-gear"></i> {{trans('file.settings')}}</a>
                       </li>

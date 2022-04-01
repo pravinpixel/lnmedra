@@ -39,16 +39,19 @@
                                 <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                @if(in_array("enquiry-edit", $all_permission))
+                                @if(userHasAccess('enquiry-edit'))
                                 <li>
                                 	<a href="{{ route('enquiry.edit', $enquiry->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
                                 </li>
                                 @endif
+                                
+                                @if(userHasAccess('enquiry_mail'))
                                 <li>
                                 	<a href="{{ route('enquiry.mail', $enquiry->id) }}" class="btn btn-link"><i class="dripicons-mail"></i> {{trans('file.Mail')}}</a>
                                 </li>
+                                @endif
                                 <li class="divider"></li>
-                                @if(in_array("enquiry-delete", $all_permission))
+                                @if(userHasAccess('enquiry-delete'))
                                 {{ Form::open(['route' => ['enquiry.destroy', $enquiry->id], 'method' => 'DELETE','onsubmit' => 'return confirmDeleteAlert(this);'] ) }}
                                 <li>
                                     <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>

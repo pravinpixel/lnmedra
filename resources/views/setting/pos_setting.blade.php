@@ -103,9 +103,9 @@
 @push('scripts')
 <script type="text/javascript">
 
-    $("ul#setting").siblings('a').attr('aria-expanded','true');
-    $("ul#setting").addClass("show");
-    $("ul#setting #pos-setting-menu").addClass("active");
+    $("ul#point_of_sale_setup").siblings('a').attr('aria-expanded','true');
+    $("ul#point_of_sale_setup").addClass("show");
+    $("ul#point_of_sale_setup #pos-setting-menu").addClass("active");
 
 
 

@@ -1360,8 +1360,36 @@ class RoleController extends Controller
                 }
                 else
                     $role->revokePermissionTo('tax_import');
+
+                if($request->has('expense_categories_import')) {
+                    $permission = Permission::firstOrCreate(['name' => 'expense_categories_import']);
+                    if(!$role->hasPermissionTo('expense_categories_import')) {
+                        $role->givePermissionTo($permission);
+                    }
+                }
+                else
+                    $role->revokePermissionTo('expense_categories_import');
+
+                if($request->has('expense_categories')) {
+                    $permission = Permission::firstOrCreate(['name' => 'expense_categories']);
+                    if(!$role->hasPermissionTo('expense_categories')) {
+                        $role->givePermissionTo($permission);
+                    }
+                }
+                else
+                    $role->revokePermissionTo('expense_categories');
+
+                    
+                if($request->has('enquiry_mail')) {
+                    $permission = Permission::firstOrCreate(['name' => 'enquiry_mail']);
+                    if(!$role->hasPermissionTo('enquiry_mail')) {
+                        $role->givePermissionTo($permission);
+                    }
+                }
+                else
+                    $role->revokePermissionTo('enquiry_mail');
                 
-            
+                    
             
             
         return redirect('role')->with('message', 'Permission updated successfully');
