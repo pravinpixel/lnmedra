@@ -12,83 +12,18 @@
             <div class="card-body">
                 <form id="product-form">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">                                        
-                                <input type="hidden" name="vendoruserid" id="vendoruserid" value="{{ Auth::id() }}">
-                                <label>{{trans('file.Product Type')}} *</strong> </label>
-                                <div class="input-group">
-                                <select name="type" required class="form-control selectpicker" id="productType">
-                                    <option value="">--Select--</option>
-                                        @foreach($productType as $product)
-                                        <option value="{{ $product->id }}">{{ $product->name }}</option>
-                                        @endforeach
-                                        
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
+                     
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{trans('file.Product Name')}} *</strong> </label>
-                                <input type="text" name="name" class="form-control" id="name" aria-describedby="name" required>
-                                <span class="validation-msg" id="name-error"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>{{trans('file.Product Code')}} *</strong> </label>
-                                <div class="input-group">
-                                    <input type="text" name="code" class="form-control" id="code" aria-describedby="code" required>
-                                    <div class="input-group-append">
-                                        <button id="genbutton" type="button" class="btn btn-sm btn-default" title="{{trans('file.Generate')}}"><i class="fa fa-refresh"></i></button>
-                                    </div>
+                                <div class="d-flex">
+                                    <select id="product" name="product" class="form-control selectpicker" data-live-search="true"></select>
+                                    <a href="#" data-toggle="modal" data-target="#addProductModal" class="btn btn-sm btn-primary d-flex align-items-center justify-content"><span class="fa fa-plus"></span></a>
                                 </div>
-                                <span class="validation-msg" id="code-error"></span>
-                            </div>
-                        </div>
-                        
-                        
-                        <div class="col-md-6" id="attribute_div">
-                            <div class="form-group">
-                                <label>{{trans('file.Attribute')}} *</strong> </label>
                                 
-                                <div id="attribute_img">
-                                    
-                                </div> 
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>{{trans('file.Brand')}}</strong> </label>
-                                <div class="input-group">
-                                    <select name="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
-                                    @foreach($lims_brand_list as $brand)
-                                        <option value="{{$brand->id}}">{{$brand->title}}</option>
-                                    @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>{{trans('file.category')}} *</strong> </label>
-                                <div class="input-group">
-                                    <select name="category_id" required class="selectpicker form-control" data-live-search="true" title="Select Category...">
-                                    @foreach($lims_category_list as $category)
-                                        @if($category->parent_id == '' || null)
-                                            <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
-                                            @foreach($lims_category_list as $subcategory)
-                                            @if($category->id == $subcategory->parent_id)
-                                            <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
-                                            @endif    
-                                            @endforeach
-                                        @endif
-                                    @endforeach
-                                    </select>
-                                </div>
-                                <span class="validation-msg"></span>
-                            </div>
-                        </div>
+                     
                         <div id="alert-qty" class="col-md-3">
                             <div class="form-group">
                                 <label>{{trans('file.Quantity')}}</strong> </label>
@@ -102,25 +37,8 @@
                                 <input type="number" name="price" required class="form-control" step="any">
                                 <span class="validation-msg"></span>
                             </div>
-                            
                         </div>
-                        
-                            
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>{{trans('file.Product Image')}}</strong> </label> <i class="dripicons-question" data-toggle="tooltip" title="{{trans('file.You can upload multiple image. Only .jpeg, .jpg, .png, .gif file can be uploaded. First image will be base image.')}}"></i>
-                                <div id="imageUpload" class="dropzone"></div>
-                                <span class="validation-msg" id="image-error"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>{{trans('file.Product Details')}}</label>
-                                <textarea name="product_details" class="form-control" rows="3"></textarea>
-                            </div>
-                        </div>
-                        
-                        
+                     
                     </div>
                     <div class="text-right mt-4 col-12">
                         <input type="button" value="{{trans('file.submit')}}" id="submit-btn" class="btn btn-primary">
@@ -128,13 +46,16 @@
                 </form>
             </div>
         </div>
-        
     </div>
+    @include('vendorproduct.add-product-modal')
 </section>
+
+
 
 
 @endsection
 @push('scripts')
+<script type="text/javascript" src="{{ asset('public/dist/js/ajax-bootstrap-select.min.js') }}"></script>
 <script type="text/javascript">
  $('#attribute_div').hide();
     $("ul#vendorproduct").siblings('a').attr('aria-expanded','true');
@@ -657,5 +578,45 @@
         }
     });
 
+    $(function(){
+        var options = {
+        ajax          : {
+            url     : '{{ route('product.get-dropdown') }}',
+            type    : 'GET',
+            dataType: 'json',
+            data: function (params) {
+            },
+        },
+        locale        : {
+            emptyTitle: 'Select and Begin Typing'
+        },
+        log           : 3,
+        preprocessData: function (data) {
+            return data;
+        }
+    };
+        $('#product').selectpicker().ajaxSelectPicker(options);
+    });
+
+    function addProduct(e)
+    {
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{{route('products.store')}}',
+            data: $("#add-product-form").serialize(),
+            success:function(response){
+                console.log(response);
+            },
+            error:function(response) {
+                if(response.responseJSON.errors.name) {
+                    $("#name-error").text(response.responseJSON.errors.name);
+                }
+                else if(response.responseJSON.errors.code) {
+                    $("#code-error").text(response.responseJSON.errors.code);
+                }
+            },
+        });
+    }
 </script>
 @endpush

@@ -249,13 +249,13 @@ class VendorProductController extends Controller
         $role = Role::firstOrCreate(['id' => Auth::user()->role_id]);
         if ($role->hasPermissionTo('vendorproducts-add')){
             
-         //   $lims_product_list_without_variant = $this->productWithoutVariant();
-          //  $lims_product_list_with_variant = $this->productWithVariant();
             $productType = ProductType::get();
             $lims_brand_list = Brand::where('is_active', true)->get();
             $lims_category_list = Category::where('is_active', true)->get();
-             
-            return view('vendorproduct.create',compact('lims_brand_list', 'lims_category_list','productType'));
+            $lims_unit_list = Unit::where('is_active', true)->get();
+            $lims_tax_list = Tax::where('is_active', true)->get();
+            $lims_warehouse_list = Warehouse::where('is_active', true)->get();
+            return view('vendorproduct.create',compact('lims_warehouse_list', 'lims_tax_list','lims_unit_list','lims_category_list','lims_brand_list','productType'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');

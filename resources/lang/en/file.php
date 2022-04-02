@@ -715,6 +715,7 @@ return [
 	"Last Visited" => "Last Visited",
 	"Total Value" => "Total Value",
 	"Total transaction" => "Total transaction",
-	"Customer since" => "Customer since"
+	"Customer since" => "Customer since",
+	"Add Product" => "Add Product",
 ];
 ?>

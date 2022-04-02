@@ -952,4 +952,17 @@ class ProductController extends Controller
          
            return response()->json(['data' => $data]);
     }
+
+    public function getDropdown(Request $request){
+        $query = $request->input('q');
+        return Product::where('name','like', '%' .  $query. '%') 
+                        ->orWhere('code', 'like', '%' .  $query. '%')
+                        ->where('is_active', 1)
+                        ->limit(25)
+                        ->get()
+                        ->map(function($row) {
+                            return  ["value" => $row->id, "text" => "$row->name [{$row->code}]"];
+                        });
+    }
+
 }
