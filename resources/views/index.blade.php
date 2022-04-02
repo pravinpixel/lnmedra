@@ -376,7 +376,7 @@
                         <td>{{ $customer->name }}</td>
                         <td>{{ $customer->phone_number }}</td>
                         <td> {{$customer->sales->sum('item')}} </td>
-                        <td> 0 </td>
+                        <td> {{$customer->payments->count()}} </td>
                       </tr>
                     @empty
                       <p> No data found</p>
