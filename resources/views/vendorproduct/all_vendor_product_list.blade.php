@@ -196,13 +196,23 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                 // console.log($(this).data('qty_row_id'));
                 var row_id = $(this).data('qty_row_id');
                 var row_qty_value = $(this).val();
-
-
+                var table = $('#product-data-table').DataTable();
+                
+                console.log(table.row( $(this).closest('tr') ).data());
+                
+               var data = table.row( $(this).closest('tr') ).data();
+                console.log((data));
                 console.log(row_id);
                 console.log(row_qty_value);
-               
-
-                $.ajax({
+                if(row_qty_value>data.qty)
+                {
+                    alert("more then quantity..")
+                    $(this).val('');
+                    return false;
+                }
+                else
+                {
+                    $.ajax({
                     type: "POST",
                    
                     url:"vendorproducts/ln-qty",
@@ -216,6 +226,10 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                     // Alert("warning", JSON.stringify(msg))
                     }
                 });
+                }
+               
+
+                
     });
     $(document).on('keyup change','.ln_price', function(){
                 
