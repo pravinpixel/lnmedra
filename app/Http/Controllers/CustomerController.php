@@ -116,6 +116,9 @@ class CustomerController extends Controller
 
     public function edit($id)
     {
+        if(!userHasAccess('customers-edit')){
+            return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('customers-edit')){
             $lims_customer_data = Customer::find($id);
@@ -325,6 +328,9 @@ class CustomerController extends Controller
 
     public function destroy($id)
     {
+        if(!userHasAccess('customers-delete')){
+            return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
         $lims_customer_data = Customer::find($id);
         $lims_customer_data->is_active = false;
         $lims_customer_data->save();
@@ -336,22 +342,25 @@ class CustomerController extends Controller
         if ($request->ajax() == true) {
             $start_date = Carbon::parse(request('start_date'))->startOfDay();
             $end_date = Carbon::parse(request('end_date'))->endOfDay();
-            $dataDb = Customer::with(['customerGroup','payments'])
+            $dataDb = Customer::with(['customerGroup','payments'=> function ($q){
+                $q->when(request('warehouse_id') != 0, function($q){
+                    $q->where('warehouse_id', request('warehouse_id'));
+                });
+            }])
             ->where('customers.is_active',1)
-            ->whereBetween('customers.created_at', [$start_date, $end_date]);
+            ->whereBetween('customers.created_at', [$start_date, $end_date])
+            ->select('customers.*');
             return DataTables::eloquent($dataDb)
                 ->addColumn('customerGroupName', function($dataDb){
                     return $dataDb->customerGroup->name;
                 })
                 ->addColumn('totalTransaction', function($dataDb){
                     return $dataDb->payments()->count();
-                })
+                })  
                 ->addColumn('totalValue', function($dataDb){
                     return $dataDb->payments->sum(['amount']);
-                })
-                ->addColumn('action', function($dataDb){
-                    return "";
-                })
+                })  
+            
                 ->addColumn('action', function($dataDb){
                     return '
                         <div class="btn-group">
@@ -361,19 +370,19 @@ class CustomerController extends Controller
                         </button>
                         <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                             <li>
-                                <a href="'.route('customer.edit', $dataDb->id) .'" class="btn btn-link"><i class="dripicons-document-edit"></i> edit</a>
+                                <a href="'.route('customer.edit', $dataDb->id) .'" class="btn btn-link"><i class="dripicons-document-edit"></i>'.trans('file.edit').'</a>
                             </li>
                             <li>
                             <form action="'.route('customer.destroy', $dataDb->id).'"  method= "POST" onsubmit="return confirmDeleteAlert(this)">
                                 <input type="hidden" name="_token" value="'.csrf_token().'">
                                 <input type="hidden" name="_method" value="delete" />
-                                <button type="submit" class="btn btn-link"><i class="dripicons-trash"></i> delete </button>
+                                <button type="submit" class="btn btn-link"><i class="dripicons-trash"></i> '.trans('file.delete').'</button>
                             </form>
                             </li>
                         </ul>
                 ';
                 })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','checkbox'])
             ->make(true);
         }
     }

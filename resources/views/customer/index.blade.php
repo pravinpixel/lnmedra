@@ -2,16 +2,7 @@
  
 <section class="container-fluid">
  
-    <div class="text-right mt-4">
-        @if(userHasAccess('customers-add'))
-            <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Customer')}}</a>&nbsp;
-            
-        @endif
-        
-        @if(userHasAccess('customer_import'))
-        <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Customer')}}</a>
-        @endif
-    </div>
+    
     <div class="card">  
         <div class="card-body">
   
@@ -23,7 +14,7 @@
                         <input type="hidden" name="ending_date" id="ending_date" value="{{now()}}" />
                     </div>
              
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center col-5">
                         <div class="mr-3">{{trans('file.Outlet')}}</div>
                         <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" >
                             <option value="0">{{trans('file.All Outlet')}}</option>
@@ -42,11 +33,20 @@
           
         </div>
     </div>
+    <div class="text-right mt-4">
+        @if(userHasAccess('customers-add'))
+            <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Customer')}}</a>&nbsp;
+            
+        @endif
+        
+        @if(userHasAccess('customer_import'))
+        <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Customer')}}</a>
+        @endif
+    </div>
     <div>
         <table id="customer-table" class="table">
             <thead>
                 <tr>
-              
                     <th>{{trans('file.Customer Group')}}</th>
                     <th>{{trans('file.name')}}</th>
                     {{-- <th>{{trans('file.Company Name')}}</th> --}}
@@ -259,6 +259,7 @@
             data :  function(d) {
              d.start_date = $("#starting_date").val();
              d.end_date = $("#ending_date").val();
+             d.warehouse_id = $("#warehouse_id").val();
             }
         },
         columns       : [
@@ -275,9 +276,53 @@
                     $("a", nTd).tooltip({container: 'body'});
                 }
             }
-        ]
+        ],
+        
+        language: {
+            'lengthMenu': '_MENU_ {{trans("file.records per page")}}',
+             "info":      '<small>{{trans("file.Showing")}} _START_ - _END_ (_TOTAL_)</small>',
+            "search":  '{{trans("file.Search")}}',
+            'paginate': {
+                    'previous': '<i class="dripicons-chevron-left"></i>',
+                    'next': '<i class="dripicons-chevron-right"></i>'
+            }
+        },
+        dom: '<"row"lfB>rtip',
+        rowId: 'ObjectID',
+        buttons: [
+            {
+                extend: 'pdf',
+                text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
+                exportOptions: {
+                    columns: ':visible:Not(.not-exported)',
+                    rows: ':visible'
+                }
+            },
+            {
+                extend: 'csv',
+                text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
+                exportOptions: {
+                    columns: ':visible:Not(.not-exported)',
+                    rows: ':visible'
+                }
+            },
+            {
+                extend: 'print',
+                text: '<i title="print" class="fa fa-print"></i>',
+                exportOptions: {
+                    columns: ':visible:Not(.not-exported)',
+                    rows: ':visible'
+                }
+            },
+           
+            {
+                extend: 'colvis',
+                text: '<i title="column visibility" class="fa fa-eye"></i>',
+                columns: ':gt(0)'
+            },
+        ],
     });
-
+ 
   $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

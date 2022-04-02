@@ -639,6 +639,7 @@ class SaleController extends Controller
             $lims_payment_data->paying_method = $paying_method;
             $lims_payment_data->payment_note = $data['payment_note'];
             $lims_payment_data->customer_id = $data['customer_id'];
+            $lims_payment_data->warehouse_id = $data['warehouse_id'];
             $lims_payment_data->save();
 
             $lims_payment_data = Payment::latest()->first();
