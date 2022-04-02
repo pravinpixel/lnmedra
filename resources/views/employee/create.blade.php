@@ -121,9 +121,9 @@
 
 @push('scripts')
 <script type="text/javascript">
-    $("ul#hrm").siblings('a').attr('aria-expanded','true');
-    $("ul#hrm").addClass("show");
-    $("ul#hrm #employee-menu").addClass("active");
+    $("ul#setting").siblings('a').attr('aria-expanded','true');
+    $("ul#setting").addClass("show");
+    $("ul#setting #employee-menu").addClass("active");
 
     $('#warehouse').hide();
     $('#biller').hide();

@@ -49,7 +49,7 @@
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                 <li><button type="button" data-id="{{$brand->id}}" class="open-EditbrandDialog btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</button></li>
                                 <li class="divider"></li>
-                                {{ Form::open(['route' => ['brand.destroy', $brand->id], 'method' => 'DELETE', .] ) }}
+                                {{ Form::open(['route' => ['brand.destroy', $brand->id], 'method' => 'DELETE'] ) }}
                                 <li>
                                     <button type="submit" class="btn btn-link" ><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
                                 </li>

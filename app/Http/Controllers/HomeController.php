@@ -418,7 +418,10 @@ class HomeController extends Controller
             }
        
         }else{
-        $customers = Customer::get()->take(10);
+   
+        $customers = Customer::with('sales')->get()->take(10);
+            // print_r($customers);die();
+
         return view('index', compact('revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price','customers','accountData',));
         }
     }

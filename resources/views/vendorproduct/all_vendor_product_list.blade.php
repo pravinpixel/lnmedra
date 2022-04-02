@@ -151,31 +151,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
         }
         return false;
     }
-    // function validateProduct(){
-    //     Alert("warning", )
-    // var values=[];
-    // $('input[name="is_approve_row_data[]"]:checked').each(function () {
-    // values[values.length] = (this.checked ? $(this).closest("tr") : "");
-    // });
-    // console.log(values);
-        
-    // }
-   
-
-
-    // $(document).ready(function() {
-        
-    //     var table = $('#product-data-table').DataTable();
- 
-    //     $('#product-data-table tbody').on( 'click', '.dt-checkboxes', function () {
-    //     if(this.checked==true)
-    //     {
-    //     console.log( table.row( this.closest('tr') ).data() );
-    //     }
-    //     } );
-
-        
-    // });
+  
     function rejectProduct(){
      
         if(user_verified == '1') {

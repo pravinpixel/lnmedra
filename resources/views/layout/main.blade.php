@@ -185,7 +185,7 @@
               @if(userHasAccess('stock_count'))
                   <li><a href="#stock_inventory" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-cart"></i><span>{{trans('file.stock_inventory')}}</span></a>
                     <ul id="stock_inventory" class="collapse list-unstyled">
-                        <li><a href="{{ route('stock-count.index') }}">{{trans('file.stock_list')}}</a></li>
+                        <li id="stock_list"><a href="{{ route('stock-count.index') }}">{{trans('file.stock_list')}}</a></li>
                     </ul>
                   </li>
               @endif
@@ -404,16 +404,16 @@
               </li>
               @endif 
              
-              @if(userHasAccess('department')|| userHasAccess('employees-index') || userHasAccess('attendance') || userHasAccess('payroll'))
+              @if(userHasAccess('department')|| userHasAccess('attendance') || userHasAccess('payroll'))
              
               <li class=""><a href="#hrm" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-user-group"></i><span>HRM</span></a>
                 <ul id="hrm" class="collapse list-unstyled ">
                   @if(userHasAccess('department'))
                   <li id="dept-menu"><a href="{{route('departments.index')}}">{{trans('file.Department')}}</a></li>
                   @endif
-                  @if(userHasAccess('employees-index'))
+                  <!-- @if(userHasAccess('employees-index'))
                   <li id="employee-menu"><a href="{{route('employees.index')}}">{{trans('file.Employee')}}</a></li>
-                  @endif
+                  @endif -->
                   @if(userHasAccess('attendance'))
                   <li id="attendance-menu"><a href="{{route('attendance.index')}}">{{trans('file.Attendance')}}</a></li>
                   @endif
@@ -892,11 +892,11 @@
                           </li>
                       </ul>
                 </li>-->
-               @if(Auth::user()->role_id != 5)
-                <li class="nav-item">
+               
+                <!-- <li class="nav-item">
                     <a class="dropdown-item" href="{{ url('public/read_me') }}" target="_blank" data-toggle="tooltip" title="{{__('Help')}}"><i class="dripicons-information"></i></a>
-                </li>
-                @endif
+                </li> -->
+               
                 <li class="nav-item">
                   <a rel="nofollow" data-target="#" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="nav-link dropdown-item"><i class="dripicons-user"></i> <span>{{ucfirst(Auth::user()->name)}}</span> <i class="fa fa-angle-down"></i>
                   </a>

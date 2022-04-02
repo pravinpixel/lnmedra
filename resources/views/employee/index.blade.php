@@ -139,9 +139,9 @@
 @push('scripts')
 <script type="text/javascript">
 
-    $("ul#hrm").siblings('a').attr('aria-expanded','true');
-    $("ul#hrm").addClass("show");
-    $("ul#hrm #employee-menu").addClass("active");
+    $("ul#setting").siblings('a').attr('aria-expanded','true');
+    $("ul#setting").addClass("show");
+    $("ul#setting #employee-menu").addClass("active");
 
     var employee_id = [];
     var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
