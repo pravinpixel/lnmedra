@@ -16,8 +16,7 @@
                 <table id="product-data-table" class="table" style="width: 100%">
                     <thead>
                         <tr>
-                            <th class="not-exported"></th>
-                            <th>{{trans('file.Image')}}</th>
+                     
                             <th>{{trans('file.name')}}</th>
                             <th>{{trans('file.Code')}}</th>
                             <th>{{trans('file.Brand')}}</th>
@@ -307,12 +306,12 @@
             "processing": true,
             "serverSide": true,
             "ajax":{
-                url:"vendorproducts/product-data",
+                url:"vendor-dashboard-data",
                 data:{
                     all_permission: all_permission
                 },
                 dataType: "json",
-                type:"post"
+                type:"GET"
             },
             "createdRow": function( row, data, dataIndex ) {
                 $(row).addClass('product-link');
@@ -320,18 +319,13 @@
                 $(row).attr('data-imagedata', data['imagedata']);
             },
             "columns": [
-                {"data": "key"},
-                {"data": "image"},
                 {"data": "name"},
                 {"data": "code"},
-                {"data": "brand"},
-                {"data": "category"},
-              
-                {"data": "qty"},
-                {"data": "price"},
-                 
-             
-                {"data": "options"},
+                {"data": "brand_name"},
+                {"data": "category_name"},
+                {"data": "vendor_qty"},
+                {"data": "vendor_price"},
+                {"data": "action", "orderable": false, "searchable": false},
             ],
             'language': {
                 /*'searchPlaceholder': "{{trans('file.Type Product Name or Code...')}}",*/
@@ -349,20 +343,7 @@
                     "orderable": false
                     //'targets': [0, 1, 9, 10, 11]
                 },
-                {
-                    'render': function(data, type, row, meta){
-                        if(type === 'display'){
-                            data = '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>';
-                        }
-
-                       return data;
-                    },
-                    'checkboxes': {
-                       'selectRow': true,
-                       'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
-                    },
-                    'targets': [0]
-                }
+               
             ],
             'select': { style: 'multi', selector: 'td:first-child'},
             'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
@@ -421,38 +402,6 @@
                         columns: ':visible:not(.not-exported)',
                         rows: ':visible',
                         stripHtml: false
-                    }
-                },
-                {
-                    text: '<i title="delete" class="dripicons-cross"></i>',
-                    className: 'buttons-delete',
-                    action: function ( e, dt, node, config ) {
-                        if(user_verified == '1') {
-                            product_id.length = 0;
-                            $(':checkbox:checked').each(function(i){
-                                if(i){
-                                    var product_data = $(this).closest('tr').data('product');
-                                    product_id[i-1] = product_data[7];
-                                }
-                            });
-                            if(product_id.length && confirmDelete()) {
-                                $.ajax({
-                                    type:'POST',
-                                    url:'vendorproducts/deletebyselection',
-                                    data:{
-                                        productIdArray: product_id
-                                    },
-                                    success:function(data){
-                                        //dt.rows({ page: 'current', selected: true }).deselect();
-                                        dt.rows({ page: 'current', selected: true }).remove().draw(false);
-                                    }
-                                });
-                            }
-                            else if(!product_id.length)
-                                Alert( "warning",'No product is selected!');
-                        }
-                        else
-                            Alert( "warning",'This feature is disable for demo!');
                     }
                 },
                 {

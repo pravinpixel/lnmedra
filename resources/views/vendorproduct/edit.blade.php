@@ -12,109 +12,23 @@
             </div>
             <div class="card-body">
                 <form id="product-form">
-                    <input type="hidden" name="id" value="{{$lims_product_data->id}}" >
-                    <input type="hidden" name="dashboardView" value="{{$lims_product_data->dashboardView}}" >
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                    <input type="hidden" name="vendoruserid" id="vendoruserid" value="{{ Auth::id() }}">
-                                <label>{{trans('file.Product Type')}} *</strong> </label>
-                                <div class="input-group">
-                                <select name="type" required class="form-control selectpicker"  data-live-search="true" data-live-search-style="begins" id="productType">
-                                    <option value="">--Select--</option>
-                                        @foreach($productType as $product)
-                                        <option value="{{ $product->id }}" >{{ $product->name }}</option>
-                                        @endforeach
-                                        <!-- <option value="standard">Standard</option>
-                                        <option value="combo">Combo</option>
-                                        <option value="digital">Digital</option>
-                                        <option value="service">Service</option> -->
-                                    </select>
-                                    <input type="hidden" name="type_hidden" value="{{$lims_product_data->type}}">
-                                </div>
-                            </div>
-                        </div>
-                        <input type="hidden" name="attributeInput" value="{{$lims_product_data->attribute}}"  id="attributeInput" >
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{trans('file.Product Name')}} *</strong> </label>
-                                <input type="text" name="name" value="{{$lims_product_data->name}}" required class="form-control">
-                                <span class="validation-msg" id="name-error"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>{{trans('file.Product Code')}} *</strong> </label>
-                                <div class="input-group">
-                                    <input type="text" name="code" id="code" value="{{$lims_product_data->code}}" class="form-control" required>
-                                    <div class="input-group-append">
-                                        <button id="genbutton" type="button" class="btn btn-sm btn-default" title="{{trans('file.Generate')}}"><i class="fa fa-refresh"></i></button>
-                                    </div>
+                                <div class="d-flex">
+                                    <select id="product" name="product" class="form-control selectpicker" data-live-search="true"></select>
+                                    <a href="#" data-toggle="modal" data-target="#addProductModal" class="btn btn-sm btn-primary d-flex align-items-center justify-content"><span class="fa fa-plus"></span></a>
                                 </div>
-                                <span class="validation-msg" id="code-error"></span>
+                               
                             </div>
                         </div>
-                        <div class="col-md-4" id="attribute_div">
-                            <div class="form-group">
-                                <label>{{trans('file.Attribute')}} *</strong> </label>
-                                
-                                <div id="attribute_img" >
-                                    
-                                </div> 
-                            </div>
-                        </div>
-                        <div id="digital" class="col-md-4">
-                            <div class="form-group">
-                                <label>{{trans('file.Attach File')}}</strong> </label>
-                                <div class="input-group">
-                                    <input type="file" name="file" class="form-control">
-                                </div>
-                                <span class="validation-msg"></span>
-                            </div>
-                        </div>
-                        
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label>{{trans('file.Brand')}}</strong> </label>
-                                <div class="input-group">
-                                    <input type="hidden" name="brand" value="{{ $lims_product_data->brand_id}}">
-                                    <select name="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
-                                    @foreach($lims_brand_list as $brand)
-                                        <option value="{{$brand->id}}">{{$brand->title}}</option>
-                                    @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="hidden" name="category" value="{{$lims_product_data->category_id}}">
-                                <label>{{trans('file.category')}} *</strong> </label>
-                                <div class="input-group">
-                                    <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
-                                    
-                                    @foreach($lims_category_list as $category)
-                                        @if($category->parent_id == '' || null)
-                                            <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
-                                            @foreach($lims_category_list as $subcategory)
-                                            @if($category->id == $subcategory->parent_id)
-                                            <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
-                                            @endif    
-                                            @endforeach
-                                        @endif
-                                    @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div id="alert-qty" class="col-md-2">
+                        <div id="alert-qty" class="col-md-3">
                             <div class="form-group">
                                 <label>{{trans('file.Quantity')}}</strong> </label>
                                 <input type="number" name="qty" value="{{ $lims_product_data->qty }}" class="form-control" step="any">
                             </div>
                         </div>
-                        
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>{{trans('file.Product Price')}} *</strong> </label>
@@ -123,51 +37,6 @@
                             </div>
                             
                         </div>
-                        
-                        
-                        
-                        
-                        <div class="col-md-12">
-                            <div class="form-groups">
-                                <label>{{trans('file.Product Image')}}</strong> </label> <i class="dripicons-question" data-toggle="tooltip" title="{{trans('file.You can upload multiple image. Only .jpeg, .jpg, .png, .gif file can be uploaded. First image will be base image.')}}"></i>
-                                <div id="imageUpload" class="dropzone"></div>
-                                <span class="validation-msg" id="image-error"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></th>
-                                            <th>Image</th>
-                                            <th>Remove</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php $images = explode(",", $lims_product_data->image)?>
-                                        @foreach($images as $key => $image)
-                                        <tr>
-                                            <td class="text-center"><button type="button" class="btn btn-sm"><i class="fa fa-list"></i></button></i></td>
-                                            <td class="text-center">
-                                                <img src="{{url('public/images/product', $image)}}" height="60" width="60">
-                                                <input type="hidden" name="prev_img[]" value="{{$image}}">
-                                            </td>
-                                            <td class="text-center"><button type="button" class="btn btn-sm btn-danger remove-img">X</button></td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label>{{trans('file.Product Details')}}</label>
-                                <textarea name="product_details" class="form-control" rows="5">{{str_replace('@', '"', $lims_product_data->product_details)}}</textarea>
-                            </div>
-                        </div>
-                        
-
                         <div class="col-md-12">
                             <div class="text-right mt-3">
                                 <input type="button" value="{{trans('file.submit')}}" class="btn btn-primary" id="submit-btn">
@@ -179,111 +48,28 @@
         </div>
                 
     </div>
+    @include('vendorproduct.add-product-modal')
 </section>
 
 @endsection
 
 @push('scripts')
+<script type="text/javascript" src="{{ asset('public/dist/js/ajax-bootstrap-select.min.js') }}"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-
-$('#productType').trigger('change');
-
-});
-    // $("ul#vendorproduct").siblings('a').attr('aria-expanded','true');
-    // $("ul#vendorproduct").addClass("show");
-    var product_id = <?php echo json_encode($lims_product_data->id) ?>;
-    var is_batch = <?php echo json_encode($lims_product_data->is_batch) ?>;
-    var is_variant = <?php echo json_encode($lims_product_data->is_variant) ?>;
-    var baseUrl = $('#baseUrl').val();
-    $('[data-toggle="tooltip"]').tooltip();
-
-    $(".remove-img").on("click", function () {
-        $(this).closest("tr").remove();
-    });
 
 
-
-    
+    $('#attribute_div').hide();
+    $("ul#vendorproduct").siblings('a').attr('aria-expanded','true');
+    $("ul#vendorproduct").addClass("show");
+    $("ul#vendorproduct #vendorproduct-create-menu").addClass("active");
     $("#digital").hide();
     $("#combo").hide();
-    $("select[name='type']").val($("input[name='type_hidden']").val());
-    variantShowHide();
-    diffPriceShowHide();
-    if(is_batch)
-        $("#variant-option").hide();
-    if(is_variant) {
-        $("#batch-option").hide();
-    }
-
-
-    $('#productType').on('change', function() {
-        
-        // alert($('#type_id').val());
-         var typeId = $(this).val();
-         
-         $.ajax({
-              type: 'GET',
-            //   url: 'get-attribute-image/' + typeId,
-              url: baseUrl +'/vendorproducts/get-edit-attribute-image'+'/' + typeId,
-             data:{
-                 data:$('#attributeInput').val()
-             },
-              success: function(res) {
-                  $('#attribute_img').html('');
-                //   alert(res.data.length)
-                  if(res.data.length){
-              
-                 for(var i=0;i<res.data.length;i++)
-                 {
-                  let att = res.data[i];
-                  console.log(res.data[i].id);
-                  $('#attribute_img').append(`
-                  ${res.data[i].checkbox} 
-                  ${res.data[i].image}     
-                  `)
-                 }  
-                }
-                else{
-                    $('#attribute_div').hide();
-                }
-              }
-          });
-  });
-
-    if($("input[name='type_hidden']").val() == "digital"){
-        $("input[name='cost']").prop('required',false);
-        $("select[name='unit_id']").prop('required',false);
-        hide();
-        $("#digital").show();
-    }
-    else if($("input[name='type_hidden']").val() == "service"){
-        $("input[name='cost']").prop('required',false);
-        $("select[name='unit_id']").prop('required',false);
-        hide();
-        $("#variant-section, #variant-option").hide();
-    }
-    else if($("input[name='type_hidden']").val() == "combo"){
-        $("input[name='cost']").prop('required', false);
-        $("input[name='price']").prop('disabled', true);
-        $("select[name='unit_id']").prop('required', false);
-        hide();
-        $("#combo").show();
-    }
-
-    var promotion = $("input[name='promotion_hidden']").val();
-    if(promotion){
-        $("input[name='promotion']").prop('checked', true);
-        $("#promotion_price").show(300);
-        $("#start_date").show(300);
-        $("#last_date").show(300);
-    }
-    else {
-        $("#promotion_price").hide(300);
-        $("#start_date").hide(300);
-        $("#last_date").hide(300);
-    }
-
+    $("#variant-section").hide();
+    $("#diffPrice-section").hide();
+    $("#promotion_price").hide();
+    $("#start_date").hide();
+    $("#last_date").hide();
+    $('[data-toggle="tooltip"]').tooltip();
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -291,13 +77,34 @@ $('#productType').trigger('change');
     });
 
     $('#genbutton').on("click", function(){
-      $.get('../gencode', function(data){
-        $("input[name='code']").val(data);
-      });
+        $.get('../gencode', function(data){
+            $("input[name='code']").val(data);
+        });
     });
 
-    $('.selectpicker').selectpicker({
-      style: 'btn-link',
+    $('#productType').on('change', function() {
+         var typeId = $(this).val();
+         $.ajax({
+              type: 'GET',
+              url: '../get-attribute-image/' + typeId,
+              success: function(res) {
+                $('#attribute_img').html('');
+                if(res.data.length){
+                    $('#attribute_div').show();
+                        for(var i=0;i<res.data.length;i++)
+                        {
+                        let att = res.data[i];
+                        console.log(res.data[i].id);
+                        $('#attribute_img').append(`
+                        ${res.data[i].checkbox} 
+                        ${res.data[i].image}     
+                        `)
+                        } 
+                    } else{
+                        $('#attribute_div').hide();
+                    }
+                }
+        });
     });
 
     tinymce.init({
@@ -312,136 +119,7 @@ $('#productType').trigger('change');
       branding:false
     });
 
-    var barcode_symbology = $("input[name='barcode_symbology_hidden']").val();
-    $('select[name=barcode_symbology]').val(barcode_symbology);
-
-    var brand = $("input[name='brand']").val();
-    $('select[name=brand_id]').val(brand);
-
-    var cat = $("input[name='category']").val();
-    $('select[name=category_id]').val(cat);
-
-    if($("input[name='unit']").val()) {
-        $('select[name=unit_id]').val($("input[name='unit']").val());
-        populate_unit($("input[name='unit']").val());
-    }
-
-    var tax = $("input[name='tax']").val();
-    if(tax)
-        $('select[name=tax_id]').val(tax);
-
-    var tax_method = $("input[name='tax_method_id']").val();
-    $('select[name=tax_method]').val(tax_method);
-    $('.selectpicker').selectpicker('refresh');
-
-
-
-
-    $('select[name="type"]').on('change', function() {
-        if($(this).val() == 'combo'){
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            hide();
-            $("#digital").hide();
-            $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
-            $("#combo").show();
-            $("input[name='price']").prop('disabled',true);
-        }
-        else if($(this).val() == 'digital'){
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            $("input[name='file']").prop('required',true);
-            hide();
-            $("#combo").hide();
-            $("#digital").show();
-            $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
-            $("input[name='price']").prop('disabled',false);
-        }
-        else if($(this).val() == 'service') {
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            $("input[name='file']").prop('required',true);
-            hide();
-            $("#combo").hide(300);
-            $("#digital").hide(300);
-            $("input[name='price']").prop('disabled',false);
-            $("#is-variant").prop("checked", false);
-            $("#variant-section, #variant-option").hide(300);
-        }
-        else if($(this).val() == 'standard'){
-            $("input[name='cost']").prop('required',true);
-            $("select[name='unit_id']").prop('required',true);
-            $("input[name='file']").prop('required',false);
-            $("#cost").show();
-            $("#unit").show();
-            $("#alert-qty").show();
-            $("#variant-option").show(300);
-            $("#diffPrice-option").show(300);
-            $("#digital").hide();
-            $("#combo").hide();
-            $("input[name='price']").prop('disabled',false);
-        }
-    });
-
-    $('select[name="unit_id"]').on('change', function() {
-        unitID = $(this).val();
-        if(unitID) {
-            populate_unit_second(unitID);
-        }else{
-            $('select[name="sale_unit_id"]').empty();
-            $('select[name="purchase_unit_id"]').empty();
-        }
-    });
-
-    <?php $productArray = []; ?>
-
-
-    var lims_productcodeSearch = $('#lims_productcodeSearch');
-
-    lims_productcodeSearch.autocomplete({
-        source: function(request, response) {
-            var matcher = new RegExp(".?" + $.ui.autocomplete.escapeRegex(request.term), "i");
-            response($.grep(lims_product_code, function(item) {
-                return matcher.test(item);
-            }));
-        },
-        select: function(event, ui) {
-            var data = ui.item.value;
-            $.ajax({
-                type: 'GET',
-                url: '../lims_product_search',
-                data: {
-                    data: data
-                },
-                success: function(data) {
-                    //console.log(data);
-                    var flag = 1;
-                    $(".product-id").each(function() {
-                        if ($(this).val() == data[8]) {
-                            alert('Duplicate input is not allowed!')
-                            flag = 0;
-                        }
-                    });
-                    $("input[name='product_code_name']").val('');
-                    if(flag){
-                        var newRow = $("<tr>");
-                        var cols = '';
-                        cols += '<td>' + data[0] +' [' + data[1] + ']</td>';
-                        cols += '<td><input type="number" class="form-control qty" name="product_qty[]" value="1" step="any"/></td>';
-                        cols += '<td><input type="number" class="form-control unit_price" name="unit_price[]" value="' + data[2] + '" step="any"/></td>';
-                        cols += '<td><button type="button" class="ibtnDel btn btn-sm btn-danger">X</button></td>';
-                        cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[8] + '"/>';
-                        cols += '<input type="hidden" class="" name="variant_id[]" value="' + data[9] + '"/>';
-
-                        newRow.append(cols);
-                        $("table.order-list tbody").append(newRow);
-                        calculate_price();
-                    }
-                }
-            });
-        }
-    });
-
+    
     //Change quantity or unit price
     $("#myTable").on('input', '.qty , .unit_price', function() {
         calculate_price();
@@ -452,6 +130,12 @@ $('#productType').trigger('change');
         $(this).closest("tr").remove();
         calculate_price();
     });
+
+    function hide() {
+        $("#cost").hide(300);
+        $("#unit").hide(300);
+        $("#alert-qty").hide(300);
+    }
 
     function calculate_price() {
         var price = 0;
@@ -464,36 +148,7 @@ $('#productType').trigger('change');
         $('input[name="price"]').val(price);
     }
 
-    function hide() {
-        $("#cost").hide();
-        $("#unit").hide();
-        $("#alert-qty").hide();
-    }
-
-    function populate_unit(unitID){
-        $.ajax({
-            url: '../saleunit/'+unitID,
-            type: "GET",
-            dataType: "json",
-
-            success:function(data) {
-                  $('select[name="sale_unit_id"]').empty();
-                  $('select[name="purchase_unit_id"]').empty();
-                  $.each(data, function(key, value) {
-                      $('select[name="sale_unit_id"]').append('<option value="'+ key +'">'+ value +'</option>');
-                      $('select[name="purchase_unit_id"]').append('<option value="'+ key +'">'+ value +'</option>');
-                  });
-                  $('.selectpicker').selectpicker('refresh');
-                  var sale_unit = $("input[name='sale_unit']").val();
-                  var purchase_unit = $("input[name='purchase_unit']").val();
-                $('#sale-unit').val(sale_unit);
-                $('select[name=purchase_unit_id]').val(purchase_unit);
-                $('.selectpicker').selectpicker('refresh');
-            },
-        });
-    }
-
-    function populate_unit_second(unitID){
+    function populate_category(unitID){
         $.ajax({
             url: '../saleunit/'+unitID,
             type: "GET",
@@ -508,7 +163,7 @@ $('#productType').trigger('change');
                   $('.selectpicker').selectpicker('refresh');
             },
         });
-    };
+    }
 
     $("input[name='is_batch']").on("change", function () {
         if ($(this).is(':checked')) {
@@ -519,24 +174,35 @@ $('#productType').trigger('change');
     });
 
     $("input[name='is_variant']").on("change", function () {
-        variantShowHide();
+        if ($(this).is(':checked')) {
+            $("#variant-section").show(300);
+            $("#batch-option").hide(300);
+        }
+        else {
+            $("#variant-section").hide(300);
+            $("#batch-option").show(300);
+        }
     });
 
     $("input[name='is_diffPrice']").on("change", function () {
-        diffPriceShowHide();
+        if ($(this).is(':checked')) {
+            $("#diffPrice-section").show(300);
+        }
+        else
+            $("#diffPrice-section").hide(300);
     });
 
     $("input[name='variant']").on("input", function () {
         if($("#code").val() == ''){
             $("input[name='variant']").val('');
-            alert('Please fillup above information first.');
+            Alert('warning' , 'Please fillup above information first.');
         }
         else if($(this).val().indexOf(',') > -1) {
             var variant_name = $(this).val().slice(0, -1);
             var item_code = variant_name+'-'+$("#code").val();
             var newRow = $("<tr>");
             var cols = '';
-            cols += '<td style="cursor:grab"><i class="dripicons-view-apps"></i><input type="hidden" name="product_variant_id[]" value="0"></td>';
+            cols += '<td style="cursor:grab"><i class="dripicons-view-apps"></i></td>';
             cols += '<td><input type="text" class="form-control" name="variant_name[]" value="' + variant_name + '" /></td>';
             cols += '<td><input type="text" class="form-control" name="item_code[]" value="'+item_code+'" /></td>';
             cols += '<td><input type="number" class="form-control" name="additional_price[]" value="" step="any" /></td>';
@@ -553,36 +219,17 @@ $('#productType').trigger('change');
         $(this).closest("tr").remove();
     });
 
-    function variantShowHide() {
-         if ($("#is-variant").is(':checked')) {
-            $("#variant-section").show(300);
-            $("#batch-option").hide(300);
-        }
-        else {
-            $("#variant-section").hide(300);
-            $("#batch-option").show(300);
-        }
-    };
-
-    function diffPriceShowHide() {
-         if ($("#is-diffPrice").is(':checked')) {
-            $("#diffPrice-section").show(300);
-        }
-        else {
-            $("#diffPrice-section").hide(300);
-        }
-    };
-
     $( "#promotion" ).on( "change", function() {
         if ($(this).is(':checked')) {
-            $("#promotion_price").show();
-            $("#start_date").show();
-            $("#last_date").show();
+            $("#starting_date").val($.datepicker.formatDate('dd-mm-yy', new Date()));
+            $("#promotion_price").show(300);
+            $("#start_date").show(300);
+            $("#last_date").show(300);
         }
         else {
-            $("#promotion_price").hide();
-            $("#start_date").hide();
-            $("#last_date").hide();
+            $("#promotion_price").hide(300);
+            $("#start_date").hide(300);
+            $("#last_date").hide(300);
         }
     });
 
@@ -602,6 +249,26 @@ $('#productType').trigger('change');
      todayHighlight: true
      });
 
+    $(window).keydown(function(e){
+        if (e.which == 13) {
+            var $targ = $(e.target);
+
+            if (!$targ.is("textarea") && !$targ.is(":button,:submit")) {
+                var focusNext = false;
+                $(this).find(":input:visible:not([disabled],[readonly]), a").each(function(){
+                    if (this === e.target) {
+                        focusNext = true;
+                    }
+                    else if (focusNext){
+                        $(this).focus();
+                        return false;
+                    }
+                });
+
+                return false;
+            }
+        }
+    });
     //dropzone portion
     Dropzone.autoDiscover = false;
 
@@ -626,20 +293,20 @@ $('#productType').trigger('change');
         var exp = /^\d+$/;
 
         if(!(product_code.match(exp)) && (barcode_symbology == 'UPCA' || barcode_symbology == 'UPCE' || barcode_symbology == 'EAN8' || barcode_symbology == 'EAN13') ) {
-            alert('Product code must be numeric.');
+            Alert('warning' , 'Product code must be numeric.');
             return false;
         }
         else if(product_code.match(exp)) {
             if(barcode_symbology == 'UPCA' && product_code.length > 11){
-                alert('Product code length must be less than 12');
+                Alert('warning' , 'Product code length must be less than 12');
                 return false;
             }
             else if(barcode_symbology == 'EAN8' && product_code.length > 7){
-                alert('Product code length must be less than 8');
+                Alert('warning' , 'Product code length must be less than 8');
                 return false;
             }
             else if(barcode_symbology == 'EAN13' && product_code.length > 12){
-                alert('Product code length must be less than 13');
+                Alert('warning' , 'Product code length must be less than 13');
                 return false;
             }
         }
@@ -647,7 +314,14 @@ $('#productType').trigger('change');
         if( $("#type").val() == 'combo' ) {
             var rownumber = $('table.order-list tbody tr:last').index();
             if (rownumber < 0) {
-                alert("Please insert product to table!")
+                Alert('warning' , "Please insert product to table!")
+                return false;
+            }
+        }
+        if($("#is-variant").is(":checked")) {
+            rowindex = $("table#variant-table tbody tr:last").index();
+            if (rowindex < 0) {
+                Alert('warning' , 'This product has variant. Please insert variant to table');
                 return false;
             }
         }
@@ -692,7 +366,7 @@ $('#productType').trigger('change');
         paramName: 'image',
         clickable: true,
         method: 'POST',
-        url:'../update',
+        url: '{{route('vendorproducts.store')}}',
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         },
@@ -713,25 +387,14 @@ $('#productType').trigger('change');
                     }
                     else {
                         $.ajax({
-                            type:'POST',
-                            url:'../update',
+                            type:'PUT',
+                            url:'{{route('vendorproducts.update', $id)}}',
                             data: $("#product-form").serialize(),
                             success:function(response){
-
-                                var data = response.data.dashboardView;
-                       
-                                if(data == 1){
-                           
-                                    location.href = '{{ route('vendor-dashboard') }}';
-                                   
-                                }else if(data == null){
-                                    location.href = '{{ route('vendorproducts.index') }}';
-                                    
-                                }
-                               
+                                //console.log(response);
+                                location.href = '{{ route('vendorproducts.index') }}';
                             },
                             error:function(response) {
-                                //console.log(response);
                               if(response.responseJSON.errors.name) {
                                   $("#name-error").text(response.responseJSON.errors.name);
                               }
@@ -754,8 +417,8 @@ $('#productType').trigger('change');
         },
         error: function (file, response) {
             console.log(response);
-            /*if(response.errors.name) {
-              $("#name-error").text(response.errors.name);
+            if(response.errors.name) {
+              $("#name-error").text(response.errors);
               this.removeAllFiles(true);
             }
             else if(response.errors.code) {
@@ -786,11 +449,11 @@ $('#productType').trigger('change');
               } catch (error) {
                   console.log(error);
               }
-            }*/
+            }
         },
         successmultiple: function (file, response) {
-            location.href = '../';
-            //console.log('sss: '+ response);
+            location.href = '{{ route('vendorproducts.index') }}';
+            //console.log(file, response);
         },
         completemultiple: function (file, response) {
             console.log(file, response, "completemultiple");
@@ -800,6 +463,110 @@ $('#productType').trigger('change');
             this.removeAllFiles(true);
         }
     });
+
+    $('select[name="type"]').on('change', function() {
+        if($(this).val() == 'combo'){
+            $("input[name='cost']").prop('required',false);
+            $("select[name='unit_id']").prop('required',false);
+            hide();
+            $("#combo").show(300);
+            $("input[name='price']").prop('disabled',true);
+            $("#is-variant").prop("checked", false);
+            $("#is-diffPrice").prop("checked", false);
+            $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
+        }
+        else if($(this).val() == 'digital'){
+            $("input[name='cost']").prop('required',false);
+            $("select[name='unit_id']").prop('required',false);
+            $("input[name='file']").prop('required',true);
+            hide();
+            $("#digital").show(300);
+            $("#combo").hide(300);
+            $("input[name='price']").prop('disabled',false);
+            $("#is-variant").prop("checked", false);
+            $("#is-diffPrice").prop("checked", false);
+            $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
+        }
+        else if($(this).val() == 'service') {
+            $("input[name='cost']").prop('required',false);
+            $("select[name='unit_id']").prop('required',false);
+            $("input[name='file']").prop('required',true);
+            hide();
+            $("#combo").hide(300);
+            $("#digital").hide(300);
+            $("input[name='price']").prop('disabled',false);
+            $("#is-variant").prop("checked", false);
+            $("#variant-section, #variant-option").hide(300);
+        }
+        else if($(this).val() == 'standard') {
+            $("input[name='cost']").prop('required',true);
+            $("select[name='unit_id']").prop('required',true);
+            $("input[name='file']").prop('required',false);
+            $("#cost").show(300);
+            $("#unit").show(300);
+            $("#alert-qty").show(300);
+            $("#variant-option").show(300);
+            $("#diffPrice-option").show(300);
+            $("#digital").hide(300);
+            $("#combo").hide(300);
+            $("input[name='price']").prop('disabled',false);
+        }
+    });
+
+    $('select[name="unit_id"]').on('change', function() {
+
+        unitID = $(this).val();
+        if(unitID) {
+            populate_category(unitID);
+        }else{
+            $('select[name="sale_unit_id"]').empty();
+            $('select[name="purchase_unit_id"]').empty();
+        }
+    });
+
+    var vendorProduct = {!! json_encode($lims_product_data) !!};
+    var newOption = new Option(vendorProduct.product.name, vendorProduct.product.id, true, true);
+    $('#product').html(newOption).trigger('change');
+    var options = {
+        ajax          : {
+            url     : '{{ route('product.get-dropdown') }}',
+            type    : 'GET',
+            dataType: 'json',
+            data: function (params) {
+            },
+        },
+        locale        : {
+            emptyTitle: 'Select and Begin Typing'
+        },
+        log           : 3,
+        preprocessData: function (data) {
+            return data;
+        }
+    };
+    $('#product').selectpicker().ajaxSelectPicker(options);
+
+    function addProduct(e)
+    {
+        e.preventDefault();
+        $.ajax({
+            type:'POST',
+            url:'{{route('vendorproducts.addproduct')}}',
+            data: $("#add-product-form").serialize(),
+            success:function(response){
+                Alert('success', 'Product added successfully');
+                $("#addProductModal").modal('hide');
+            },
+            error:function(response) {
+                if(response.responseJSON.errors.name) {
+                    $("#name-error").text(response.responseJSON.errors.name);
+                }
+                else if(response.responseJSON.errors.code) {
+                    $("#code-error").text(response.responseJSON.errors.code);
+                }
+                Alert('danger', 'Something went wrong try agin');
+            },
+        });
+    }
 
 </script>
 @endpush

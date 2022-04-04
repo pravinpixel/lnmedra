@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class VendorProduct extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'product_id',
@@ -20,4 +21,9 @@ class VendorProduct extends Model
         'attribute',
         'created_by',
     ];
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
+    }
 }

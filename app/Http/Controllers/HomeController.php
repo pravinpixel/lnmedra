@@ -405,16 +405,16 @@ class HomeController extends Controller
        
             if($role->hasPermissionTo('vendor-dashboard-index')){
             
-                $project = VendorProduct::where('created_by',Auth::user()->id)->where('is_active', '=',1)->count();
-                $approved = VendorProduct::where('created_by',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
-                $rejected = VendorProduct::where('created_by',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
-                $pending = VendorProduct::where('created_by',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
+                $product = VendorProduct::where('created_by',user()->id)->groupBy('product_id')->count();
+                $approved = VendorProduct::where('created_by',user()->id)->where('is_approve', '=',1)->count();
+                $rejected = VendorProduct::where('created_by',user()->id)->where('is_approve', '=',2)->count();
+                $pending = VendorProduct::where('created_by',user()->id)->where('is_approve', '=',0)->count();
                 $permissions = Role::findByName($role->name)->permissions;
                 foreach ($permissions as $permission)
                     $all_permission[] = $permission->name;
                 if(empty($all_permission))
                     $all_permission[] = 'dummy text';
-                return view('vendor-dashboard', compact('all_permission','sale','purchase','expense','project','approved','rejected','pending','toBePaid','paymentReceived','saleTotal'));
+                return view('vendor-dashboard', compact('all_permission','sale','purchase','expense','product','approved','rejected','pending','toBePaid','paymentReceived','saleTotal'));
             }
        
         }else{

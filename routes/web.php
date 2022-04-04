@@ -128,7 +128,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::resource('vendorproducts', 'VendorProductController');
 	Route::get('all-vendor-products-list', 'VendorProductController@allVendorProductsList')->name('all-vendor-products-list');
 	Route::get('vendor-dashboard', 'VendorProductController@vendorDashboard')->name('vendor-dashboard');
-	Route::post('vendor-dashboard-data', 'VendorProductController@vendorDashboardData')->name('vendor-dashboard-data');
+	Route::get('vendor-dashboard-data', 'VendorProductController@vendorDashboardData')->name('vendor-dashboard-data');
 	Route::delete('vendorproducts/deletebyVendorDashboard/{id}', 'VendorProductController@deletebyVendorDashboard')->name('vendorproducts.deletebyVendorDashboard');
 	
 	Route::post('vendorproducts/ln-qty', 'VendorProductController@lnQtyStore')->name('vendorproducts.ln-qty');

@@ -19,7 +19,8 @@ class CreateVendorProductsTable extends Migration
             $table->unsignedBigInteger('created_by');
             $table->integer('qty');
             $table->decimal('price');
-            $table->boolean('is_active')->default(0);
+            $table->boolean('is_active')->default(1);
+            $table->softDeletes('deleted_at');
             $table->timestamps();   
         });
     }

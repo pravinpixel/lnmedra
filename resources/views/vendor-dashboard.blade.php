@@ -47,7 +47,7 @@
                 <div class="card">
                     <div class="card-body">
                         <span class="text-info h3 m-0"><strong>Products</strong></span>
-                        <div class="float-right laed h1">{{ $project }}</div>
+                        <div class="float-right laed h1">{{ $product }}</div>
                     </div>
                 </div>
             </div>
@@ -87,13 +87,14 @@
                 <thead>
                     <tr>
                         <th> Product Name </th>
+                        <th> Code </th>
                         <th> Product Type </th>
                         <th> Brand </th>
                         <th> Category </th>
                         <th> Quantity </th>
                         <th> Unit Price </th>
                         <th> Status </th>
-                        <th> Action </th>
+                        <th  class="not-exported"> Action </th>
                     </tr>
                 </thead>
                 <!-- <tbody>
@@ -325,7 +326,7 @@
                     d.todate =  $('#toDate').val();
                 },
                 dataType: "json",
-                type:"post"
+                type:"GET"
             },
             "createdRow": function( row, data, dataIndex ) {
                 $(row).addClass('product-link');
@@ -334,13 +335,14 @@
             },
             "columns": [
                 {"data": "name"},
-                {"data": "name"},
+                {"data": "code"},
+                {"data": "product_type_name"},
                 {"data": "brand_name"},
-                {"data": "category"},
-                {"data": "vendor_product_qty"},
-                {"data": "vendor_product_price"},
-                {"data": "name"},
-                {"data": "name"},
+                {"data": "category_name"},
+                {"data": "vendor_price"},
+                {"data": "vendor_qty"},
+                {"data": "vendor_is_approve"},
+                {"data": "action", "orderable": false, "searchable": false},
             ],
             'language': {
                 /*'searchPlaceholder': "{{trans('file.Type Product Name or Code...')}}",*/
@@ -362,6 +364,40 @@
             ],
             'select': { style: 'multi', selector: 'td:first-child'},
             'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
+            dom: '<"row"lfB>rtip',
+        rowId: 'ObjectID',
+        buttons: [
+            {
+                extend: 'pdf',
+                text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
+                exportOptions: {
+                    columns: ':visible:Not(.not-exported)',
+                    rows: ':visible'
+                }
+            },
+            {
+                extend: 'csv',
+                text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
+                exportOptions: {
+                    columns: ':visible:Not(.not-exported)',
+                    rows: ':visible'
+                }
+            },
+            {
+                extend: 'print',
+                text: '<i title="print" class="fa fa-print"></i>',
+                exportOptions: {
+                    columns: ':visible:Not(.not-exported)',
+                    rows: ':visible'
+                }
+            },
+           
+            {
+                extend: 'colvis',
+                text: '<i title="column visibility" class="fa fa-eye"></i>',
+                columns: ':gt(0)'
+            },
+        ]
 
         } );
 

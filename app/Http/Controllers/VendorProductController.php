@@ -31,7 +31,6 @@ use DB;
 use App\Variant;
 use App\ProductVariant;
 use Illuminate\Support\Facades\Validator;
-use DataTables;
 
 class VendorProductController extends Controller
 {
@@ -53,198 +52,7 @@ class VendorProductController extends Controller
 
     public function productData(Request $request)
     {
-        $columns = array( 
-            2 => 'name', 
-            3 => 'code',
-            4 => 'brand_id',
-            5 => 'category_id',            
-            6 => 'price'
-        );
-        
-        $totalData = VendorProduct::where('is_active', true)->count();
-        $totalFiltered = $totalData; 
-
-        if($request->input('length') != -1)
-            $limit = $request->input('length');
-        else
-            $limit = $totalData;
-        $start = $request->input('start');
-        $order = 'vendor_products.'.$columns[$request->input('order.0.column')];
-        $dir = $request->input('order.0.dir');
-        if(empty($request->input('search.value'))){
-            if(Auth::user()->role_id == 6)
-            {
-                $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
-                ->where('is_active', '!=',2)
-                ->where('vendoruserid',Auth::user()->id)
-                ->limit($limit)
-                ->orderBy($order,$dir)
-                ->get();
-                
-               $totalFiltered = count($products);
-               $totalData= $totalFiltered;
-                
-            }
-            else if(Auth::user()->role_id == 2){
-                $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
-                ->where('is_active', true)
-                ->limit($limit)
-                ->orderBy($order,$dir)
-                ->get();
-                $totalFiltered = count($products);
-                $totalData= $totalFiltered;
-              }
-          else if(Auth::user()->role_id == 1){
-            $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
-            ->where('is_active', true)
-            ->limit($limit)
-            ->orderBy($order,$dir)
-            ->get();
-            $totalFiltered = count($products);
-            $totalData= $totalFiltered;
-          }
-            
-        }
-        else
-        {
-            $search = $request->input('search.value'); 
-            $products =  VendorProduct::select('vendor_products.*')
-                        ->with('category', 'brand', 'unit')
-                        ->join('categories', 'vendor_products.category_id', '=', 'categories.id')
-                        ->leftjoin('brands', 'vendor_products.brand_id', '=', 'brands.id')
-                        ->where([
-                            ['vendor_products.name', 'LIKE', "%{$search}%"],
-                            ['vendor_products.is_active', true],
-                            ['vendoruserid',Auth::user()->id]
-                        ])
-                        ->orWhere([
-                            ['vendor_products.code', 'LIKE', "%{$search}%"],
-                            ['vendor_products.is_active', true],
-                             ['vendoruserid',Auth::user()->id]
-                        ])
-                        ->orWhere([
-                            ['categories.name', 'LIKE', "%{$search}%"],
-                            ['categories.is_active', true],
-                            ['vendor_products.is_active', true],
-                             ['vendoruserid',Auth::user()->id]
-                        ])
-                        ->orWhere([
-                            ['brands.title', 'LIKE', "%{$search}%"],
-                            ['brands.is_active', true],
-                            ['vendor_products.is_active', true],
-                            ['vendoruserid',Auth::user()->id]
-                        ])
-                        ->offset($start)
-                        ->limit($limit)
-                        ->orderBy($order,$dir)->get();
-
-            $totalFiltered = VendorProduct::
-                            join('categories', 'vendor_products.category_id', '=', 'categories.id')
-                            ->leftjoin('brands', 'vendor_products.brand_id', '=', 'brands.id')
-                            ->where([
-                                ['vendor_products.name','LIKE',"%{$search}%"],
-                                ['vendor_products.is_active', true],
-                                 ['vendoruserid',Auth::user()->id]
-                            ])
-                            ->orWhere([
-                                ['vendor_products.code', 'LIKE', "%{$search}%"],
-                                ['vendor_products.is_active', true],
-                                 ['vendoruserid',Auth::user()->id]
-                            ])
-                            ->orWhere([
-                                ['categories.name', 'LIKE', "%{$search}%"],
-                                ['categories.is_active', true],
-                                ['vendor_products.is_active', true],
-                                 ['vendoruserid',Auth::user()->id]
-                            ])
-                            ->orWhere([
-                                ['brands.title', 'LIKE', "%{$search}%"],
-                                ['brands.is_active', true],
-                                ['vendor_products.is_active', true],
-                                 ['vendoruserid',Auth::user()->id]
-                            ])
-                            ->count();
-                            $totalData= $totalFiltered;
-        }
-        $data = array();
-         //print_r($products);die();
-        if(!empty($products))
-        {
-            foreach ($products as $key=>$product)
-            {
-                $nestedData['id'] = $product->id;
-                $nestedData['key'] = $key;
-                $product_image = explode(",", $product->image);
-                $product_image = htmlspecialchars($product_image[0]);
-                $nestedData['image'] = '<img src="'.url('public/images/product', $product_image).'" height="80" width="80">';
-                $nestedData['name'] = $product->name;
-                $nestedData['code'] = $product->code;
-                if($product->brand_id)
-                    $nestedData['brand'] = $product->brand->title;
-                else
-                    $nestedData['brand'] = "N/A";
-                $nestedData['category'] = $product->category->name;
-                $nestedData['qty'] = $product->qty;
-                // if($product->unit_id)
-                //     $nestedData['unit'] = $product->unit->unit_name;
-                // else
-                //     $nestedData['unit'] = 'N/A';
-                
-                $nestedData['price'] = $product->price;
-                $nestedData['cost'] = $product->cost;
-
-                if(config('currency_position') == 'prefix')
-                    $nestedData['stock_worth'] = config('currency').' '.($product->qty * $product->price).' / '.config('currency').' '.($product->qty * (float)$product->cost);
-                else
-                    $nestedData['stock_worth'] = ($product->qty * $product->price).' '.config('currency').' / '.($product->qty * $product->cost).' '.config('currency');
-                //$nestedData['stock_worth'] = ($product->qty * $product->price).'/'.($product->qty * $product->cost);
-
-                $nestedData['options'] = '<div class="btn-group">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.trans("file.action").'
-                              <span class="caret"></span>
-                              <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                            <li>
-                                <button="type" class="btn btn-link view"><i class="fa fa-eye"></i> '.trans('file.View').'</button>
-                            </li>';
-                if(in_array("vendorproducts-edit", $request['all_permission']))
-                    $nestedData['options'] .= '<li>
-                            <a href="'.route('vendorproducts.edit', $product->id).'" class="btn btn-link"><i class="fa fa-edit"></i> '.trans('file.edit').'</a>
-                        </li>';
-                if(in_array("vendorproducts-delete", $request['all_permission']))
-                    $nestedData['options'] .= \Form::open(["route" => ["vendorproducts.destroy", $product->id], "method" => "DELETE", 'onsubmit' => 'return confirmDeleteAlert(this);'] ).'
-                            <li>
-                              <button type="submit" class="btn btn-link" ><i class="fa fa-trash"></i> '.trans("file.delete").'</button> 
-                            </li>'.\Form::close().'
-                        </ul>
-                    </div>';
-                // data for product details by one click
-                // if($product->tax_id)
-                //     $tax = Tax::find($product->tax_id)->name;
-                // else
-                //     $tax = "N/A";
-
-                // if($product->tax_method == 1)
-                //     $tax_method = trans('file.Exclusive');
-                // else
-                //     $tax_method = trans('file.Inclusive');
-
-                $nestedData['product'] = array( '[ "'.$product->type.'"', ' "'.$product->name.'"', ' "'.$product->code.'"', ' "'.$nestedData['brand'].'"', ' "'.$nestedData['category'].'"',' "'.$product->price.'"',  ' "'.preg_replace('/\s+/S', " ", $product->product_details).'"', ' "'.$product->id.'"', ' "'.$product->product_list.'"',  ' "'.$product->price_list.'"',  ' "'.$product->image.'"',' "'.$product->qty.'"]'
-                );
-                //$nestedData['imagedata'] = DNS1D::getBarcodePNG($product->code, $product->barcode_symbology);
-                $data[] = $nestedData;
-            }
-        }
-        //print_r($data);die();
-        $json_data = array(
-            "draw"            => intval($request->input('draw')),  
-            "recordsTotal"    => intval($totalData),  
-            "recordsFiltered" => intval($totalFiltered), 
-            "data"            => $data   
-        );
-            
-        echo json_encode($json_data);
+      
     }
     
     public function create()
@@ -281,20 +89,20 @@ class VendorProductController extends Controller
     }
     public function vendorDashboardEdit($id)
     {
-        $role = Role::firstOrCreate(['id' => Auth::user()->role_id]);
-        if ($role->hasPermissionTo('vendorproducts-edit')) {
-            $lims_brand_list = Brand::where('is_active', true)->get();
-            $lims_category_list = Category::where('is_active', true)->get();
-            $productType = ProductType::get();
-            // print_r($productType);die();
-            $lims_product_data = VendorProduct::where('id', $id)->first();
-
-            $lims_product_data['dashboardView'] = 1;
-            return view('vendorproduct.edit',compact('lims_brand_list', 'lims_category_list',  'lims_product_data','productType'));
-        }
-        else
+        if (!userHasAccess('vendorproducts-edit')) {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
+        $lims_brand_list     = Brand::where('is_active', true)->get();
+        $lims_category_list  = Category::where('is_active', true)->get();
+        $productType         = ProductType::get();
+        $lims_product_data   = VendorProduct::with('product')->find($id);
+        $lims_unit_list      = Unit::where('is_active', true)->get();
+        $lims_tax_list       = Tax::where('is_active', true)->get();
+        $lims_warehouse_list = Warehouse::where('is_active', true)->get();
+        $lims_product_data['dashboardView'] = 1;
+        return view('vendorproduct.edit',compact('id','lims_unit_list', 'lims_tax_list','lims_warehouse_list','lims_brand_list', 'lims_category_list',  'lims_product_data','productType'));
     }
+
 
     public function edit($id)
     {
@@ -308,10 +116,24 @@ class VendorProductController extends Controller
         return view('vendorproduct.edit',compact('lims_brand_list', 'lims_category_list',  'lims_product_data','productType'));
     }
 
+    public function update($id, Request $request)
+    {
+        $product = Product::findOrFail($request->input('product'));
+        $vendorProduct = [
+            'created_by' => user()->id,
+            'qty'        => $request->input('qty'),
+            'price'      => $request->input('price'),
+            'product_id' => $product->id
+        ];
+        $result = VendorProduct::findOrFail($id)->update($vendorProduct);
+        if($result){
+            response(['status' => true, 'msg' => 'product updated']);
+        }
+        response(['status' => false, 'msg' => 'something went wrong']);
+    }
+
     public function updateProduct(Request $request)
     {
-
-    
         if(!env('USER_VERIFIED')) {
             \Session::flash('not_permitted', 'This feature is disable for demo!');
         }
@@ -1086,313 +908,110 @@ class VendorProductController extends Controller
         
         public function deletebyVendorDashboard($id)
         {
-            // print_r($id);die();
-           
-           // print_r($product_id);die();
-            if($id) {
-                // echo $id;
-                $lims_product_data =VendorProduct::findOrFail($id);
-                $lims_product_data->is_active = 2;
-                $lims_product_data->save();
-            }
-          
-            return redirect('vendor-dashboard')->with('not_permitted', 'Product deleted successfully');
+            $lims_product_data =VendorProduct::findOrFail($id);
+            $lims_product_data->delete();
+            return redirect()->back()->with('message', 'Product deleted successfully');
         }
+
         public function vendorDashboardData(Request $request)
         {
             if ($request->ajax() == true) {
-                $draw = $request->get('draw');
-                $start = $request->get("start");
-                $rowperpage = $request->get("length"); // Rows display per page
-    
+                $draw            = $request->get('draw');
+                $start           = $request->get("start");
+                $rowperpage      = $request->get("length");
                 $columnIndex_arr = $request->get('order');
-                $columnName_arr = $request->get('columns');
-                $order_arr = $request->get('order');
-                $search_arr = $request->get('search');
-                $columnIndex = $columnIndex_arr[0]['column']; // Column index
-                $columnName = $columnName_arr[$columnIndex]['data']; // Column name
-                $columnSortOrder = $order_arr[0]['dir']; // asc or desc
-                $searchValue = $search_arr['value']; // Search value
-                // Total records
-                $totalRecords = Product::select('count(*) as allcount')->count();
-                $totalRecordswithFilter = Product::select('count(*) as allcount')->where('name', 'like', '%' .$searchValue . '%')->count();
-                // Fetch records
-                $records = Product::with(['brand','productType','category','vendorProduct'])
-                    ->whereHas('vendorProduct', function($q){
-                        $q->where('created_by', user()->id);
-                    })
-                    ->orderBy($columnName,$columnSortOrder)
-                    ->where('products.name', 'like', '%' .$searchValue . '%')
-                    ->select('products.*')
-                    ->skip($start)
-                    ->take($rowperpage)
-                    ->get();
-                $data_arr = array();
-    
-                foreach($records as $record){
+                $columnName_arr  = $request->get('columns');
+                $order_arr       = $request->get('order');
+                $search_arr      = $request->get('search');
+                $columnIndex     = $columnIndex_arr[0]['column'];
+                $columnName      = $columnName_arr[$columnIndex]['data'];
+                $columnSortOrder = $order_arr[0]['dir'];
+                $searchValue     = $search_arr['value'];
+         
+                $totalRecords =  VendorProduct::join('products','vendor_products.product_id','=','products.id')
+                                    ->leftJoin('brands','brands.id','=','products.brand_id')
+                                    ->leftJoin('categories','categories.id','=','products.category_id')
+                                    ->leftJoin('product_types','product_types.id','=','products.type')
+                                    ->where('vendor_products.created_by', user()->id)
+                                    ->get()
+                                    ->count();
 
-                    $id = $record->id;
-                    $product_name = $record->name;
-                    $brand_name = $record->brand->title;
-                    $category_name = $record->category->name;
-                    $product_type = $record->productType->name;
-                    $vendor_product_qty = $record->vendorProduct->qty;
-                    $vendor_product_price = $record->vendorProduct->price;
+                $records = VendorProduct::join('products','vendor_products.product_id','=','products.id')
+                                    ->leftJoin('brands','brands.id','=','products.brand_id')
+                                    ->leftJoin('categories','categories.id','=','products.category_id')
+                                    ->leftJoin('product_types','product_types.id','=','products.type')
+                                    ->where('vendor_products.created_by', user()->id)
+                                    ->when(!empty($searchValue), function($q) use($searchValue){
+                                        $q->where('products.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('categories.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('brands.title', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('product_types.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('vendor_products.qty', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('vendor_products.price', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('products.code', 'like', '%' .$searchValue. '%');
+                                    })->select('products.*',
+                                        'brands.title as brand_name',
+                                        'categories.name as category_name',
+                                        'product_types.name as product_type_name',
+                                        'vendor_products.id as vendor_id',
+                                        'vendor_products.price as vendor_price',
+                                        'vendor_products.qty as vendor_qty',
+                                        'vendor_products.is_approve as vendor_is_approve'
+                                    )
+                                    ->orderBy($columnName,$columnSortOrder)
+                                    ->skip($start)
+                                    ->take($rowperpage == -1 ? $totalRecords : $rowperpage)
+                                    ->get();
+                $data_arr = array();
+                foreach($records as $record){
+                    $id                   = $record->id;
+                    $code                 = $record->code;
+                    $product_name         = $record->name;
+                    $brand_name           = $record->brand_name;
+                    $category_name        = $record->category_name;
+                    $product_type         = $record->product_type_name;
+                    $vendor_product_qty   = $record->vendor_price;
+                    $vendor_product_price = $record->vendor_qty;
+                    if($record->vendor_is_approve == 1){
+                        $approve_status = '<span class="badge badge-danger">Rejected</span>';
+                    } else if($record->vendor_is_approve == 2){
+                        $approve_status = '<span class="badge badge-danger">Approved</span>';
+                    } else {
+                        $approve_status = '<span class="badge badge-info">Pending</span>';
+                    }
+                    $action ='<div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.trans("file.action").'
+                      <span class="caret"></span>
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
+                    $action .=' <li> <a href="'.route('vendorproducts.dashboardEdit', $record->vendor_id).'" class="btn btn-link"><i class="fa fa-edit"></i> Edit </a> </li>';
+                    $action .='<li>'. \Form::open(["route" => ["vendorproducts.deletebyVendorDashboard", $record->vendor_id], "method" => "DELETE", 'onsubmit' => 'return confirmDeleteAlert(this);'] ).'
+                                    <button type="submit" class="btn btn-link"  ><i class="fa fa-trash"></i> Delete </button> 
+                                '.\Form::close().'</li>';
                     $data_arr[] = array(
-                        "id" => $id,
-                        "name" => $product_name,
-                        "brand_name" => $brand_name,
-                        "product_type" => $product_type,
-                        "category" => $category_name,
-                        "vendor_product_qty" => $vendor_product_qty,
-                        "vendor_product_price" => $vendor_product_price,
+                        "id"                => $id,
+                        "code"              => $code,
+                        "name"              => $product_name,
+                        "brand_name"        => $brand_name,
+                        "product_type_name" => $product_type,
+                        "category_name"     => $category_name,
+                        "vendor_qty"        => $vendor_product_qty,
+                        "vendor_price"      => $vendor_product_price,
+                        "vendor_is_approve" => $approve_status,
+                        "action"            => $action
                     );
                 }
-                // dd($data_arr);
                 $response = array(
                     "draw" => intval($draw),
                     "iTotalRecords" => $totalRecords,
-                    "iTotalDisplayRecords" => $totalRecordswithFilter,
+                    "iTotalDisplayRecords" => $records->count(),
                     "aaData" => $data_arr
                 );
                 echo json_encode($response);
-                return false;
             }
-
-            // dd(Auth::user()->id);
-            $columns = array( 
-                2 => 'name', 
-                3 => 'code',
-                4 => 'brand_id',
-                5 => 'category_id',            
-                6 => 'price'
-            );
-            
-            $totalData = VendorProduct::where('is_active', true)->count();
-            $totalFiltered = $totalData; 
-            if($request->input('length') != -1)
-                $limit = $request->input('length');
-            else
-                $limit = $totalData;
-            $start = $request->input('start');
-            $order = 'vendor_products.'.$columns[$request->input('order.0.column')];
-            $dir = $request->input('order.0.dir');
-            if(empty($request->input('search.value'))){
-                if($request['fromdate'] || $request['todate'])
-                {
-                    $startDate = $request['fromdate'];
-                    $endDate = $request['todate'];
-                    $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
-                    ->where('is_active', '!=',2)
-                    ->where('created_at', '>=', $startDate)
-                    ->where('created_at', '<=', $endDate)
-                    ->limit($limit)
-                    ->orderBy($order,$dir)
-                    ->get();
-                   
-                }
-                else{
-                   
-                    if(Auth::user()->role_id == 6)
-                    {
-                        $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
-                        ->where('is_active', '!=',2)
-                        ->where('vendoruserid',Auth::user()->id)
-                        ->limit($limit)
-                        ->orderBy($order,$dir)
-                        ->get();
-                        $totalData =  count($products);
-                       $totalFiltered = count($products);
-                        
-                    }
-                    else if(Auth::user()->role_id == 1)
-                    {
-                        $products = VendorProduct::with('category', 'brand', 'unit')->offset($start)
-                        ->where('is_active', '!=',2)
-                        ->limit($limit)
-                        ->orderBy($order,$dir)
-                        ->get();
-                    }
-                   
-                }
-               
-            }
-            else
-            {
-            //    dd(Auth::user()->id);
-                $search = $request->input('search.value'); 
-                $products =  VendorProduct::select('vendor_products.*')
-                            ->with('category', 'brand', 'unit')
-                         
-                            ->join('categories', 'vendor_products.category_id', '=', 'categories.id')
-                            ->leftjoin('brands', 'vendor_products.brand_id', '=', 'brands.id')
-                            ->where([
-                                ['vendor_products.name', 'LIKE', "%{$search}%"],
-                                ['vendor_products.is_active', true],
-                                ['vendoruserid',Auth::user()->id]
-                            ])
-                            ->orWhere([
-                                ['vendor_products.code', 'LIKE', "%{$search}%"],
-                                ['vendor_products.is_active', true],
-                                ['vendoruserid',Auth::user()->id]
-                            ])
-                            ->orWhere([
-                                ['categories.name', 'LIKE', "%{$search}%"],
-                                ['categories.is_active', true],
-                                ['vendor_products.is_active', true],
-                                ['vendoruserid',Auth::user()->id]
-                            ])
-                            ->orWhere([
-                                ['brands.title', 'LIKE', "%{$search}%"],
-                                ['brands.is_active', true],
-                                ['vendor_products.is_active', true],
-                                ['vendoruserid',Auth::user()->id]
-                            ])
-                            ->offset($start)
-                            ->limit($limit)
-                            ->orderBy($order,$dir)->get();
-    
-                $totalFiltered = VendorProduct::
-                                join('categories', 'vendor_products.category_id', '=', 'categories.id')
-                                ->leftjoin('brands', 'vendor_products.brand_id', '=', 'brands.id')
-                                ->where([
-                                    ['vendor_products.name','LIKE',"%{$search}%"],
-                                    ['vendor_products.is_active', true],
-                                    ['vendoruserid',Auth::user()->id]
-                                ])
-                                ->orWhere([
-                                    ['vendor_products.code', 'LIKE', "%{$search}%"],
-                                    ['vendor_products.is_active', true],
-                                     ['vendoruserid',Auth::user()->id]
-                                ])
-                                ->orWhere([
-                                    ['categories.name', 'LIKE', "%{$search}%"],
-                                    ['categories.is_active', true],
-                                    ['vendor_products.is_active', true],
-                                     ['vendoruserid',Auth::user()->id]
-                                ])
-                                ->orWhere([
-                                    ['brands.title', 'LIKE', "%{$search}%"],
-                                    ['brands.is_active', true],
-                                    ['vendor_products.is_active', true],
-                                     ['vendoruserid',Auth::user()->id]
-                                ])
-                                ->count();
-            }
-            $data = array();
-            //  print_r($products);die();
-            if(!empty($products))
-            { 
-                $i = 0;
-                foreach ($products as $key=>$product)
-                {
-                    $i++;
-                    // print_r($product->id);die();
-                    $nestedData['id'] = $product->id;
-                    $nestedData['key'] = $key;
-                    $product_image = explode(",", $product->image);
-                    $product_image = htmlspecialchars($product_image[0]);
-                    $nestedData['image'] = '<img src="'.url('public/images/product', $product_image).'" height="80" width="80">';
-
-
-                    $userData = User::where('id',$product->vendoruserid)->select('name')->first()->toArray();
-                    
-                    $nestedData['user_name'] = $userData['name'];
-
-                    $nestedData['name'] = $product->name;
-                    
-                    $nestedData['type'] = $product->type;
-                    $nestedData['code'] = $product->code;
-                    if($product->brand_id)
-                        $nestedData['brand'] = $product->brand->title;
-                    else
-                        $nestedData['brand'] = "N/A";
-                    $nestedData['category'] = $product->category->name;
-                    $nestedData['qty'] = $product->qty;
-                    // if($product->is_active == true)
-                    // {
-                    //     $nestedData['is_active'] = '<span class="badge badge-success">Active</span>';
-                    // }
-                    // else if($product->is_active == false){
-                    //     $nestedData['is_active'] = '<span class="badge badge-warning">Inactive </span>';
-                    // }
-                    
-
-                    if($product->is_active == 1)
-                    {
-                        $nestedData['is_active'] = '
-                        <div class="btn-group">
-                                <button type="button" onclick="vendorProductId('.$product->id.')" class="btn btn-primary"  aria-haspopup="true" aria-expanded="false">Status</button>
-                                </div>
-                        ';
-                    }
-                    else if($product->is_active == 0){
-                        $nestedData['is_active'] = '
-                        <div class="btn-group">
-                                <button type="button" onclick="vendorProductId('.$product->id.')" class="btn btn-danger"  aria-haspopup="true" aria-expanded="false">Status</button>
-                                </div>
-                        ';
-                    }
-                    // $nestedData['is_active'] = $product->is_active;
-                    // dd($product->is_active);
-                    // if($product->unit_id)
-                    //     $nestedData['unit'] = $product->unit->unit_name;
-                    // else
-                    //     $nestedData['unit'] = 'N/A';
-                    $nestedData['i'] = $i;
-                    $nestedData['price'] = $product->price;
-                    $nestedData['cost'] = $product->cost;
-                    
-                    if(config('currency_position') == 'prefix')
-                        $nestedData['stock_worth'] = config('currency').' '.($product->qty * $product->price).' / '.config('currency').' '.($product->qty * (float)$product->cost);
-                    else
-                        $nestedData['stock_worth'] = ($product->qty * $product->price).' '.config('currency').' / '.($product->qty * $product->cost).' '.config('currency');
-                   
-
-
-
-
-                    if($product->is_approve == 1)
-                    {
-                        $nestedData['options'] = 'Approved';
-                    }
-                    else if($product->is_approve == 2)
-                    {
-                        $nestedData['options'] = 'Rejected';
-                    }else{
-                        $nestedData['options'] = '<div class="btn-group">';
-                        if(in_array("vendorproducts-edit", $request['all_permission']))
-                            $nestedData['options'] .= '
-                                    <a href="'.route('vendorproducts.dashboardEdit', $product->id).'" class="btn btn-link"><i class="fa fa-pencil text-info me-1 mr-2 btn btn-light"></i></a>
-                                ';
-                        if(in_array("vendorproducts-delete", $request['all_permission']))
-                            $nestedData['options'] .= \Form::open(["route" => ["vendorproducts.deletebyVendorDashboard", $product->id], "method" => "DELETE"] ).'
-                                    
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="fa fa-trash text-danger btn btn-light"></i> </button> 
-                                    '.\Form::close().'
-                                
-                            </div>';
-                    }
-                  
-                    $nestedData['product'] = array( '[ "'.$product->type.'"', ' "'.$product->name.'"', ' "'.$product->code.'"', ' "'.$nestedData['brand'].'"','"'.$nestedData['is_active'].'"', ' "'.$nestedData['category'].'"',' "'.$product->price.'"',  ' "'.preg_replace('/\s+/S', " ", $product->product_details).'"', ' "'.$product->id.'"', ' "'.$product->product_list.'"',  ' "'.$product->price_list.'"',  ' "'.$product->image.'"',' "'.$product->qty.'"]'
-                    );
-                    
-                    //$nestedData['imagedata'] = DNS1D::getBarcodePNG($product->code, $product->barcode_symbology);
-                    $data[] = $nestedData;
-                }
-               
-            }
-            // print_r($$data);die();
-            // $totalFiltered = 15;
-            $json_data = array(
-                "draw"            => intval($request->input('draw')),  
-                "recordsTotal"    => intval($totalData),  
-                "recordsFiltered" => intval($totalFiltered), 
-                "data"            => $data   
-            );
-            // print_r($json_data);die();
-            echo json_encode($json_data);
         }
+        
         public function lnQtyStore(Request $request)
         {
             
