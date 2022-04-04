@@ -597,16 +597,20 @@
     };
         $('#product').selectpicker().ajaxSelectPicker(options);
     });
-
+    
     function addProduct(e)
     {
         e.preventDefault();
+
         $.ajax({
             type:'POST',
-            url:'{{route('products.store')}}',
+            url:'{{route('vendorproducts.addproduct')}}',
             data: $("#add-product-form").serialize(),
             success:function(response){
-                console.log(response);
+                var newOption1 = new Option(response.data.name,response.data.id, true, true);
+                $('#product').html(newOption1).trigger('change');
+                Alert('success', 'Product added successfully');
+                $("#addProductModal").modal('hide');
             },
             error:function(response) {
                 if(response.responseJSON.errors.name) {
@@ -615,6 +619,7 @@
                 else if(response.responseJSON.errors.code) {
                     $("#code-error").text(response.responseJSON.errors.code);
                 }
+                Alert('danger', 'Something went wrong try agin');
             },
         });
     }

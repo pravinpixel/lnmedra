@@ -14,6 +14,7 @@ use App\ProductType;
 use App\Product;
 use App\Purchase;
 use App\Expense;
+use App\Notifications\ProductCreation;
 use App\Tax;
 use App\Warehouse;
 use App\Supplier;
@@ -30,6 +31,7 @@ use DB;
 use App\Variant;
 use App\ProductVariant;
 use Illuminate\Support\Facades\Validator;
+use DataTables;
 
 class VendorProductController extends Controller
 {
@@ -42,6 +44,7 @@ class VendorProductController extends Controller
                 $all_permission[] = $permission->name;
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
+                
             return view('vendorproduct.index', compact('all_permission'));
         }
         else
@@ -263,103 +266,23 @@ class VendorProductController extends Controller
 
     public function store(Request $request)
     {
-        // print_r($request->all());die();
-        $this->validate($request, [
-            'code' => [
-                'max:255',
-                    Rule::unique('vendor_products')->where(function ($query) {
-                    return $query->where('is_active', 1);
-                }),
-            ],
-            'name' => [
-                'max:255',
-                    Rule::unique('vendor_products')->where(function ($query) {
-                    return $query->where('is_active', 1);
-                }),
-            ]
-        ]);
-        $data = $request->except('image', 'file');
-        $data['name'] = htmlspecialchars(trim($data['name']));
-        if($request['attribute']){
-            $data['attribute'] = implode(',',$request['attribute']);
-        }
         
-        if($data['type'] == 'combo'){
-            $data['product_list'] = implode(",", $data['product_id']);
-           // $data['variant_list'] = implode(",", $data['variant_id']);
-            $data['qty_list'] = implode(",", $data['product_qty']);
-            $data['price_list'] = implode(",", $data['unit_price']);
-            $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
+        $product = Product::findOrFail($request->input('product'));
+        $vendorProduct = [
+            'created_by' => user()->id,
+            'qty' => $request->input('qty'),
+            'price' => $request->input('price'),
+        ];
+        $result = $product->vendorProduct()->create($vendorProduct);
+        if($result){
+            response(['status' => true, 'msg' => 'product addeded']);
         }
-        elseif($data['type'] == 'digital' || $data['type'] == 'service')
-            $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
-
-        $data['product_details'] = str_replace('"', '@', $data['product_details']);
-
-        // if($data['starting_date'])
-        //     $data['starting_date'] = date('Y-m-d', strtotime($data['starting_date']));
-        // if($data['last_date'])
-        //     $data['last_date'] = date('Y-m-d', strtotime($data['last_date']));
-        $data['is_active'] = true;
-        $images = $request->image;
-        $image_names = [];
-        if($images) {            
-            foreach ($images as $key => $image) {
-                $imageName = $image->getClientOriginalName();
-                $image->move('public/images/product', $imageName);
-                $image_names[] = $imageName;
-            }
-            $data['image'] = implode(",", $image_names);
-        }
-        else {
-            $data['image'] = 'zummXD2dvAtI.png';
-        }
-        $file = $request->file;
-        if ($file) {
-            $ext = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
-            $fileName = strtotime(date('Y-m-d H:i:s'));
-            $fileName = $fileName . '.' . $ext;
-            $file->move('public/vendorproduct/files', $fileName);
-            $data['file'] = $fileName;
-        }
-        $lims_product_data = VendorProduct::create($data);
-        //dealing with product variant
-        if(!isset($data['is_batch']))
-            $data['is_batch'] = null;
-        // if(isset($data['is_variant'])) {
-        //     foreach ($data['variant_name'] as $key => $variant_name) {
-        //         $lims_variant_data = Variant::firstOrCreate(['name' => $data['variant_name'][$key]]);
-        //         $lims_variant_data->name = $data['variant_name'][$key];
-        //         $lims_variant_data->save();
-        //         $lims_product_variant_data = new ProductVariant;             
-        //         $lims_product_variant_data->product_id = $lims_product_data->id;
-        //         $lims_product_variant_data->variant_id = $lims_variant_data->id;
-        //         $lims_product_variant_data->position = $key + 1;
-        //         $lims_product_variant_data->item_code = $data['item_code'][$key];
-        //         $lims_product_variant_data->additional_price = $data['additional_price'][$key];
-        //         $lims_product_variant_data->qty = 0;
-        //         $lims_product_variant_data->save();
-        //     }
-        // }
-        // if(isset($data['is_diffPrice'])) {
-        //     foreach ($data['diff_price'] as $key => $diff_price) {
-        //         if($diff_price) {
-        //             Product_Warehouse::create([
-        //                 "product_id" => $lims_product_data->id,
-        //                 "warehouse_id" => $data["warehouse_id"][$key],
-        //                 "qty" => 0,
-        //                 "price" => $diff_price
-        //             ]);
-        //         }
-        //     }
-        // }
-        \Session::flash('create_message', 'Product created successfully');
+        response(['status' => false, 'msg' => 'something went wrong']);
     }
     public function vendorDashboardEdit($id)
     {
         $role = Role::firstOrCreate(['id' => Auth::user()->role_id]);
         if ($role->hasPermissionTo('vendorproducts-edit')) {
-         
             $lims_brand_list = Brand::where('is_active', true)->get();
             $lims_category_list = Category::where('is_active', true)->get();
             $productType = ProductType::get();
@@ -372,21 +295,17 @@ class VendorProductController extends Controller
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
+
     public function edit($id)
     {
-        $role = Role::firstOrCreate(['id' => Auth::user()->role_id]);
-        if ($role->hasPermissionTo('vendorproducts-edit')) {
-            $productType = ProductType::get();
-            // print_r($productType);die();
-            $lims_brand_list = Brand::where('is_active', true)->get();
-            $lims_category_list = Category::where('is_active', true)->get();
-         
-            $lims_product_data = VendorProduct::where('id', $id)->first();
-            
-            return view('vendorproduct.edit',compact('lims_brand_list', 'lims_category_list',  'lims_product_data','productType'));
-        }
-        else
+        if(!userHasAccess('vendorproducts-edit')) {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        }
+        $productType = ProductType::get();
+        $lims_brand_list = Brand::where('is_active', true)->get();
+        $lims_category_list = Category::where('is_active', true)->get();
+        $lims_product_data = VendorProduct::where('id', $id)->first();
+        return view('vendorproduct.edit',compact('lims_brand_list', 'lims_category_list',  'lims_product_data','productType'));
     }
 
     public function updateProduct(Request $request)
@@ -854,15 +773,11 @@ class VendorProductController extends Controller
         public function vendorDashboard()
         {
         
-            $role = Role::find(Auth::user()->role_id);
-
-            $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '!=',2)->count();
-            $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
-            $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
-            $pending = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
-            
-            if($role->hasPermissionTo('vendor-dashboard-index')){
-                     
+            $project = VendorProduct::where('created_by',Auth::user()->id)->where('is_active', '!=',2)->count();
+            $approved = VendorProduct::where('created_by',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
+            $rejected = VendorProduct::where('created_by',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
+            $pending = VendorProduct::where('created_by',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
+            if(userHasAccess('vendor-dashboard-index')){
                 $permissions = Role::findByName($role->name)->permissions;
                 foreach ($permissions as $permission)
                     $all_permission[] = $permission->name;
@@ -871,8 +786,28 @@ class VendorProductController extends Controller
                 return view('vendor-dashboard', compact('all_permission','project','approved','rejected','pending'));
             }
             else
-                   
                 return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+           
+        
+            // $role = Role::find(Auth::user()->role_id);
+
+            // $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '!=',2)->count();
+            // $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
+            // $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
+            // $pending = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
+            
+            // if($role->hasPermissionTo('vendor-dashboard-index')){
+                     
+            //     $permissions = Role::findByName($role->name)->permissions;
+            //     foreach ($permissions as $permission)
+            //         $all_permission[] = $permission->name;
+            //     if(empty($all_permission))
+            //         $all_permission[] = 'dummy text';
+            //     return view('vendor-dashboard', compact('all_permission','project','approved','rejected','pending'));
+            // }
+            // else
+                   
+            //     return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
            
         }
         public function allVendorproductData(Request $request)
@@ -1165,6 +1100,65 @@ class VendorProductController extends Controller
         }
         public function vendorDashboardData(Request $request)
         {
+            if ($request->ajax() == true) {
+                $draw = $request->get('draw');
+                $start = $request->get("start");
+                $rowperpage = $request->get("length"); // Rows display per page
+    
+                $columnIndex_arr = $request->get('order');
+                $columnName_arr = $request->get('columns');
+                $order_arr = $request->get('order');
+                $search_arr = $request->get('search');
+                $columnIndex = $columnIndex_arr[0]['column']; // Column index
+                $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+                $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+                $searchValue = $search_arr['value']; // Search value
+                // Total records
+                $totalRecords = Product::select('count(*) as allcount')->count();
+                $totalRecordswithFilter = Product::select('count(*) as allcount')->where('name', 'like', '%' .$searchValue . '%')->count();
+                // Fetch records
+                $records = Product::with(['brand','productType','category','vendorProduct'])
+                    ->whereHas('vendorProduct', function($q){
+                        $q->where('created_by', user()->id);
+                    })
+                    ->orderBy($columnName,$columnSortOrder)
+                    ->where('products.name', 'like', '%' .$searchValue . '%')
+                    ->select('products.*')
+                    ->skip($start)
+                    ->take($rowperpage)
+                    ->get();
+                $data_arr = array();
+    
+                foreach($records as $record){
+
+                    $id = $record->id;
+                    $product_name = $record->name;
+                    $brand_name = $record->brand->title;
+                    $category_name = $record->category->name;
+                    $product_type = $record->productType->name;
+                    $vendor_product_qty = $record->vendorProduct->qty;
+                    $vendor_product_price = $record->vendorProduct->price;
+                    $data_arr[] = array(
+                        "id" => $id,
+                        "name" => $product_name,
+                        "brand_name" => $brand_name,
+                        "product_type" => $product_type,
+                        "category" => $category_name,
+                        "vendor_product_qty" => $vendor_product_qty,
+                        "vendor_product_price" => $vendor_product_price,
+                    );
+                }
+                // dd($data_arr);
+                $response = array(
+                    "draw" => intval($draw),
+                    "iTotalRecords" => $totalRecords,
+                    "iTotalDisplayRecords" => $totalRecordswithFilter,
+                    "aaData" => $data_arr
+                );
+                echo json_encode($response);
+                return false;
+            }
+
             // dd(Auth::user()->id);
             $columns = array( 
                 2 => 'name', 
@@ -1176,7 +1170,6 @@ class VendorProductController extends Controller
             
             $totalData = VendorProduct::where('is_active', true)->count();
             $totalFiltered = $totalData; 
-    
             if($request->input('length') != -1)
                 $limit = $request->input('length');
             else
@@ -1590,5 +1583,92 @@ class VendorProductController extends Controller
          
            return response()->json(['data' => $data]);
     }
+
+    public function addProduct(Request $request)
+    {  
+        $this->validate($request, [
+            'code' => [
+                'max:255',
+                    Rule::unique('products')->where(function ($query) {
+                    return $query->where('is_active', 1);
+                }),
+            ],
+            'name' => [
+                'max:255',
+                    Rule::unique('products')->where(function ($query) {
+                    return $query->where('is_active', 1);
+                }),
+            ]
+        ]);
+        $data = $request->except('image', 'file');
+        $data['name'] = htmlspecialchars(trim($data['name']));
+        $data['product_details'] = str_replace('"', '@', $data['product_details']);
+        if($request['attribute']){
+            $data['attribute'] = implode(',',$request['attribute']);
+        }
+        if($data['starting_date'])
+            $data['starting_date'] = date('Y-m-d', strtotime($data['starting_date']));
+        if($data['last_date'])
+            $data['last_date'] = date('Y-m-d', strtotime($data['last_date']));
+        $data['is_active'] = true;
+        $images = $request->image;
+        $image_names = [];
+        if($images) {            
+            foreach ($images as $key => $image) {
+                $imageName = $image->getClientOriginalName();
+                $image->move('public/images/product', $imageName);
+                $image_names[] = $imageName;
+            }
+            $data['image'] = implode(",", $image_names);
+        }
+        else {
+            $data['image'] = 'zummXD2dvAtI.png';
+        }
+        $file = $request->file;
+        if ($file) {
+            $ext = pathinfo($file->getClientOriginalName(), PATHINFO_EXTENSION);
+            $fileName = strtotime(date('Y-m-d H:i:s'));
+            $fileName = $fileName . '.' . $ext;
+            $file->move('public/product/files', $fileName);
+            $data['file'] = $fileName;
+        }
+        $lims_product_data = Product::create($data);
+        if($lims_product_data){
+            $user = User::find(1);
+            $user->notify(new ProductCreation($lims_product_data));
+        }
+        //dealing with product variant
+        if(!isset($data['is_batch']))
+            $data['is_batch'] = null;
+        if(isset($data['is_variant'])) {
+            foreach ($data['variant_name'] as $key => $variant_name) {
+                $lims_variant_data = Variant::firstOrCreate(['name' => $data['variant_name'][$key]]);
+                $lims_variant_data->name = $data['variant_name'][$key];
+                $lims_variant_data->save();
+                $lims_product_variant_data = new ProductVariant;             
+                $lims_product_variant_data->product_id = $lims_product_data->id;
+                $lims_product_variant_data->variant_id = $lims_variant_data->id;
+                $lims_product_variant_data->position = $key + 1;
+                $lims_product_variant_data->item_code = $data['item_code'][$key];
+                $lims_product_variant_data->additional_price = $data['additional_price'][$key];
+                $lims_product_variant_data->qty = 0;
+                $lims_product_variant_data->save();
+            }
+        }
+        if(isset($data['is_diffPrice'])) {
+            foreach ($data['diff_price'] as $key => $diff_price) {
+                if($diff_price) {
+                    Product_Warehouse::create([
+                        "product_id" => $lims_product_data->id,
+                        "warehouse_id" => $data["warehouse_id"][$key],
+                        "qty" => 0,
+                        "price" => $diff_price
+                    ]);
+                }
+            }
+        }
+       return response(['status' => true, 'data' => $lims_product_data]);
     }
+
+}
     

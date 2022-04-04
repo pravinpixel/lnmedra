@@ -13,3 +13,9 @@ if(!function_exists('userHasAccess')) {
        return $role->hasPermissionTo($permission);
     }
 }
+
+if(!function_exists('user')) {
+    function user() {
+        return Auth::user();
+    }
+}

@@ -14,7 +14,7 @@ class AddVendorProducts extends Migration
     public function up()
     {
         Schema::table('vendor_products', function (Blueprint $table) {
-            $table->boolean('is_approve')->after('sale_unit_id')->default(0);
+            $table->boolean('is_approve')->default(0);
         });
     }
 

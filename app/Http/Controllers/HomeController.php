@@ -405,10 +405,10 @@ class HomeController extends Controller
        
             if($role->hasPermissionTo('vendor-dashboard-index')){
             
-                $project = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_active', '=',1)->count();
-                $approved = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
-                $rejected = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
-                $pending = VendorProduct::where('vendoruserid',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
+                $project = VendorProduct::where('created_by',Auth::user()->id)->where('is_active', '=',1)->count();
+                $approved = VendorProduct::where('created_by',Auth::user()->id)->where('is_approve', '=',1)->where('is_active', '=',1)->count();
+                $rejected = VendorProduct::where('created_by',Auth::user()->id)->where('is_approve', '=',2)->where('is_active', '=',1)->count();
+                $pending = VendorProduct::where('created_by',Auth::user()->id)->where('is_approve', '=',0)->where('is_active', '=',1)->count();
                 $permissions = Role::findByName($role->name)->permissions;
                 foreach ($permissions as $permission)
                     $all_permission[] = $permission->name;

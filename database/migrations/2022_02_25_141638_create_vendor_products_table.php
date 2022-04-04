@@ -15,32 +15,12 @@ class CreateVendorProductsTable extends Migration
     {
         Schema::create('vendor_products', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('code');
-            $table->string('type');
-            $table->string('barcode_symbology')->nullable();
-            $table->integer('brand_id')->nullable();
-            $table->integer('category_id')->nullable();
-            $table->integer('unit_id')->nullable();
-            $table->integer('purchase_unit_id')->nullable();
-            $table->integer('sale_unit_id')->nullable();
-            $table->string('cost')->nullable();
-            $table->string('price')->nullable();
-            $table->double('qty')->nullable();
-            $table->double('alert_quantity')->nullable();
-            $table->tinyInteger('promotion')->nullable();
-            $table->string('promotion_price')->nullable();
-            $table->date('starting_date')->nullable();
-            $table->date('last_date')->nullable();
-            $table->integer('tax_id')->nullable();
-            $table->integer('tax_method')->nullable();
-            $table->longText('image')->nullable();
-            $table->tinyInteger('featured')->nullable();
-            $table->text('product_details')->nullable();
-            $table->boolean('is_active')->nullable();
-            $table->integer('vendoruserid')->nullable();
-            
-            $table->timestamps();
+            $table->unsignedBigInteger('product_id');
+            $table->unsignedBigInteger('created_by');
+            $table->integer('qty');
+            $table->decimal('price');
+            $table->boolean('is_active')->default(0);
+            $table->timestamps();   
         });
     }
 /**

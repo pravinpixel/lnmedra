@@ -86,8 +86,6 @@
             <table id="product-data-table" class="table custom table-hover bg-white p-0 m-0">
                 <thead>
                     <tr>
-                        <th> Sl. No </th>
-                        <!-- <th> Image </th> -->
                         <th> Product Name </th>
                         <th> Product Type </th>
                         <th> Brand </th>
@@ -311,7 +309,6 @@
     }
 
     $(document).ready(function() {
-       
         var table = $('#product-data-table').DataTable( {
             responsive: true,
             fixedHeader: {
@@ -336,18 +333,14 @@
                 $(row).attr('data-imagedata', data['imagedata']);
             },
             "columns": [
-                {"data": "i"},
-                // {"data":"image"}, 
                 {"data": "name"},
-                {"data": "type"},
-                {"data": "brand"},
+                {"data": "name"},
+                {"data": "brand_name"},
                 {"data": "category"},
-                {"data": "qty"},
-                {"data": "price"},
-                {"data": "is_active"},
-                // {"data": "user_name"},
-                // {"data": "code"},
-                {"data": "options"},
+                {"data": "vendor_product_qty"},
+                {"data": "vendor_product_price"},
+                {"data": "name"},
+                {"data": "name"},
             ],
             'language': {
                 /*'searchPlaceholder': "{{trans('file.Type Product Name or Code...')}}",*/
@@ -369,102 +362,7 @@
             ],
             'select': { style: 'multi', selector: 'td:first-child'},
             'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
-            // dom: '<"row"lfB>rtip',
-            // buttons: [
-            //     {
-            //         extend: 'pdf',
-            //         text: '<i title="export to pdf" class="fa fa-file-pdf-o"></i>',
-            //         exportOptions: {
-            //             columns: ':visible:not(.not-exported)',
-            //             rows: ':visible',
-            //             stripHtml: false
-            //         },
-            //         customize: function(doc) {
-            //             for (var i = 1; i < doc.content[1].table.body.length; i++) {
-            //                 if (doc.content[1].table.body[i][0].text.indexOf('<img src=') !== -1) {
-            //                     var imagehtml = doc.content[1].table.body[i][0].text;
-            //                     var regex = /<img.*?src=['"](.*?)['"]/;
-            //                     var src = regex.exec(imagehtml)[1];
-            //                     var tempImage = new Image();
-            //                     tempImage.src = src;
-            //                     var canvas = document.createElement("canvas");
-            //                     canvas.width = tempImage.width;
-            //                     canvas.height = tempImage.height;
-            //                     var ctx = canvas.getContext("2d");
-            //                     ctx.drawImage(tempImage, 0, 0);
-            //                     var imagedata = canvas.toDataURL("image/png");
-            //                     delete doc.content[1].table.body[i][0].text;
-            //                     doc.content[1].table.body[i][0].image = imagedata;
-            //                     doc.content[1].table.body[i][0].fit = [30, 30];
-            //                 }
-            //             }
-            //         },
-            //     },
-            //     {
-            //         extend: 'csv',
-            //         text: '<i title="export to csv" class="fa fa-file-text-o"></i>',
-            //         exportOptions: {
-            //             columns: ':visible:not(.not-exported)',
-            //             rows: ':visible',
-            //             format: {
-            //                 body: function ( data, row, column, node ) {
-            //                     if (column === 0 && (data.indexOf('<img src=') !== -1)) {
-            //                         var regex = /<img.*?src=['"](.*?)['"]/;
-            //                         data = regex.exec(data)[1];
-            //                     }
-            //                     return data;
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     {
-            //         extend: 'print',
-            //         text: '<i title="print" class="fa fa-print"></i>',
-            //         exportOptions: {
-            //             columns: ':visible:not(.not-exported)',
-            //             rows: ':visible',
-            //             stripHtml: false
-            //         }
-            //     },
-            //     {
-            //         text: '<i title="delete" class="dripicons-cross"></i>',
-            //         className: 'buttons-delete',
-            //         action: function ( e, dt, node, config ) {
-            //             if(user_verified == '1') {
-            //                 product_id.length = 0;
-            //                 $(':checkbox:checked').each(function(i){
-            //                     if(i){
-            //                         var product_data = $(this).closest('tr').data('product');
-            //                         product_id[i-1] = product_data[7];
-            //                     }
-            //                 });
-            //                 if(product_id.length && confirmDelete()) {
-            //                     alert()
-            //                     $.ajax({
-            //                         type:'DELETE',
-            //                         url:'vendorproducts.deletebyVendorDashboard/',
-            //                         data:{
-            //                             productIdArray: product_id
-            //                         },
-            //                         success:function(data){
-            //                             //dt.rows({ page: 'current', selected: true }).deselect();
-            //                             dt.rows({ page: 'current', selected: true }).remove().draw(false);
-            //                         }
-            //                     });
-            //                 }
-            //                 else if(!product_id.length)
-            //                     alert('No product is selected!');
-            //             }
-            //             else
-            //                 alert('This feature is disable for demo!');
-            //         }
-            //     },
-            //     {
-            //         extend: 'colvis',
-            //         text: '<i title="column visibility" class="fa fa-eye"></i>',
-            //         columns: ':gt(0)'
-            //     },
-            // ],
+
         } );
 
         $('#dateValidate').click(function(){

@@ -122,6 +122,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	
 	Route::post('vendorproducts/deletebyselection', 'VendorProductController@deleteBySelection');
 	Route::post('vendorproducts/vendorProductDeny', 'VendorProductController@vendorProductDeny');
+	Route::post('vendorproducts/addproduct', 'VendorProductController@addproduct')->name('vendorproducts.addproduct');
 
 	Route::post('vendorproducts/update', 'VendorProductController@updateProduct');
 	Route::resource('vendorproducts', 'VendorProductController');

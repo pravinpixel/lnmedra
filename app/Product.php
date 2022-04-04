@@ -47,4 +47,14 @@ class Product extends Model
             ['featured', 1]
         ]);
     }
+
+    public function vendorProduct()
+    {
+        return $this->hasOne(VendorProduct::class,'product_id','id');
+    }
+
+    public function productType()
+    {
+        return $this->belongsTo(ProductType::class,'type','id');
+    }
 }
