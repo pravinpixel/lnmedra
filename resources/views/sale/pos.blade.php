@@ -1,6 +1,16 @@
 @extends('layout.top-head')
 @section('content')
- 
+<style>
+    .modal-header {
+        align-items: center !important;
+        background: #14AB69 !important;
+        color: white !important;
+        font-weight: bold !important; 
+    }
+    .modal-header h5 {
+        font-size: 1.5rem !important; 
+    }
+</style>
 @php
     if($lims_pos_setting_data)
         $keybord_active = $lims_pos_setting_data->keybord_active;
@@ -922,7 +932,7 @@
                         </div>
                         <div class="modal-body">
                             <div class="row m-0">
-                                <div class="col-md-10">
+                                <div class="col">
                                     <div class="row m-0">
                                         <div class="col-md-6 mt-1">
                                             <label>{{trans('file.Recieved Amount')}} *</label>
@@ -934,17 +944,20 @@
                                         </div>
                                         <div class="col-md-6 mt-1">
                                             <label>{{trans('file.Change')}} : </label>
-                                            <p id="change" class="ml-2">0.00</p>
+                                            <div id="change" class="form-control fw-bold">0.00</div>
                                         </div>
                                         <div class="col-md-6 mt-1">
                                             <input type="hidden" name="paid_by_id">
                                             <label>{{trans('file.Paid By')}}</label>
                                             <select name="paid_by_id_select" class="form-control selectpicker">
+											
+												<option value="5">UPI</option>
+											 
                                                 <option value="1">Cash</option>
                                                  
                                                 <option value="3">Credit Card</option>
                                              
-                                                <option value="5">UPI</option>
+                                               
                                                
                                             </select>
                                         </div>
@@ -1170,6 +1183,13 @@
                         
                         <div class="mx-0 shadow" style="background: #0c324c !important">
                             <div class="row m-0  p-0 ">
+							
+							 <div class="col p-0">
+                                    <button type="button" class="h-100 h3 text-white w-100  rounded-0 btn btn-info payment-btn" data-toggle="modal" data-target="#add-payment" id="paypal-btn">
+                                        <i class="fa fa-paypal"></i> <b>UPI</b>
+                                    </button>
+                                </div> 
+								
                                 <div class="col p-0">
                                     <button type="button" class="h-100 w-100 h3 text-white rounded-0 btn btn-primary payment-btn" data-toggle="modal" data-target="#add-payment" id="credit-card-btn">
                                         <i class="fa fa-credit-card"></i> <b>{{trans('file.Card')}}</b>
@@ -1180,11 +1200,7 @@
                                         <i class="fa fa-money"></i> <b>{{trans('file.Cash')}}</b>
                                     </button>
                                 </div>
-                                <div class="col p-0">
-                                    <button type="button" class="h-100 h3 text-white w-100  rounded-0 btn btn-info payment-btn" data-toggle="modal" data-target="#add-payment" id="paypal-btn">
-                                        <i class="fa fa-paypal"></i> <b>UPI</b>
-                                    </button>
-                                </div> 
+                               
                                 
                                 <div class="col p-0">
                                     <button type="button" class="h-100 w-100 h3 text-white rounded-0 btn btn-danger" id="cancel-btn" onclick="return confirmCancel()">
@@ -1210,12 +1226,18 @@
                         <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Scan/Search product by name/code" class="form-control form-control-lg rounded-pill active text-dark"  />
                     </div>
                     <div class="btn-group w-100 mt-3">
-                        <button class="btn w-100 btn-primary" id="category-filter">{{trans('file.category')}}</button>
-                        <button class="btn w-100 btn-info" id="brand-filter">{{trans('file.Brand')}}</button>
-                        <button class="btn w-100 btn-danger" id="featured-filter">{{trans('file.Featured')}}</button>
+                        <button class="btn btn-sm w-100 btn-primary" id="category-filter">{{trans('file.category')}}</button>
+                        <button class="btn btn-sm w-100 btn-info" id="brand-filter">{{trans('file.Brand')}}</button>
+                        <button class="btn btn-sm w-100 btn-danger" id="featured-filter">{{trans('file.Featured')}}</button>
                     </div>
                 </div> 
                 <div class="card-body p-0">
+                    <div class="text-right m-3">
+                        <div class="btn-group ">
+                            <button class="btn btn-sm btn-light active"><i class="fa fa-th" aria-hidden="true"></i></button>
+                            <button class="btn btn-sm btn-light"><i class="fa fa-list" aria-hidden="true"></i></button>
+                        </div>
+                    </div>
                     <div class="filter-window">
                         <div class="category ">
                             <div class="row m-0 ml-2 mr-2 px-2 p-3">
