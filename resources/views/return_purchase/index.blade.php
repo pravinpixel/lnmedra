@@ -6,7 +6,34 @@
         @if(in_array("purchase-return-add", $all_permission))
             <a href="{{route('return-purchase.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Return')}}</a>
         @endif
+        <div class="card">  
+        <div class="card-body">
+            {!! Form::open(['route' => 'return-purchase.index', 'method' => 'get']) !!}
+                <div class="row m-0">
+                    
+             
+                    <div class="d-flex align-items-center col-5">
+                        <div class="mr-3">{{trans('file.customer')}}</div>
+                        <select id="supplier_id" name="supplier_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" >
+                            <option value="0">{{trans('file.All Outlet')}}</option>
+                            @foreach($lims_customer_list as $customer)
+                     
+                                <option value="{{$customer->id}}">{{$customer->name}}</option>
+                           
+                            @endforeach
+                        </select>
+                    </div>
+                
+                    <div class="col-2">
+                        <button class="btn btn-primary w-100" onclick="filter()" id="filter-btn" type="submit">{{trans('file.search')}}</button>
+                    </div>
+                </div>
+            {!! Form::close() !!}
+          
+        </div>
+        </div>
     </div>
+
     <div class="table-responsive">
         <table id="return-table" class="table return-list">
             <thead>

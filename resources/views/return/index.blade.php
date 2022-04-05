@@ -7,6 +7,33 @@
                 <a href="{{route('return-sale.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Return')}}</a>
             </div>
         @endif
+        
+    <div class="card">  
+        <div class="card-body">
+            {!! Form::open(['route' => 'return-sale.index', 'method' => 'get']) !!}
+                <div class="row m-0">
+                    
+             
+                    <div class="d-flex align-items-center col-5">
+                        <div class="mr-3">{{trans('file.customer')}}</div>
+                        <select id="customer_id" name="customer_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" >
+                            <option value="0">{{trans('file.All Outlet')}}</option>
+                            @foreach($lims_customer_list as $customer)
+                     
+                                <option value="{{$customer->id}}">{{$customer->name}}</option>
+                           
+                            @endforeach
+                        </select>
+                    </div>
+                
+                    <div class="col-2">
+                        <button class="btn btn-primary w-100" onclick="filter()" id="filter-btn" type="submit">{{trans('file.search')}}</button>
+                    </div>
+                </div>
+            {!! Form::close() !!}
+          
+        </div>
+    </div>
 
         <div class="card pb-3 shadow">
             <div class="table-responsive">
@@ -370,5 +397,19 @@
 
     if(all_permission.indexOf("returns-delete") == -1)
         $('.buttons-delete').addClass('d-none');
+
+        $(".daterangepicker-field").daterangepicker({
+        callback: function(startDate, endDate, period){
+        var starting_date = startDate.format('YYYY-MM-DD');
+        var ending_date = endDate.format('YYYY-MM-DD');
+        var title = starting_date + ' To ' + ending_date;
+        $('.daterangepicker-field').val(title);
+        $('input[name="starting_date"]').val(starting_date);
+        $('input[name="ending_date"]').val(ending_date);
+        }
+    });
+    function filter(){
+        $('#return-table').DataTable().draw();
+    }
 </script>
 @endpush

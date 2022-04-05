@@ -25,8 +25,9 @@ use Illuminate\Support\Facades\Validator;
 
 class ReturnPurchaseController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // print_r($request->all());die();
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('purchase-return-index')){
             $permissions = Role::findByName($role->name)->permissions;
@@ -36,9 +37,19 @@ class ReturnPurchaseController extends Controller
                 $all_permission[] = 'dummy text';
             if(Auth::user()->role_id > 2 && config('staff_access') == 'own')
                 $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->orderBy('id', 'desc')->where('user_id', Auth::id())->get();
-            else
-                $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->orderBy('id', 'desc')->get();
-            return view('return_purchase.index', compact('lims_return_all', 'all_permission'));
+            else{
+                if($request->supplier_id){
+                    // return 1;
+                    $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->where('supplier_id',$request->supplier_id)->orderBy('id', 'desc')->get();
+                }
+                else{
+                    $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->orderBy('id', 'desc')->get();
+                }
+            }
+                
+
+            $lims_customer_list = Supplier::where('is_active', true)->get();
+            return view('return_purchase.index', compact('lims_return_all', 'all_permission','lims_customer_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');

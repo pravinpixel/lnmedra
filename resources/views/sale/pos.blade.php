@@ -957,7 +957,7 @@
                                                  
                                                 <option value="3">Credit Card</option>
                                              
-                                               
+                                              
                                                
                                             </select>
                                         </div>
@@ -1183,8 +1183,7 @@
                         
                         <div class="mx-0 shadow" style="background: #0c324c !important">
                             <div class="row m-0  p-0 ">
-							
-							 <div class="col p-0">
+							   <div class="col p-0">
                                     <button type="button" class="h-100 h3 text-white w-100  rounded-0 btn btn-info payment-btn" data-toggle="modal" data-target="#add-payment" id="paypal-btn">
                                         <i class="fa fa-paypal"></i> <b>UPI</b>
                                     </button>
@@ -1200,7 +1199,7 @@
                                         <i class="fa fa-money"></i> <b>{{trans('file.Cash')}}</b>
                                     </button>
                                 </div>
-                               
+                             
                                 
                                 <div class="col p-0">
                                     <button type="button" class="h-100 w-100 h3 text-white rounded-0 btn btn-danger" id="cancel-btn" onclick="return confirmCancel()">

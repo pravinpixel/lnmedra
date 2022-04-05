@@ -80,7 +80,7 @@ class ProductController extends Controller
                         ->get();
         }
         else
-        {
+        {         
             $search = $request->input('search.value'); 
             $products =  Product::select('products.*')
                         ->with('category', 'brand', 'unit')

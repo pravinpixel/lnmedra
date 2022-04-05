@@ -28,8 +28,9 @@ use Illuminate\Support\Facades\Validator;
 
 class ReturnController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('returns-index')){
             $permissions = Role::findByName($role->name)->permissions;
@@ -41,8 +42,19 @@ class ReturnController extends Controller
             if(Auth::user()->role_id > 2 && config('staff_access') == 'own')
                 $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')->orderBy('id', 'desc')->orderBy('id', 'desc')->where('user_id', Auth::id())->get();
             else
-                $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')->orderBy('id', 'desc')->get();
-            return view('return.index', compact('lims_return_all', 'all_permission'));
+            {
+                if($request->customer_id){
+                    $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')->where('customer_id',$request->customer_id)->orderBy('id', 'desc')->get();
+                }
+                else{
+                    $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')->orderBy('id', 'desc')->get();
+                }
+                
+            }
+                
+            
+            $lims_customer_list = Customer::where('is_active', true)->get();
+            return view('return.index', compact('lims_return_all', 'all_permission','lims_customer_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
