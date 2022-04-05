@@ -7,7 +7,7 @@
 <section>
     <div class="container-fluid">
         <div class="card border">
-            {!! Form::open(['route' => 'purchases.index', 'method' => 'get']) !!}
+            <!-- {!! Form::open(['route' => 'purchases.index', 'method' => 'get']) !!} -->
             <div class="d-flex justify-content-center card-body">
                 <div class="mx-3">
                     <div class="form-group row">
@@ -21,6 +21,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="d-flex align-items-center col-5">
+                        <div class="mr-3">{{trans('file.Supplier')}}</div>
+                        <select id="supplier_id" name="supplier_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Supplier.." data-live-search-style="begins" >
+                            <!-- <option value="0">{{trans('file.Supplier')}}</option> -->
+                            @foreach($lims_supplier_list as $supplier)
+                     
+                                <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                           
+                            @endforeach
+                        </select>
+                    </div>
                 <?php $outletId = Auth::user()->warehouse_id ?>
                 
                 <div class="mx-3 @if(\Auth::user()->role_id > 2){{'d-none'}}@endif">
@@ -38,10 +49,10 @@
                     </div>
                 </div>
                 <div>
-                    <button class="btn btn-primary" id="filter-btn" type="submit">{{trans('file.submit')}}</button>
+                    <button class="btn btn-primary" id="filter-btn" onclick="filter()" type="submit">{{trans('file.submit')}}</button>
                 </div>
             </div>
-            {!! Form::close() !!}
+            <!-- {!! Form::close() !!} -->
         </div>
         
         <div class="text-right mb-3">
@@ -521,22 +532,27 @@
         $(".change").text(parseFloat( $(this).val() - $('input[name="edit_amount"]').val() ).toFixed(2));
     });
 
-    dataTable();
+    // dataTable();
 
-    function dataTable() {
-        var starting_date = $("input[name=starting_date]").val();
-        var ending_date = $("input[name=ending_date]").val();
-        var warehouse_id = $("#warehouse_id").val();
-        $('#purchase-table').DataTable( {
+    // function dataTable() {
+        // var starting_date = $("input[name=starting_date]").val()
+        // var ending_date = $("input[name=ending_date]").val();
+        // var warehouse_id = $("#warehouse_id").val();
+        // var supplier_id = $("#supplier_id").val();
+       
+       
+        var table = $('#purchase-table').DataTable( {
+            
             "processing": true,
             "serverSide": true,
             "ajax":{
                 url:"purchases/purchase-data",
-                data:{
-                    all_permission: all_permission,
-                    starting_date: starting_date,
-                    ending_date: ending_date,
-                    warehouse_id: warehouse_id
+                data :  function(d) {
+                    d.all_permission = all_permission,
+                    d.starting_date= $("input[name=starting_date]").val(),
+                    d.ending_date= $("input[name=ending_date]").val(),
+                    d.warehouse_id= $("#warehouse_id").val(),
+                    d.supplier_id= $("#supplier_id").val()
                 },
                 dataType: "json",
                 type:"post",
@@ -682,7 +698,7 @@
             }
         } );
 
-    }
+    // }
 
     function datatable_sum(dt_selector, is_calling_first) {
         if (dt_selector.rows( '.selected' ).any() && is_calling_first) {
@@ -809,6 +825,11 @@
     if(all_permission.indexOf("purchases-delete") == -1)
         $('.buttons-delete').addClass('d-none');
 
+
+    function filter(){
+        $('#purchase-table').DataTable().draw();
+        // dataTable();
+    }
 
 </script>
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>

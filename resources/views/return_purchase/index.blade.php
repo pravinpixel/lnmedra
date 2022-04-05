@@ -13,9 +13,9 @@
                     
              
                     <div class="d-flex align-items-center col-5">
-                        <div class="mr-3">{{trans('file.customer')}}</div>
+                        <div class="mr-3">{{trans('file.Supplier')}}</div>
                         <select id="supplier_id" name="supplier_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" >
-                            <option value="0">{{trans('file.All Outlet')}}</option>
+                            <option value="0">{{trans('file.Supplier')}}</option>
                             @foreach($lims_customer_list as $customer)
                      
                                 <option value="{{$customer->id}}">{{$customer->name}}</option>
