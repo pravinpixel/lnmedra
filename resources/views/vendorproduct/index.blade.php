@@ -10,8 +10,16 @@
                 {{-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> --}}
             @endif
         </div>
-
-        <div class="card pb-3">
+         
+        <div class="card py-3">
+            <div class="col-md-4 mx-auto">
+                <select class="select form-control" id="product-status" name="product-status">
+                    <option value="">@lang('file.All')</option>
+                    <option value="0">@lang('file.Pending')</option>
+                    <option value="1">@lang('file.Approved')</option>
+                    <option value="2">@lang('file.Rejected')</option>
+                </select>
+            </div>
             <div class="table-responsive">
                 <table id="product-data-table" class="table" style="width: 100%">
                     <thead>
@@ -23,6 +31,7 @@
                             <th>{{trans('file.category')}}</th>
                             <th>{{trans('file.Qty')}}</th>
                             <th>{{trans('file.Price')}}</th>                    
+                            <th>{{trans('file.Status')}}</th>                    
                             <th class="not-exported">{{trans('file.action')}}</th>
                         </tr>
                     </thead>
@@ -307,8 +316,9 @@
             "serverSide": true,
             "ajax":{
                 url:"vendor-dashboard-data",
-                data:{
-                    all_permission: all_permission
+                data: function(d){
+                    d.status = $('#product-status').val();
+                    d.all_permission =  all_permission;
                 },
                 dataType: "json",
                 type:"GET"
@@ -325,6 +335,7 @@
                 {"data": "category_name"},
                 {"data": "vendor_qty"},
                 {"data": "vendor_price"},
+                {"data": "vendor_is_approve"},
                 {"data": "action", "orderable": false, "searchable": false},
             ],
             'language': {
@@ -418,6 +429,10 @@
         $('.buttons-delete').addClass('d-none');
 
     $('select').selectpicker();
+
+    $("#product-status").change(function(){
+        $('#product-data-table').DataTable().draw().clear();
+    });
 
 </script>
 @endpush

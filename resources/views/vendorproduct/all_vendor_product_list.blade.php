@@ -174,7 +174,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
         location.reload();
     }
 
-    $(document).on('keyup change','.ln_qty', function(){
+    $(document).on('focusout','.ln_qty', function(){
                 
                 // console.log($(this).data('qty_row_id'));
                 var row_id = $(this).data('qty_row_id');
@@ -214,7 +214,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
 
                 
     });
-    $(document).on('keyup change','.ln_price', function(){
+    $(document).on('focusout','.ln_price', function(){
                 
                 // console.log($(this).data('qty_row_id'));
                 var row_id = $(this).data('price_row_id');
@@ -441,7 +441,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                 url:"{{ route('all-vendor-product-data-list') }}",
                 data: function(d) {
                     d.all_permission= all_permission;
-                   d.vendorName= $('#vendorName').val();
+                   d.vendor_id= $('#vendorName').val();
                 },
                 dataType: "json",
                 type:"GET"

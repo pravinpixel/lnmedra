@@ -717,5 +717,10 @@ return [
 	"Total transaction" => "Total transaction",
 	"Customer since" => "Customer since",
 	"Add Product" => "Add Product",
+	"Peding" => "Pending",
+	"Approved" => "Approved",
+	"Rejected" => "Rejected",
+	"Select" => "Select",
+	"All" => "All",
 ];
 ?>
