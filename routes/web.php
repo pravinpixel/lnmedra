@@ -111,7 +111,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('vendorproducts/get-attribute-image/{id}', 'VendorProductController@getAttributeImage')->name('vendorproducts.get-attribute-image');
 	Route::get('vendorproducts/get-edit-attribute-image/{id}', 'VendorProductController@getEditAttributeImage')->name('product.get-attribute-image');
 	Route::post('vendorproducts/product-data', 'VendorProductController@productData');
-	Route::post('vendorproducts/all-vendor-product-data', 'VendorProductController@allVendorproductData');
+	Route::get('vendorproducts/all-vendor-product-data-list', 'VendorProductController@allVendorproductData')->name('all-vendor-product-data-list');
 	Route::get('vendorproducts/gencode', 'VendorProductController@generateCode');
 	Route::get('vendorproducts/search', 'VendorProductController@search');
 	Route::get('vendorproducts/saleunit/{id}', 'VendorProductController@saleUnit');
@@ -135,7 +135,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('vendorproducts/ln-price', 'VendorProductController@lnPriceStore')->name('vendorproducts.ln-price');
 	Route::post('vendorproducts/ln-discount', 'VendorProductController@lnDiscountStore')->name('vendorproducts.ln-discount');
 	
-	Route::post('vendorproducts/row-data', 'VendorProductController@rowDataStore')->name('vendorproducts.row-data');
+	Route::post('vendorproducts/approve-products', 'VendorProductController@approveProducts')->name('vendorproducts.approve-products');
 
 	Route::post('vendorproducts/vendor-dashboard-status', 'VendorProductController@vendorDashboardStatus')->name('vendor-dashboard-status');
 

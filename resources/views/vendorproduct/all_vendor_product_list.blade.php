@@ -3,10 +3,7 @@
 
 <section>
     <div class="container-fluid">
-        @if(in_array("vendorproducts-add", $all_permission))
-            <!-- <a href="{{route('vendorproducts.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> Vendor {{__('file.add_product')}}</a> -->
-            {{-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> --}}
-        @endif
+     
         <div>
            <div class="col-8 mx-auto">
                 <div class="d-flex align-items-center my-4">
@@ -23,33 +20,33 @@
            </div>
             <div class="card pb-3">
                 <div class="table-responsive ">
-                    {!! Form::open(['route' => 'vendorproducts.row-data','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true,'onsubmit' => 'return checkformvalidation()'],) !!}
-                
-                        <div class="m-3 ml-4 text-center">
-                            <button class="btn-sm btn-success btn" id="btnClick" type="submit">Approve</button>
-                            <button class="btn-sm btn-danger btn"  onclick="rejectProduct()" >Reject</button>
-                        </div> 
-                        <table id="product-data-table" class="table m-0" style="width: 100%">
-                            <thead>
-                                <tr>
-                                    <th class="not-exported"></th>
-                                    <th>{{trans('file.Image')}}</th>
-                                    <th>{{trans('file.name')}}</th>
-                                    <th>{{trans('file.Vendor Name')}}</th>
-                                    <th>{{trans('file.Code')}}</th>
-                                    <th>{{trans('file.Brand')}}</th>
-                                    <th>{{trans('file.category')}}</th>
-                                    <th>{{ trans('file.L&N Quantity')  }}</th>
-                                    <th>{{trans('file.Qty')}}</th>
-                                    <th>{{ trans('file.L&N Price')  }}</th>
-                                    <th>{{trans('file.Price')}}</th>                    
-                                    <th class="not-exported">{{trans('file.action')}}</th>
-                                </tr>
-                            </thead> 
-                        </table> 
-                    {!! Form::close() !!}
-                    </div>
+
+                    <div class="m-3 ml-4 text-center">
+                        <button class="btn-sm btn-success btn" id="btnClick" onclick="checkformvalidation(event)">Approve</button>
+                        <button class="btn-sm btn-danger btn"  onclick="rejectProduct()" >Reject</button>
+                    </div> 
+                    <table id="product-data-table" class="table m-0" style="width: 100%">
+                        <thead>
+                            <tr>
+                                <th class="not-exported"></th>
+                                <th>{{trans('file.Image')}}</th>
+                                <th>{{trans('file.name')}}</th>
+                                <th>{{trans('file.Vendor Name')}}</th>
+                                <th>{{trans('file.Code')}}</th>
+                                <th>{{trans('file.Brand')}}</th>
+                                <th>{{trans('file.category')}}</th>
+                                <th>{{ trans('file.L&N Quantity')  }}</th>
+                                <th>{{trans('file.Qty')}}</th>
+                                <th>{{ trans('file.L&N Price')  }}</th>
+                                <th>{{trans('file.Price')}}</th>                    
+                                <th class="not-exported">{{trans('file.action')}}</th>
+                            </tr>
+                        </thead> 
+                    </table> 
+                </div>
             </div>
+
+            
         </div> 
     </div> 
 </section>
@@ -154,39 +151,25 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
   
     function rejectProduct(){
      
-        if(user_verified == '1') {
-            
-            // product_id.length = 0;
-        var val = [];
-        $(':checkbox:checked').each(function(i){
-          
-          val[i] = $(this).val();
-        //   product_id =i;
-        });
-            // Alert("warning", val)
-    
-            if(val.length && confirmDelete()) {
-                $.ajax({
-                    type:'POST',
-                    url:'vendorproducts/vendorProductDeny',
-                    data:{
-                        productIdArray: val
-                    },
-                    success:function(data){
-                        // Alert("warning", )
-                        //dt.rows({ page: 'current', selected: true }).deselect();
-                        // dt.rows({ page: 'current', selected: true }).remove().draw(false);
-                        location.reload();
-                    }
-                });
-            }
-            else if(!product_id.length)
-                Alert("warning", 'No product is selected!');
-        }
-        else
-            Alert("warning", 'This feature is disable for demo!');
-                
+        if(selectedRow.length && confirmDelete()) {
+            $.ajax({
+                type:'POST',
+                url:'vendorproducts/vendorProductDeny',
+                data:{
+                    productIdArray: selectedRow
+                },
+                success:function(res){
+                    Alert("success", res.msg);
+                    $('#product-data-table').DataTable().clear().draw();
+                }, error: function(e) {
+                    Alert("warning", "Somethign went wrong");
+                    $('#product-data-table').DataTable().clear().draw();
+                }
+            });
+        } else 
+            Alert("warning", 'No product is selected!');
     }
+             
     function resetVendor(){
         location.reload();
     }
@@ -441,10 +424,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
 
 
         $("#vendorName").on('change',function(){
-           
-            console.log($('#vendorName').val());
-            table.clear().draw()
-
+            table.clear().draw();
         });
         
         
@@ -458,13 +438,13 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
             "processing": true,
             "serverSide": true,
             "ajax":{
-                url:"vendorproducts/all-vendor-product-data",
+                url:"{{ route('all-vendor-product-data-list') }}",
                 data: function(d) {
                     d.all_permission= all_permission;
                    d.vendorName= $('#vendorName').val();
                 },
                 dataType: "json",
-                type:"post"
+                type:"GET"
             },
             "createdRow": function( row, data, dataIndex ) {
                 $(row).addClass('product-link');
@@ -472,18 +452,18 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                 $(row).attr('data-imagedata', data['imagedata']);
             },
             "columns": [
-                {"data": "key"},
+                {"data": "brand_name"},
                 {"data": "image"},
                 {"data": "name"},
                 {"data": "user_name"},
                 {"data": "code"},
-                {"data": "brand"},
-                {"data": "category"},
+                {"data": "brand_name"},
+                {"data": "category_name"},
                 {"data": "ln_qty"},
-                {"data": "qty"},
+                {"data": "vendor_qty"},
                 {"data": "ln_price"},
-                {"data": "price"},
-                {"data": "options"},
+                {"data": "vendor_price"},
+                {"data": "action"},
             ],
             'language': {
                 /*'searchPlaceholder': "{{trans('file.Type Product Name or Code...')}}",*/
@@ -502,23 +482,11 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                     //'targets': [0, 1, 9, 10, 11]
                 },
                 {
-                    
                     'render': function(data, type, row, meta){
-                       
-                        if(type === 'display' && row.is_approve == 0){
-                            data = '<input type="checkbox" class="dt-checkboxes checkbox " onclick="return checkoxvalidation(this)" id="check'+row.id+'" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
+                        data = ''
+                        if(type === 'display' && row.vendor_is_approve == 0){
+                            data = '<input type="checkbox" class="dt-checkboxes checkbox approve-checkbox" onclick="return checkoxvalidation(this)" id="check'+row.vendor_id+'" name="is_approve_row_data[]" value="'+row.vendor_id+'" ><label></label></div>';
                         }
-                        else if(type === 'display' && row.is_approve == 1){
-                            // console.log(row);
-                            data = '';
-                        }
-                        else if(type === 'display' && row.is_approve == 2){
-                            data = '';
-                        }
-                        else {
-                            data = '<input type="checkbox" class="dt-checkboxes checkbox "  onclick="return checkoxvalidation(this)" id="check'+row.id+'" name="is_approve_row_data[]" value="'+row.id+'" ><label></label></div>';
-                        }
-
                        return data;
                     },
                     'checkboxes': {
@@ -528,7 +496,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                     'targets': [0]
                 }
             ],
-            'select': { style: 'multi', selector: 'td:first-child'},
+            // 'select': { style: 'multi', selector: 'td:first-child'},
             'lengthMenu': [[10, 25, 50, -1], [10, 25, 50, "All"]],
             dom: '<"row"lfB>rtip',
             buttons: [
@@ -626,6 +594,11 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                     columns: ':gt(0)'
                 },
             ],
+            drawCallback: function( settings ) {
+                selectedRow.map(e => {
+                    return $(`[value=${e}]`).prop("checked", true);
+                });
+            },
         } );
 
     } );
@@ -634,29 +607,45 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
         $('.buttons-delete').addClass('d-none');
 
     $('select').selectpicker();
-
+    let selectedRow = [];
     function checkoxvalidation(getdatas){
-         
         if($(getdatas).prop("checked") == true){
-                  var classname = $(getdatas).attr("id");
-                  
-                  $('.'+classname+'text').attr("required", true);
-                }
-                else if($(getdatas).prop("checked") == false){
-                var classname = $(getdatas).attr("id");
-                
-                 $('.'+classname+'text').attr("required", false);
-                }
+            selectedRow.push($(getdatas).val());
+            var classname = $(getdatas).attr("id");
+            $('.'+classname+'text').attr("required", true);
+        } else {
+            let index = selectedRow.indexOf($(getdatas).val());
+            if(index != -1) {
+                selectedRow.splice(index, 1);
+            }
+            var classname = $(getdatas).attr("id");
+            $('.'+classname+'text').attr("required", false);
+        }
+        $("#selectedRow").val(selectedRow.join(','));
     }
 
-    function checkformvalidation(){      
+    function checkformvalidation(e){    
+        e.preventDefault();  
         let roleChecked = $("input:checked").length;
         if (!roleChecked) {
             Alert("warning", "Please check at least one checkbox");
             return false;
         }
-      }
-        /*  $('input[type="checkbox"]').click(function(){
+        $.ajax({
+            type: 'POST',
+            url: '{{ route('vendorproducts.approve-products') }}',
+            data: { selectedRow: selectedRow },
+            success: function(res) {
+                Alert('success', res.msg);
+                $('#product-data-table').DataTable().clear().draw();
+            },
+            error: function(e){
+                Alert('warning', 'Something went wrong');
+                $('#product-data-table').DataTable().clear().draw();
+            }
+        });
+    }
+            /*  $('input[type="checkbox"]').click(function(){
             //$('.checkbox').change( function () {
             Alert("warning", "check")
             if($(this).prop("checked") == true){
@@ -672,6 +661,5 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
             });
         });
 */
-
 </script>
 @endpush

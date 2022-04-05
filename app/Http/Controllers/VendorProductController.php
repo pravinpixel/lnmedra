@@ -572,8 +572,8 @@ class VendorProductController extends Controller
         }
         public function allVendorProductsList(Type $var = null)
         {
-        
 
+            
             $role = Role::find(Auth::user()->role_id);
             if($role->hasPermissionTo('vendor-approval-index')){
                      
@@ -634,6 +634,116 @@ class VendorProductController extends Controller
         }
         public function allVendorproductData(Request $request)
         {
+
+            if ($request->ajax() == true) {
+                $draw            = $request->get('draw');
+                $start           = $request->get("start");
+                $rowperpage      = $request->get("length");
+                $columnIndex_arr = $request->get('order');
+                $columnName_arr  = $request->get('columns');
+                $order_arr       = $request->get('order');
+                $search_arr      = $request->get('search');
+                $columnIndex     = $columnIndex_arr[0]['column'];
+                $columnName      = $columnName_arr[$columnIndex]['data'];
+                $columnSortOrder = $order_arr[0]['dir'];
+                $searchValue     = $search_arr['value'];
+         
+                $totalRecords =  VendorProduct::join('products','vendor_products.product_id','=','products.id')
+                                    ->where('is_approve', 0)
+                                    ->leftJoin('brands','brands.id','=','products.brand_id')
+                                    ->leftJoin('categories','categories.id','=','products.category_id')
+                                    ->leftJoin('product_types','product_types.id','=','products.type')
+                                    ->get()
+                                    ->count();
+
+                $records = VendorProduct::join('products','vendor_products.product_id','=','products.id')
+                                    ->where('is_approve', 0)
+                                    ->leftJoin('brands','brands.id','=','products.brand_id')
+                                    ->leftJoin('categories','categories.id','=','products.category_id')
+                                    ->leftJoin('product_types','product_types.id','=','products.type')
+                                    ->leftJoin('users','users.id','=','vendor_products.created_by')
+                                    ->when(!empty($searchValue), function($q) use($searchValue){
+                                        $q->where('products.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('categories.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('brands.title', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('product_types.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('vendor_products.qty', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('vendor_products.price', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('products.code', 'like', '%' .$searchValue. '%');
+                                    })->select('products.*',
+                                        'brands.title as brand_name',
+                                        'categories.name as category_name',
+                                        'product_types.name as product_type_name',
+                                        'vendor_products.id as vendor_id',
+                                        'vendor_products.price as vendor_price',
+                                        'vendor_products.ln_price as ln_price',
+                                        'vendor_products.ln_qty as ln_qty',
+                                        'vendor_products.qty as vendor_qty',
+                                        'vendor_products.is_approve as vendor_is_approve',
+                                        'users.name as user_name',
+                                    )
+                                    ->orderBy($columnName,$columnSortOrder)
+                                    ->skip($start)
+                                    ->take($rowperpage == -1 ? $totalRecords : $rowperpage)
+                                    ->get();
+                $data_arr = array();
+                foreach($records as $record){
+                    $id                      = $record->id;
+                    $code                    = $record->code;
+                    $product_name            = $record->name;
+                    $brand_name              = $record->brand_name;
+                    $category_name           = $record->category_name;
+                    $product_type            = $record->product_type_name;
+                    $vendor_product_qty      = $record->vendor_qty;
+                    $vendor_product_price    = $record->vendor_price;
+                    
+                    $vendor_product_ln_qty   = '<div class="btn-group">
+                        <input type="number" name="ln_qty[]" min="0" id="ln_qty'.$record->vendor_id.'" class="form-control ln_qty check'.$record->vendor_id.'text"  data-qty_row_id="'.$record->vendor_id.'" value="'.$record->ln_qty.'" style="width:70px;" >
+                    <div>';
+                    $vendor_product_ln_price = '<div class="btn-group">
+                            <input type="number" name="ln_price[]" id="ln_price'.$record->vendor_id.'" min="0" class="form-control ln_price check'.$record->vendor_id.'text" data-price_row_id="'.$record->vendor_id.'" value="'.$record->ln_price.'" style="width:70px;">
+                    <div>';
+                    $user_name               = $record->user_name;
+                    $image                   = '<img src="'.url('public/images/product', $record->image).'" height="80" width="80">';
+                    $action ='<div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">'.trans("file.action").'
+                      <span class="caret"></span>
+                      <span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
+                    $action .=' <li> <a href="'.route('vendorproducts.dashboardEdit', $record->vendor_id).'" class="btn btn-link"><i class="fa fa-edit"></i> Edit </a> </li>';
+                    $action .='<li>'. \Form::open(["route" => ["vendorproducts.deletebyVendorDashboard", $record->vendor_id], "method" => "DELETE", 'onsubmit' => 'return confirmDeleteAlert(this);'] ).'
+                                    <button type="submit" class="btn btn-link"  ><i class="fa fa-trash"></i> Delete </button> 
+                                '.\Form::close().'</li>';
+                    $data_arr[] = array(
+                        "id"                => $id,
+                        "image"             => $image,
+                        "code"              => $code,
+                        "name"              => $product_name,
+                        "brand_name"        => $brand_name,
+                        "product_type_name" => $product_type,
+                        "category_name"     => $category_name,
+                        "vendor_qty"        => $vendor_product_qty,
+                        "vendor_price"      => $vendor_product_price,
+                        "ln_qty"            => $vendor_product_ln_qty,
+                        "ln_price"          => $vendor_product_ln_price,
+                        "vendor_is_approve" => $record->vendor_is_approve,
+                        "user_name"         => $user_name,
+                        "vendor_id"         => $record->vendor_id,
+                        "action"            => $action
+                    );
+                }
+                $response = array(
+                    "draw" => intval($draw),
+                    "iTotalRecords" => $totalRecords,
+                    "iTotalDisplayRecords" => $records->count(),
+                    "aaData" => $data_arr
+                );
+                echo json_encode($response);
+                return false;
+            }
+
+
             $columns = array( 
                 2 => 'name', 
                 3 => 'code',
@@ -1042,124 +1152,27 @@ class VendorProductController extends Controller
            
             return true;
         }
-         public function vendorProductDeny(Request $request)
+
+        public function vendorProductDeny(Request $request)
         {
-            // return 1;
-           $product_id = $request['productIdArray'];
-           foreach ((array)$product_id as $id) {
-            if($id !="on")
-            {
-                $lims_product_data =VendorProduct::where('id',$id)->first();
-                // return $lims_product_data;
-                $lims_product_data->is_approve = 2;
-                $lims_product_data->save();
+            $ids = $request->input('productIdArray');
+            $vendorProducts = VendorProduct::find($ids);
+            foreach($vendorProducts as $vendorProduct){
+                $vendorProduct->is_approve = 2;
+                $vendorProduct->save();
             }
-           
+            return response(['status' => true, 'msg' => 'Product rejected successfully']);
         }
-        return redirect('vendorproducts')->with('message', 'Product deleted successfully');
-       
-        }
-        public function rowDataStore(Request $request)
+
+        public function approveProducts(Request $request)
         {
-            // print_r($request->all());die();
-            if($request['is_approve_row_data'])
-            {
-                foreach($request['is_approve_row_data'] as $val)
-                {
-                    $val = VendorProduct::where('id',$val)->first();
-                    $val->is_approve = 1;
-                    $val->save();
-                     $data[] = $val;
-                }
-                $productCount = 0;
-                $total_qty=0;
-                foreach($data as $key=>$value)
-                {
-                    ++$productCount;
-                    $insert = new Product();
-                    $insert->name = $value['name'];
-                    $insert->code = $value['code'];
-                    $insert->type = $value['type'];
-                    $insert->attribute = $value['attribute'];
-                    $insert->barcode_symbology = $value['barcode_symbology'];
-                    $insert->vendor_product_id = $value['id'];
-                    $insert->brand_id = $value['brand_id'];
-                    $insert->category_id = $value['category_id'];
-                    $insert->unit_id = $value['unit_id'];
-                    $insert->purchase_unit_id = $value['purchase_unit_id'];
-                    $insert->sale_unit_id = $value['sale_unit_id'];
-                    // $insert->cost = $value['cost'];
-                    $insert->cost = $value['price'];
-                    // $insert->qty = $value['qty'];
-                    $insert->alert_quantity = $value['alert_quantity'];
-                    $insert->promotion = $value['promotion'];
-                    $insert->promotion_price = $value['promotion_price'];
-                    $insert->starting_date = $value['starting_date'];
-                    $insert->last_date = $value['last_date'];
-                    $insert->tax_id = $value['tax_id'];
-                    $insert->tax_method = $value['tax_method'];
-                    $insert->image = $value['image'];
-                    $insert->vendor_user_id = $value['vendoruserid'];
-                    // $insert->is_variant = $value['name'];
-                    // $insert->is_batch = $value['name'];
-                    // $insert->is_diffPrice = $value['name'];
-                    // $insert->is_imei = $value['name'];
-                    $insert->featured = $value['featured'];
-                    // $insert->product_list = $value['name'];
-                    // $insert->variant_list = $value['name'];
-                    // $insert->qty_list = $value['name'];
-                    // $insert->price_list = $value['name'];
-                    $insert->product_details = $value['product_details'];
-                    $insert->is_active =1;
-                    $insert->save();
-                    $product_id[] = $insert->id;
-                    $total_qty += $value['qty'];
-                // array_push( $data['product_id'],$insert->id);
-                }
-                // /////////// purchase store
-                // // print_r($produ);
-                // // $data['product_id'] = $product_id;
-                // print_r($total_qty."____");
-                // // print_r($request->all());die();
-
-                // die();
-
-                // $data['user_id'] = Auth::id();
-                // $data['reference_no'] = 'pr-' . date("Ymd") . '-'. date("his");
-                // $data['warehouse_id'] = $request->warehouse_id;
-                // $data['supplier_id'] = $request->supplier_id;
-                // $data['item'] = $request->productCount;
-                
-                // $document = $request->document;
-                // if ($document) {
-                //     $v = Validator::make(
-                //         [
-                //             'extension' => strtolower($request->document->getClientOriginalExtension()),
-                //         ],
-                //         [
-                //             'extension' => 'in:jpg,jpeg,png,gif,pdf,csv,docx,xlsx,txt',
-                //         ]
-                //     );
-                //     if ($v->fails())
-                //         return redirect()->back()->withErrors($v->errors());
-
-                //     $documentName = $document->getClientOriginalName();
-                //     $document->move('public/documents/purchase', $documentName);
-                //     $data['document'] = $documentName;
-                // }
-                // Purchase::create($data);
-
-
-                /////////////////////
-
+            $ids = $request->input('selectedRow');
+            $vendorProducts = VendorProduct::find($ids);
+            foreach($vendorProducts as $vendorProduct){
+                $vendorProduct->is_approve = 1;
+                $vendorProduct->save();
             }
-            else{
-                return redirect('all-vendor-products-list')->with('message', 'No product is selected!');
-            }
-               
-                return redirect('all-vendor-products-list')->with('message', 'Product Added successfully');
-               
-               
+            return response(['status' => true, 'msg' => 'Product approved successfully']);
         }
         public function vendorDashboardStatus(Request $request)
         {
