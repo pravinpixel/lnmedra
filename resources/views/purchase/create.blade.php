@@ -404,12 +404,15 @@
 
     //Change quantity
     $("#myTable").on('input', '.qty', function() {
-        
         rowindex = $(this).closest('tr').index();
         // alert($(this).val())
         if($(this).val() < 1 && $(this).val() != '') {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(1);
         Alert("warning","Quantity can't be less than 1");
+        }
+        if($(this).val() > Number($(this).attr('max'))) {
+            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val($(this).attr('max'));
+            Alert("warning",`Quantity can't be more than ${$(this).attr('max')}`);
         }
         checkQuantity($(this).val(), true);
     });
@@ -569,8 +572,7 @@
 
 
     $('#supplier_id').on('change',function(){
-        // alert($(this).val())
-        // productSearch($(this).val());
+        
         $.ajax({
             type: 'GET',
             url: 'supplier_search',
@@ -644,7 +646,7 @@
                         cols += '<td style="padding: 0 !important; text-align:center !important">' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target=""> </button></td>';
                         // cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
                         cols += '<td style="padding: 0 !important; text-align:center !important">' + data[1] + '</td>';
-                        cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
+                        cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" max="'+data['ln_qty']+'" required/></td>';
                         if($('select[name="status"]').val() == 1)
                             cols += '<td style="padding: 0 !important; text-align:center !important" class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
                         else if($('select[name="status"]').val() == 2)

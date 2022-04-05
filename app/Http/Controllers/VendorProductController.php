@@ -778,8 +778,10 @@ class VendorProductController extends Controller
                                     ->leftJoin('brands','brands.id','=','products.brand_id')
                                     ->leftJoin('categories','categories.id','=','products.category_id')
                                     ->leftJoin('product_types','product_types.id','=','products.type')
-                                    ->where('vendor_products.created_by', user()->id)
-                                    ->when(request('status') != '', function($q){
+                                    ->when(!useInRole(['admin','ceo']) , function($q){
+                                        $q->where('vendor_products.created_by', user()->id);
+                                    })
+                                    ->when(!empty(request('status')), function($q){
                                         $q->where('is_approve',request('status'));
                                     })
                                     ->get()
@@ -789,8 +791,10 @@ class VendorProductController extends Controller
                                     ->leftJoin('brands','brands.id','=','products.brand_id')
                                     ->leftJoin('categories','categories.id','=','products.category_id')
                                     ->leftJoin('product_types','product_types.id','=','products.type')
-                                    ->where('vendor_products.created_by', user()->id)
-                                    ->when(request('status') != '', function($q){
+                                    ->when(!useInRole(['admin','ceo']), function($q){
+                                        $q->where('vendor_products.created_by', user()->id);
+                                    })
+                                    ->when(!empty(request('status')), function($q){
                                         $q->where('is_approve',request('status'));
                                     })
                                     ->when(!empty($searchValue), function($q) use($searchValue){

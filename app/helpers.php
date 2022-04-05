@@ -19,3 +19,12 @@ if(!function_exists('user')) {
         return Auth::user();
     }
 }
+
+if(!function_exists('useInRole')) {
+    function useInRole($role) {
+        $rolesData = is_array($role) ?  $role : [$role];
+        $user =  Auth::user();
+        $role = Role::find($user->role_id);
+        return in_array($role->name, $rolesData);
+    }
+}

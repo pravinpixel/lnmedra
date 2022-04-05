@@ -16,7 +16,6 @@ use App\Payment;
 use App\PaymentWithCheque;
 use App\PaymentWithCreditCard;
 use App\PosSetting;
-use DB;
 use App\GeneralSetting;
 use Stripe\Stripe;
 use Auth;
@@ -24,6 +23,7 @@ use App\User;
 use App\ProductVariant;
 use App\ProductBatch;
 use App\VendorProduct;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Validator;
@@ -295,10 +295,10 @@ class PurchaseController extends Controller
        
         $vendorData = User::where('vendor_id',$supplierId)->select('id')->first();
         // return $vendorData;
-        $lims_product_data = Product::where([
-            ['products.vendor_user_id',$vendorData->id],
-            ['is_active', true]
-        ])->get();
+        $lims_product_data = Product::select(DB::raw('products.*','vendor_products.ln_qty','vendor_products.ln_price'))
+        ->join('vendor_products','vendor_products.product_id','products.id')
+        ->where('products.is_active', true)
+        ->get();
        
         return $lims_product_data;
     }
@@ -310,11 +310,13 @@ class PurchaseController extends Controller
         $supplierId = $request->supplierId;
         $product_code[0] = rtrim($product_code[0], " ");
       
-        $lims_product_data = Product::where([
+        $lims_product_data = Product::select('products.*','vendor_products.ln_qty as ln_qty','vendor_products.ln_price as ln_price')
+        ->join('vendor_products','vendor_products.product_id','products.id')
+        ->where('vendor_products.')
+        ->where([
             ['code', $product_code[0]],
-            ['is_active', true]
+            ['products.is_active', true]
         ])->first();
-      
         if(!$lims_product_data) {
             $lims_product_data = Product::join('product_variants', 'products.id', 'product_variants.product_id')
                 ->select('products.*', 'product_variants.item_code')
@@ -333,8 +335,8 @@ class PurchaseController extends Controller
             $product[] = $lims_product_data->item_code;
         else
             $product[] = $lims_product_data->code;
-        $product[] = $lims_product_data->cost;
-        // $product[] = $lims_product_data->price;
+        // $product[] = $lims_product_data->cost;
+        $product[] = $lims_product_data->ln_price;
         
         if ($lims_product_data->tax_id) {
             $lims_tax_data = Tax::find($lims_product_data->tax_id);
@@ -372,6 +374,8 @@ class PurchaseController extends Controller
         $product[] = $lims_product_data->is_batch;
         $product[] = $lims_product_data->is_imei;
         $product[] = $lims_product_data->vendor_user_id;
+        $product['ln_qty'] = $lims_product_data->ln_qty;
+        $product['ln_price'] = $lims_product_data->ln_price;
         return $product;
     }
 
