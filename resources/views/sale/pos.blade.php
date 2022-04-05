@@ -1224,19 +1224,19 @@
                     <div class="search-box m-0 text-dark">
                         <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Scan/Search product by name/code" class="form-control form-control-lg rounded-pill active text-dark"  />
                     </div>
-                    <div class="btn-group w-100 mt-3">
-                        <button class="btn btn-sm w-100 btn-primary" id="category-filter">{{trans('file.category')}}</button>
-                        <button class="btn btn-sm w-100 btn-info" id="brand-filter">{{trans('file.Brand')}}</button>
-                        <button class="btn btn-sm w-100 btn-danger" id="featured-filter">{{trans('file.Featured')}}</button>
-                    </div>
-                </div> 
-                <div class="card-body p-0">
-                    <div class="text-right m-3">
-                        <div class="btn-group ">
-                            <button class="btn btn-sm btn-light active"><i class="fa fa-th" aria-hidden="true"></i></button>
-                            <button class="btn btn-sm btn-light"><i class="fa fa-list" aria-hidden="true"></i></button>
+                    <div class="row m-0 align-items-center">
+                        <div class="btn-group col-10 mt-3">
+                            <button class="btn btn-sm w-100 btn-primary" id="category-filter">{{trans('file.category')}}</button>
+                            <button class="btn btn-sm w-100 btn-info" id="brand-filter">{{trans('file.Brand')}}</button>
+                            <button class="btn btn-sm w-100 btn-danger" id="featured-filter">{{trans('file.Featured')}}</button>
+                        </div>
+                        <div class="btn-group col mt-3 text-right">
+                            <button id="show_btn" class="btn btn-sm btn-light"><i class="fa fa-th" aria-hidden="true"></i></button>
+                            <button id="hide_btn" class="btn btn-sm btn-light"><i class="fa fa-list" aria-hidden="true"></i></button>
                         </div>
                     </div>
+                </div> 
+                <div class="card-body p-0"> 
                     <div class="filter-window">
                         <div class="category ">
                             <div class="row m-0 ml-2 mr-2 px-2 p-3">
@@ -1794,6 +1794,23 @@
 
 
 @push('scripts')
+<script>
+    $(document).ready(function () {
+        $(".hide_image").hide();
+        $("#hide_btn").attr('disabled', true);
+        $("#hide_btn").click(function () {
+            $(".hide_image").hide();
+            $("#hide_btn").attr('disabled', true);
+            $("#show_btn").attr('disabled', false);
+        });
+        $("#show_btn").click(function () {
+            $(".hide_image").show();
+            $("#hide_btn").attr('disabled', false);
+            $("#show_btn").attr('disabled', true);
+        });
+    });
+</script>
+
 <script type="text/javascript">
 <?php $id =Auth::user()->role_id ?>
     var auth_id = {{$id}};
@@ -2313,9 +2330,9 @@ function populateProduct(data) {
         $.each(data['name'], function(index) {
             var product_info = data['code'][index]+' (' + data['name'][index] + ')';
             if(index % 5 == 0 && index != 0)
-                tableData += '</tr><tr><td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="public/images/product/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p><span>'+data['code'][index]+'</span></td>';
+                tableData += '</tr><tr><td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img class="hide_image" src="public/images/product/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p><span>'+data['code'][index]+'</span></td>';
             else
-                tableData += '<td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img  src="public/images/product/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p><span>'+data['code'][index]+'</span></td>';
+                tableData += '<td class="product-img sound-btn" title="'+data['name'][index]+'" data-product = "'+product_info+'"><img class="hide_image" src="public/images/product/'+data['image'][index]+'" width="100%" /><p>'+data['name'][index]+'</p><span>'+data['code'][index]+'</span></td>';
         });
 
         if(data['name'].length % 5){

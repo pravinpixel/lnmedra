@@ -304,3 +304,10 @@ a.ui-button:active,
 section {
   padding-top:  0 !important;
 }
+
+.dropzone .dz-preview .dz-progress {
+  display: none !important;
+}
+.dz-details {
+  display: none !important;
+}
