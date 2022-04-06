@@ -2,123 +2,116 @@
  
 
 <section>
-    <div class="container-fluid">
-        @if(in_array("purchase-return-add", $all_permission))
-            <a href="{{route('return-purchase.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Return')}}</a>
-        @endif
+    <div class="container-fluid"> 
         <div class="card">  
-        <div class="card-body">
-            {!! Form::open(['route' => 'return-purchase.index', 'method' => 'get']) !!}
-                <div class="row m-0">
-                    
-             
-                    <div class="d-flex align-items-center col-5">
-                        <div class="mr-3">{{trans('file.Supplier')}}</div>
-                        <select id="supplier_id" name="supplier_id" class="selectpicker form-control w-100" title="Select Supplier" data-live-search="true" data-live-search-style="begins" >
-                            <!-- <option value="0">{{trans('file.Supplier')}}</option> -->
-                            @foreach($lims_customer_list as $customer)
-                     
-                                <option value="{{$customer->id}}">{{$customer->name}}</option>
-                           
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="d-flex align-items-center col-5">
-                        <div class="mr-3">{{trans('file.Outlet')}}</div>
-                        <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" title="Select Outlet" data-live-search="true" data-live-search-style="begins" >
-                            <!-- <option value="0">{{trans('file.All Outlet')}}</option> -->
-                            @foreach($lims_warehouse_list as $warehouse)
-                     
-                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                           
-                            @endforeach
-                        </select>
-                    </div>
-                
-                    <div class="col-2">
-                        <button class="btn btn-primary w-100" onclick="filter()" id="filter-btn" >{{trans('file.search')}}</button>
-                    </div>
-                    <div class="col-2">
-                        <button class="btn btn-danger w-100"  onclick="filterReset()" id="filter-btn" type="submit">{{trans('file.Reset')}}</button>
-                    </div>
-                </div>
-            {!! Form::close() !!}
-          
-        </div>
-        </div>
-    </div>
-
-    <div class="table-responsive">
-        <table id="return-table" class="table return-list">
-            <thead>
-                <tr>
-                    <th class="not-exported"></th>
-                    <th>{{trans('file.Date')}}</th>
-                    <th>{{trans('file.reference')}}</th>
-                    <th>{{trans('file.Outlet')}}</th>
-                    <th>{{trans('file.Supplier')}}</th>
-                    <th>{{trans('file.Account')}}</th>
-                    <th>{{trans('file.grand total')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($lims_return_all as $key=>$return)
-                <?php
-                    $supplier = $return->supplier;
-                    if(!$supplier)
-                        $supplier = new App\Supplier();
-                    $account = DB::table('accounts')->find($return->account_id);
-                ?>
-                <tr class="return-link" data-return='["{{date($general_setting->date_format, strtotime($return->created_at->toDateString()))}}", "{{$return->reference_no}}", "{{$return->warehouse->name}}", "{{$return->warehouse->phone}}", "{{$return->warehouse->address}}", "{{$supplier->name}}", "{{$supplier->company_name}}","{{$supplier->email}}", "{{$supplier->phone_number}}", "{{$supplier->address}}", "{{$supplier->city}}", "{{$return->id}}", "{{$return->total_tax}}", "{{$return->total_discount}}", "{{$return->total_cost}}", "{{$return->order_tax}}", "{{$return->order_tax_rate}}", "{{$return->grand_total}}", "{{$return->return_note}}", "{{$return->staff_note}}", "{{$return->user->name}}", "{{$return->user->email}}"]'>
-                    <td>{{$key}}</td>
-                    <td>{{ date($general_setting->date_format, strtotime($return->created_at->toDateString())) . ' '. $return->created_at->toTimeString() }}</td>
-                    <td>{{ $return->reference_no }}</td>
-                    <td>{{ $return->warehouse->name }}</td>
-                    <td>{{ $supplier->name }}</td>
-                    <td>{{$account->name}}</td>
-                    <td class="grand-total">{{ $return->grand_total }}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
-                                <span class="caret"></span>
-                                <span class="sr-only">Toggle Dropdown</span>
-                            </button>
-                            <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
-                                <li>
-                                    <button type="button" class="btn btn-link view"><i class="fa fa-eye"></i> {{trans('file.View')}}</button>
-                                </li>
-                                @if(in_array("purchase-return-edit", $all_permission))
-                                <li>
-                                    <a href="{{ route('return-purchase.edit', $return->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
-                                </li>
-                                @endif
-                                <li class="divider"></li>
-                                @if(in_array("purchase-return-delete", $all_permission))
-                                {{ Form::open(['route' => ['return-purchase.destroy', $return->id], 'method' => 'DELETE'] ) }}
-                                <li>
-                                    <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
-                                </li>
-                                {{ Form::close() }}
-                                @endif
-                            </ul>
+            <div class="card-body">
+                {!! Form::open(['route' => 'return-purchase.index', 'method' => 'get']) !!}
+                    <div class="row m-0">
+                        <div class="d-flex align-items-center col">
+                            <div class="mr-3">{{trans('file.Supplier')}}</div>
+                            <select id="supplier_id" name="supplier_id" class="selectpicker form-control w-100" title="Select Supplier" data-live-search="true" data-live-search-style="begins" >
+                                @foreach($lims_customer_list as $customer)
+                                    <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-            <tfoot class="tfoot active">
-                <th></th>
-                <th>{{trans('file.Total')}}</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-            </tfoot>
-        </table>
+                        <div class="d-flex align-items-center col">
+                            <div class="mr-3">{{trans('file.Outlet')}}</div>
+                            <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" title="Select Outlet" data-live-search="true" data-live-search-style="begins" >
+                                @foreach($lims_warehouse_list as $warehouse)
+                                    <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-1 p-0">
+                            <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                            <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                        </div>
+                    </div>
+                {!! Form::close() !!}
+            
+            </div>
+        </div>
+        <div class="text-right my-4">
+            @if(in_array("purchase-return-add", $all_permission))
+                <a href="{{route('return-purchase.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Return')}}</a>
+            @endif
+        </div>
+        <div class="card pb-3">
+            <div class="table-responsive">
+                <table id="return-table" class="table return-list">
+                    <thead>
+                        <tr>
+                            <th class="not-exported"></th>
+                            <th>{{trans('file.Date')}}</th>
+                            <th>{{trans('file.reference')}}</th>
+                            <th>{{trans('file.Outlet')}}</th>
+                            <th>{{trans('file.Supplier')}}</th>
+                            <th>{{trans('file.Account')}}</th>
+                            <th>{{trans('file.grand total')}}</th>
+                            <th class="not-exported">{{trans('file.action')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($lims_return_all as $key=>$return)
+                        <?php
+                            $supplier = $return->supplier;
+                            if(!$supplier)
+                                $supplier = new App\Supplier();
+                            $account = DB::table('accounts')->find($return->account_id);
+                        ?>
+                        <tr class="return-link" data-return='["{{date($general_setting->date_format, strtotime($return->created_at->toDateString()))}}", "{{$return->reference_no}}", "{{$return->warehouse->name}}", "{{$return->warehouse->phone}}", "{{$return->warehouse->address}}", "{{$supplier->name}}", "{{$supplier->company_name}}","{{$supplier->email}}", "{{$supplier->phone_number}}", "{{$supplier->address}}", "{{$supplier->city}}", "{{$return->id}}", "{{$return->total_tax}}", "{{$return->total_discount}}", "{{$return->total_cost}}", "{{$return->order_tax}}", "{{$return->order_tax_rate}}", "{{$return->grand_total}}", "{{$return->return_note}}", "{{$return->staff_note}}", "{{$return->user->name}}", "{{$return->user->email}}"]'>
+                            <td>{{$key}}</td>
+                            <td>{{ date($general_setting->date_format, strtotime($return->created_at->toDateString())) . ' '. $return->created_at->toTimeString() }}</td>
+                            <td>{{ $return->reference_no }}</td>
+                            <td>{{ $return->warehouse->name }}</td>
+                            <td>{{ $supplier->name }}</td>
+                            <td>{{$account->name}}</td>
+                            <td class="grand-total">{{ $return->grand_total }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{trans('file.action')}}
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
+                                        <li>
+                                            <button type="button" class="btn btn-link view"><i class="fa fa-eye"></i> {{trans('file.View')}}</button>
+                                        </li>
+                                        @if(in_array("purchase-return-edit", $all_permission))
+                                        <li>
+                                            <a href="{{ route('return-purchase.edit', $return->id) }}" class="btn btn-link"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</a>
+                                        </li>
+                                        @endif
+                                        <li class="divider"></li>
+                                        @if(in_array("purchase-return-delete", $all_permission))
+                                        {{ Form::open(['route' => ['return-purchase.destroy', $return->id], 'method' => 'DELETE'] ) }}
+                                        <li>
+                                            <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
+                                        </li>
+                                        {{ Form::close() }}
+                                        @endif
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    <tfoot class="tfoot active">
+                        <th></th>
+                        <th>{{trans('file.Total')}}</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
+    
     <div id="return-details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
         <div role="document" class="modal-dialog">
           <div class="modal-content">

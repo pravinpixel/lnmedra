@@ -2,53 +2,49 @@
  
 <section>
     <div class="container-fluid">
+        <div class="card">  
+            <div class="card-body">
+                {!! Form::open(['route' => 'return-sale.index', 'method' => 'get']) !!}
+                    <div class="row m-0">
+                        
+                
+                        <div class="d-flex align-items-center col">
+                            <div class="mr-3">{{trans('file.customer')}}</div>
+                            <select id="customer_id" name="customer_id" class="selectpicker form-control w-100" title="Select Customer" data-live-search="true" data-live-search-style="begins" >
+                                <!-- <option value="0">{{trans('file.customer')}}</option> -->
+                                @foreach($lims_customer_list as $customer)
+                        
+                                    <option value="{{$customer->id}}">{{$customer->name}}</option>
+                            
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="d-flex align-items-center col">
+                            <div class="mr-3">{{trans('file.Outlet')}}</div>
+                            <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" title="Select Outlet" data-live-search="true" data-live-search-style="begins" >
+                                <!-- <option value="0">{{trans('file.All Outlet')}}</option> -->
+                                @foreach($lims_warehouse_list as $warehouse)
+                        
+                                    <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                            
+                                @endforeach
+                            </select>
+                        </div> 
+                        <div class="col-1 p-0">
+                            <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                            <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                        </div>
+                    </div>
+                {!! Form::close() !!}
+            
+            </div>
+        </div>
+
         @if(in_array("returns-add", $all_permission))
             <div class="text-right my-4">
                 <a href="{{route('return-sale.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Return')}}</a>
             </div>
         @endif
-        
-    <div class="card">  
-        <div class="card-body">
-            {!! Form::open(['route' => 'return-sale.index', 'method' => 'get']) !!}
-                <div class="row m-0">
-                    
-             
-                    <div class="d-flex align-items-center col-5">
-                        <div class="mr-3">{{trans('file.customer')}}</div>
-                        <select id="customer_id" name="customer_id" class="selectpicker form-control w-100" title="Select Customer" data-live-search="true" data-live-search-style="begins" >
-                            <!-- <option value="0">{{trans('file.customer')}}</option> -->
-                            @foreach($lims_customer_list as $customer)
-                     
-                                <option value="{{$customer->id}}">{{$customer->name}}</option>
-                           
-                            @endforeach
-                        </select>
-                    </div>
-                     <div class="d-flex align-items-center col-5">
-                        <div class="mr-3">{{trans('file.Outlet')}}</div>
-                        <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" title="Select Outlet" data-live-search="true" data-live-search-style="begins" >
-                            <!-- <option value="0">{{trans('file.All Outlet')}}</option> -->
-                            @foreach($lims_warehouse_list as $warehouse)
-                     
-                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                           
-                            @endforeach
-                        </select>
-                    </div>
-                    
-                    <div class="col-2">
-                        <button class="btn btn-primary w-100" onclick="filter()" id="filter-btn" >{{trans('file.search')}}</button>
-                    </div>
-                    <div class="col-2">
-                        <button class="btn btn-danger w-100"  onclick="filterReset()" id="filter-btn" type="submit">{{trans('file.Reset')}}</button>
-                    </div>
-                </div>
-            {!! Form::close() !!}
-          
-        </div>
-    </div>
-
         <div class="card pb-3 shadow">
             <div class="table-responsive">
                 <table id="return-table" class="table return-list">

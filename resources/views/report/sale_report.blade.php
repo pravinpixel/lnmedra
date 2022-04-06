@@ -40,9 +40,8 @@
                     </div>
                 </div>
                 <div class="col-md-3 mt-4">
-                    <div class="form-group">
-                        <button class="btn btn-primary" type="submit">{{trans('file.submit')}}</button>
-                    </div>
+                    <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                    <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
                 </div>
             </div>
             {!! Form::close() !!}
