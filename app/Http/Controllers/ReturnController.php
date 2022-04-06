@@ -43,7 +43,7 @@ class ReturnController extends Controller
                 $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')->orderBy('id', 'desc')->orderBy('id', 'desc')->where('user_id', Auth::id())->get();
             else
             {
-                if($request->customer_id != ''){
+                if($request->customer_id != ''){              
                     if($request->customer_id != '' && $request->warehouse_id != '')
                     {
                         $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')

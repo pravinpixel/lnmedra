@@ -43,12 +43,13 @@
                        @endforeach
                    </select>
                </div>
-               <div class="col-2">
-                   <button class="btn btn-danger w-100"  onclick="filterReset()" id="filter-btn" type="submit">{{trans('file.Reset')}}</button>
-               </div>
+               
                
                <div class="col-2">
                    <button class="btn btn-primary w-100"  onclick="filter()" id="filter-btn" type="submit">{{trans('file.search')}}</button>
+               </div>
+               <div class="col-2">
+                   <button class="btn btn-danger w-100"  onclick="filterReset()" id="filter-btn" type="submit">{{trans('file.Reset')}}</button>
                </div>
            </div>
         <div class="card pb-3">

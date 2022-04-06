@@ -38,21 +38,34 @@ class ReturnPurchaseController extends Controller
             if(Auth::user()->role_id > 2 && config('staff_access') == 'own')
                 $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->orderBy('id', 'desc')->where('user_id', Auth::id())->get();
             else{
-                if($request->supplier_id){
+                if($request->supplier_id != ''){
                     // return 1;
-                    $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->where('supplier_id',$request->supplier_id)->orderBy('id', 'desc')->get();
+
+                    if($request->supplier_id != '' && $request->warehouse_id != '')
+                    {
+                        $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')
+                        ->where('supplier_id',$request->supplier_id)
+                        ->where('warehouse_id',$request->warehouse_id)
+                        ->orderBy('id', 'desc')->get();
+
+                    }else{
+                        $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')
+                        ->where('supplier_id',$request->supplier_id)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                    }
+                   
                 }
                 else if($request->warehouse_id != '')
                 {
                     
-                    $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->where('warehouse_id',$request->warehouse_id)->orderBy('id', 'desc')->get();
-                }
-                else if($request->supplier_id != '' && $request->warehouse_id != ''){
-                   
-                    $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->where('supplier_id',$request->supplier_id)->where('warehouse_id',$request->warehouse_id)->orderBy('id', 'desc')->get();
+                    $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')
+                    ->where('warehouse_id',$request->warehouse_id)
+                    ->orderBy('id', 'desc')->get();
                 }
                 else{
-                    $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->orderBy('id', 'desc')->get();
+                    $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')
+                    ->orderBy('id', 'desc')->get();
                 }
             }
                 
