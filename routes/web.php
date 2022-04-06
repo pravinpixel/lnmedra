@@ -252,6 +252,12 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('return-sale/lims_product_search', 'ReturnController@limsProductSearch')->name('product_return-sale.search');
 	Route::get('return-sale/product_return/{id}','ReturnController@productReturnData');
 	Route::post('return-sale/deletebyselection', 'ReturnController@deleteBySelection');
+
+	Route::post('return-sale/getProductList', 'ReturnController@getProductList')->name('return-sale.getProductList');
+
+	
+
+
 	Route::resource('return-sale', 'ReturnController');
 
 	Route::get('return-purchase/getcustomergroup/{id}', 'ReturnPurchaseController@getCustomerGroup')->name('return-purchase.getcustomergroup');

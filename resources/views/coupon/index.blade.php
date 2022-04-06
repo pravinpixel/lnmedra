@@ -304,6 +304,7 @@ function confirmDelete() {
 }
 
     var table = $('#coupon-table').DataTable( {
+        "pageLength": 50,
         responsive: true,
         fixedHeader: {
             header: true,

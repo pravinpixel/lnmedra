@@ -228,6 +228,7 @@
     });
 
     $('#payroll-table').DataTable( {
+        "pageLength": 50,
         "order": [],
         'language': {
             'lengthMenu': '_MENU_ {{trans("file.records per page")}}',

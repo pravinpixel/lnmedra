@@ -10,6 +10,47 @@
                 <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary  ml-auto"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a>
             @endif 
         </div>
+        <div class="row m-0">
+               
+                <div class="d-flex align-items-center col-4">
+                   <div class="mr-3">{{trans('file.Product Type')}}</div>
+                   <select id="product_id" name="product_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Product Type.." data-live-search-style="begins" >
+                       <!-- <option value="">{{trans('file.customer')}}</option> -->
+                       @foreach($lims_productType_list as $product)
+               
+                           <option value="{{$product->id}}">{{$product->name}}</option>
+                   
+                       @endforeach
+                   </select>
+               </div>
+               <div class="d-flex align-items-center col-4">
+                   <div class="mr-3">{{trans('file.category')}}</div>
+                   <select id="category_id" name="category_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Category.." data-live-search-style="begins" >
+                       <!-- <option value="">{{trans('file.customer')}}</option> -->
+                       @foreach($lims_category_list as $category)
+               
+                           <option value="{{$category->id}}">{{$category->name}}</option>
+                   
+                       @endforeach
+                   </select>
+               </div>
+               <div class="d-flex align-items-center col-4">
+                   <div class="mr-3">{{trans('file.Brand')}}</div>
+                   <select id="brand_id" name="brand_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Brand.." data-live-search-style="begins" >
+                       <!-- <option value="">{{trans('file.Brand')}}</option> -->
+                       @foreach($lims_brand_list as $brand)
+                           <option value="{{$brand->id}}">{{$brand->title}}</option>
+                       @endforeach
+                   </select>
+               </div>
+               <div class="col-2">
+                   <button class="btn btn-danger w-100"  onclick="filterReset()" id="filter-btn" type="submit">{{trans('file.Reset')}}</button>
+               </div>
+               
+               <div class="col-2">
+                   <button class="btn btn-primary w-100"  onclick="filter()" id="filter-btn" type="submit">{{trans('file.search')}}</button>
+               </div>
+           </div>
         <div class="card pb-3">
             <div class="table-responsive">
                 <table id="product-data-table" class="table custom table-hover table-centered" style="width: 100%">
@@ -302,6 +343,7 @@ var baseUrl = $('#baseUrl').val();
 
     $(document).ready(function() {
         var table = $('#product-data-table').DataTable( {
+            "pageLength": 50,
             responsive: true,
             fixedHeader: {
                 header: true,
@@ -312,8 +354,11 @@ var baseUrl = $('#baseUrl').val();
             "ajax":{
                 // url:"products/product-data",
                 url: baseUrl +'/products/product-data',
-                data:{
-                    all_permission: all_permission
+                data :  function(d) {
+                    d.all_permission= all_permission,
+                    d.product_id = $("#product_id").val(),
+                    d.category_id = $("#category_id").val(),
+                    d.brand_id = $("#brand_id").val()
                 },
                 dataType: "json",
                 type:"post"
@@ -507,6 +552,22 @@ var baseUrl = $('#baseUrl').val();
         $('.buttons-delete').addClass('d-none');
 
     $('select').selectpicker();
+
+
+    function filter(){
+        $('#product-data-table').DataTable().draw();
+    }
+    function filterReset()
+    {
+        var product_Id = $("#product_id").val();
+        var category_Id = $("#category_id").val();
+        var brand_Id = $("#brand_id").val();
+        if(product_Id || category_Id || brand_Id)
+        {
+            location.reload();
+        }
+        
+    }
 
 </script>
 @endpush

@@ -48,9 +48,13 @@
                         </div>
                     </div>
                 </div>
+               
                 <div>
                     <button class="btn btn-primary" id="filter-btn" onclick="filter()" type="submit">{{trans('file.submit')}}</button>
                 </div>
+                <div class="col-2">
+                   <button class="btn btn-danger w-100"  onclick="filterReset()" id="filter-btn" type="submit">{{trans('file.Reset')}}</button>
+               </div>
             </div>
             <!-- {!! Form::close() !!} -->
         </div>
@@ -542,7 +546,7 @@
        
        
         var table = $('#purchase-table').DataTable( {
-            
+            "pageLength": 50,
             "processing": true,
             "serverSide": true,
             "ajax":{
@@ -830,7 +834,17 @@
         $('#purchase-table').DataTable().draw();
         // dataTable();
     }
-
+    function filterReset()
+    {
+       
+        var supplier_id = $("#supplier_id").val();
+        
+        if( supplier_id)
+        {
+            location.reload();
+        }
+        
+    }
 </script>
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 @endpush

@@ -9,6 +9,7 @@ use App\Category;
 use App\Product;
 use DB;
 use App\StockCount;
+use App\ProductType;
 use Auth;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -28,7 +29,11 @@ class StockCountController extends Controller
             else
                 $lims_stock_count_all = StockCount::orderBy('id', 'desc')->get();
 
-            return view('stock_count.index', compact('lims_warehouse_list', 'lims_brand_list', 'lims_category_list', 'lims_stock_count_all'));
+
+                $lims_productType_list = ProductType::where('is_active', true)->get();
+                
+               
+            return view('stock_count.index', compact('lims_warehouse_list', 'lims_brand_list', 'lims_category_list', 'lims_stock_count_all','lims_productType_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');

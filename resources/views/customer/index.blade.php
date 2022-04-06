@@ -248,6 +248,7 @@
     });
 
     var table = $('#customer-table').DataTable( {
+        "pageLength": 50,
         aaSorting     : [[0, 'desc']],
         responsive: true,
         processing: true,    

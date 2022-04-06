@@ -27,7 +27,7 @@ class ReturnPurchaseController extends Controller
 {
     public function index(Request $request)
     {
-        // print_r($request->all());die();
+        // print_r($request->warehouse_id);die();
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('purchase-return-index')){
             $permissions = Role::findByName($role->name)->permissions;
@@ -42,14 +42,23 @@ class ReturnPurchaseController extends Controller
                     // return 1;
                     $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->where('supplier_id',$request->supplier_id)->orderBy('id', 'desc')->get();
                 }
+                else if($request->warehouse_id != '')
+                {
+                    
+                    $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->where('warehouse_id',$request->warehouse_id)->orderBy('id', 'desc')->get();
+                }
+                else if($request->supplier_id != '' && $request->warehouse_id != ''){
+                   
+                    $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->where('supplier_id',$request->supplier_id)->where('warehouse_id',$request->warehouse_id)->orderBy('id', 'desc')->get();
+                }
                 else{
                     $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->orderBy('id', 'desc')->get();
                 }
             }
                 
-
+            $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             $lims_customer_list = Supplier::where('is_active', true)->get();
-            return view('return_purchase.index', compact('lims_return_all', 'all_permission','lims_customer_list'));
+            return view('return_purchase.index', compact('lims_return_all', 'all_permission','lims_warehouse_list','lims_customer_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');

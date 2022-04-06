@@ -289,6 +289,7 @@
 
     $(document).ready(function() {
         var table = $('#product-data-table').DataTable( {
+            "pageLength": 50,
           
             responsive: true,
             fixedHeader: {

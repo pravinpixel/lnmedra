@@ -41,7 +41,11 @@ class ProductController extends Controller
                 $all_permission[] = $permission->name;
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
-            return view('product.index', compact('all_permission'));
+
+                $lims_productType_list =  ProductType::where('is_active',true)->where('is_active','!=',2)->get();
+            $lims_category_list = Category::where('is_active',true)->get();
+            $lims_brand_list = Brand::where('is_active',true)->get();
+            return view('product.index', compact('all_permission','lims_category_list','lims_brand_list','lims_productType_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -49,7 +53,6 @@ class ProductController extends Controller
 
     public function productData(Request $request)
     {
-       
         $columns = array( 
             2 => 'name', 
             3 => 'code',
@@ -72,15 +75,119 @@ class ProductController extends Controller
         $start = $request->input('start');
         $order = 'products.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
+
+
+        $product_id = $request->input('product_id');
+        $category_id = $request->input('category_id');
+        $brand_id = $request->input('brand_id');
         if(empty($request->input('search.value'))){
-            $products = Product::with('category', 'brand', 'unit')->offset($start)
-                        ->where('is_active', '!=',2)
-                        ->limit($limit)
-                        ->orderBy($order,$dir)
-                        ->get();
+            if($product_id != '')
+            {
+                if($product_id !='' && $category_id != '' && $brand_id != '')
+                {
+                 $products = Product::with('category', 'brand', 'unit')->offset($start)
+                 ->where('is_active', '!=',2)
+                 ->where('type',$product_id)
+                 ->where('category_id',$category_id)
+                 ->where('brand_id',$brand_id)
+                 ->limit($limit)
+                 ->orderBy($order,$dir)
+                 ->get();
+                 $totalData= count($products);
+                 $totalFiltered = $totalData; 
+                }
+               else if($product_id !='' && $category_id != '')
+               {
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('type',$product_id)
+                ->where('category_id',$category_id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+               }
+               else if($product_id !='' && $brand_id != '')
+               {
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('type',$product_id)
+                ->where('brand_id',$brand_id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+               }
+              
+               else{
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('type',$product_id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+               }
+                
+               
+            }
+            else if($category_id != '')
+            {
+                if($category_id !='' && $brand_id != '')
+                {
+                 $products = Product::with('category', 'brand', 'unit')->offset($start)
+                 ->where('is_active', '!=',2)
+                 ->where('category_id',$category_id)
+                 ->where('brand_id',$brand_id)
+                 ->limit($limit)
+                 ->orderBy($order,$dir)
+                 ->get();
+                 $totalData= count($products);
+                 $totalFiltered = $totalData; 
+                }
+                else{
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('category_id',$category_id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+                }
+               
+            }
+            else if($brand_id != '')
+            {
+            
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('brand_id',$brand_id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+            }
+            else{
+                
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+            }
+            
+            
+            
         }
         else
-        {         
+        {     
             $search = $request->input('search.value'); 
             $products =  Product::select('products.*')
                         ->with('category', 'brand', 'unit')
@@ -217,6 +324,8 @@ class ProductController extends Controller
                 $data[] = $nestedData;
             }
         }
+        // $totalFiltered = count($products);
+        // $totalData = $totalFiltered;
         $json_data = array(
             "draw"            => intval($request->input('draw')),  
             "recordsTotal"    => intval($totalData),  

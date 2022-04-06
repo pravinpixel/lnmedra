@@ -43,18 +43,44 @@ class ReturnController extends Controller
                 $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')->orderBy('id', 'desc')->orderBy('id', 'desc')->where('user_id', Auth::id())->get();
             else
             {
-                if($request->customer_id){
-                    $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')->where('customer_id',$request->customer_id)->orderBy('id', 'desc')->get();
+                if($request->customer_id != ''){
+                    if($request->customer_id != '' && $request->warehouse_id != '')
+                    {
+                        $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')
+                            ->where('customer_id',$request->customer_id)
+                            ->where('warehouse_id',$request->warehouse_id)
+                            ->orderBy('id', 'desc')->get();
+                    }
+                    else{
+                        $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')
+                        ->where('customer_id',$request->customer_id)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                    }
+                   
                 }
+                else if($request->warehouse_id != '')
+                {
+                    
+                    $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')
+                    ->where('warehouse_id',$request->warehouse_id)
+                    ->orderBy('id', 'desc')
+                    ->get();
+                }
+                
                 else{
-                    $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')->orderBy('id', 'desc')->get();
+                    
+                    $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')
+                    ->orderBy('id', 'desc')
+                    ->get();
                 }
                 
             }
                 
             
             $lims_customer_list = Customer::where('is_active', true)->get();
-            return view('return.index', compact('lims_return_all', 'all_permission','lims_customer_list'));
+            $lims_warehouse_list = Warehouse::where('is_active', true)->get();
+            return view('return.index', compact('lims_return_all', 'all_permission','lims_customer_list','lims_warehouse_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');

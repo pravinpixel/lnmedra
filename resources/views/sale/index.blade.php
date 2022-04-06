@@ -797,6 +797,7 @@ else if(auth_id == 1)
     var warehouse_id = $("#warehouse_id").val();
     var customer_id = $("#customer_id").val();
     $('#sale-table').DataTable( {
+        "pageLength": 50,
         "processing": true,
         "serverSide": true,
         "ajax":{

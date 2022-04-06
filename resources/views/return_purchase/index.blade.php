@@ -14,8 +14,8 @@
              
                     <div class="d-flex align-items-center col-5">
                         <div class="mr-3">{{trans('file.Supplier')}}</div>
-                        <select id="supplier_id" name="supplier_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" >
-                            <option value="0">{{trans('file.Supplier')}}</option>
+                        <select id="supplier_id" name="supplier_id" class="selectpicker form-control w-100" title="Select Supplier" data-live-search="true" data-live-search-style="begins" >
+                            <!-- <option value="0">{{trans('file.Supplier')}}</option> -->
                             @foreach($lims_customer_list as $customer)
                      
                                 <option value="{{$customer->id}}">{{$customer->name}}</option>
@@ -23,9 +23,23 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="d-flex align-items-center col-5">
+                        <div class="mr-3">{{trans('file.Outlet')}}</div>
+                        <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" title="Select Outlet" data-live-search="true" data-live-search-style="begins" >
+                            <!-- <option value="0">{{trans('file.All Outlet')}}</option> -->
+                            @foreach($lims_warehouse_list as $warehouse)
+                     
+                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                           
+                            @endforeach
+                        </select>
+                    </div>
                 
                     <div class="col-2">
-                        <button class="btn btn-primary w-100" onclick="filter()" id="filter-btn" type="submit">{{trans('file.search')}}</button>
+                        <button class="btn btn-primary w-100" onclick="filter()" id="filter-btn" >{{trans('file.search')}}</button>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn btn-danger w-100"  onclick="filterReset()" id="filter-btn" type="submit">{{trans('file.Reset')}}</button>
                     </div>
                 </div>
             {!! Form::close() !!}
@@ -199,6 +213,7 @@
     });
 
     $('#return-table').DataTable( {
+        "pageLength": 50,
         "order": [],
         'language': {
             'lengthMenu': '_MENU_ {{trans("file.records per page")}}',
@@ -393,5 +408,17 @@
 
     if(all_permission.indexOf("purchase-return-delete") == -1)
         $('.buttons-delete').addClass('d-none');
+
+    function filterReset()
+    {
+        var supplier_id = $("#supplier_id").val();
+        var warehouse_id = $("#warehouse_id").val();
+        
+        if(supplier_id || warehouse_id )
+        {
+            location.reload();
+        }
+        
+    }
 </script>
 @endpush
