@@ -2,56 +2,44 @@
  
 
 <section>
-    <div class="container-fluid">
-    
-        <div class="my-4 text-right">
-            @if(in_array("vendorproducts-add", $all_permission))
-                <a href="{{route('vendorproducts.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> Vendor {{__('file.add_product')}}</a>
-                {{-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> --}}
-            @endif
-        </div>
+    <div class="container-fluid"> 
+        <div class="card card-body">
             <div class="row m-0">
-               
-                <div class="d-flex align-items-center col-4">
-                    <div class="mr-3">{{trans('file.Vendor Name')}}</div>
+                <div class="d-flex align-items-center col">
+                    <div class="mr-3">Name</div>
                     <select id="vendor_id" name="vendor_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Vendor.." data-live-search-style="begins" >
-                        <!-- <option value="">{{trans('file.Vendor Name')}}</option> -->
                         @foreach($lims_supplier_list as $supplier)
-                
                             <option value="{{$supplier->id}}">{{$supplier->name}}</option>
-                    
                         @endforeach
                     </select>
                 </div>
-                <div class="d-flex align-items-center col-4">
+                <div class="d-flex align-items-center col">
                     <div class="mr-3">{{trans('file.category')}}</div>
                     <select id="category_id" name="category_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Category.." data-live-search-style="begins" >
-                        <!-- <option value="">{{trans('file.customer')}}</option> -->
                         @foreach($lims_category_list as $category)
-                
                             <option value="{{$category->id}}">{{$category->name}}</option>
-                    
                         @endforeach
                     </select>
                 </div>
-                <div class="d-flex align-items-center col-4">
+                <div class="d-flex align-items-center col">
                     <div class="mr-3">{{trans('file.Brand')}}</div>
                     <select id="brand_id" name="brand_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Brand.." data-live-search-style="begins" >
-                        <!-- <option value="">{{trans('file.Brand')}}</option> -->
                         @foreach($lims_brand_list as $brand)
                             <option value="{{$brand->id}}">{{$brand->title}}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="col-2">
-                    <button class="btn btn-danger w-100"  onclick="filterReset()" id="filter-btn" type="submit">{{trans('file.Reset')}}</button>
-                </div>
-                
-                <div class="col-2">
-                    <button class="btn btn-primary w-100"  onclick="filter()" id="filter-btn" type="submit">{{trans('file.search')}}</button>
-                </div>
+                <div class="col-1 p-0">
+                    <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                    <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                </div> 
             </div>
-
+        </div> 
+        <div class="my-4 text-right">
+            @if(in_array("vendorproducts-add", $all_permission))
+                <a href="{{route('vendorproducts.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> Vendor {{__('file.add_product')}}</a>
+            @endif
+        </div>
         <div class="card pb-3">
             <div class="table-responsive">
                 <table id="product-data-table" class="table" style="width: 100%">
