@@ -9,9 +9,9 @@
       letter-spacing: 1px;
     }
     .count-title {
-      background: linear-gradient(45deg, #0095ff, #14AB69) !important;
-      border: 1px solid white !important;
+      background:linear-gradient(1deg, #0095FF, #FFFFFF) !important;
       color : #032617 !important;
+      border: 2px  solid white !important;
       text-shadow: 0 2px 5px white !important;
     }
     .icon i{
@@ -47,7 +47,7 @@
   <div class="row m-0">
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title text-center shadow">
+      <div class="wrapper count-title text-center shadow-sm">
         <div class="icon"><i class="dripicons-graph-bar" ></i></div>
         <div class="name"><strong >Sales</strong></div>
         <div class="count-number revenue-data">00.00</div>
@@ -55,7 +55,7 @@
     </div>
      <!-- Count item widget-->
      <div class="col">
-      <div class="wrapper count-title text-center shadow">
+      <div class="wrapper count-title text-center shadow-sm">
         <div class="icon"><i class="dripicons-media-loop" ></i></div>
         <div class="name"><strong >Purchase</strong></div>
         <div class="count-number purchase-data">00.00</div>
@@ -64,7 +64,7 @@
 
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title text-center shadow">
+      <div class="wrapper count-title text-center shadow-sm">
         <div class="icon"><i class="dripicons-media-loop" ></i></div>
         <div class="name"><strong >Expense</strong></div>
         <div class="count-number expense-data">00.00</div>
@@ -73,7 +73,7 @@
     
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title text-center shadow">
+      <div class="wrapper count-title text-center shadow-sm">
         <div class="icon"><i class="dripicons-return" ></i></div>
         <div class="name"><strong >Sale Return</strong></div>
         <div class="count-number return-data">00.00</div>
@@ -81,7 +81,7 @@
     </div>
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title text-center shadow">
+      <div class="wrapper count-title text-center shadow-sm">
         <div class="icon"><i class="dripicons-media-loop" ></i></div>
         <div class="name"><strong >Purchase Return</strong></div>
         <div class="count-number purchase_return-data">00.00</div>
@@ -91,7 +91,7 @@
    
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title text-center shadow">
+      <div class="wrapper count-title text-center shadow-sm">
         <div class="icon"><i class="dripicons-trophy"></i></div>
         <div class="name"><strong>Profit</strong></div>
         <div class="count-number profit-data">00.00</div>
