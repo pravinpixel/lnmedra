@@ -631,7 +631,6 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
             Alert("warning", "Please check at least one checkbox");
             return false;
         }
-        return false;
         $.ajax({
             type: 'POST',
             url: '{{ route('vendorproducts.approve-products') }}',

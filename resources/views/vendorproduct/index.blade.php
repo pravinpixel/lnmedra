@@ -162,7 +162,7 @@
         }
     });
 
-    $(document).on("click", "tr.product-link td:not(:first-child, :last-child)", function() {
+    $(document).on("click", "tr.product-link td:not(:last-child)", function() {
         productDetails( $(this).parent().data('product'), $(this).parent().data('imagedata') );
     });
 
@@ -184,25 +184,25 @@
     function productDetails(product, imagedata) {
         product[1] = product[1].replace(/@/g, '"');
         htmltext = slidertext = '';
+        htmltext = '<p><strong>{{trans("file.name")}}: </strong>'+product[1]+'</p><p><strong>{{trans("file.Code")}}: </strong>'+product[2]+ '</p><p><strong>{{trans("file.Brand")}}: </strong>'+product[3]+'</p><p><strong>{{trans("file.category")}}: </strong>'+product[4];
 
-        htmltext = '<p><strong>{{trans("file.Type")}}: </strong>'+product[0]+'</p><p><strong>{{trans("file.name")}}: </strong>'+product[1]+'</p><p><strong>{{trans("file.Code")}}: </strong>'+product[2]+ '</p><p><strong>{{trans("file.Brand")}}: </strong>'+product[3]+'</p><p><strong>{{trans("file.category")}}: </strong>'+product[4]+'</p><p><strong>{{trans("file.Price")}}: </strong>'+product[5]+'</p><p><strong>{{trans("file.Product Details")}}: </strong></p>'+product[6];
-        if(product[10]) {
-            var product_image = product[10].split(",");
+        if(product[18]) {
+            var product_image = product[18].split(",");
             if(product_image.length > 1) {
                 slidertext = '<div id="product-img-slider" class="carousel slide" data-ride="carousel"><div class="carousel-inner">';
                 for (var i = 0; i < product_image.length; i++) {
                     if(!i)
-                        slidertext += '<div class="carousel-item active"><img src="public/images/vendorproduct/'+product_image[i]+'" height="300" width="100%"></div>';
+                        slidertext += '<div class="carousel-item active"><img src="public/images/product/'+product_image[i]+'" height="300" width="100%"></div>';
                     else
-                        slidertext += '<div class="carousel-item"><img src="public/images/vendorproduct/'+product_image[i]+'" height="300" width="100%"></div>';
+                        slidertext += '<div class="carousel-item"><img src="public/images/product/'+product_image[i]+'" height="300" width="100%"></div>';
                 }
                 slidertext += '</div><a class="carousel-control-prev" href="#product-img-slider" data-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="sr-only">Previous</span></a><a class="carousel-control-next" href="#product-img-slider" data-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="sr-only">Next</span></a></div>';
             }
             else {
-                slidertext = '<img src="public/images/vendorproduct/'+product[10]+'" height="300" width="100%">';
+                slidertext = '<img src="public/images/product/'+product[18]+'" height="300" width="100%">';
             }
         }
-
+        console.log(slidertext);
         $("#combo-header").text('');
         $("table.item-list thead").remove();
         $("table.item-list tbody").remove();
@@ -212,93 +212,7 @@
         $(".product-variant-warehouse-list tbody").remove();
         $("#product-warehouse-section").addClass('d-none');
         $("#product-variant-warehouse-section").addClass('d-none');
-        if(product[0] == 'combo') {
-            $("#combo-header").text('{{trans("file.Combo Products")}}');
-            product_list = product[13].split(",");
-            variant_list = product[14].split(",");
-            qty_list = product[15].split(",");
-            price_list = product[16].split(",");
-            $(".item-list thead").remove();
-            $(".item-list tbody").remove();
-            var newHead = $("<thead>");
-            var newBody = $("<tbody>");
-            var newRow = $("<tr>");
-            newRow.append('<th>{{trans("file.product")}}</th><th>{{trans("file.Quantity")}}</th><th>{{trans("file.Price")}}</th>');
-            newHead.append(newRow);
-
-            $(product_list).each(function(i) {
-                if(!variant_list[i])
-                    variant_list[i] = 0;
-                $.get('vendorproducts/getdata/' + product_list[i] + '/' + variant_list[i], function(data) {
-                    var newRow = $("<tr>");
-                    var cols = '';
-                    cols += '<td>' + data['name'] +' [' + data['code'] + ']</td>';
-                    cols += '<td>' + qty_list[i] + '</td>';
-                    cols += '<td>' + price_list[i] + '</td>';
-
-                    newRow.append(cols);
-                    newBody.append(newRow);
-                });
-            });
-
-            $("table.item-list").append(newHead);
-            $("table.item-list").append(newBody);
-        }
-        else if(product[0] == 'standard') {
-            $.get('products/product_warehouse/' + product[12], function(data) {
-                if(data.product_warehouse[0].length != 0) {
-                    warehouse = data.product_warehouse[0];
-                    qty = data.product_warehouse[1];
-                    batch = data.product_warehouse[2];
-                    expired_date = data.product_warehouse[3];
-                    imei_numbers = data.product_warehouse[4];
-                    var newHead = $("<thead>");
-                    var newBody = $("<tbody>");
-                    var newRow = $("<tr>");
-                    newRow.append('<th>{{trans("file.Warehouse")}}</th><th>{{trans("file.Batch No")}}</th><th>{{trans("file.Expired Date")}}</th><th>{{trans("file.Quantity")}}</th><th>{{trans("file.IMEI or Serial Numbers")}}</th>');
-                    newHead.append(newRow);
-                    $.each(warehouse, function(index) {
-                        var newRow = $("<tr>");
-                        var cols = '';
-                        cols += '<td>' + warehouse[index] + '</td>';
-                        cols += '<td>' + batch[index] + '</td>';
-                        cols += '<td>' + expired_date[index] + '</td>';
-                        cols += '<td>' + qty[index] + '</td>';
-                        cols += '<td>' + imei_numbers[index] + '</td>';
-
-                        newRow.append(cols);
-                        newBody.append(newRow);
-                        $("table.product-warehouse-list").append(newHead);
-                        $("table.product-warehouse-list").append(newBody);
-                    });
-                    $("#product-warehouse-section").removeClass('d-none');
-                }
-                if(data.product_variant_warehouse[0].length != 0) {
-                    warehouse = data.product_variant_warehouse[0];
-                    variant = data.product_variant_warehouse[1];
-                    qty = data.product_variant_warehouse[2];
-                    var newHead = $("<thead>");
-                    var newBody = $("<tbody>");
-                    var newRow = $("<tr>");
-                    newRow.append('<th>{{trans("file.Warehouse")}}</th><th>{{trans("file.Variant")}}</th><th>{{trans("file.Quantity")}}</th>');
-                    newHead.append(newRow);
-                    $.each(warehouse, function(index){
-                        var newRow = $("<tr>");
-                        var cols = '';
-                        cols += '<td>' + warehouse[index] + '</td>';
-                        cols += '<td>' + variant[index] + '</td>';
-                        cols += '<td>' + qty[index] + '</td>';
-
-                        newRow.append(cols);
-                        newBody.append(newRow);
-                        $("table.product-variant-warehouse-list").append(newHead);
-                        $("table.product-variant-warehouse-list").append(newBody);
-                    });
-                    $("#product-variant-warehouse-section").removeClass('d-none');
-                }
-            });
-        }
-
+     
         $('#product-content').html(htmltext);
         $('#slider-content').html(slidertext);
         $('#product-details').modal('show');

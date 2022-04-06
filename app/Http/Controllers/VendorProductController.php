@@ -853,6 +853,17 @@ class VendorProductController extends Controller
                             <button type="submit" class="btn btn-link"  ><i class="fa fa-trash"></i> Delete </button> 
                         '.\Form::close().'</li>';
                     }
+                    if($record->tax_id)
+                        $tax = Tax::find($record->tax_id)->name ??  "N/A";
+                    else
+                        $tax = "N/A";
+
+                    if($record->tax_method == 1)
+                        $tax_method = trans('file.Exclusive');
+                    else
+                        $tax_method = trans('file.Inclusive');
+
+                    $product =  array( '[ "'.$record->type.'"', ' "'.$record->name.'"', ' "'.$record->code.'"', ' "'.$brand_name.'"', ' "'.$category_name.'"', ' ""', ' "'.$record->cost.'"', ' "'.$record->price.'"', ' "'.$tax.'"', ' "'.$tax_method.'"', ' "'.$record->alert_quantity.'"', ' "'.preg_replace('/\s+/S', " ", $record->record_details).'"', ' "'.$record->id.'"', ' "'.$record->record_list.'"', ' "'.$record->variant_list.'"', ' "'.$record->qty_list.'"', ' "'.$record->price_list.'"', ' "'.$record->qty.'"', ' "'.$record->image.'"]');
                    
                     $data_arr[] = array(
                         "id"                => $id,
@@ -864,6 +875,7 @@ class VendorProductController extends Controller
                         "vendor_qty"        => $vendor_product_qty,
                         "vendor_price"      => $vendor_product_price,
                         "vendor_is_approve" => $approve_status,
+                        "product"           => $product,
                         "action"            => $action
                     );
                 }
