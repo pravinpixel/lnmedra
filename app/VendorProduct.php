@@ -17,6 +17,7 @@ class VendorProduct extends Model
         'is_approve',
         'in_price',
         'in_qty',
+        'actual_qty',
         'discount',
         'attribute',
         'created_by',

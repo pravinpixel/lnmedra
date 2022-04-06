@@ -646,7 +646,8 @@
                         cols += '<td style="padding: 0 !important; text-align:center !important">' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target=""> </button></td>';
                         // cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
                         cols += '<td style="padding: 0 !important; text-align:center !important">' + data[1] + '</td>';
-                        cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" max="'+data['ln_qty']+'" required/></td>';
+                        cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" max="'+data['actual_qty']+'" required/></td>';
+                        cols += '<input type="hidden" class="form-control" name="vendor_product_id[]"  step="any" value="'+data['vendor_product_id']+'" required/>';
                         if($('select[name="status"]').val() == 1)
                             cols += '<td style="padding: 0 !important; text-align:center !important" class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';
                         else if($('select[name="status"]').val() == 2)
@@ -931,6 +932,10 @@
     }
     else
         $(".batch-no, .expired-date").prop('disabled', false);
+ });
+ $(document).on('change','#supplier_id', function(){
+     console.log('clicked')
+    $("#myTable tbody").empty();
  });
 </script>
 

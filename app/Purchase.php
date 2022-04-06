@@ -13,7 +13,8 @@ class Purchase extends Model
 
     public function supplier()
     {
-    	return $this->belongsTo('App\Supplier');
+    	// return $this->belongsTo('App\Supplier');
+    	return $this->belongsTo('App\User','supplier_id','id');
     }
 
     public function warehouse()

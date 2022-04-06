@@ -17,6 +17,7 @@ class CreateVendorProductsTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedBigInteger('created_by');
+            $table->integer('actual_qty')->default(0);
             $table->integer('qty')->default(0);
             $table->decimal('price')->default(0);
             $table->boolean('is_active')->default(1);

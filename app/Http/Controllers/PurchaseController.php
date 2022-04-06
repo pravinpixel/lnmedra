@@ -154,7 +154,7 @@ class PurchaseController extends Controller
             else {
                 $purchases =  Purchase::select('purchases.*')
                             ->with('supplier', 'warehouse')
-                            ->leftJoin('suppliers', 'purchases.supplier_id', '=', 'suppliers.id')
+                            ->leftJoin('users', 'purchases.supplier_id', '=', 'users.id')
                             ->whereDate('purchases.created_at', '=' , date('Y-m-d', strtotime(str_replace('/', '-', $search))))
                             ->orwhere('purchases.reference_no', 'LIKE', "%{$search}%")
                             ->orwhere('suppliers.name', 'LIKE', "%{$search}%")
@@ -164,7 +164,7 @@ class PurchaseController extends Controller
                             ->get();
 
                 $totalFiltered = Purchase::
-                                leftJoin('suppliers', 'purchases.supplier_id', '=', 'suppliers.id')
+                                leftJoin('users', 'purchases.supplier_id', '=', 'users.id')
                                 ->whereDate('purchases.created_at', '=' , date('Y-m-d', strtotime(str_replace('/', '-', $search))))
                                 ->orwhere('purchases.reference_no', 'LIKE', "%{$search}%")
                                 ->orwhere('suppliers.name', 'LIKE', "%{$search}%")
@@ -263,7 +263,8 @@ class PurchaseController extends Controller
     {
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('purchases-add')){
-            $lims_supplier_list = Supplier::where('is_active', true)->get();
+            // $lims_supplier_list = Supplier::where('is_active', true)->get();
+            $lims_supplier_list = User::where('is_active', true)->whereNotNull('vendor_id')->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
             $lims_product_list_without_variant = $this->productWithoutVariant();
@@ -293,10 +294,13 @@ class PurchaseController extends Controller
     {
         $supplierId = $request->supplierId;
        
-        $vendorData = User::where('vendor_id',$supplierId)->select('id')->first();
+        // $vendorData = User::where('vendor_id',$supplierId)->select('id')->first();
         // return $vendorData;
         $lims_product_data = Product::select(DB::raw('products.*','vendor_products.ln_qty','vendor_products.ln_price'))
         ->join('vendor_products','vendor_products.product_id','products.id')
+        ->where('vendor_products.created_by', $supplierId)
+        ->where('vendor_products.is_approve', 1)
+        ->where('vendor_products.ln_qty', '>', 0)
         ->where('products.is_active', true)
         ->get();
        
@@ -310,21 +314,26 @@ class PurchaseController extends Controller
         $supplierId = $request->supplierId;
         $product_code[0] = rtrim($product_code[0], " ");
       
-        $lims_product_data = Product::select('products.*','vendor_products.ln_qty as ln_qty','vendor_products.ln_price as ln_price')
+        $lims_product_data = Product::select('products.*','vendor_products.id as vendor_product_id','vendor_products.actual_qty as actual_qty','vendor_products.ln_qty as ln_qty','vendor_products.ln_price as ln_price')
         ->join('vendor_products','vendor_products.product_id','products.id')
-        ->where('vendor_products.')
+        ->where('vendor_products.created_by',  $supplierId)
+        ->where('vendor_products.is_approve', 1)
+        ->where('vendor_products.ln_qty', '>', 0)
         ->where([
             ['code', $product_code[0]],
             ['products.is_active', true]
         ])->first();
-        if(!$lims_product_data) {
-            $lims_product_data = Product::join('product_variants', 'products.id', 'product_variants.product_id')
-                ->select('products.*', 'product_variants.item_code')
-                ->where([
-                    ['product_variants.item_code', $product_code[0]],
-                    ['products.is_active', true]
-                ])->first();
+        if(empty($lims_product_data)){
+            return false;
         }
+        // if(!$lims_product_data) {
+        //     $lims_product_data = Product::join('product_variants', 'products.id', 'product_variants.product_id')
+        //         ->select('products.*', 'product_variants.item_code')
+        //         ->where([
+        //             ['product_variants.item_code', $product_code[0]],
+        //             ['products.is_active', true]
+        //         ])->first();
+        // }
         
         // print_r($lims_product_data->cost);die();
         if($lims_product_data->price == ''|| Null){
@@ -376,12 +385,14 @@ class PurchaseController extends Controller
         $product[] = $lims_product_data->vendor_user_id;
         $product['ln_qty'] = $lims_product_data->ln_qty;
         $product['ln_price'] = $lims_product_data->ln_price;
+        $product['vendor_product_id'] = $lims_product_data->vendor_product_id;
+        $product['actual_qty'] = $lims_product_data->actual_qty;
         return $product;
     }
 
     public function store(Request $request)
     {
-        // print_r($request->all());die();
+        // dd($request->all());
         $data = $request->except('document');
         //return dd($data);
         // print_r( $data['product_id']);die();
@@ -510,7 +521,7 @@ class PurchaseController extends Controller
                     $lims_product_warehouse_data->imei_number = $imei_numbers[$i];
             }
             $lims_product_warehouse_data->save();
-
+            $product_purchase['vendor_product_id'] = $data['vendor_product_id'][$i];
             $product_purchase['purchase_id'] = $lims_purchase_data->id ;
             $product_purchase['product_id'] = $id;
             $product_purchase['imei_number'] = $imei_numbers[$i];
@@ -522,7 +533,12 @@ class PurchaseController extends Controller
             $product_purchase['tax_rate'] = $tax_rate[$i];
             $product_purchase['tax'] = $tax[$i];
             $product_purchase['total'] = $total[$i];
-            ProductPurchase::create($product_purchase);
+            $result = ProductPurchase::create($product_purchase);
+            if($result) {
+                $vendorProduct = VendorProduct::find($product_purchase['vendor_product_id']);
+                $vendorProduct->ln_qty = $vendorProduct->ln_qty -  $product_purchase['qty'];
+                $vendorProduct->save();
+            }
         }
 
         return redirect('purchases')->with('message', 'Purchase created successfully');
@@ -701,7 +717,8 @@ class PurchaseController extends Controller
     {
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('purchases-edit')){
-            $lims_supplier_list = Supplier::where('is_active', true)->get();
+            // $lims_supplier_list = Supplier::where('is_active', true)->get();
+            $lims_supplier_list = User::where('is_active', true)->whereNotNull('vendor_id')->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
             $lims_product_list_without_variant = $this->productWithoutVariant();

@@ -873,6 +873,7 @@ class VendorProductController extends Controller
             
             $data = VendorProduct::find($request['row_id']);
             $data->ln_qty = $request['row_qty_value'];
+            $data->actual_qty = $request['row_qty_value'];
             $res = $data->update();
            
             return true;
