@@ -6,57 +6,51 @@
 
 <section>
     <div class="container-fluid">
-        <div class="card border">
-            <!-- {!! Form::open(['route' => 'purchases.index', 'method' => 'get']) !!} -->
-            <div class="d-flex justify-content-center card-body">
-                <div class="mx-3">
-                    <div class="form-group row">
-                        <label class="d-tc mt-2"><strong>{{trans('file.Choose Your Date')}}</strong> &nbsp;</label>
-                        <div class="d-tc">
-                            <div class="input-group">
-                                <input type="text" class="daterangepicker-field form-control" value="{{$starting_date}} To {{$ending_date}}" required />
-                                <input type="hidden" name="starting_date" value="{{$starting_date}}" />
-                                <input type="hidden" name="ending_date" value="{{$ending_date}}" />
-                            </div>
-                        </div>
+        <div class="card">
+            {{-- <!-- {!! Form::open(['route' => 'purchases.index', 'method' => 'get']) !!} --> --}}
+            <div class="row m-0 justify-content-center card-body">
+                <div class="d-flex align-items-center col">
+                    <label class="d-tc mr-2 mb-0">Date</label>
+                    <div class="d-tc w-100">
+                        <input type="text" class="daterangepicker-field form-control" value="{{$starting_date}} To {{$ending_date}}" required />
+                        <input type="hidden" name="starting_date" value="{{$starting_date}}" />
+                        <input type="hidden" name="ending_date" value="{{$ending_date}}" />
                     </div>
                 </div>
-                <div class="d-flex align-items-center col-5">
-                        <div class="mr-3">{{trans('file.Supplier')}}</div>
-                        <select id="supplier_id" name="supplier_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Supplier.." data-live-search-style="begins" >
-                            <!-- <option value="0">{{trans('file.Supplier')}}</option> -->
-                            @foreach($lims_supplier_list as $supplier)
-                     
-                                <option value="{{$supplier->id}}">{{$supplier->name}}</option>
-                           
-                            @endforeach
-                        </select>
-                    </div>
+                <div class="d-flex align-items-center col">
+                    <div class="mr-3">{{trans('file.Supplier')}}</div>
+                    <select id="supplier_id" name="supplier_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Supplier.." data-live-search-style="begins" >
+                        <!-- <option value="0">{{trans('file.Supplier')}}</option> -->
+                        @foreach($lims_supplier_list as $supplier)
+                    
+                            <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                        
+                        @endforeach
+                    </select>
+                </div>
+
                 <?php $outletId = Auth::user()->warehouse_id ?>
                 
-                <div class="mx-3 @if(\Auth::user()->role_id > 2){{'d-none'}}@endif">
-                    <div class="form-group row outletStore" id="outletStore">
-                        <label class="d-tc mt-2"><strong>{{trans('file.Choose Outlet')}}</strong> &nbsp;</label>
-                        <div class="d-tc">
+                <div class="col @if(\Auth::user()->role_id > 2) d-none @endif  ">
+                    <div class="d-flex outletStore d-flex align-items-center " id="outletStore">
+                        <label class="d-tc mr-2 mb-0">Outlet</label>
+                        <div class="d-tc w-100">
                             <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" >
                                 <option value="0">{{trans('file.All Outlet')}}</option>
                                 @foreach($lims_warehouse_list as $warehouse)
-                                <option value="{{$warehouse->id}}"  <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?> >{{$warehouse->name}}</option>
-                                   
+                                    <option value="{{$warehouse->id}}"  <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?> >{{$warehouse->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
-               
-                <div>
-                    <button class="btn btn-primary" id="filter-btn" onclick="filter()" type="submit">{{trans('file.submit')}}</button>
-                </div>
-                <div class="col-2">
-                   <button class="btn btn-danger w-100"  onclick="filterReset()" id="filter-btn" type="submit">{{trans('file.Reset')}}</button>
-               </div>
+
+                <div class="col-1 p-0">
+                    <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                    <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                </div> 
             </div>
-            <!-- {!! Form::close() !!} -->
+            {{-- <!-- {!! Form::close() !!} --> --}}
         </div>
         
         <div class="text-right mb-3">
