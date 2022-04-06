@@ -40,8 +40,8 @@
                             </div>
                         </div>
                         <div class="col-2">
-                            <button title="Search" class="btn btn-primary shadow"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
-                            <button title="Reset " class="btn btn-light active" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                            <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                            <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
                         </div> 
                     </div>
                 <!-- {!! Form::close() !!} -->

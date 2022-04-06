@@ -25,47 +25,44 @@
                             @endforeach
                         </select>
                     </div>
-                
                     <div class="col-2">
-                        <button class="btn btn-primary w-100" onclick="filter()" id="filter-btn" type="submit">{{trans('file.search')}}</button>
-                    </div>
-                    <div class="col-2">
-                        <button class="btn btn-danger w-100"  onclick="filterReset()" id="filter-btn" type="submit">{{trans('file.Reset')}}</button>
-                    </div>
+                        <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                        <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                    </div> 
                 </div>
           
         </div>
     </div>
-    <div class="text-right mt-4">
+    <div class="text-right my-4">
         @if(userHasAccess('customers-add'))
             <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Customer')}}</a>&nbsp;
-            
         @endif
-        
         @if(userHasAccess('customer_import'))
         <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Customer')}}</a>
         @endif
     </div>
-    <div>
-        <table id="customer-table" class="table">
-            <thead>
-                <tr>
-                    <th>{{trans('file.Customer Group')}}</th>
-                    <th>{{trans('file.name')}}</th>
-                    {{-- <th>{{trans('file.Company Name')}}</th> --}}
-                   <th>{{trans('file.Email')}}</th>
-                     {{-- <th>{{trans('file.Phone Number')}}</th> --}}
-                    <th>{{trans('file.Total transaction')}}</th>
-                    <th>{{trans('file.Total Value')}}</th>
-                    <th>{{trans('file.Last Visited')}}</th>
-                    <th>{{trans('file.Customer since')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-                <tbody>
-                
-                </tbody>
-            </table>
+    <div class="card"> 
+        <div class="pb-3">
+            <table id="customer-table" class="table">
+                <thead>
+                    <tr>
+                        <th>{{trans('file.Customer Group')}}</th>
+                        <th>{{trans('file.name')}}</th>
+                        {{-- <th>{{trans('file.Company Name')}}</th> --}}
+                       <th>{{trans('file.Email')}}</th>
+                         {{-- <th>{{trans('file.Phone Number')}}</th> --}}
+                        <th>{{trans('file.Total transaction')}}</th>
+                        <th>{{trans('file.Total Value')}}</th>
+                        <th>{{trans('file.Last Visited')}}</th>
+                        <th>{{trans('file.Customer since')}}</th>
+                        <th class="not-exported">{{trans('file.action')}}</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                    
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </section>
