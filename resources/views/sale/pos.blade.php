@@ -22,7 +22,8 @@
         display: flex !important;
         justify-content: start !important;
         align-items: center !important;
-        padding: 0 !important
+        padding: 0 !important;
+        flex-direction: row-reverse !important
     }
     .table.change_grid td:hover p {
         color: black !important
@@ -35,8 +36,10 @@
         display: none !important
     }
     .table.change_grid td p {
-        margin: 0 10px  0 0 !important;
-        border-right: 1px solid #d8d8d8 !important;
+        margin-left:auto !important;
+        margin-top:  0 !important;
+        margin-bottom:  0 !important;
+        border-left: 1px solid #d8d8d8 !important;
         padding: 0 0 0 15px !important;
         color :  slategrey !important;
         font-weight: bold !important;
@@ -53,11 +56,10 @@
         font-size: 75%;
         font-weight: 700;
         line-height: 1;
-        text-align: center;
         white-space: nowrap;
         vertical-align: baseline;
         border-radius: 0.25rem;
-        margin: auto !important
+        margin: 0 10px !important
     }
 </style>
 @php
