@@ -219,7 +219,7 @@ margin: 0 !important
 .section-title {
     margin-bottom: 1rem !important;
     padding: 0.5rem  1rem !important;
-    background-color: #14AB69 !important;
+    background:linear-gradient(90deg, #14AB69 , #0f8854) !important;
     color: white !important;
     font-weight: bold !important;
     border-radius: 5px;
@@ -322,3 +322,4 @@ section {
   border-radius: 5px 5px 0 0 !important ;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;;
 }
+ 

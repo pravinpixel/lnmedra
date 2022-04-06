@@ -1838,8 +1838,7 @@
 
 
 @endsection
-
-
+ 
 @push('scripts')
     <script>
         function change_grid() {

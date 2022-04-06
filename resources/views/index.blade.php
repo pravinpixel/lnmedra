@@ -13,6 +13,7 @@
       color : #032617 !important;
       border: 2px  solid white !important;
       text-shadow: 0 2px 5px white !important;
+      box-shadow: 0 5px 10px #9b9b9b !important
     }
     .icon i{
       font-size: 2rem !important
