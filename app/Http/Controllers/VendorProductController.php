@@ -92,10 +92,13 @@ class VendorProductController extends Controller
         if (!userHasAccess('vendorproducts-edit')) {
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
         }
+        $lims_product_data   = VendorProduct::with('product')->find($id);
+        if($lims_product_data->is_approve == 1){
+            return redirect()->back()->with('not_permitted', 'can not edit product already approved');
+        }
         $lims_brand_list     = Brand::where('is_active', true)->get();
         $lims_category_list  = Category::where('is_active', true)->get();
         $productType         = ProductType::get();
-        $lims_product_data   = VendorProduct::with('product')->find($id);
         $lims_unit_list      = Unit::where('is_active', true)->get();
         $lims_tax_list       = Tax::where('is_active', true)->get();
         $lims_warehouse_list = Warehouse::where('is_active', true)->get();
@@ -705,7 +708,7 @@ class VendorProductController extends Controller
                     $vendor_product_price    = $record->vendor_price;
                     
                     $vendor_product_ln_qty   = '<div class="btn-group">
-                        <input type="number" name="ln_qty[]" min="0" id="ln_qty'.$record->vendor_id.'" class="form-control ln_qty check'.$record->vendor_id.'text"  data-qty_row_id="'.$record->vendor_id.'" value="'.$record->ln_qty.'" style="width:70px;" >
+                        <input type="number" onkeypress="return isNumber(event)" name="ln_qty[]" min="0" max="'.$record->vendor_qty.'" id="ln_qty'.$record->vendor_id.'" class="form-control ln_qty check'.$record->vendor_id.'text"  data-qty_row_id="'.$record->vendor_id.'" value="'.$record->ln_qty.'" style="width:70px;" >
                     <div>';
                     $vendor_product_ln_price = '<div class="btn-group">
                             <input type="number" name="ln_price[]" id="ln_price'.$record->vendor_id.'" min="0" class="form-control ln_price check'.$record->vendor_id.'text" data-price_row_id="'.$record->vendor_id.'" value="'.$record->ln_price.'" style="width:70px;">
@@ -755,6 +758,9 @@ class VendorProductController extends Controller
         public function deletebyVendorDashboard($id)
         {
             $lims_product_data =VendorProduct::findOrFail($id);
+            if($lims_product_data->is_approve == 1){
+                return redirect()->back()->with('not_permitted', 'can not edit product already approved');
+            }
             $lims_product_data->delete();
             return redirect()->back()->with('message', 'Product deleted successfully');
         }
@@ -778,7 +784,7 @@ class VendorProductController extends Controller
                                     ->leftJoin('brands','brands.id','=','products.brand_id')
                                     ->leftJoin('categories','categories.id','=','products.category_id')
                                     ->leftJoin('product_types','product_types.id','=','products.type')
-                                    ->when(!useInRole(['admin','ceo']) , function($q){
+                                    ->when(!useInRole(config('global.all_access')) , function($q){
                                         $q->where('vendor_products.created_by', user()->id);
                                     })
                                     ->when(!empty(request('status')), function($q){
@@ -791,7 +797,7 @@ class VendorProductController extends Controller
                                     ->leftJoin('brands','brands.id','=','products.brand_id')
                                     ->leftJoin('categories','categories.id','=','products.category_id')
                                     ->leftJoin('product_types','product_types.id','=','products.type')
-                                    ->when(!useInRole(['admin','ceo']), function($q){
+                                    ->when(!useInRole(config('global.all_access')), function($q){
                                         $q->where('vendor_products.created_by', user()->id);
                                     })
                                     ->when(!empty(request('status')), function($q){
@@ -829,7 +835,7 @@ class VendorProductController extends Controller
                     $vendor_product_qty   = $record->vendor_qty;
                     $vendor_product_price = $record->vendor_price;
                     if($record->vendor_is_approve == 1){
-                        $approve_status = '<span class="badge badge-success">Approve</span>';
+                        $approve_status = '<span class="badge badge-success">Approved</span>';
                     } else if($record->vendor_is_approve == 2){
                         $approve_status = '<span class="badge badge-danger">Rejected</span>';
                     } else {
@@ -842,9 +848,12 @@ class VendorProductController extends Controller
                     </button>
                     <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">';
                     $action .=' <li> <a href="'.route('vendorproducts.dashboardEdit', $record->vendor_id).'" class="btn btn-link"><i class="fa fa-edit"></i> Edit </a> </li>';
-                    $action .='<li>'. \Form::open(["route" => ["vendorproducts.deletebyVendorDashboard", $record->vendor_id], "method" => "DELETE", 'onsubmit' => 'return confirmDeleteAlert(this);'] ).'
-                                    <button type="submit" class="btn btn-link"  ><i class="fa fa-trash"></i> Delete </button> 
-                                '.\Form::close().'</li>';
+                    if($record->vendor_is_approve != 1){
+                        $action .='<li>'. \Form::open(["route" => ["vendorproducts.deletebyVendorDashboard", $record->vendor_id], "method" => "DELETE", 'onsubmit' => 'return confirmDeleteAlert(this);'] ).'
+                            <button type="submit" class="btn btn-link"  ><i class="fa fa-trash"></i> Delete </button> 
+                        '.\Form::close().'</li>';
+                    }
+                   
                     $data_arr[] = array(
                         "id"                => $id,
                         "code"              => $code,
