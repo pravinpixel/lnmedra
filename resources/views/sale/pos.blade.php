@@ -150,7 +150,9 @@
             <span class="navbar-toggler-icon"></span>
             </button>
             <div>
-                <a href="{{url('/')}}" class="text-white"><strong>Lnmedra POS Management System</strong></a>
+            <?php $site_title = DB::table('general_settings')->select('site_title')->first(); ?>
+                <a href="{{url('/')}}" class="text-white"><strong>{{$site_title->site_title}} | Sales & POS Management</strong></a>
+                
             </div>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ml-auto">

@@ -823,7 +823,7 @@
     function dashboardFilter(data){
       console.log(data.percentagecal);
       $.each( data.percentagecal, function( key, value ) {
-        console.log( key + ": " + value + "===");
+        // console.log( key + ": " + value + "===");
         $('.'+key).html(parseFloat(value).toFixed(2));
       });
         $('.revenue-data').hide();

@@ -16,24 +16,107 @@ use Spatie\Permission\Models\Permission;
 
 class StockCountController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        // dd($request->all());
         $role = Role::find(Auth::user()->role_id);
         if( $role->hasPermissionTo('stock_count') ) {
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             $lims_brand_list = Brand::where('is_active', true)->get();
             $lims_category_list = Category::where('is_active', true)->get();
             $general_setting = DB::table('general_settings')->latest()->first();
+
+            $categoryId = $request->category_id;
+            $warehouseId = $request->warehouse_id;
+            $brandId = $request->brand_id;
             if(Auth::user()->role_id > 2 && $general_setting->staff_access == 'own')
+            {
                 $lims_stock_count_all = StockCount::orderBy('id', 'desc')->where('user_id', Auth::id())->get();
-            else
-                $lims_stock_count_all = StockCount::orderBy('id', 'desc')->get();
+            }   
+            else{
+                    if($warehouseId != '')
+                    {
+                        if($warehouseId != '' && $categoryId != '' && $brandId != '')
+                        {
+                            $lims_stock_count_all = StockCount::
+                            where('warehouse_id',$warehouseId)
+                            ->where('category_id',$categoryId)
+                            ->where('brand_id',$brandId)
+                            ->orderBy('id', 'desc')
+                            ->get();
+                        }
+                        else if($warehouseId != '' && $categoryId != '' &&  $brandId != '')
+                        {
+                            $lims_stock_count_all = StockCount::
+                            where('warehouse_id',$warehouseId)
+                            ->where('category_id',$categoryId)
+                            ->where('brand_id',$brandId)
+                            ->orderBy('id', 'desc')
+                            ->get();
+                        }
+                        else  if($warehouseId != '' && $categoryId != '' )
+                        {
+                            $lims_stock_count_all = StockCount::
+                            where('warehouse_id',$warehouseId)
+                            ->where('category_id',$categoryId)
+                            ->orderBy('id', 'desc')
+                            ->get();
+                        }
+                        else if($warehouseId != '' && $brandId != '' )
+                        {
+                            $lims_stock_count_all = StockCount::
+                            where('warehouse_id',$warehouseId)
+                            ->where('brand_id',$brandId)
+                            ->orderBy('id', 'desc')
+                            ->get();
+                        }
+                        else{
+                            $lims_stock_count_all = StockCount::
+                            where('warehouse_id',$warehouseId)
+                            ->orderBy('id', 'desc')
+                            ->get();
+                        }
+                        
+                    }
+                
+                    else if($categoryId != '')
+                    {
+                        
+                        if($categoryId != '' && $brandId != '' )
+                        {
+                            $lims_stock_count_all = StockCount::
+                            where('category_id',$categoryId)
+                            ->where('brand_id',$brandId)
+                            ->orderBy('id', 'desc')
+                            ->get();
+                        }
+                       
+                        
+                        else{
+                            $lims_stock_count_all = StockCount::
+                            where('category_id',$categoryId)
+                            ->orderBy('id', 'desc')
+                            ->get();
+                        }
+                        
+                    }
+                    else if($brandId != '')
+                    {
+                        
+                        $lims_stock_count_all = StockCount::
+                        where('brand_id',$brandId)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                    }
+                    else{
+                        $lims_stock_count_all = StockCount::orderBy('id', 'desc')->get();
+                    }
+            }
 
-
-                $lims_productType_list = ProductType::where('is_active', true)->get();
+                // $lims_productType_list = ProductType::where('is_active', true)->get();
                 
                
-            return view('stock_count.index', compact('lims_warehouse_list', 'lims_brand_list', 'lims_category_list', 'lims_stock_count_all','lims_productType_list'));
+            return view('stock_count.index', compact('lims_warehouse_list', 'lims_brand_list', 'lims_category_list', 'lims_stock_count_all','categoryId','warehouseId','brandId'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
