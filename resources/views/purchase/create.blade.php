@@ -15,6 +15,7 @@
                 <div class="row m-0">
                     <div class="col-md-12 p-0">
                         <div class="row mx-0">
+                            <input type="hidden" name="defaultSupplier" id="defaultSupplier" value="{{ getDefaultSupplier() }}">
                             <?php $outletId = Auth::user()->warehouse_id ?>
                            
                             <div class="col-md-6 outletStoreDiv"  id="outletStoreDiv">
@@ -272,6 +273,9 @@
 @endsection
 @push('scripts')
 <script type="text/javascript">
+
+$("#supplier_id").val($("#defaultSupplier").val());
+
 <?php $id =Auth::user()->role_id ?>
     var auth_id = {{$id}};
     // if(auth_id != 1)
@@ -572,7 +576,9 @@
 
 
     $('#supplier_id').on('change',function(){
-        
+        if($("#defaultSupplier").val() == $(this).val()) {
+            return false;
+        }
         $.ajax({
             type: 'GET',
             url: 'supplier_search',
@@ -611,6 +617,7 @@
         // alert(data)
        var _product = data;
        var supplier_id= $('#supplier_id').val();
+       var defaulr_supplier_id = $('#defaultSupplier').val();
         // alert(supplier_id)
         $.ajax({
             type: 'GET',
@@ -646,7 +653,11 @@
                         cols += '<td style="padding: 0 !important; text-align:center !important">' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target=""> </button></td>';
                         // cols += '<td>' + data[0] + '<button type="button" class="edit-product btn btn-link" data-toggle="modal" data-target="#editModal"> <i class="dripicons-document-edit"></i></button></td>';
                         cols += '<td style="padding: 0 !important; text-align:center !important">' + data[1] + '</td>';
-                        cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" max="'+data['actual_qty']+'" required/></td>';
+                        if(defaulr_supplier_id == supplier_id) {
+                            cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
+                        } else {
+                            cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" max="'+data['actual_qty']+'" required/></td>';
+                        }
                         cols += '<input type="hidden" class="form-control" name="vendor_product_id[]"  step="any" value="'+data['vendor_product_id']+'" required/>';
                         if($('select[name="status"]').val() == 1)
                             cols += '<td style="padding: 0 !important; text-align:center !important" class="recieved-product-qty d-none"><input type="number" class="form-control recieved" name="recieved[]" value="1" step="any"/></td>';

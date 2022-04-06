@@ -19,6 +19,7 @@ class CreatePosSettingTable extends Migration
             $table->integer('warehouse_id');
             $table->integer('biller_id');
             $table->integer('product_number');
+            $table->integer('supplier_id');
             $table->string('stripe_public_key')->nullable();
             $table->string('stripe_secret_key');
             $table->timestamps();

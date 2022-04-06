@@ -1,5 +1,6 @@
 <?php
 
+use App\PosSetting;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 
@@ -26,5 +27,11 @@ if(!function_exists('useInRole')) {
         $user =  Auth::user();
         $role = Role::find($user->role_id);
         return in_array($role->name, $rolesData);
+    }
+}
+
+if(!function_exists('getDefaultSupplier')) {
+    function getDefaultSupplier() {
+        return PosSetting::first()->supplier_id;
     }
 }

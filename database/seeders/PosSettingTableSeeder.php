@@ -25,6 +25,7 @@ class PosSettingTableSeeder extends Seeder
                 'customer_id' => 11,
                 'warehouse_id' => 1,
                 'biller_id' => 1,
+                'supplier_id' => 8,
                 'product_number' => 4,
                 'keybord_active' => 0,
                 'stripe_public_key' => NULL,

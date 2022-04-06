@@ -69,6 +69,17 @@
                                         </select>
                                     </div>
                                     <div class="form-group">
+                                        <label>{{trans('file.Default')}} Supplier *</label>
+                                        @if($lims_pos_setting_data)
+                                        <input type="hidden" name="supplier_id_hidden" value="{{$lims_pos_setting_data->supplier_id}}">
+                                        @endif
+                                        <select required name="supplier_id" class="selectpicker form-control " data-live-search="true" data-live-search-style="begins" title="Select outlet...">
+                                            @foreach($lims_supplier_list as $supplier)
+                                            <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
                                         <label>{{trans('file.Displayed Number of Product Row')}} *</label>
                                         <input type="number" name="product_number" class="form-control" value="@if($lims_pos_setting_data){{$lims_pos_setting_data->product_number}}@endif" required />
                                     </div>
@@ -112,6 +123,7 @@
     $('select[name="customer_id"]').val($("input[name='customer_id_hidden']").val());
     $('select[name="biller_id"]').val($("input[name='biller_id_hidden']").val());
     $('select[name="warehouse_id"]').val($("input[name='warehouse_id_hidden']").val());
+    $('select[name="supplier_id"]').val($("input[name='supplier_id_hidden']").val());
     $('.selectpicker').selectpicker('refresh');
 
 </script>

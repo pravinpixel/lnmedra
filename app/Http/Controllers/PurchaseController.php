@@ -293,7 +293,9 @@ class PurchaseController extends Controller
     public function supplierSearch(Request $request)
     {
         $supplierId = $request->supplierId;
-       
+        if(getDefaultSupplier() == $supplierId){
+            return [];
+        }
         // $vendorData = User::where('vendor_id',$supplierId)->select('id')->first();
         // return $vendorData;
         $lims_product_data = Product::select(DB::raw('products.*','vendor_products.ln_qty','vendor_products.ln_price'))
@@ -313,16 +315,26 @@ class PurchaseController extends Controller
         $product_code = explode("(", $request['data']);
         $supplierId = $request->supplierId;
         $product_code[0] = rtrim($product_code[0], " ");
+        $defaultSupplier = getDefaultSupplier();
+        if($defaultSupplier == $supplierId){
+            $lims_product_data = Product::select('products.*')
+            ->where([
+                ['code', $product_code[0]],
+                ['products.is_active', true]
+            ])->first();
+        } else {
+            $lims_product_data = Product::select('products.*','vendor_products.id as vendor_product_id','vendor_products.actual_qty as actual_qty','vendor_products.ln_qty as ln_qty','vendor_products.ln_price as ln_price')
+            ->join('vendor_products','vendor_products.product_id','products.id')
+            ->where('vendor_products.created_by',  $supplierId)
+            ->where('vendor_products.is_approve', 1)
+            ->where('vendor_products.ln_qty', '>', 0)
+            ->where([
+                ['code', $product_code[0]],
+                ['products.is_active', true]
+            ])->first();
+    
+        }
       
-        $lims_product_data = Product::select('products.*','vendor_products.id as vendor_product_id','vendor_products.actual_qty as actual_qty','vendor_products.ln_qty as ln_qty','vendor_products.ln_price as ln_price')
-        ->join('vendor_products','vendor_products.product_id','products.id')
-        ->where('vendor_products.created_by',  $supplierId)
-        ->where('vendor_products.is_approve', 1)
-        ->where('vendor_products.ln_qty', '>', 0)
-        ->where([
-            ['code', $product_code[0]],
-            ['products.is_active', true]
-        ])->first();
         if(empty($lims_product_data)){
             return false;
         }
@@ -345,7 +357,11 @@ class PurchaseController extends Controller
         else
             $product[] = $lims_product_data->code;
         // $product[] = $lims_product_data->cost;
-        $product[] = $lims_product_data->ln_price;
+        if($defaultSupplier == $supplierId){
+            $product[] = $lims_product_data->price;
+        } else {
+            $product[] = $lims_product_data->ln_price;
+        }
         
         if ($lims_product_data->tax_id) {
             $lims_tax_data = Tax::find($lims_product_data->tax_id);
@@ -383,10 +399,13 @@ class PurchaseController extends Controller
         $product[] = $lims_product_data->is_batch;
         $product[] = $lims_product_data->is_imei;
         $product[] = $lims_product_data->vendor_user_id;
-        $product['ln_qty'] = $lims_product_data->ln_qty;
-        $product['ln_price'] = $lims_product_data->ln_price;
-        $product['vendor_product_id'] = $lims_product_data->vendor_product_id;
-        $product['actual_qty'] = $lims_product_data->actual_qty;
+        if($defaultSupplier != $supplierId){
+            $product['ln_qty'] = $lims_product_data->ln_qty;
+            $product['ln_price'] = $lims_product_data->ln_price;
+            $product['vendor_product_id'] = $lims_product_data->vendor_product_id;
+            $product['actual_qty'] = $lims_product_data->actual_qty;
+        }
+      
         return $product;
     }
 
@@ -534,7 +553,7 @@ class PurchaseController extends Controller
             $product_purchase['tax'] = $tax[$i];
             $product_purchase['total'] = $total[$i];
             $result = ProductPurchase::create($product_purchase);
-            if($result) {
+            if($result && ($data['supplier_id'] != getDefaultSupplier())) {
                 $vendorProduct = VendorProduct::find($product_purchase['vendor_product_id']);
                 $vendorProduct->ln_qty = $vendorProduct->ln_qty -  $product_purchase['qty'];
                 $vendorProduct->save();

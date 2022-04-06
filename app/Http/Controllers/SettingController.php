@@ -13,6 +13,7 @@ use App\PosSetting;
 use App\GeneralSetting;
 use App\HrmSetting;
 use App\RewardPointSetting;
+use App\User;
 use DB;
 use ZipArchive;
 use Twilio\Rest\Client;
@@ -335,8 +336,9 @@ class SettingController extends Controller
         $lims_warehouse_list = Warehouse::where('is_active', true)->get();
         $lims_biller_list = Biller::where('is_active', true)->get();
         $lims_pos_setting_data = PosSetting::latest()->first();
+        $lims_supplier_list = User::where('is_active', true)->whereNotNull('vendor_id')->get();
         
-    	return view('setting.pos_setting', compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_pos_setting_data'));
+    	return view('setting.pos_setting', compact('lims_customer_list', 'lims_warehouse_list', 'lims_biller_list', 'lims_pos_setting_data','lims_supplier_list'));
     }
 
     public function posSettingStore(Request $request)
@@ -358,6 +360,7 @@ class SettingController extends Controller
     	$pos_setting->customer_id = $data['customer_id'];
     	$pos_setting->warehouse_id = $data['warehouse_id'];
     	$pos_setting->biller_id = $data['biller_id'];
+    	$pos_setting->supplier_id = $data['supplier_id'];
     	$pos_setting->product_number = $data['product_number'];
     	$pos_setting->stripe_public_key = $data['stripe_public_key'];
     	$pos_setting->stripe_secret_key = $data['stripe_secret_key'];
