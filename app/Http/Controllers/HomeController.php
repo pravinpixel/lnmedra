@@ -606,7 +606,7 @@ class HomeController extends Controller
             $data[3] = $purchase_return;
             $data['purchase'] = $purchase;
             $data['expense'] = $expense;
-            $data['percentagecal'] = $amountCal;
+            $data['percentagecal'] = $amountCal ?? [];
         }
         return $data;
     }
