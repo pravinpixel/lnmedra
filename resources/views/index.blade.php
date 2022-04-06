@@ -9,7 +9,7 @@
       letter-spacing: 1px;
     }
     .count-title {
-      background:linear-gradient(1deg, #0095FF, #FFFFFF) !important;
+      background:linear-gradient(1deg, #0095FF, #e9ffee) !important;
       color : #032617 !important;
       border: 2px  solid white !important;
       text-shadow: 0 2px 5px white !important;
@@ -102,11 +102,11 @@
   <div class="row" id="simple-dragula" data-plugin="dragula">
     <div class="col-md-6">
       <div class="card line-chart-example shadow">
-        <div class="card-header bg-success text-white p-2">
+        <div class="custom-card-header">
           
           <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.Cash Flow')}}</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body p-3">
           @php
             if($general_setting->theme == 'default.css'){
               $color = '#0095ff';
@@ -131,23 +131,23 @@
     </div>
     <div class="col-md-6">
       <div class="card shadow">
-        <div class="card-header  bg-success text-white p-2">
+        <div class="custom-card-header">
           
           <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.yearly report')}}</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body p-3">
           <canvas id="saleChart" data-sale_chart_value = "{{json_encode($yearly_sale_amount)}}" data-purchase_chart_value = "{{json_encode($yearly_purchase_amount)}}" data-label1="{{trans('file.Purchased Amount')}}" data-label2="{{trans('file.Sold Amount')}}"></canvas>
         </div>
       </div>
     </div>
     <div class="col-md-6">
       <div class="card shadow">
-        <div class="card-header  bg-success text-white p-2">
+        <div class="custom-card-header">
           
           <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.Best Seller').' '.date('Y'). '('.trans('file.qty').')'}}</h4>
           <div class="right-column"></div>
         </div>
-        <div class="card-body">
+        <div class="card-body p-3">
           <div class="table-responsive">
             <table class="table m-0 table-bordered" id="best-seller-table">
               <thead>
@@ -176,12 +176,12 @@
     
     <div class="col-md-6">
       <div class="card shadow">
-        <div class="card-header  bg-success text-white p-2">
+        <div class="custom-card-header">
           
           <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.Recent Transaction')}}</h4>
           <div class="right-column"></div>
         </div>
-        <div class="card-body pt-3">
+        <div class="card-body p-3 pt-3">
           <ul class="nav nav-tabs bg-light border rounded mb-2" role="tablist">
             <li class="nav-item">
               <a class="nav-link active" href="#sale-latest" role="tab" data-toggle="tab">{{trans('file.Sale')}}</a>
@@ -198,7 +198,7 @@
           </ul> 
           <div class="tab-content p-0">
             <div role="tabpanel" class="tab-pane fade show active" id="sale-latest">
-                <div class="table-responsive">
+                <div class="table-responsive border-right border-info border-left">
                   <table class="table m-0 table-bordered">
                     <thead>
                       <tr>
@@ -231,7 +231,7 @@
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane fade" id="purchase-latest">
-                <div class="table-responsive">
+                <div class="table-responsive border-right border-info border-left">
                   <table class="table m-0 table-bordered">
                     <thead>
                       <tr>
@@ -270,7 +270,7 @@
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane fade" id="quotation-latest">
-                <div class="table-responsive">
+                <div class="table-responsive border-right border-info border-left">
                   <table class="table m-0 table-bordered">
                     <thead>
                       <tr>
@@ -301,7 +301,7 @@
                 </div>
             </div>
             <div role="tabpanel" class="tab-pane fade" id="payment-latest">
-                <div class="table-responsive">
+                <div class="table-responsive border-right border-info border-left">
                   <table class="table m-0 table-bordered">
                     <thead>
                       <tr>
@@ -330,10 +330,10 @@
     </div>
     <div class="col-md-6">
       <div class="card shadow">
-        <div class="card-header  bg-success text-white p-2">
+        <div class="custom-card-header">
           <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{date('F')}} {{date('Y')}}</h4>
         </div>
-        <div class="card-body">
+        <div class="card-body p-3">
           <div class="pie-chart">
             <canvas id="transactionChart" data-color = "{{$color}}" data-color_rgba = "{{$color_rgba}}" data-revenue={{$revenue}} data-purchase={{$purchase}} data-expense={{$expense}} data-label1="{{trans('file.Purchase')}}" data-label2="{{trans('file.revenue')}}" data-label3="{{trans('file.Expense')}}" width="100" height="95"> </canvas>
           </div>
@@ -342,11 +342,11 @@
     </div>
     <div class="col-md-6">
       <div class="card shadow">
-        <div class="card-header  bg-success text-white p-2">
+        <div class="custom-card-header">
           <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>Cash flow Distribution</h4>  
         </div>
-        <div class="card-body">
-          <div class="table-responsive">
+        <div class="card-body p-3">
+          <div class="table-responsive border-right border-info border-left">
             <table class="table m-0 table-bordered">
               <thead>
                 <tr>
@@ -373,13 +373,13 @@
     </div> 
     <div class="col-md-6">
       <div class="card shadow">
-        <div class="card-header  bg-success text-white p-2">
+        <div class="custom-card-header">
           
           <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>Recent  Customers</h4>
           <div class="right-column"></div>
         </div>
-        <div class="card-body">
-          <div class="table-responsive">
+        <div class="card-body p-3">
+          <div class="table-responsive border-right border-info border-left">
             <table class="table m-0 table-bordered">
               <thead>
                 <tr>
@@ -472,7 +472,7 @@
             <div class="card-header">
               <h4>{{trans('file.Cash Flow')}}</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body p-3">
               @php
                 if($general_setting->theme == 'default.css'){
                   $color = '#0095ff';
@@ -501,7 +501,7 @@
             <div class="card-header">
               <h4>{{trans('file.yearly report')}}</h4>
             </div>
-            <div class="card-body">
+            <div class="card-body p-3">
               <canvas id="saleChart" data-sale_chart_value = "{{json_encode($yearly_sale_amount)}}" data-purchase_chart_value = "{{json_encode($yearly_purchase_amount)}}" data-label1="{{trans('file.Purchased Amount')}}" data-label2="{{trans('file.Sold Amount')}}"></canvas>
             </div>
           </div>
@@ -562,7 +562,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
               <h4>Cash flow Distribution</h4>  
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive border-right border-info border-left">
                 <table class="table">
                   <thead>
                     <tr>
@@ -611,7 +611,7 @@
 
             <div class="tab-content p-3">
               <div role="tabpanel" class="tab-pane fade show active" id="sale-latest">
-                  <div class="table-responsive">
+                  <div class="table-responsive border-right border-info border-left">
                     <table class="table">
                       <thead>
                         <tr>
@@ -644,7 +644,7 @@
                   </div>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="purchase-latest">
-                  <div class="table-responsive">
+                  <div class="table-responsive border-right border-info border-left">
                     <table class="table">
                       <thead>
                         <tr>
@@ -683,7 +683,7 @@
                   </div>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="quotation-latest">
-                  <div class="table-responsive">
+                  <div class="table-responsive border-right border-info border-left">
                     <table class="table">
                       <thead>
                         <tr>
@@ -714,7 +714,7 @@
                   </div>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="payment-latest">
-                  <div class="table-responsive">
+                  <div class="table-responsive border-right border-info border-left">
                     <table class="table">
                       <thead>
                         <tr>
@@ -748,7 +748,7 @@
                 
               </div>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive border-right border-info border-left">
                 <table class="table">
                   <thead>
                     <tr>

@@ -19,7 +19,7 @@
             <div class="container-fluid">
                 {!! Form::open(['route' => ['supplier.update',$lims_supplier_data->id],'name'=>'vendorForm','id'=>'vendorForm', 'method' => 'put', 'files' => true]) !!}
                     <div class="card shadow">
-                        <div class="card-header bg-success text-white">
+                        <div class="custom-card-header">
                             <h4><strong>{{trans('file.Edit Supplier')}}</strong></h4>
                         </div>
                         <div class="card-body">
@@ -125,7 +125,7 @@
                         </div>
                     </div>
                     <div class="card shadow">
-                        <div class="card-header bg-success text-white">
+                        <div class="custom-card-header">
                             <h4><strong>{{trans('file.Company Info')}}</strong></h4>
                         </div>
                         <div class="card-body">
@@ -168,7 +168,7 @@
                         </div>
                     </div> 
                     <div class="card shadow">
-                        <div class="card-header bg-success text-white">
+                        <div class="custom-card-header">
                             <h4><strong>{{trans('file.Bank Info')}}</strong></h4>
                         </div>
                         <div class="card-body">
@@ -218,7 +218,7 @@
         <section class="forms">
             <div class="container-fluid">
                 <div class="card">
-                    <div class="card-header bg-success text-white">
+                    <div class="custom-card-header">
                         <h4><strong>{{trans('file.Password Reset')}}</strong></h4>
                     </div>
                     <div class="card-body">

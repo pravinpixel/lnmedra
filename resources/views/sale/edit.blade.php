@@ -62,7 +62,7 @@
                 </div>
             </div>
             <div class="card shadow">
-                <div class="card-header bg-info text-white">
+                <div class="custom-card-header">
                     <h4 class="m-0">{{trans('file.Order Table')}} *</h4>
                 </div>
                 <div class="card-body"> 

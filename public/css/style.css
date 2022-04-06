@@ -311,3 +311,14 @@ section {
 .dz-details {
   display: none !important;
 }
+
+.custom-card-header h4 {
+  margin: 0 !important;
+}
+.custom-card-header {
+  background:linear-gradient(45deg, #2395FC, #14AB69);
+  color: white;
+  padding: 10px !important;
+  border-radius: 5px 5px 0 0 !important ;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;;
+}
