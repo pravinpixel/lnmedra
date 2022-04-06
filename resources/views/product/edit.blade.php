@@ -6,7 +6,7 @@
    
         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
         <div class="card">
-            <div class="card-header bg-success text-white">
+            <div class="custom-card-header">
                 <h4>{{trans('file.Update Product')}}</h4>
             </div> 
             <div class="card-body">
@@ -54,14 +54,7 @@
                                 <span class="validation-msg" id="code-error"></span>
                             </div>
                         </div>
-                        <div class="col-md-4" id="attribute_div">
-                            <div class="form-group">
-                                <label>{{trans('file.Attribute')}} *</strong> </label> 
-                                <div id="attribute_img" class="row m-0">
-                                    
-                                </div>  
-                            </div>
-                        </div>
+                        
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>{{trans('file.Barcode Symbology')}} *</strong> </label>
@@ -270,7 +263,6 @@
                                 <input type="text"  name="max_discount"  value="{{ $lims_product_data->max_discount}}" required class="form-control">
                                 <span class="validation-msg"></span>
                             </div>
-                            
                         </div>
                         <div id="alert-qty" class="col-md-4">
                             <div class="form-group">
@@ -467,6 +459,13 @@
                                         <input type="text" name="last_date" value="{{$lims_product_data->last_date}}" id="ending_date" class="form-control" />
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="attribute_div">
+                            <div class="form-group">
+                                <label>{{trans('file.Attribute')}} *</strong> </label> 
+                                <div id="attribute_img" class="row m-0">
+                                </div>  
                             </div>
                         </div>
                         <div class="col-md-12">

@@ -41,7 +41,11 @@ class ProductController extends Controller
                 $all_permission[] = $permission->name;
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
-            return view('product.index', compact('all_permission'));
+
+                $lims_productType_list =  ProductType::where('is_active',true)->where('is_active','!=',2)->get();
+            $lims_category_list = Category::where('is_active',true)->get();
+            $lims_brand_list = Brand::where('is_active',true)->get();
+            return view('product.index', compact('all_permission','lims_category_list','lims_brand_list','lims_productType_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -49,7 +53,6 @@ class ProductController extends Controller
 
     public function productData(Request $request)
     {
-       
         $columns = array( 
             2 => 'name', 
             3 => 'code',
@@ -72,15 +75,119 @@ class ProductController extends Controller
         $start = $request->input('start');
         $order = 'products.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
+
+
+        $product_id = $request->input('product_id');
+        $category_id = $request->input('category_id');
+        $brand_id = $request->input('brand_id');
         if(empty($request->input('search.value'))){
-            $products = Product::with('category', 'brand', 'unit')->offset($start)
-                        ->where('is_active', '!=',2)
-                        ->limit($limit)
-                        ->orderBy($order,$dir)
-                        ->get();
+            if($product_id != '')
+            {
+                if($product_id !='' && $category_id != '' && $brand_id != '')
+                {
+                 $products = Product::with('category', 'brand', 'unit')->offset($start)
+                 ->where('is_active', '!=',2)
+                 ->where('type',$product_id)
+                 ->where('category_id',$category_id)
+                 ->where('brand_id',$brand_id)
+                 ->limit($limit)
+                 ->orderBy($order,$dir)
+                 ->get();
+                 $totalData= count($products);
+                 $totalFiltered = $totalData; 
+                }
+               else if($product_id !='' && $category_id != '')
+               {
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('type',$product_id)
+                ->where('category_id',$category_id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+               }
+               else if($product_id !='' && $brand_id != '')
+               {
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('type',$product_id)
+                ->where('brand_id',$brand_id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+               }
+              
+               else{
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('type',$product_id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+               }
+                
+               
+            }
+            else if($category_id != '')
+            {
+                if($category_id !='' && $brand_id != '')
+                {
+                 $products = Product::with('category', 'brand', 'unit')->offset($start)
+                 ->where('is_active', '!=',2)
+                 ->where('category_id',$category_id)
+                 ->where('brand_id',$brand_id)
+                 ->limit($limit)
+                 ->orderBy($order,$dir)
+                 ->get();
+                 $totalData= count($products);
+                 $totalFiltered = $totalData; 
+                }
+                else{
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('category_id',$category_id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+                }
+               
+            }
+            else if($brand_id != '')
+            {
+            
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->where('brand_id',$brand_id)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+            }
+            else{
+                
+                $products = Product::with('category', 'brand', 'unit')->offset($start)
+                ->where('is_active', '!=',2)
+                ->limit($limit)
+                ->orderBy($order,$dir)
+                ->get();
+                $totalData= count($products);
+                $totalFiltered = $totalData; 
+            }
+            
+            
+            
         }
         else
-        {
+        {     
             $search = $request->input('search.value'); 
             $products =  Product::select('products.*')
                         ->with('category', 'brand', 'unit')
@@ -217,6 +324,8 @@ class ProductController extends Controller
                 $data[] = $nestedData;
             }
         }
+        // $totalFiltered = count($products);
+        // $totalData = $totalFiltered;
         $json_data = array(
             "draw"            => intval($request->input('draw')),  
             "recordsTotal"    => intval($totalData),  
@@ -900,15 +1009,21 @@ class ProductController extends Controller
        $data = MasterAttribute::where('product_type',$id)->get();
        foreach($data as $key=>$val)
        {
-        $attribute_image = explode(",", $val->image);
-        $attribute_image = htmlspecialchars($attribute_image[0]);
+        // $attribute_image = explode(",", );
+        // $attribute_image = htmlspecialchars($attribute_image[0]);
+        $path = asset('public/images/attribute').'/'.$val->image;
+         
         $val['checkbox_image'] = '
-            <div class="border col-3 p-0 m-2">
-                <div class="d-flex" style="background: url("'.url('public/images/attribute', $attribute_image).'"); height:60px;width:60px;background-size: cover;" >
-                    <input type="checkbox" name="attribute[]" value="'.$val->id.'" required>
-                </div> 
-                <span class="validation-msg"></span>
-            </div>
+            <div class="col-2 p-2 mb-2">
+                <div class="card p-1 shadow-sm d-flex justify-content-center align-items-center text-center m-0 " style="min-height:100px" id="active_class'.$val->id.'">
+                    <div>
+                        <img class="mx-auto mb-2" src="'.$path.'" width="40">
+                        <div class="text-center"> 
+                            <label  style="font-size: 12px;" for="att_'.$val->id.'_icon" class="card-text text-center fw-bold m-0"><input onclick="check_this_box('.$val->id.')" type="checkbox" id="att_'.$val->id.'_icon" name="attribute[]" value="'.$val->id.'" required class="mr-1"> '.$val->title.'</label>
+                        </div>
+                    </div>
+                </div>
+            </div>            
         ';
        }
         // dd($data);
@@ -923,29 +1038,43 @@ class ProductController extends Controller
         $data = MasterAttribute::where('product_type',$id)->get();
         foreach($data as $key=>$val)
         {
-            $attribute_image = explode(",", $val->image);
-            $attribute_image = htmlspecialchars($attribute_image[0]);
-            if(in_array("$val->id",$dd))
-            {
-                $val['checkbox_image'] = '
-                    <div class="border col-3 p-0 m-2">
-                        <div class="d-flex" style="background: url('.asset('public/images/attribute/', $attribute_image).'); height:60px;width:60px;background-size: cover;" >
-                            <input type="checkbox" name="attribute[]" checked value="'.$val->id.'" required>
-                        </div> 
-                        <span class="validation-msg"></span>
-                    </div>
-                ';
-            }
-            else{
-                $val['checkbox_image'] = '
-                        <div class="border col-3 p-0 m-2">
-                            <div class="d-flex" style="background: url('.asset('public/images/attribute/', $attribute_image).'); height:60px;width:60px;background-size: cover;" >
-                                <input type="checkbox" name="attribute[]" value="'.$val->id.'" required>
-                            </div> 
-                            <span class="validation-msg"></span>
+            // $attribute_image = explode(",", $val->image);
+            // $attribute_image = htmlspecialchars($attribute_image[0]);
+            // if(in_array("$val->id",$dd))
+            // {
+            //     $val['checkbox_image'] = '
+            //         <div class="border col-3 p-0 m-2">
+            //             <div class="d-flex" style="background: url('.asset('public/images/attribute/', $attribute_image).'); height:60px;width:60px;background-size: cover;" >
+            //                 <input type="checkbox" name="attribute[]" checked value="'.$val->id.'" required>
+            //             </div> 
+            //             <span class="validation-msg"></span>
+            //         </div>
+            //     ';
+            // }
+            // else{
+            //     $val['checkbox_image'] = '
+            //             <div class="border col-3 p-0 m-2">
+            //                 <div class="d-flex" style="background: url('.asset('public/images/attribute/', $attribute_image).'); height:60px;width:60px;background-size: cover;" >
+            //                     <input type="checkbox" name="attribute[]" value="'.$val->id.'" required>
+            //                 </div> 
+            //                 <span class="validation-msg"></span>
+            //             </div>
+            //         ';
+            // } 
+            $path = asset('public/images/attribute').'/'.$val->image;
+         
+            $val['checkbox_image'] = '
+                <div class="col-2 p-2 mb-2">
+                    <div class="card p-1 shadow-sm d-flex justify-content-center align-items-center text-center m-0 " style="min-height:100px" id="active_class'.$val->id.'">
+                        <div>
+                            <img class="mx-auto mb-2" src="'.$path.'" width="40">
+                            <div class="text-center"> 
+                                <label  style="font-size: 12px;" for="att_'.$val->id.'_icon" class="card-text text-center fw-bold m-0"><input onclick="check_this_box('.$val->id.')" type="checkbox" id="att_'.$val->id.'_icon" name="attribute[]" value="'.$val->id.'" required class="mr-1"> '.$val->title.'</label>
+                            </div>
                         </div>
-                    ';
-            } 
+                    </div>
+                </div>            
+            ';
 
         }
          // dd($data);

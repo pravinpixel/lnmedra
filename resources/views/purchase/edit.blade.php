@@ -7,7 +7,7 @@
         <div class="row m-0">
             <div class="col-md-12 p-0">
                 <div class="card">
-                    <div class="card-header bg-success text-white">
+                    <div class="custom-card-header">
                         <h4>{{trans('file.Update Purchase')}}</h4>
                     </div>
                     <div class="card-body">

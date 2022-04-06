@@ -6,7 +6,7 @@
     
         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
             <div class="card">
-                <div class="card-header bg-success text-white fw-bold">
+                <div class="custom-card-header">
                     <h4>{{trans('file.add_product')}}</h4>
                 </div>
          
@@ -49,16 +49,7 @@
                                     </div>
                                     <span class="validation-msg" id="code-error"></span>
                                 </div>
-                            </div>
-                            <div class="col-md-6" id="attribute_div">
-                                <div class="form-group">
-                                    <label>{{trans('file.Attribute')}} *</strong> </label>
-                                    
-                                    <div id="attribute_img" >
-                                        
-                                    </div> 
-                                </div>
-                            </div>
+                            </div> 
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('file.Barcode Symbology')}} *</strong> </label>
@@ -396,6 +387,13 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-12" id="attribute_div">
+                                <div class="form-group">
+                                    <label>{{trans('file.Attribute')}} *</strong> </label>
+                                    <small class="validation-msg text-danger"></small>
+                                    <div id="attribute_img" class="row m-0"></div>  
+                                </div>
+                            </div>
                         </div>
                         <div class="text-right pt-3">
                             <input type="button" value="{{trans('file.submit')}}" id="submit-btn" class="btn btn-primary">
@@ -413,6 +411,9 @@
 
 <script type="text/javascript">
 
+function check_this_box(product_id) {
+   $(`#active_class${product_id}`).toggleClass('shadow border-primary border');
+}
 
 $('#attribute_div').hide();
     $("ul#product").siblings('a').attr('aria-expanded','true');
@@ -474,8 +475,8 @@ $('#attribute_div').hide();
                     let att = res.data[i];
                     console.log(res.data[i].id);
                     $('#attribute_img').append(`
-                    ${res.data[i].checkbox} 
-                    ${res.data[i].image}     
+                        ${res.data[i].checkbox_image} 
+                          
                     `)
                    } 
                 }

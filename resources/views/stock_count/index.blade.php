@@ -6,6 +6,51 @@
 
 <section>
     <div class="container-fluid">
+    {!! Form::open(['route' => 'stock-count.index', 'method' => 'get']) !!}
+        <div class="row m-0">
+            <div class="d-flex align-items-center col-5">
+                <div class="mr-3">{{trans('file.Outlet')}}</div>
+                <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" title="Select Outlet" data-live-search="true" data-live-search-style="begins" >
+                    <!-- <option value="0">{{trans('file.All Outlet')}}</option> -->
+                    @foreach($lims_warehouse_list as $warehouse)
+                
+                        <option {{ $warehouse['id'] == $warehouseId ? "selected" : "" }} value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                    
+                    @endforeach
+                </select>
+            </div>
+            <div class="d-flex align-items-center col-5">
+                <div class="mr-3">{{trans('file.category')}}</div>
+                <select id="category_id" name="category_id" class="selectpicker form-control w-100" title="Select Category" data-live-search="true" data-live-search-style="begins" >
+                    <!-- <option value="0">{{trans('file.customer')}}</option> -->
+                    @foreach($lims_category_list as $category)
+                
+                        <option {{ $category['id'] == $categoryId ? "selected" : "" }} value="{{$category->id}}">{{$category->name}}</option>
+                    
+                    @endforeach
+                </select>
+            </div>
+            
+            <div class="d-flex align-items-center col-5">
+                <div class="mr-3">{{trans('file.Brand')}}</div>
+                <select id="brand_id" name="brand_id" class="selectpicker form-control w-100" title="Select Brand" data-live-search="true" data-live-search-style="begins" >
+                    <!-- <option value="0">{{trans('file.All Outlet')}}</option> -->
+                    @foreach($lims_brand_list as $brand)
+                
+                        <option {{ $brand['id'] == $brandId ? "selected" : "" }} value="{{$brand->id}}">{{$brand->title}}</option>
+                        
+                    @endforeach
+                </select>
+            </div>
+             
+            <div class="col-2">
+                <button class="btn btn-primary w-100" onclick="filter()" id="filter-btn" type="submit" >{{trans('file.search')}}</button>
+            </div>
+            <div class="col-2">
+                <a class="btn btn-danger w-100" href="{{ route('stock-count.index') }}"  id="filter-btn" >{{trans('file.Reset')}}</a>
+            </div> 
+        </div>
+        {!! Form::close() !!}
         <div class="text-right">
             <button class="btn btn-info my-4" data-toggle="modal" data-target="#createModal"><i class="dripicons-plus"></i> {{trans('file.Count Stock')}} </button>
         </div>
@@ -328,6 +373,8 @@
     });
 
     $('#stock-count-table').DataTable( {
+        "pageLength": 50,
+        "pageLength": 50,
         "order": [],
         'language': {
             'lengthMenu': '_MENU_ {{trans("file.records per page")}}',
@@ -393,6 +440,7 @@
             },
         ],
     } );
+    
 
 </script>
 @endpush

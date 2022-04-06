@@ -2,12 +2,42 @@
  
 
 <section>
-    <div class="container-fluid">
-    
+    <div class="container-fluid"> 
+        <div class="card card-body">
+            <div class="row m-0">
+                <div class="d-flex align-items-center col">
+                    <div class="mr-3">Name</div>
+                    <select id="vendor_id" name="vendor_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Vendor.." data-live-search-style="begins" >
+                        @foreach($lims_supplier_list as $supplier)
+                            <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="d-flex align-items-center col">
+                    <div class="mr-3">{{trans('file.category')}}</div>
+                    <select id="category_id" name="category_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Category.." data-live-search-style="begins" >
+                        @foreach($lims_category_list as $category)
+                            <option value="{{$category->id}}">{{$category->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="d-flex align-items-center col">
+                    <div class="mr-3">{{trans('file.Brand')}}</div>
+                    <select id="brand_id" name="brand_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Brand.." data-live-search-style="begins" >
+                        @foreach($lims_brand_list as $brand)
+                            <option value="{{$brand->id}}">{{$brand->title}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-1 p-0">
+                    <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                    <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                </div> 
+            </div>
+        </div> 
         <div class="my-4 text-right">
             @if(in_array("vendorproducts-add", $all_permission))
                 <a href="{{route('vendorproducts.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> Vendor {{__('file.add_product')}}</a>
-                {{-- <a href="#" data-toggle="modal" data-target="#importProduct" class="btn btn-primary"><i class="dripicons-copy"></i> {{__('file.import_product')}}</a> --}}
             @endif
         </div>
          
@@ -220,7 +250,9 @@
     }
 
     $(document).ready(function() {
+       
         var table = $('#product-data-table').DataTable( {
+            "pageLength": 50,
             responsive: true,
             fixedHeader: {
                 header: true,
@@ -230,9 +262,13 @@
             "serverSide": true,
             "ajax":{
                 url:"vendor-dashboard-data",
-                data: function(d){
+                data :  function(d) {
+                    d.all_permission= all_permission,
                     d.status = $('#product-status').val();
-                    d.all_permission =  all_permission;
+                    d.vendor_id = $("#vendor_id").val(),
+                    d.category_id = $("#category_id").val(),
+                    d.brand_id = $("#brand_id").val()
+                    
                 },
                 dataType: "json",
                 type:"GET"
@@ -347,6 +383,20 @@
     $("#product-status").change(function(){
         $('#product-data-table').DataTable().draw().clear();
     });
+    function filter(){
+        $('#product-data-table').DataTable().draw();
+    }
+    function filterReset()
+    {
+        var vendor_Id = $("#vendor_id").val();
+        var category_Id = $("#category_id").val();
+        var brand_Id = $("#brand_id").val();
+        if(vendor_Id || category_Id || brand_Id)
+        {
+            location.reload();
+        }
+        
+    }
 
 </script>
 @endpush

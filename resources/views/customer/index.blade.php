@@ -5,64 +5,62 @@
     
     <div class="card">  
         <div class="card-body">
-  
-                <div class="row m-0">
-                    <div class="col-5 d-flex align-items-center">
-                        <div class="mr-3">{{trans('file.Date')}}</div>
-                        <input type="text" class="daterangepicker-field form-control w-100" value="{{ now()->format('Y-m-d') }} To {{ now()->format('Y-m-d') }}" required />
-                        <input type="hidden" name="starting_date" id="starting_date" value="{{now()}}" />
-                        <input type="hidden" name="ending_date" id="ending_date" value="{{now()}}" />
-                    </div>
-             
-                    <div class="d-flex align-items-center col-5">
-                        <div class="mr-3">{{trans('file.Outlet')}}</div>
-                        <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" >
-                            <option value="0">{{trans('file.All Outlet')}}</option>
-                            @foreach($lims_warehouse_list as $warehouse)
-                     
-                                <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                           
-                            @endforeach
-                        </select>
-                    </div>
-                
-                    <div class="col-2">
-                        <button class="btn btn-primary w-100" onclick="filter()" id="filter-btn" type="submit">{{trans('file.search')}}</button>
-                    </div>
+            <div class="row m-0">
+                <div class="col-5 d-flex align-items-center">
+                    <div class="mr-3">{{trans('file.Date')}}</div>
+                    <input type="text" class="daterangepicker-field form-control w-100" value="{{ now()->subDays(30)->format('Y-m-d') }} To {{ now()->format('Y-m-d') }}" required />
+                    <input type="hidden" name="starting_date" id="starting_date" value="{{now()->subDays(30)}}" />
+                    <input type="hidden" name="ending_date" id="ending_date" value="{{now()}}" />
                 </div>
-          
+            
+                <div class="d-flex align-items-center col-5">
+                    <div class="mr-3">{{trans('file.Outlet')}}</div>
+                    <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" >
+                        <option value="0">{{trans('file.All Outlet')}}</option>
+                        @foreach($lims_warehouse_list as $warehouse)
+                    
+                            <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                        
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-2">
+                    <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                    <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                </div> 
+            </div>
         </div>
     </div>
-    <div class="text-right mt-4">
+    <div class="text-right my-4">
         @if(userHasAccess('customers-add'))
             <a href="{{route('customer.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Customer')}}</a>&nbsp;
-            
         @endif
-        
         @if(userHasAccess('customer_import'))
         <a href="#" data-toggle="modal" data-target="#importCustomer" class="btn btn-primary"><i class="dripicons-copy"></i> {{trans('file.Import Customer')}}</a>
         @endif
     </div>
-    <div>
-        <table id="customer-table" class="table">
-            <thead>
-                <tr>
-                    <th>{{trans('file.Customer Group')}}</th>
-                    <th>{{trans('file.name')}}</th>
-                    {{-- <th>{{trans('file.Company Name')}}</th> --}}
-                   <th>{{trans('file.Email')}}</th>
-                     {{-- <th>{{trans('file.Phone Number')}}</th> --}}
-                    <th>{{trans('file.Total transaction')}}</th>
-                    <th>{{trans('file.Total Value')}}</th>
-                    <th>{{trans('file.Last Visited')}}</th>
-                    <th>{{trans('file.Customer since')}}</th>
-                    <th class="not-exported">{{trans('file.action')}}</th>
-                </tr>
-            </thead>
-                <tbody>
-                
-                </tbody>
-            </table>
+    <div class="card"> 
+        <div class="pb-3">
+            <table id="customer-table" class="table">
+                <thead>
+                    <tr>
+                        <th>{{trans('file.Customer Group')}}</th>
+                        <th>{{trans('file.name')}}</th>
+                        {{-- <th>{{trans('file.Company Name')}}</th> --}}
+                       <th>{{trans('file.Email')}}</th>
+                         {{-- <th>{{trans('file.Phone Number')}}</th> --}}
+                        <th>{{trans('file.Total transaction')}}</th>
+                        <th>{{trans('file.Total Value')}}</th>
+                        <th>{{trans('file.Last Visited')}}</th>
+                        <th>{{trans('file.Customer since')}}</th>
+                        <th class="not-exported">{{trans('file.action')}}</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                    
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </section>
@@ -248,6 +246,7 @@
     });
 
     var table = $('#customer-table').DataTable( {
+        "pageLength": 50,
         aaSorting     : [[0, 'desc']],
         responsive: true,
         processing: true,    
@@ -363,6 +362,16 @@
 
     function filter(){
         $('#customer-table').DataTable().draw();
+    }
+    function filterReset()
+    {
+        var warehouse_id = $("#warehouse_id").val();
+        
+        if(warehouse_id)
+        {
+            location.reload();
+        }
+        
     }
 </script>
 @endpush

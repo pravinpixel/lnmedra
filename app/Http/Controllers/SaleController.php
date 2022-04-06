@@ -81,8 +81,8 @@ class SaleController extends Controller
             $lims_reward_point_setting_data = RewardPointSetting::latest()->first();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             $lims_account_list = Account::where('is_active', true)->get();
-
-            return view('sale.index',compact('starting_date', 'ending_date', 'warehouse_id', 'lims_gift_card_list', 'lims_pos_setting_data', 'lims_reward_point_setting_data', 'lims_account_list', 'lims_warehouse_list', 'all_permission'));
+            $lims_customer_list = Customer::where('is_active', true)->get();
+            return view('sale.index',compact('starting_date', 'ending_date', 'warehouse_id', 'lims_gift_card_list', 'lims_pos_setting_data', 'lims_reward_point_setting_data', 'lims_account_list', 'lims_warehouse_list', 'all_permission','lims_customer_list'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -90,6 +90,7 @@ class SaleController extends Controller
 
     public function saleData(Request $request)
     {
+        
         $columns = array( 
             1 => 'created_at', 
             2 => 'reference_no',
@@ -98,7 +99,7 @@ class SaleController extends Controller
         );
         
         $warehouse_id = $request->input('warehouse_id');
-
+        $customer_id = $request->input('customer_id');
         if(Auth::user()->role_id > 2 && config('staff_access') == 'own')
             $totalData = Sale::where('user_id', Auth::id())
                         ->whereDate('created_at', '>=' ,$request->input('starting_date'))
@@ -128,15 +129,54 @@ class SaleController extends Controller
                         ->orderBy($order, $dir)
                         ->get();
             elseif($warehouse_id != 0)
-                $sales = Sale::with('biller', 'customer', 'warehouse', 'user')
-                        ->where('warehouse_id', $warehouse_id)
-                        ->whereDate('created_at', '>=' ,$request->input('starting_date'))
-                        ->whereDate('created_at', '<=' ,$request->input('ending_date'))
-                        ->offset($start)
-                        ->limit($limit)
-                        ->orderBy($order, $dir)
-                        ->get();
+            {
+                
+                if($customer_id != 0)
+                {
+                    
+                    $sales = Sale::with('biller', 'customer', 'warehouse', 'user')
+                    ->where('warehouse_id', $warehouse_id)
+                    ->whereDate('created_at', '>=' ,$request->input('starting_date'))
+                    ->whereDate('created_at', '<=' ,$request->input('ending_date'))
+                    ->where('customer_id','=',$customer_id)
+                    ->offset($start)
+                    ->limit($limit)
+                    ->orderBy($order, $dir)
+                    ->get();
+                }
+                else{
+
+                   
+                    $sales = Sale::with('biller', 'customer', 'warehouse', 'user')
+                            ->where('warehouse_id', $warehouse_id)
+                            ->whereDate('created_at', '>=' ,$request->input('starting_date'))
+                            ->whereDate('created_at', '<=' ,$request->input('ending_date'))
+                            ->offset($start)
+                            ->limit($limit)
+                            ->orderBy($order, $dir)
+                            ->get();
+                    
+                }
+            }
             else
+            {
+               
+                if($customer_id != 0)
+                {
+                    
+                    $sales = Sale::with('biller', 'customer', 'warehouse', 'user')
+                    ->where('customer_id','=',$customer_id)
+                    ->whereDate('created_at', '>=' ,$request->input('starting_date'))
+                    ->whereDate('created_at', '<=' ,$request->input('ending_date'))
+                    
+                    ->offset($start)
+                    ->limit($limit)
+                    ->orderBy($order, $dir)
+                    ->get();
+                }
+                else{
+
+                
                 $sales = Sale::with('biller', 'customer', 'warehouse', 'user')
                         ->whereDate('created_at', '>=' ,$request->input('starting_date'))
                         ->whereDate('created_at', '<=' ,$request->input('ending_date'))
@@ -144,6 +184,8 @@ class SaleController extends Controller
                         ->limit($limit)
                         ->orderBy($order, $dir)
                         ->get();
+                }
+            }
         }
         else
         {

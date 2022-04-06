@@ -2,6 +2,41 @@
  
 <section>
     <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <div class="row m-0">
+                    <div class="d-flex align-items-center col">
+                        <div class="mr-3">Type</div>
+                        <select id="product_id" name="product_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Product Type.." data-live-search-style="begins" >
+                            @foreach($lims_productType_list as $product)
+                                <option value="{{$product->id}}">{{$product->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="d-flex align-items-center col">
+                        <div class="mr-3">{{trans('file.category')}}</div>
+                        <select id="category_id" name="category_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Category.." data-live-search-style="begins" >
+                            @foreach($lims_category_list as $category)
+                                <option value="{{$category->id}}">{{$category->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="d-flex align-items-center col">
+                        <div class="mr-3">{{trans('file.Brand')}}</div>
+                        <select id="brand_id" name="brand_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Brand.." data-live-search-style="begins" >
+                            @foreach($lims_brand_list as $brand)
+                                <option value="{{$brand->id}}">{{$brand->title}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-1 p-0">
+                        <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                        <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+
         <div class="my-4 text-right">
             @if(userHasAccess('products-add'))
                 <a href="{{route('products.create')}}" class="btn btn-info "><i class="dripicons-plus"></i> {{__('file.add_product')}}</a>
@@ -302,6 +337,7 @@ var baseUrl = $('#baseUrl').val();
 
     $(document).ready(function() {
         var table = $('#product-data-table').DataTable( {
+            "pageLength": 50,
             responsive: true,
             fixedHeader: {
                 header: true,
@@ -312,8 +348,11 @@ var baseUrl = $('#baseUrl').val();
             "ajax":{
                 // url:"products/product-data",
                 url: baseUrl +'/products/product-data',
-                data:{
-                    all_permission: all_permission
+                data :  function(d) {
+                    d.all_permission= all_permission,
+                    d.product_id = $("#product_id").val(),
+                    d.category_id = $("#category_id").val(),
+                    d.brand_id = $("#brand_id").val()
                 },
                 dataType: "json",
                 type:"post"
@@ -507,6 +546,22 @@ var baseUrl = $('#baseUrl').val();
         $('.buttons-delete').addClass('d-none');
 
     $('select').selectpicker();
+
+
+    function filter(){
+        $('#product-data-table').DataTable().draw();
+    }
+    function filterReset()
+    {
+        var product_Id = $("#product_id").val();
+        var category_Id = $("#category_id").val();
+        var brand_Id = $("#brand_id").val();
+        if(product_Id || category_Id || brand_Id)
+        {
+            location.reload();
+        }
+        
+    }
 
 </script>
 @endpush

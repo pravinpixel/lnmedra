@@ -8,7 +8,7 @@
 
         {!! Form::open(['route' => 'customer.store','id'=>'basicData', 'method' => 'post', 'files' => true]) !!}
             <div class="card shadow">
-                <div class="card-header bg-info text-white">
+                <div class="custom-card-header">
                     <h4>{{trans('file.Basic Information')}}</h4>
                 </div>
                 <div class="card-body">
@@ -93,7 +93,7 @@
             </div>
 
             <div class="card shadow">
-                <div class="card-header bg-info text-white">
+                <div class="custom-card-header">
                     <h4>{{trans('file.Additional Information')}}</h4>
                 </div>
                 <div class="card-body">

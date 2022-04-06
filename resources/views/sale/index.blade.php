@@ -5,15 +5,26 @@
     <div class="container-fluid">
         <div class="card"> 
             <div class="card-body">
-                {!! Form::open(['route' => 'sales.index', 'method' => 'get']) !!}
+                <!-- {!! Form::open(['route' => 'sales.index', 'method' => 'get']) !!} -->
                     <div class="row m-0">
-                        <div class="col-5 d-flex align-items-center">
+                        <div class="col-3 d-flex align-items-center">
                             <div class="mr-3">{{trans('file.Date')}}</div>
                             <input type="text" class="daterangepicker-field form-control w-100" value="{{$starting_date}} To {{$ending_date}}" required />
                             <input type="hidden" name="starting_date" value="{{$starting_date}}" />
                             <input type="hidden" name="ending_date" value="{{$ending_date}}" />
                         </div>
-                        <div class="col-5 @if(\Auth::user()->role_id > 2){{'d-none'}}@endif">
+                        <div class="d-flex align-items-center col-4">
+                            <div class="mr-3">{{trans('file.customer')}}</div>
+                            <select id="customer_id" name="customer_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Customer.." data-live-search-style="begins" >
+                                <!-- <option value="0">{{trans('file.customer')}}</option> -->
+                                @foreach($lims_customer_list as $customer)
+                        
+                                    <option value="{{$customer->id}}">{{$customer->name}}</option>
+                            
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-3 @if(\Auth::user()->role_id > 2){{'d-none'}}@endif">
                             <div class="d-flex align-items-center">
                                 <div class="mr-3">{{trans('file.Outlet')}}</div>
                                 <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" data-live-search="true" data-live-search-style="begins" >
@@ -29,10 +40,11 @@
                             </div>
                         </div>
                         <div class="col-2">
-                            <button class="btn btn-primary w-100" id="filter-btn" type="submit">{{trans('file.search')}}</button>
-                        </div>
+                            <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                            <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                        </div> 
                     </div>
-                {!! Form::close() !!}
+                <!-- {!! Form::close() !!} -->
                    
                 @if(session()->has('default_outlet'))
                     
@@ -781,17 +793,19 @@ else if(auth_id == 1)
     var starting_date = $("input[name=starting_date]").val();
     var ending_date = $("input[name=ending_date]").val();
     var warehouse_id = $("#warehouse_id").val();
-
+    var customer_id = $("#customer_id").val();
     $('#sale-table').DataTable( {
+        "pageLength": 50,
         "processing": true,
         "serverSide": true,
         "ajax":{
             url:"sales/sale-data",
-            data:{
-                all_permission: all_permission,
-                starting_date: starting_date,
-                ending_date: ending_date,
-                warehouse_id: warehouse_id
+            data :  function(d) {
+                d.all_permission= all_permission,
+                d.starting_date = $("input[name=starting_date]").val(),
+                d.ending_date= $("input[name=ending_date]").val(),
+                d.warehouse_id= $("#warehouse_id").val(),
+                d.customer_id=$("#customer_id").val()
             },
             dataType: "json",
             type:"post"
@@ -1099,7 +1113,19 @@ else if(auth_id == 1)
         }
         return false;
     }
-    
+    function filter(){
+        $('#sale-table').DataTable().draw();
+    }
+    function filterReset()
+    {
+      
+        var category_Id = $("#customer_id").val();
+        if(category_Id)
+        {
+            location.reload();
+        }
+        
+    }
 
 </script>
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>

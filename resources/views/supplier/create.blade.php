@@ -11,7 +11,7 @@
     <div class="container-fluid">
         {!! Form::open(['route' => 'supplier.store','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true]) !!}
         <div class="card shadow">
-            <div class="card-header bg-success text-white">
+            <div class="custom-card-header">
                 <h4><strong>{{trans('file.Add Supplier')}}</strong></h4>
             </div>
             <div class="card-body">
@@ -117,7 +117,7 @@
             </div>
         </div>
         <div class="card shadow">
-            <div class="card-header bg-success text-white">
+            <div class="custom-card-header">
                 <h4><strong>{{trans('file.Company Info')}}</strong></h4>
             </div>
             <div class="card-body row m-0"> 
@@ -158,7 +158,7 @@
             </div>
         </div>
         <div class="card shadow">
-            <div class="card-header bg-success text-white">
+            <div class="custom-card-header">
                 <h4><strong>{{trans('file.Bank Info')}}</strong></h4>
             </div>
             <div class="card-body row m-0"> 

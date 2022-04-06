@@ -15,6 +15,7 @@
                             'biller.create','role.index','role.permission','warehouse.index','customer_group.index','unit.index','currency.index',
                             'tax.index','user.index','user.edit','user.create','setting.general','master-attribute.index','enquiry.index','enquiry.create'
                         ];
+
     $replace_title  =   [
                             'customer listing table', "Update Customer Details",'add new customer',
                             'sales listing table', 'Update Sale Details','add new sale','coupons list',
@@ -26,6 +27,7 @@
                             'add new biller','add new role','role permission listing','warehouse listing','customer group list','Unit Listing','currency Listing',
                             'tax listing','user listing','update user details','Add new user','general settings',' master attribute listing','enquiry listing','add new enquiry',
                         ];
+                        
     $title          =  str_replace($find_title, $replace_title, Route::currentRouteName());
  
 @endphp 

@@ -7,7 +7,7 @@
         <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
          
         <div class="card">
-            <div class="card-header bg-success text-white">
+            <div class="custom-card-header">
                 <h4>{{trans('file.Update Product')}}</h4>
             </div>
             <div class="card-body">

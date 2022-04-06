@@ -32,13 +32,19 @@ class PurchaseController extends Controller
 {
     public function index(Request $request)
     {
-       
+    //    dd($request->all());
+     
         $role = Role::find(Auth::user()->role_id);
         if($role->hasPermissionTo('purchases-index')) {
             if($request->input('warehouse_id'))
                 $warehouse_id = $request->input('warehouse_id');
             else
                 $warehouse_id = 0;
+
+            if($request->input('supplier_id'))
+                $supplier_id = $request->input('supplier_id');
+            else
+                $supplier_id = 0;
 
             if($request->input('starting_date')) {
                 $starting_date = $request->input('starting_date');
@@ -56,7 +62,8 @@ class PurchaseController extends Controller
             $lims_pos_setting_data = PosSetting::latest()->first();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             $lims_account_list = Account::where('is_active', true)->get();
-            return view('purchase.index', compact( 'lims_account_list', 'lims_warehouse_list', 'all_permission', 'lims_pos_setting_data', 'warehouse_id', 'starting_date', 'ending_date'));
+            $lims_supplier_list = Supplier::where('is_active', true)->get();
+            return view('purchase.index', compact( 'lims_supplier_list','lims_account_list', 'lims_warehouse_list', 'all_permission', 'lims_pos_setting_data', 'warehouse_id', 'starting_date', 'ending_date'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -64,6 +71,7 @@ class PurchaseController extends Controller
 
     public function purchaseData(Request $request)
     {
+        
         $columns = array( 
             1 => 'created_at', 
             2 => 'reference_no',
@@ -72,6 +80,8 @@ class PurchaseController extends Controller
         );
         
         $warehouse_id = $request->input('warehouse_id');
+        $supplier_id = $request->input('supplier_id');
+       
         if(Auth::user()->role_id > 2 && config('staff_access') == 'own')
             $totalData = Purchase::where('user_id', Auth::id())
                         ->whereDate('created_at', '>=' ,$request->input('starting_date'))
@@ -92,22 +102,42 @@ class PurchaseController extends Controller
         $order = $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
         if(empty($request->input('search.value'))) {
+           
             if(Auth::user()->role_id > 2 && config('staff_access') == 'own')
                 $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
                             ->where('user_id', Auth::id())
                             ->whereDate('created_at', '>=' ,$request->input('starting_date'))
                             ->whereDate('created_at', '<=' ,$request->input('ending_date'))
+                            
                             ->limit($limit)
                             ->orderBy($order, $dir)
                             ->get();
-            elseif($warehouse_id != 0)
-                $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
-                            ->where('warehouse_id', $warehouse_id)
-                            ->whereDate('created_at', '>=' ,$request->input('starting_date'))
-                            ->whereDate('created_at', '<=' ,$request->input('ending_date'))
-                            ->limit($limit)
-                            ->orderBy($order, $dir)
-                            ->get();
+            elseif($warehouse_id != 0 ){
+                
+                if($supplier_id != 0)
+                {
+                    
+                    $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
+                    ->where('warehouse_id', $warehouse_id)
+                    ->whereDate('created_at', '>=' ,$request->input('starting_date'))
+                    ->whereDate('created_at', '<=' ,$request->input('ending_date'))
+                    ->where('supplier_id','=',$supplier_id)
+                    ->limit($limit)
+                    ->orderBy($order, $dir)
+                    ->get();
+                }
+                else{
+                    $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
+                    ->where('warehouse_id', $warehouse_id)
+                    ->whereDate('created_at', '>=' ,$request->input('starting_date'))
+                    ->whereDate('created_at', '<=' ,$request->input('ending_date'))
+                    ->limit($limit)
+                    ->orderBy($order, $dir)
+                    ->get();
+                }
+               
+           
+            }
             else
                 $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
                             ->whereDate('created_at', '>=' ,$request->input('starting_date'))
@@ -115,6 +145,7 @@ class PurchaseController extends Controller
                             ->limit($limit)
                             ->orderBy($order, $dir)
                             ->get();
+                            
         }
         else
         {
@@ -413,7 +444,7 @@ class PurchaseController extends Controller
     {
         // dd($request->all());
         $data = $request->except('document');
-        //return dd($data);
+       
         // print_r( $data['product_id']);die();
         $data['user_id'] = Auth::id();
         $data['reference_no'] = 'pr-' . date("Ymd") . '-'. date("his");
@@ -435,7 +466,7 @@ class PurchaseController extends Controller
             $data['vendor_id'] = $request->vendor_id;
             $data['document'] = $documentName;
         }
-        //return dd($data);
+       
         Purchase::create($data);
 
         $lims_purchase_data = Purchase::latest()->first();
@@ -774,7 +805,7 @@ class PurchaseController extends Controller
             $document->move('public/purchase/documents', $documentName);
             $data['document'] = $documentName;
         }
-        //return dd($data);
+       
         $balance = $data['grand_total'] - $data['paid_amount'];
         if ($balance < 0 || $balance > 0) {
             $data['payment_status'] = 1;

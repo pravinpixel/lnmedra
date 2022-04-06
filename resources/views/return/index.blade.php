@@ -2,12 +2,49 @@
  
 <section>
     <div class="container-fluid">
+        <div class="card">  
+            <div class="card-body">
+                {!! Form::open(['route' => 'return-sale.index', 'method' => 'get']) !!}
+                    <div class="row m-0">
+                        
+                
+                        <div class="d-flex align-items-center col">
+                            <div class="mr-3">{{trans('file.customer')}}</div>
+                            <select id="customer_id" name="customer_id" class="selectpicker form-control w-100" title="Select Customer" data-live-search="true" data-live-search-style="begins" >
+                                <!-- <option value="0">{{trans('file.customer')}}</option> -->
+                                @foreach($lims_customer_list as $customer)
+                        
+                                    <option value="{{$customer->id}}">{{$customer->name}}</option>
+                            
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="d-flex align-items-center col">
+                            <div class="mr-3">{{trans('file.Outlet')}}</div>
+                            <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" title="Select Outlet" data-live-search="true" data-live-search-style="begins" >
+                                <!-- <option value="0">{{trans('file.All Outlet')}}</option> -->
+                                @foreach($lims_warehouse_list as $warehouse)
+                        
+                                    <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                            
+                                @endforeach
+                            </select>
+                        </div> 
+                        <div class="col-1 p-0">
+                            <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
+                            <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                        </div>
+                    </div>
+                {!! Form::close() !!}
+            
+            </div>
+        </div>
+
         @if(in_array("returns-add", $all_permission))
             <div class="text-right my-4">
                 <a href="{{route('return-sale.create')}}" class="btn btn-info"><i class="dripicons-plus"></i> {{trans('file.Add Return')}}</a>
             </div>
         @endif
-
         <div class="card pb-3 shadow">
             <div class="table-responsive">
                 <table id="return-table" class="table return-list">
@@ -174,6 +211,7 @@
     });
 
     $('#return-table').DataTable( {
+        "pageLength": 50,
         "order": [],
         'language': {
             'lengthMenu': '_MENU_ {{trans("file.records per page")}}',
@@ -370,5 +408,31 @@
 
     if(all_permission.indexOf("returns-delete") == -1)
         $('.buttons-delete').addClass('d-none');
+
+        $(".daterangepicker-field").daterangepicker({
+        callback: function(startDate, endDate, period){
+        var starting_date = startDate.format('YYYY-MM-DD');
+        var ending_date = endDate.format('YYYY-MM-DD');
+        var title = starting_date + ' To ' + ending_date;
+        $('.daterangepicker-field').val(title);
+        $('input[name="starting_date"]').val(starting_date);
+        $('input[name="ending_date"]').val(ending_date);
+        }
+    });
+    function filter(){
+        $('#return-table').DataTable().draw();
+    }
+    function filterReset()
+    {
+        var customer_id = $("#customer_id").val();
+        var warehouse_id = $("#warehouse_id").val();
+        
+        if(customer_id || warehouse_id )
+        {
+            // location.reload();
+            window.location.href = "{{ route('return-sale.index')}}";
+        }
+        
+    }
 </script>
 @endpush
