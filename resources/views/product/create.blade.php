@@ -14,6 +14,28 @@
                 
                     <form id="product-form" name="product-form">
                         <div class="row m-0">
+                        <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>{{trans('file.category')}} *</strong> </label>
+                                    <div class="input-group">
+                                    <select name="category_id" required class="selectpicker form-control" data-live-search="true" title="Select Category...">
+                                        @foreach($lims_category_list as $category)
+                                            
+                                            @if($category->parent_id == '' || null)
+                                                <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                                                @foreach($lims_category_list as $subcategory)
+                                                @if($category->id == $subcategory->parent_id)
+                                                <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
+                                                @endif    
+                                                @endforeach
+                                            @endif
+                                            
+                                        @endforeach
+                                    </select>
+                                    </div>
+                                    <span class="validation-msg"></span>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('file.Product Type')}} *</strong> </label>
@@ -33,9 +55,14 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label>{{trans('file.Product Name')}} *</strong> </label>
-                                    <input type="text" name="name" class="form-control" id="name" aria-describedby="name" required>
-                                    <span class="validation-msg" id="name-error"></span>
+                                    <label>{{trans('file.Brand')}}</strong> </label>
+                                    <div class="input-group">
+                                        <select name="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
+                                        @foreach($lims_brand_list as $brand)
+                                            <option value="{{$brand->id}}">{{$brand->title}}</option>
+                                        @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -49,7 +76,35 @@
                                     </div>
                                     <span class="validation-msg" id="code-error"></span>
                                 </div>
-                            </div> 
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>{{trans('file.Product Name')}} *</strong> </label>
+                                    <input type="text" name="name" class="form-control" id="name" aria-describedby="name" required>
+                                    <span class="validation-msg" id="name-error"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Family {{trans('file.name')}} *</strong> </label>
+                                    <input type="text" name="family_name" required class="form-control">
+                                    <span class="validation-msg"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Common {{trans('file.name')}} *</strong> </label>
+                                    <input type="text" name="common_name" required class="form-control">
+                                    <span class="validation-msg"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>{{trans('file.sku')}} *</strong> </label>
+                                    <input type="text" name="sku" required class="form-control">
+                                    <span class="validation-msg"></span>
+                                </div>
+                            </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('file.Barcode Symbology')}} *</strong> </label>
@@ -96,54 +151,10 @@
                                     </table>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>{{trans('file.Brand')}}</strong> </label>
-                                    <div class="input-group">
-                                        <select name="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
-                                        @foreach($lims_brand_list as $brand)
-                                            <option value="{{$brand->id}}">{{$brand->title}}</option>
-                                        @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>{{trans('file.category')}} *</strong> </label>
-                                    <div class="input-group">
-                                    <select name="category_id" required class="selectpicker form-control" data-live-search="true" title="Select Category...">
-                                        @foreach($lims_category_list as $category)
-                                            
-                                            @if($category->parent_id == '' || null)
-                                                <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
-                                                @foreach($lims_category_list as $subcategory)
-                                                @if($category->id == $subcategory->parent_id)
-                                                <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
-                                                @endif    
-                                                @endforeach
-                                            @endif
-                                            
-                                        @endforeach
-                                    </select>
-                                    </div>
-                                    <span class="validation-msg"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>{{trans('file.sku')}} *</strong> </label>
-                                    <input type="text" name="sku" required class="form-control">
-                                    <span class="validation-msg"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label>Family {{trans('file.name')}} *</strong> </label>
-                                    <input type="text" name="family_name" required class="form-control">
-                                    <span class="validation-msg"></span>
-                                </div>
-                            </div>
+                           
+                           
+                            
+                            
                             
                         
                             <div id="unit" class="col-md-12 p-0">
@@ -182,13 +193,7 @@
                                 </div>
                                 <hr>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label>Common {{trans('file.name')}} *</strong> </label>
-                                    <input type="text" name="common_name" required class="form-control">
-                                    <span class="validation-msg"></span>
-                                </div>
-                            </div>
+                            
                             <div class="col-md-4">
                                     <div class="form-group">
                                     <label>{{trans('file.size')}} *</strong> </label>

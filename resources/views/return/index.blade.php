@@ -32,7 +32,7 @@
                         </div> 
                         <div class="col-1 p-0">
                             <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
-                            <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                            <a title="Reset " class="btn btn-light border text-secondary" href="{{ route('return-sale.index')}}" id="filter-btn" type="submit"><i class="fa fa-undo"></i></a>
                         </div>
                     </div>
                 {!! Form::close() !!}
@@ -422,17 +422,6 @@
     function filter(){
         $('#return-table').DataTable().draw();
     }
-    function filterReset()
-    {
-        var customer_id = $("#customer_id").val();
-        var warehouse_id = $("#warehouse_id").val();
-        
-        if(customer_id || warehouse_id )
-        {
-            // location.reload();
-            window.location.href = "{{ route('return-sale.index')}}";
-        }
-        
-    }
+   
 </script>
 @endpush
