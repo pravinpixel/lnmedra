@@ -44,7 +44,7 @@ class VendorProductController extends Controller
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
 
-            $lims_supplier_list = Supplier::where('is_active',true)->get();
+            $lims_supplier_list = User::whereNotNull('vendor_id')->where('is_active',true)->get();
             $lims_category_list = Category::where('is_active',true)->get();
             $lims_brand_list = Brand::where('is_active',true)->get();
             // dd($lims_category_list);
@@ -1068,7 +1068,7 @@ class VendorProductController extends Controller
         }
 
         public function vendorDashboardData(Request $request)
-        {
+        {  
             if ($request->ajax() == true) {
                 $draw            = $request->get('draw');
                 $start           = $request->get("start");
@@ -1081,7 +1081,7 @@ class VendorProductController extends Controller
                 $columnName      = $columnName_arr[$columnIndex]['data'];
                 $columnSortOrder = $order_arr[0]['dir'];
                 $searchValue     = $search_arr['value'];
-         
+        
                 $totalRecords =  VendorProduct::join('products','vendor_products.product_id','=','products.id')
                                     ->leftJoin('brands','brands.id','=','products.brand_id')
                                     ->leftJoin('categories','categories.id','=','products.category_id')
@@ -1091,6 +1091,15 @@ class VendorProductController extends Controller
                                     })
                                     ->when(!empty(request('status')), function($q){
                                         $q->where('is_approve',request('status'));
+                                    })
+                                    ->when(!empty(request('vendor_id')), function($q){
+                                        $q->where('vendor_products.created_by',request('vendor_id'));
+                                    })
+                                    ->when(!empty(request('category_id')), function($q){
+                                        $q->where('categories.id',request('category_id'));
+                                    })
+                                    ->when(!empty(request('brand_id')), function($q){
+                                        $q->where('brands.id',request('brand_id'));
                                     })
                                     ->get()
                                     ->count();
@@ -1104,6 +1113,15 @@ class VendorProductController extends Controller
                                     })
                                     ->when(!empty(request('status')), function($q){
                                         $q->where('is_approve',request('status'));
+                                    })
+                                    ->when(!empty(request('vendor_id')), function($q){
+                                        $q->where('vendor_products.created_by',request('vendor_id'));
+                                    })
+                                    ->when(!empty(request('category_id')), function($q){
+                                        $q->where('categories.id',request('category_id'));
+                                    })
+                                    ->when(!empty(request('brand_id')), function($q){
+                                        $q->where('brands.id',request('brand_id'));
                                     })
                                     ->when(!empty($searchValue), function($q) use($searchValue){
                                         $q->where('products.name', 'like', '%' .$searchValue. '%')
