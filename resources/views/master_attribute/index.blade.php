@@ -11,7 +11,7 @@
         <table id="product-data-table" class="table custom table-hover table-centered" style="width: 100%">
             <thead>
                 <tr>
-                    <th class="not-exported"></th>
+                    <!-- <th class="not-exported"></th> -->
                     <th>{{trans('file.Image')}}</th>
                     <th>{{trans('file.Title')}}</th>
                     <th>{{trans('file.Product Type')}}</th>
@@ -312,7 +312,7 @@
                 $(row).attr('data-imagedata', data['imagedata']);
             },
             "columns": [
-                {"data": "key"},
+                // {"data": "key"},
                 {"data": "image"},
                 {"data": "title"},
                 {"data": "product_type"},

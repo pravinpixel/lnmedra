@@ -47,7 +47,7 @@
                          
                         <div class="col-1 p-0">
                             <button title="Search" class="btn btn-primary shadow-sm"  onclick="filter()" id="filter-btn" type="submit"><i class="fa fa-search"></i></button>
-                            <button title="Reset " class="btn btn-light border text-secondary" onclick="filterReset()" id="filter-btn" type="submit"><i class="fa fa-undo"></i></button>
+                            <a title="Reset " class="btn btn-light border text-secondary" href="{{ route('stock-count.index') }}" id="filter-btn" type="submit"><i class="fa fa-undo"></i></a>
                         </div> 
                     </div>
                 </div>

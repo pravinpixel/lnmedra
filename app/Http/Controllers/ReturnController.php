@@ -39,6 +39,9 @@ class ReturnController extends Controller
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
             
+            
+            $customerId = $request->customer_id;
+            $warehouseId = $request->warehouse_id;
             if(Auth::user()->role_id > 2 && config('staff_access') == 'own')
                 $lims_return_all = Returns::with('biller', 'customer', 'warehouse', 'user')->orderBy('id', 'desc')->orderBy('id', 'desc')->where('user_id', Auth::id())->get();
             else
@@ -80,7 +83,7 @@ class ReturnController extends Controller
             
             $lims_customer_list = Customer::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-            return view('return.index', compact('lims_return_all', 'all_permission','lims_customer_list','lims_warehouse_list'));
+            return view('return.index', compact('lims_return_all', 'all_permission','lims_customer_list','lims_warehouse_list','customerId','warehouseId'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
