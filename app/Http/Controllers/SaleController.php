@@ -1138,25 +1138,20 @@ class SaleController extends Controller
         if(($category_id != 0) && ($brand_id != 0)){
             $lims_product_list = DB::table('products')
                                 ->join('categories', 'products.category_id', '=', 'categories.id')
+                                ->where('products.qty','>',0)
                                 ->where([
                                     ['products.is_active', true],
                                     ['products.category_id', $category_id],
-                                    ['brand_id', $brand_id]
-                                ])->orWhere([
-                                    ['categories.parent_id', $category_id],
-                                    ['products.is_active', true],
                                     ['brand_id', $brand_id]
                                 ])->select('products.name', 'products.code', 'products.image')->get();
         }
         elseif(($category_id != 0) && ($brand_id == 0)){
             $lims_product_list = DB::table('products')
                                 ->join('categories', 'products.category_id', '=', 'categories.id')
+                                ->where('products.qty','>',0)
                                 ->where([
                                     ['products.is_active', true],
                                     ['products.category_id', $category_id],
-                                ])->orWhere([
-                                    ['categories.parent_id', $category_id],
-                                    ['products.is_active', true]
                                 ])->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')->get();
         }
         elseif(($category_id == 0) && ($brand_id != 0)){
@@ -1164,11 +1159,12 @@ class SaleController extends Controller
                                 ['brand_id', $brand_id],
                                 ['is_active', true]
                             ])
+                            ->where('products.qty','>',0)
                             ->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')
                             ->get();
         }
         else
-            $lims_product_list = Product::where('is_active', true)->get();
+            $lims_product_list = Product::where('is_active', true)->where('qty','>',0)->get();
 
         $index = 0;
         foreach ($lims_product_list as $product) {
