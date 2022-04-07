@@ -442,7 +442,6 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $data = $request->except('document');
        
         // print_r( $data['product_id']);die();
@@ -571,7 +570,9 @@ class PurchaseController extends Controller
                     $lims_product_warehouse_data->imei_number = $imei_numbers[$i];
             }
             $lims_product_warehouse_data->save();
-            $product_purchase['vendor_product_id'] = $data['vendor_product_id'][$i];
+            if($data['supplier_id'] != getDefaultSupplier()) {
+                $product_purchase['vendor_product_id'] = $data['vendor_product_id'][$i];
+            }
             $product_purchase['purchase_id'] = $lims_purchase_data->id ;
             $product_purchase['product_id'] = $id;
             $product_purchase['imei_number'] = $imei_numbers[$i];

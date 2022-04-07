@@ -17,7 +17,7 @@ class CreateProductPurchasesTable extends Migration
             $table->increments('id');
             $table->integer('purchase_id');
             $table->integer('product_id');
-            $table->integer('vendor_product_id');
+            $table->integer('vendor_product_id')->nullable();
             $table->double('qty');
             $table->double('recieved');
             $table->integer('purchase_unit_id');
