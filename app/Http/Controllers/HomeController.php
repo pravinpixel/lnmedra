@@ -20,6 +20,7 @@ use App\Product;
 use App\AccountsDate;
 use App\VendorProduct;
 use App\RewardPointSetting;
+use App\User;
 use Auth; 
 use DNS1D;
 use Illuminate\Support\Facades\DB;
@@ -113,7 +114,10 @@ class HomeController extends Controller
         // print_r($default_outlet);die();
         // $ff= session()->put('default_outlet',$default_outlet);
         // dd(session()->get('default_outlet'));
-    
+        $dashboardOrderables = json_decode(user()->sortable_order) ?? [];
+        if(count($dashboardOrderables) != 7){
+            $dashboardOrderables = ["sortable-1","sortable-2","sortable-3","sortable-4","sortable-5","sortable-6","sortable-7"];
+        }
         if(Auth::user()->role_id == 5) {
             $customer = Customer::select('id', 'points')->where('user_id', Auth::id())->first();
             $lims_sale_data = Sale::with('warehouse')->where('customer_id', $customer->id)->orderBy('created_at', 'desc')->get();
@@ -128,7 +132,7 @@ class HomeController extends Controller
             $lims_return_data = Returns::with('warehouse', 'customer', 'biller')->where('customer_id', $customer->id)->orderBy('created_at', 'desc')->get();
             $lims_reward_point_setting_data = RewardPointSetting::select('per_point_amount')->latest()->first();
         
-            return view('customer_index', compact('customer', 'lims_sale_data', 'lims_payment_data', 'lims_quotation_data', 'lims_return_data', 'lims_reward_point_setting_data'));
+            return view('customer_index', compact('dashboardOrderables','customer', 'lims_sale_data', 'lims_payment_data', 'lims_quotation_data', 'lims_return_data', 'lims_reward_point_setting_data'));
         }
 
         $start_date = date("Y").'-'.date("m").'-'.'01';
@@ -414,7 +418,7 @@ class HomeController extends Controller
                     $all_permission[] = $permission->name;
                 if(empty($all_permission))
                     $all_permission[] = 'dummy text';
-                return view('vendor-dashboard', compact('all_permission','sale','purchase','expense','product','approved','rejected','pending','toBePaid','paymentReceived','saleTotal'));
+                return view('vendor-dashboard', compact('dashboardOrderables','all_permission','sale','purchase','expense','product','approved','rejected','pending','toBePaid','paymentReceived','saleTotal'));
             }
        
         }else{
@@ -422,7 +426,7 @@ class HomeController extends Controller
         $customers = Customer::with(['sales','payments'])->get()->take(10);
             // print_r($customers);die();
 
-        return view('index', compact('revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price','customers','accountData',));
+        return view('index', compact('dashboardOrderables','revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price','customers','accountData',));
         }
     }
 
@@ -635,5 +639,12 @@ class HomeController extends Controller
         $next_year = date('Y', strtotime('+1 month', strtotime($year.'-'.$month.'-01')));
         $next_month = date('m', strtotime('+1 month', strtotime($year.'-'.$month.'-01')));
         return view('user.my_transaction', compact('start_day', 'year', 'month', 'number_of_day', 'prev_year', 'prev_month', 'next_year', 'next_month', 'sale_generated', 'sale_grand_total','purchase_generated', 'purchase_grand_total','quotation_generated', 'quotation_grand_total'));
+    }
+
+    public function DashboardSortableOrder(Request $request) 
+    {
+        $user = User::find(user()->id);
+        $user->sortable_order = $request->input('data');
+        $user->save();
     }
 }

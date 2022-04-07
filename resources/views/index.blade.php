@@ -100,314 +100,346 @@
     </div>
   </div>
   <br>
-  <div class="row" id="simple-dragula" data-plugin="dragula">
-    <div class="col-md-6">
-      <div class="card line-chart-example shadow">
-        <div class="custom-card-header">
-          
-          <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.Cash Flow')}}</h4>
-        </div>
-        <div class="card-body p-3">
-          @php
-            if($general_setting->theme == 'default.css'){
-              $color = '#0095ff';
-              $color_rgba = 'rgba(34, 83, 62)';
-            }
-            elseif($general_setting->theme == 'green.css'){
-                $color = '#2ecc71';
-                $color_rgba = 'rgba(46, 204, 113, 0.8)';
-            }
-            elseif($general_setting->theme == 'blue.css'){
-                $color = '#3498db';
-                $color_rgba = 'rgba(52, 152, 219, 0.8)';
-            }
-            elseif($general_setting->theme == 'dark.css'){
-                $color = '#34495e';
-                $color_rgba = 'rgba(52, 73, 94, 0.8)';
-            }
-          @endphp
-          <canvas id="cashFlow" data-color = "{{$color}}" data-color_rgba = "{{$color_rgba}}" data-recieved = "{{json_encode($payment_recieved)}}" data-sent = "{{json_encode($payment_sent)}}" data-month = "{{json_encode($month)}}" data-label1="{{trans('file.Payment Recieved')}}" data-label2="{{trans('file.Payment Sent')}}"></canvas>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card shadow">
-        <div class="custom-card-header">
-          
-          <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.yearly report')}}</h4>
-        </div>
-        <div class="card-body p-3">
-          <canvas id="saleChart" data-sale_chart_value = "{{json_encode($yearly_sale_amount)}}" data-purchase_chart_value = "{{json_encode($yearly_purchase_amount)}}" data-label1="{{trans('file.Purchased Amount')}}" data-label2="{{trans('file.Sold Amount')}}"></canvas>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card shadow">
-        <div class="custom-card-header">
-          
-          <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.Best Seller').' '.date('Y'). '('.trans('file.qty').')'}}</h4>
-          <div class="right-column"></div>
-        </div>
-        <div class="card-body p-3">
-          <div class="table-responsive">
-            <table class="table m-0 table-bordered" id="best-seller-table">
-              <thead>
-                <tr>
-                  <th>S.No</th>
-                  <th>{{trans('file.Product Details')}}</th>
-                  <th>{{trans('file.qty')}}</th>
-                  <th>{{ trans('file.amount') }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                @foreach($yearly_best_selling_qty as $key => $sale)
-                  <tr>
-                    <td>{{$key + 1}}</td>
-                    <td>{{$sale->product->name}}<br>[{{$sale->product->code}}]</td>
-                    <td>{{$sale->sold_qty}}</td>
-                    <td>{{$sale->sold_qty * $sale->product->price}}</td>
-                  </tr>
-                @endforeach
-              </tbody>
-            </table>
-        </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-md-6">
-      <div class="card shadow">
-        <div class="custom-card-header">
-          
-          <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.Recent Transaction')}}</h4>
-          <div class="right-column"></div>
-        </div>
-        <div class="card-body p-3 pt-3">
-          <ul class="nav nav-tabs bg-light border rounded mb-2" role="tablist">
-            <li class="nav-item">
-              <a class="nav-link active" href="#sale-latest" role="tab" data-toggle="tab">{{trans('file.Sale')}}</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#purchase-latest" role="tab" data-toggle="tab">{{trans('file.Purchase')}}</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#quotation-latest" role="tab" data-toggle="tab">{{trans('file.Quotation')}}</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#payment-latest" role="tab" data-toggle="tab">{{trans('file.Payment')}}</a>
-            </li>
-          </ul> 
-          <div class="tab-content p-0">
-            <div role="tabpanel" class="tab-pane fade show active" id="sale-latest">
-                <div class="table-responsive border-right border-info border-left">
-                  <table class="table m-0 table-bordered">
-                    <thead>
-                      <tr>
-                        <th>{{trans('file.date')}}</th>
-                        <th>{{trans('file.reference')}}</th>
-                        <th>{{trans('file.customer')}}</th>
-                        <th>{{trans('file.status')}}</th>
-                        <th>{{trans('file.grand total')}}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($recent_sale as $sale)
-                      <?php $customer = DB::table('customers')->find($sale->customer_id); ?>
-                      <tr>
-                        <td>{{ date($general_setting->date_format, strtotime($sale->created_at->toDateString())) }}</td>
-                        <td>{{$sale->reference_no}}</td>
-                        <td>{{$customer->name}}</td>
-                        @if($sale->sale_status == 1)
-                        <td><div class="badge badge-success">{{trans('file.Completed')}}</div></td>
-                        @elseif($sale->sale_status == 2)
-                        <td><div class="badge badge-danger">{{trans('file.Pending')}}</div></td>
-                        @else
-                        <td><div class="badge badge-warning">{{trans('file.Draft')}}</div></td>
-                        @endif
-                        <td>{{$sale->grand_total}}</td>
-                      </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
+    @php
+    if($general_setting->theme == 'default.css'){
+      $color = '#0095ff';
+      $color_rgba = 'rgba(34, 83, 62)';
+    }
+    elseif($general_setting->theme == 'green.css'){
+        $color = '#2ecc71';
+        $color_rgba = 'rgba(46, 204, 113, 0.8)';
+    }
+    elseif($general_setting->theme == 'blue.css'){
+        $color = '#3498db';
+        $color_rgba = 'rgba(52, 152, 219, 0.8)';
+    }
+    elseif($general_setting->theme == 'dark.css'){
+        $color = '#34495e';
+        $color_rgba = 'rgba(52, 73, 94, 0.8)';
+    }
+  @endphp
+  <ul id="sortable">
+    @foreach($dashboardOrderables as $sortableOrder)
+    {{-- <div class="row" id="simple-dragula" data-plugin="dragula"> --}}
+      @if($sortableOrder == "sortable-1")
+      <li id="sortable-1" class="ui-state-default">
+        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <div class="col-md-6">
+          <div class="card line-chart-example shadow">
+            <div class="custom-card-header">
+              
+              <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.Cash Flow')}}</h4>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="purchase-latest">
-                <div class="table-responsive border-right border-info border-left">
-                  <table class="table m-0 table-bordered">
-                    <thead>
-                      <tr>
-                        <th>{{trans('file.date')}}</th>
-                        <th>{{trans('file.reference')}}</th>
-                        <th>{{trans('file.Supplier')}}</th>
-                        <th>{{trans('file.status')}}</th>
-                        <th>{{trans('file.grand total')}}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($recent_purchase as $purchase)
-                      <?php $supplier = DB::table('suppliers')->find($purchase->supplier_id); ?>
-                      <tr>
-                        <td>{{date($general_setting->date_format, strtotime($purchase->created_at->toDateString())) }}</td>
-                        <td>{{$purchase->reference_no}}</td>
-                        @if($supplier)
-                          <td>{{$supplier->name}}</td>
-                        @else
-                          <td>N/A</td>
-                        @endif
-                        @if($purchase->status == 1)
-                        <td><div class="badge badge-success">Recieved</div></td>
-                        @elseif($purchase->status == 2)
-                        <td><div class="badge badge-success">Partial</div></td>
-                        @elseif($purchase->status == 3)
-                        <td><div class="badge badge-danger">Pending</div></td>
-                        @else
-                        <td><div class="badge badge-danger">Ordered</div></td>
-                        @endif
-                        <td>{{$purchase->grand_total}}</td>
-                      </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="quotation-latest">
-                <div class="table-responsive border-right border-info border-left">
-                  <table class="table m-0 table-bordered">
-                    <thead>
-                      <tr>
-                        <th>{{trans('file.date')}}</th>
-                        <th>{{trans('file.reference')}}</th>
-                        <th>{{trans('file.customer')}}</th>
-                        <th>{{trans('file.status')}}</th>
-                        <th>{{trans('file.grand total')}}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($recent_quotation as $quotation)
-                      <?php $customer = DB::table('customers')->find($quotation->customer_id); ?>
-                      <tr>
-                        <td>{{date($general_setting->date_format, strtotime($quotation->created_at->toDateString())) }}</td>
-                        <td>{{$quotation->reference_no}}</td>
-                        <td>{{$customer->name}}</td>
-                        @if($quotation->quotation_status == 1)
-                        <td><div class="badge badge-danger">Pending</div></td>
-                        @else
-                        <td><div class="badge badge-success">Sent</div></td>
-                        @endif
-                        <td>{{$quotation->grand_total}}</td>
-                      </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="payment-latest">
-                <div class="table-responsive border-right border-info border-left">
-                  <table class="table m-0 table-bordered">
-                    <thead>
-                      <tr>
-                        <th>{{trans('file.date')}}</th>
-                        <th>{{trans('file.reference')}}</th>
-                        <th>{{trans('file.Amount')}}</th>
-                        <th>{{trans('file.Paid By')}}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      @foreach($recent_payment as $payment)
-                      <tr>
-                        <td>{{date($general_setting->date_format, strtotime($payment->created_at->toDateString())) }}</td>
-                        <td>{{$payment->payment_reference}}</td>
-                        <td>{{$payment->amount}}</td>
-                        <td>{{$payment->paying_method}}</td>
-                      </tr>
-                      @endforeach
-                    </tbody>
-                  </table>
-                </div>
+            <div class="card-body p-3">
+              <canvas id="cashFlow" data-color = "{{$color}}" data-color_rgba = "{{$color_rgba}}" data-recieved = "{{json_encode($payment_recieved)}}" data-sent = "{{json_encode($payment_sent)}}" data-month = "{{json_encode($month)}}" data-label1="{{trans('file.Payment Recieved')}}" data-label2="{{trans('file.Payment Sent')}}"></canvas>
             </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card shadow">
-        <div class="custom-card-header">
-          <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{date('F')}} {{date('Y')}}</h4>
-        </div>
-        <div class="card-body p-3">
-          <div class="pie-chart">
-            <canvas id="transactionChart" data-color = "{{$color}}" data-color_rgba = "{{$color_rgba}}" data-revenue={{$revenue}} data-purchase={{$purchase}} data-expense={{$expense}} data-label1="{{trans('file.Purchase')}}" data-label2="{{trans('file.revenue')}}" data-label3="{{trans('file.Expense')}}" width="100" height="95"> </canvas>
+      </li>
+      @elseif($sortableOrder == "sortable-2")
+      <li id="sortable-2" class="ui-state-default">
+        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="custom-card-header">
+              
+              <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.yearly report')}}</h4>
+            </div>
+            <div class="card-body p-3">
+              <canvas id="saleChart" data-sale_chart_value = "{{json_encode($yearly_sale_amount)}}" data-purchase_chart_value = "{{json_encode($yearly_purchase_amount)}}" data-label1="{{trans('file.Purchased Amount')}}" data-label2="{{trans('file.Sold Amount')}}"></canvas>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card shadow">
-        <div class="custom-card-header">
-          <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>Cash flow Distribution</h4>  
-        </div>
-        <div class="card-body p-3">
-          <div class="table-responsive border-right border-info border-left">
-            <table class="table m-0 table-bordered">
-              <thead>
-                <tr>
-                    <th> Heads</th>
-                    <th> Total Sales</th>
-                    @foreach($accountData as $key=>$val)
-                    <th> {{ $val['accounts_date_name'] }}</th>
+      </li>
+      @elseif($sortableOrder == "sortable-3")
+      <li id="sortable-3" class="ui-state-default">
+        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="custom-card-header">
+              
+              <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.Best Seller').' '.date('Y'). '('.trans('file.qty').')'}}</h4>
+              <div class="right-column"></div>
+            </div>
+            <div class="card-body p-3">
+              <div class="table-responsive">
+                <table class="table m-0 table-bordered" id="best-seller-table">
+                  <thead>
+                    <tr>
+                      <th>S.No</th>
+                      <th>{{trans('file.Product Details')}}</th>
+                      <th>{{trans('file.qty')}}</th>
+                      <th>{{ trans('file.amount') }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @foreach($yearly_best_selling_qty as $key => $sale)
+                      <tr>
+                        <td>{{$key + 1}}</td>
+                        <td>{{$sale->product->name}}<br>[{{$sale->product->code}}]</td>
+                        <td>{{$sale->sold_qty}}</td>
+                        <td>{{$sale->sold_qty * $sale->product->price}}</td>
+                      </tr>
                     @endforeach
-                </tr>
-              </thead>
-              <tbody>
-                  <tr>
-                  <td> Allocated %</td>
-                  <td class="revenue-data" > 0.00</td>
-                  @foreach($accountData as $key=>$val)
-                  <td class="<?php echo(str_replace([' ','&'], '', $val['accounts_date_name']))?>" >0.00</td>
-                  @endforeach
-                  </tr>
-              </tbody>
-            </table>
+                  </tbody>
+                </table>
+            </div>
+            </div>
           </div>
         </div>
-        </div>
-    </div> 
-    <div class="col-md-6">
-      <div class="card shadow">
-        <div class="custom-card-header">
-          
-          <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>Recent  Customers</h4>
-          <div class="right-column"></div>
-        </div>
-        <div class="card-body p-3">
-          <div class="table-responsive border-right border-info border-left">
-            <table class="table m-0 table-bordered">
-              <thead>
-                <tr>
-                  <th>Customer Name</th>
-                  <th>Customer Mobile</th>
-                  <th>No. of Orders</th>
-                  <th>Transaction</th>
-                </tr>
-              </thead>
-              <tbody>
-                @forelse($customers as $key => $customer)
-                  <tr>
-                    <td>{{ $customer->name }}</td>
-                    <td>{{ $customer->phone_number }}</td>
-                    <td> {{$customer->sales->sum('item')}} </td>
-                    <td> {{$customer->payments->count()}} </td>
-                  </tr>
-                @empty
-                  <p> No data found</p>
-                @endforelse
-              </tbody>
-            </table>
+      </li>
+      @elseif($sortableOrder == "sortable-4")
+      <li id="sortable-4" class="ui-state-default">
+        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="custom-card-header">
+              
+              <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{trans('file.Recent Transaction')}}</h4>
+              <div class="right-column"></div>
+            </div>
+            <div class="card-body p-3 pt-3">
+              <ul class="nav nav-tabs bg-light border rounded mb-2" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#sale-latest" role="tab" data-toggle="tab">{{trans('file.Sale')}}</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#purchase-latest" role="tab" data-toggle="tab">{{trans('file.Purchase')}}</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#quotation-latest" role="tab" data-toggle="tab">{{trans('file.Quotation')}}</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#payment-latest" role="tab" data-toggle="tab">{{trans('file.Payment')}}</a>
+                </li>
+              </ul> 
+              <div class="tab-content p-0">
+                <div role="tabpanel" class="tab-pane fade show active" id="sale-latest">
+                    <div class="table-responsive border-right border-info border-left">
+                      <table class="table m-0 table-bordered">
+                        <thead>
+                          <tr>
+                            <th>{{trans('file.date')}}</th>
+                            <th>{{trans('file.reference')}}</th>
+                            <th>{{trans('file.customer')}}</th>
+                            <th>{{trans('file.status')}}</th>
+                            <th>{{trans('file.grand total')}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($recent_sale as $sale)
+                          <?php $customer = DB::table('customers')->find($sale->customer_id); ?>
+                          <tr>
+                            <td>{{ date($general_setting->date_format, strtotime($sale->created_at->toDateString())) }}</td>
+                            <td>{{$sale->reference_no}}</td>
+                            <td>{{$customer->name}}</td>
+                            @if($sale->sale_status == 1)
+                            <td><div class="badge badge-success">{{trans('file.Completed')}}</div></td>
+                            @elseif($sale->sale_status == 2)
+                            <td><div class="badge badge-danger">{{trans('file.Pending')}}</div></td>
+                            @else
+                            <td><div class="badge badge-warning">{{trans('file.Draft')}}</div></td>
+                            @endif
+                            <td>{{$sale->grand_total}}</td>
+                          </tr>
+                          @endforeach
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="purchase-latest">
+                    <div class="table-responsive border-right border-info border-left">
+                      <table class="table m-0 table-bordered">
+                        <thead>
+                          <tr>
+                            <th>{{trans('file.date')}}</th>
+                            <th>{{trans('file.reference')}}</th>
+                            <th>{{trans('file.Supplier')}}</th>
+                            <th>{{trans('file.status')}}</th>
+                            <th>{{trans('file.grand total')}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($recent_purchase as $purchase)
+                          <?php $supplier = DB::table('suppliers')->find($purchase->supplier_id); ?>
+                          <tr>
+                            <td>{{date($general_setting->date_format, strtotime($purchase->created_at->toDateString())) }}</td>
+                            <td>{{$purchase->reference_no}}</td>
+                            @if($supplier)
+                              <td>{{$supplier->name}}</td>
+                            @else
+                              <td>N/A</td>
+                            @endif
+                            @if($purchase->status == 1)
+                            <td><div class="badge badge-success">Recieved</div></td>
+                            @elseif($purchase->status == 2)
+                            <td><div class="badge badge-success">Partial</div></td>
+                            @elseif($purchase->status == 3)
+                            <td><div class="badge badge-danger">Pending</div></td>
+                            @else
+                            <td><div class="badge badge-danger">Ordered</div></td>
+                            @endif
+                            <td>{{$purchase->grand_total}}</td>
+                          </tr>
+                          @endforeach
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="quotation-latest">
+                    <div class="table-responsive border-right border-info border-left">
+                      <table class="table m-0 table-bordered">
+                        <thead>
+                          <tr>
+                            <th>{{trans('file.date')}}</th>
+                            <th>{{trans('file.reference')}}</th>
+                            <th>{{trans('file.customer')}}</th>
+                            <th>{{trans('file.status')}}</th>
+                            <th>{{trans('file.grand total')}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($recent_quotation as $quotation)
+                          <?php $customer = DB::table('customers')->find($quotation->customer_id); ?>
+                          <tr>
+                            <td>{{date($general_setting->date_format, strtotime($quotation->created_at->toDateString())) }}</td>
+                            <td>{{$quotation->reference_no}}</td>
+                            <td>{{$customer->name}}</td>
+                            @if($quotation->quotation_status == 1)
+                            <td><div class="badge badge-danger">Pending</div></td>
+                            @else
+                            <td><div class="badge badge-success">Sent</div></td>
+                            @endif
+                            <td>{{$quotation->grand_total}}</td>
+                          </tr>
+                          @endforeach
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="payment-latest">
+                    <div class="table-responsive border-right border-info border-left">
+                      <table class="table m-0 table-bordered">
+                        <thead>
+                          <tr>
+                            <th>{{trans('file.date')}}</th>
+                            <th>{{trans('file.reference')}}</th>
+                            <th>{{trans('file.Amount')}}</th>
+                            <th>{{trans('file.Paid By')}}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @foreach($recent_payment as $payment)
+                          <tr>
+                            <td>{{date($general_setting->date_format, strtotime($payment->created_at->toDateString())) }}</td>
+                            <td>{{$payment->payment_reference}}</td>
+                            <td>{{$payment->amount}}</td>
+                            <td>{{$payment->paying_method}}</td>
+                          </tr>
+                          @endforeach
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+      </li>
+      @elseif($sortableOrder == "sortable-5")
+      <li id="sortable-5" class="ui-state-default">
+        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="custom-card-header">
+              <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{date('F')}} {{date('Y')}}</h4>
+            </div>
+            <div class="card-body p-3">
+              <div class="pie-chart">
+                <canvas id="transactionChart" data-color = "{{$color}}" data-color_rgba = "{{$color_rgba}}" data-revenue={{$revenue}} data-purchase={{$purchase}} data-expense={{$expense}} data-label1="{{trans('file.Purchase')}}" data-label2="{{trans('file.revenue')}}" data-label3="{{trans('file.Expense')}}" width="100" height="95"> </canvas>
+              </div>
+            </div>
+          </div>
         </div>
-    </div>
-  </div>
+      </li>
+      @elseif($sortableOrder == "sortable-6")
+      <li id="sortable-6" class="ui-state-default">
+        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="custom-card-header">
+              <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>Cash flow Distribution</h4>  
+            </div>
+            <div class="card-body p-3">
+              <div class="table-responsive border-right border-info border-left">
+                <table class="table m-0 table-bordered">
+                  <thead>
+                    <tr>
+                        <th> Heads</th>
+                        <th> Total Sales</th>
+                        @foreach($accountData as $key=>$val)
+                        <th> {{ $val['accounts_date_name'] }}</th>
+                        @endforeach
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                      <td> Allocated %</td>
+                      <td class="revenue-data" > 0.00</td>
+                      @foreach($accountData as $key=>$val)
+                      <td class="<?php echo(str_replace([' ','&'], '', $val['accounts_date_name']))?>" >0.00</td>
+                      @endforeach
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li> 
+      @elseif($sortableOrder == "sortable-7")
+      <li id="sortable-7" class="ui-state-default">
+        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="custom-card-header">
+              
+              <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>Recent  Customers</h4>
+              <div class="right-column"></div>
+            </div>
+            <div class="card-body p-3">
+              <div class="table-responsive border-right border-info border-left">
+                <table class="table m-0 table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Customer Name</th>
+                      <th>Customer Mobile</th>
+                      <th>No. of Orders</th>
+                      <th>Transaction</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @forelse($customers as $key => $customer)
+                      <tr>
+                        <td>{{ $customer->name }}</td>
+                        <td>{{ $customer->phone_number }}</td>
+                        <td> {{$customer->sales->sum('item')}} </td>
+                        <td> {{$customer->payments->count()}} </td>
+                      </tr>
+                    @empty
+                      <p> No data found</p>
+                    @endforelse
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            </div>
+        </div>
+      </li>
+      @endif
+    @endforeach
+    {{-- </div> --}}
+  </ul>
 {{-- 
   <section class="dashboard-counts">
     <div class="container-fluid">
@@ -785,7 +817,33 @@
 @push('scripts')
 <script src="https://coderthemes.com/hyper/saas/assets/js/vendor/dragula.min.js"></script>
 <script src="https://coderthemes.com/hyper/saas/assets/js/ui/component.dragula.js"></script>
-
+<script>
+  $( function() {
+    $("#sortable").sortable({
+      update: function(event, ui) {
+        let $lis = $(this).children('li');
+        let sortableOrder = [];
+        $lis.each(function() {
+            var $li = $(this).attr('id');
+            sortableOrder.push($li);
+        });
+        console.log(sortableOrder);
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $.post('{{route('dashboard-sortable-order')}}',{data: sortableOrder})
+        // $.ajax({
+        //   url: ,
+        //   method: "POST",
+        //   data: ,
+        //   success: function(res){}
+        // });
+      }
+    });
+  });
+</script>
 <script type="text/javascript">
     $(document).ready(function(){
         let bestSeller = $("#best-seller-table").DataTable({searching: false, paging: false, info: false});

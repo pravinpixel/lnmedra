@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->integer('vendor_id')->nullable();
+            $table->text('sortable_order')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

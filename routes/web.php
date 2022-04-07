@@ -381,6 +381,6 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::get('my-transactions/{year}/{month}', 'HomeController@myTransaction');
-	
+	Route::post('dashboard-sortable-order', 'HomeController@DashboardSortableOrder')->name('dashboard-sortable-order');
 });
 

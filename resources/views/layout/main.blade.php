@@ -40,7 +40,7 @@
     <!-- Custom Scrollbar-->
     <link rel="preload" href="<?php echo asset('vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="<?php echo asset('vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.css') ?>" rel="stylesheet"></noscript>
-
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
     @if(Route::current()->getName() != '/')
     <!-- date range stylesheet-->
     <link rel="preload" href="<?php echo asset('vendor/daterange/css/daterangepicker.min.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -1387,7 +1387,8 @@
     <script type="text/javascript" src="<?php echo asset('vendor/jquery-validation/jquery.validate.min.js') ?>"></script>
     <script type="text/javascript" src="<?php echo asset('vendor/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js')?>"></script>
     
-    
+    {{-- ui-sortable --}}
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 
     @if( Config::get('app.locale') == 'ar' || $general_setting->is_rtl)
       <script type="text/javascript" src="<?php echo asset('js/front_rtl.js') ?>"></script>
