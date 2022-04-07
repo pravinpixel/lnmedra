@@ -27,7 +27,7 @@ use App\Variant;
 use App\ProductVariant;
 use App\User;
 use Illuminate\Support\Facades\Auth as FacadesAuth;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx\Rels;
+
 
 class ProductController extends Controller
 {
@@ -76,124 +76,23 @@ class ProductController extends Controller
         $order = 'products.'.$columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
 
-
-        $product_id = $request->input('product_id');
-        $category_id = $request->input('category_id');
-        $brand_id = $request->input('brand_id');
-        if(empty($request->input('search.value'))){
-            if($product_id != '')
-            {
-                if($product_id !='' && $category_id != '' && $brand_id != '')
-                {
-                 $products = Product::with('category', 'brand', 'unit')->offset($start)
-                 ->where('is_active', '!=',2)
-                 ->where('type',$product_id)
-                 ->where('category_id',$category_id)
-                 ->where('brand_id',$brand_id)
-                 ->limit($limit)
-                 ->orderBy($order,$dir)
-                 ->get();
-                 $totalData= count($products);
-                 $totalFiltered = $totalData; 
-                }
-               else if($product_id !='' && $category_id != '')
-               {
-                $products = Product::with('category', 'brand', 'unit')->offset($start)
-                ->where('is_active', '!=',2)
-                ->where('type',$product_id)
-                ->where('category_id',$category_id)
-                ->limit($limit)
-                ->orderBy($order,$dir)
-                ->get();
-                $totalData= count($products);
-                $totalFiltered = $totalData; 
-               }
-               else if($product_id !='' && $brand_id != '')
-               {
-                $products = Product::with('category', 'brand', 'unit')->offset($start)
-                ->where('is_active', '!=',2)
-                ->where('type',$product_id)
-                ->where('brand_id',$brand_id)
-                ->limit($limit)
-                ->orderBy($order,$dir)
-                ->get();
-                $totalData= count($products);
-                $totalFiltered = $totalData; 
-               }
-              
-               else{
-                $products = Product::with('category', 'brand', 'unit')->offset($start)
-                ->where('is_active', '!=',2)
-                ->where('type',$product_id)
-                ->limit($limit)
-                ->orderBy($order,$dir)
-                ->get();
-                $totalData= count($products);
-                $totalFiltered = $totalData; 
-               }
-                
-               
-            }
-            else if($category_id != '')
-            {
-                if($category_id !='' && $brand_id != '')
-                {
-                 $products = Product::with('category', 'brand', 'unit')->offset($start)
-                 ->where('is_active', '!=',2)
-                 ->where('category_id',$category_id)
-                 ->where('brand_id',$brand_id)
-                 ->limit($limit)
-                 ->orderBy($order,$dir)
-                 ->get();
-                 $totalData= count($products);
-                 $totalFiltered = $totalData; 
-                }
-                else{
-                $products = Product::with('category', 'brand', 'unit')->offset($start)
-                ->where('is_active', '!=',2)
-                ->where('category_id',$category_id)
-                ->limit($limit)
-                ->orderBy($order,$dir)
-                ->get();
-                $totalData= count($products);
-                $totalFiltered = $totalData; 
-                }
-               
-            }
-            else if($brand_id != '')
-            {
-            
-                $products = Product::with('category', 'brand', 'unit')->offset($start)
-                ->where('is_active', '!=',2)
-                ->where('brand_id',$brand_id)
-                ->limit($limit)
-                ->orderBy($order,$dir)
-                ->get();
-                $totalData= count($products);
-                $totalFiltered = $totalData; 
-            }
-            else{
-                
-                $products = Product::with('category', 'brand', 'unit')->offset($start)
-                ->where('is_active', '!=',2)
-                ->limit($limit)
-                ->orderBy($order,$dir)
-                ->get();
-                $totalData= count($products);
-                $totalFiltered = $totalData; 
-            }
-            
-            
-            
-        }
-        else
-        {     
-            $search = $request->input('search.value'); 
-            $products =  Product::select('products.*')
-                        ->with('category', 'brand', 'unit')
-                        ->join('categories', 'products.category_id', '=', 'categories.id')
-                        ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
-                        ->where([
+  
+        $search = $request->input('search.value'); 
+        $products =  Product::select('products.*')
+                    ->with('category', 'brand', 'unit')
+                    ->join('categories', 'products.category_id', '=', 'categories.id')
+                    ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
+                    ->when(!empty(request('category_id')), function($q){
+                        $q->where('products.category_id', request('category_id'));
+                    })
+                    ->when(!empty(request('brand_id')), function($q){
+                        $q->where('products.brand_id', request('brand_id'));
+                    })
+                    ->when(!empty(request('product_id')), function($q){
+                        $q->where('products.type', request('product_id'));
+                    })
+                    ->when(!empty($search), function($q){
+                        $q->where([
                             ['products.name', 'LIKE', "%{$search}%"],
                             ['products.is_active','!=', 2]
                         ])
@@ -210,16 +109,28 @@ class ProductController extends Controller
                             ['brands.title', 'LIKE', "%{$search}%"],
                             ['brands.is_active', true],
                             ['products.is_active','!=', 2]
-                        ])
-                        ->offset($start)
-                        ->limit($limit)
-                        ->orderBy($order,$dir)->get();
+                        ]);
+                    })
+                    
+                    ->offset($start)
+                    ->limit($limit)
+                    ->orderBy($order,$dir)->get();
 
-            $totalFiltered = Product::
-                            join('categories', 'products.category_id', '=', 'categories.id')
-                            ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
-                            ->where([
-                                ['products.name','LIKE',"%{$search}%"],
+        $totalFiltered = Product::
+                        join('categories', 'products.category_id', '=', 'categories.id')
+                        ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
+                        ->when(!empty(request('category_id')), function($q){
+                            $q->where('products.category_id', request('category_id'));
+                        })
+                        ->when(!empty(request('brand_id')), function($q){
+                            $q->where('products.brand_id', request('brand_id'));
+                        })
+                        ->when(!empty(request('product_id')), function($q){
+                            $q->where('products.type', request('product_id'));
+                        })
+                        ->when(!empty($search), function($q){
+                            $q->where([
+                                ['products.name', 'LIKE', "%{$search}%"],
                                 ['products.is_active','!=', 2]
                             ])
                             ->orWhere([
@@ -235,9 +146,10 @@ class ProductController extends Controller
                                 ['brands.title', 'LIKE', "%{$search}%"],
                                 ['brands.is_active', true],
                                 ['products.is_active','!=', 2]
-                            ])
-                            ->count();
-        }
+                            ]);
+                        })
+                        ->count();
+    
         $data = array();
         if(!empty($products))
         {
