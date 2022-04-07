@@ -15,7 +15,7 @@ use App\Mail\UserNotification;
 use App\Warehouse;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
-use Yajra\DataTables\DataTables;
+use DataTables;
 
 class CustomerController extends Controller
 {

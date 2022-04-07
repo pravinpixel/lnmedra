@@ -67,7 +67,11 @@
       <link rel="stylesheet" href="<?php echo asset('css/custom-rtl.css') ?>" type="text/css" id="custom-style">
     @endif
     <link rel="stylesheet" href="{{ asset("css/style.css") }}">
- 
+    <style>
+      .dataTable {
+        width: 100% !important;
+      }
+    </style>
   </head>
 
   @if(session()->has('not_permitted'))
