@@ -2528,7 +2528,7 @@ $("#myTable").on("change", ".batch-no", function () {
     var product_id = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.product-id').val();
     var warehouse_id = $('#warehouse_id').val();
     $.get('check-batch-availability/' + product_id + '/' + $(this).val() + '/' + warehouse_id, function(data) {
-        console.log(data);
+        // console.log(data);
         if(data['message'] != 'ok') {
             Alert("warning" , data['message']);
             $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.batch-no').val('');
@@ -2562,8 +2562,8 @@ $(document).on('click', '.sound-btn', function() {
     audio.play();
 });
 $('select[name="warehouse_id"]').change(function(){
-    console.log('called warehouse');
-    console.log($(this).val());
+    // console.log('called warehouse');
+    // console.log($(this).val());
 
 })
 $(document).on('click', '.product-img', function() {
