@@ -81,7 +81,7 @@ class PurchaseController extends Controller
         
         $warehouse_id = $request->input('warehouse_id');
         $supplier_id = $request->input('supplier_id');
-       
+    
         if(Auth::user()->role_id > 2 && config('staff_access') == 'own')
             $totalData = Purchase::where('user_id', Auth::id())
                         ->whereDate('created_at', '>=' ,$request->input('starting_date'))
@@ -114,9 +114,10 @@ class PurchaseController extends Controller
                             ->get();
             elseif($warehouse_id != 0 ){
                 
-                if($supplier_id != 0)
+                if($warehouse_id != 0 && $supplier_id != 0)
                 {
-                    
+                    $userId=  User::where('vendor_id',$supplier_id)->select('id')->first();
+                    $supplier_id = $userId->id;
                     $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
                     ->where('warehouse_id', $warehouse_id)
                     ->whereDate('created_at', '>=' ,$request->input('starting_date'))
@@ -127,6 +128,8 @@ class PurchaseController extends Controller
                     ->get();
                 }
                 else{
+                    $userId=  User::where('vendor_id',$supplier_id)->select('id')->first();
+                    $supplier_id = $userId->id;
                     $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
                     ->where('warehouse_id', $warehouse_id)
                     ->whereDate('created_at', '>=' ,$request->input('starting_date'))
@@ -137,6 +140,23 @@ class PurchaseController extends Controller
                 }
                
            
+            }
+            else if($supplier_id != 0){
+               
+                if($warehouse_id == 0 && $supplier_id != 0)
+                {
+                   
+                    $userId=  User::where('vendor_id',$supplier_id)->select('id')->first();
+                    $supplier_id = $userId->id;
+                    $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
+                    ->whereDate('created_at', '>=' ,$request->input('starting_date'))
+                    ->whereDate('created_at', '<=' ,$request->input('ending_date'))
+                    ->where('supplier_id','=',$supplier_id)
+                    ->limit($limit)
+                    ->orderBy($order, $dir)
+                    ->get();
+                }
+
             }
             else
                 $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
