@@ -1221,6 +1221,45 @@ class SaleController extends Controller
         }
         return $data;
     }
+    public function getTopSale()
+    {
+        $data = [];
+        
+       $product_sale =  Product_Sale::select(DB::raw('product_id,sum(total) as sold_amount'))
+        //    ->join('products','products.id','=','product_id')
+       ->groupBy('product_id')->orderBy('sold_amount','desc')->take(10)->get()->toArray();
+        $ids = [];  
+        foreach($product_sale as $key=>$val)
+        {
+            array_push($ids,$val['product_id']);
+        }
+        $lims_product_list = Product::whereIn('id',$ids)
+        ->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')
+        ->get();
+
+        $index = 0;
+        foreach ($lims_product_list as $product) {
+            if($product->is_variant) {
+                $lims_product_data = Product::select('id')->find($product->id);
+                $lims_product_variant_data = $lims_product_data->variant()->orderBy('position')->get();
+                foreach ($lims_product_variant_data as $key => $variant) {
+                    $data['name'][$index] = $product->name.' ['.$variant->name.']';
+                    $data['code'][$index] = $variant->pivot['item_code'];
+                    $images = explode(",", $product->image);
+                    $data['image'][$index] = $images[0];
+                    $index++;
+                }
+            }
+            else {
+                $data['name'][$index] = $product->name;
+                $data['code'][$index] = $product->code;
+                $images = explode(",", $product->image);
+                $data['image'][$index] = $images[0];
+                $index++;
+            }
+        }
+        return $data;
+    }
 
     public function getCustomerGroup($id)
     {

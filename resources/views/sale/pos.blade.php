@@ -1111,6 +1111,7 @@
                         <span class="btn btn-sm w-100 btn-primary" id="category-filter">{{trans('file.category')}}</span>
                         <span class="btn btn-sm w-100 btn-info" id="brand-filter">{{trans('file.Brand')}}</span>
                         <span class="btn btn-sm w-100 btn-danger" id="featured-filter">{{trans('file.Featured')}}</span>
+                        <span class="btn btn-sm w-100 btn-success" id="top-sale-filter">{{trans('file.Top Sale')}}</span>
                     </div>
                     <div class="btn-group col mt-3 text-right">
                         <span onclick="change_grid()" class="btn btn-sm btn-light"><i id="grid_icon" class="fa fa-th" aria-hidden="true"></i></span>
@@ -2386,6 +2387,13 @@ $('#featured-filter').on('click', function(){
         populateProduct(data);
     });
 });
+$('#top-sale-filter').on('click', function(){
+    $(".table-container").children().remove();
+    $.get('sales/get-top-sale', function(data) {
+        populateProduct(data);
+    });
+});
+
 
 function populateProduct(data) {
     var tableData = '<table id="product-table" class="table no-shadow product-list"> <thead class="d-none"> <tr> <th></th> <th></th> <th></th> <th></th> <th></th> </tr></thead> <tbody><tr>';
