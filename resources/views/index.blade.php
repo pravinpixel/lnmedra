@@ -2,6 +2,15 @@
 @section('content')
   <style>.drag-icon{cursor: move} table.dataTable{margin: 0 !important} #simple-dragula .card{ min-height: 300px;  margin: 20px 0 !important} .dataTables_wrapper{padding: 0 !important; margin: 0 !important}#simple-dragula .card .card-header h4{font-weight: bold !important; } #simple-dragula .card .card-header{justify-content: start !important} .bg-dragula{background-color:var(--ct-dragula-bg)}.gu-mirror{position:fixed!important;margin:0!important;z-index:9999!important;opacity:.8}.gu-hide{display:none!important}.gu-unselectable{-webkit-user-select:none!important;-moz-user-select:none!important;-ms-user-select:none!important;user-select:none!important}.gu-transit{opacity:.2}.dragula-handle{position:relative;width:36px;height:36px;font-size:24px;text-align:center;cursor:move}.dragula-handle:before{content:"\f01db";font-family:"Material Design Icons";position:absolute}</style>
   <style>
+    .ui-state-default {
+      border: none !important;
+      background: none !important 
+    }
+    .grid-view {
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 0px 0px; 
+    }
     .count-number {
       font-weight: bold !important;
       color: white;
@@ -118,13 +127,12 @@
         $color_rgba = 'rgba(52, 73, 94, 0.8)';
     }
   @endphp
-  <ul id="sortable">
+  <ul id="sortable" class="list-group grid-view">
     @foreach($dashboardOrderables as $sortableOrder)
     {{-- <div class="row" id="simple-dragula" data-plugin="dragula"> --}}
       @if($sortableOrder == "sortable-1")
-      <li id="sortable-1" class="ui-state-default">
-        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        <div class="col-md-6">
+      <li id="sortable-1" class="list-group-item ui-state-default">
+        <div >
           <div class="card line-chart-example shadow">
             <div class="custom-card-header">
               
@@ -137,9 +145,8 @@
         </div>
       </li>
       @elseif($sortableOrder == "sortable-2")
-      <li id="sortable-2" class="ui-state-default">
-        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        <div class="col-md-6">
+      <li id="sortable-2" class="list-group-item ui-state-default">
+        <div >
           <div class="card shadow">
             <div class="custom-card-header">
               
@@ -152,9 +159,8 @@
         </div>
       </li>
       @elseif($sortableOrder == "sortable-3")
-      <li id="sortable-3" class="ui-state-default">
-        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        <div class="col-md-6">
+      <li id="sortable-3" class="list-group-item ui-state-default">
+        <div >
           <div class="card shadow">
             <div class="custom-card-header">
               
@@ -189,9 +195,8 @@
         </div>
       </li>
       @elseif($sortableOrder == "sortable-4")
-      <li id="sortable-4" class="ui-state-default">
-        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        <div class="col-md-6">
+      <li id="sortable-4" class="list-group-item ui-state-default">
+        <div >
           <div class="card shadow">
             <div class="custom-card-header">
               
@@ -347,9 +352,8 @@
         </div>
       </li>
       @elseif($sortableOrder == "sortable-5")
-      <li id="sortable-5" class="ui-state-default">
-        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        <div class="col-md-6">
+      <li id="sortable-5" class="list-group-item ui-state-default">
+        <div >
           <div class="card shadow">
             <div class="custom-card-header">
               <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>{{date('F')}} {{date('Y')}}</h4>
@@ -363,9 +367,8 @@
         </div>
       </li>
       @elseif($sortableOrder == "sortable-6")
-      <li id="sortable-6" class="ui-state-default">
-        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        <div class="col-md-6">
+      <li id="sortable-6" class="list-group-item ui-state-default">
+        <div >
           <div class="card shadow">
             <div class="custom-card-header">
               <h4><i class="fa fa-bars drag-icon mx-2" aria-hidden="true" ></i>Cash flow Distribution</h4>  
@@ -398,9 +401,8 @@
         </div>
       </li> 
       @elseif($sortableOrder == "sortable-7")
-      <li id="sortable-7" class="ui-state-default">
-        <span class="ui-icon ui-icon-arrowthick-2-n-s"></span>
-        <div class="col-md-6">
+      <li id="sortable-7" class="list-group-item ui-state-default">
+        <div >
           <div class="card shadow">
             <div class="custom-card-header">
               
@@ -500,7 +502,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
+        <div >
           <div class="card line-chart-example">
             <div class="card-header">
               <h4>{{trans('file.Cash Flow')}}</h4>
@@ -590,7 +592,7 @@
       </div>
       <div class="row">
         
-        <div class="col-md-6">
+        <div >
           <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
               <h4>Cash flow Distribution</h4>  
@@ -619,7 +621,7 @@
               </div>
           </div>
         </div>
-        <div class="col-md-6">
+        <div >
           <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
               <h4>{{trans('file.Recent Transaction')}}</h4>
@@ -773,7 +775,7 @@
             </div>
           </div>
         </div>
-        <div class="col-md-6">
+        <div >
           <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
               <h4>Recent  Customers</h4>
