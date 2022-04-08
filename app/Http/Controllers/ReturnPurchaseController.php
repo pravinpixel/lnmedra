@@ -35,6 +35,9 @@ class ReturnPurchaseController extends Controller
                 $all_permission[] = $permission->name;
             if(empty($all_permission))
                 $all_permission[] = 'dummy text';
+
+            $supplierId = $request->supplier_id;
+            $warehouseId = $request->warehouse_id;
             if(Auth::user()->role_id > 2 && config('staff_access') == 'own')
                 $lims_return_all = ReturnPurchase::with('supplier', 'warehouse', 'user')->orderBy('id', 'desc')->where('user_id', Auth::id())->get();
             else{
@@ -71,7 +74,7 @@ class ReturnPurchaseController extends Controller
                 
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             $lims_customer_list = Supplier::where('is_active', true)->get();
-            return view('return_purchase.index', compact('lims_return_all', 'all_permission','lims_warehouse_list','lims_customer_list'));
+            return view('return_purchase.index', compact('lims_return_all', 'all_permission','lims_warehouse_list','lims_customer_list','supplierId','warehouseId'));
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');

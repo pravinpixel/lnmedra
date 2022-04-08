@@ -1111,6 +1111,7 @@
                         <span class="btn btn-sm w-100 btn-primary" id="category-filter">{{trans('file.category')}}</span>
                         <span class="btn btn-sm w-100 btn-info" id="brand-filter">{{trans('file.Brand')}}</span>
                         <span class="btn btn-sm w-100 btn-danger" id="featured-filter">{{trans('file.Featured')}}</span>
+                        <span class="btn btn-sm w-100 btn-success" id="top-sale-filter">{{trans('file.Top Sale')}}</span>
                     </div>
                     <div class="btn-group col mt-3 text-right">
                         <span onclick="change_grid()" class="btn btn-sm btn-light"><i id="grid_icon" class="fa fa-th" aria-hidden="true"></i></span>
@@ -1235,7 +1236,6 @@
             </div>
         </div>
     </div>
-    <!-- payment modal -->
     <div id="add-payment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
         <div role="document" class="modal-dialog">
             <div class="modal-content">
@@ -1265,13 +1265,13 @@
                                     <select name="paid_by_id_select" class="form-control selectpicker">
                                     
                                         <option value="5">UPI</option>
-                                    
+                                     
                                         <option value="1">Cash</option>
-                                        
+                                         
                                         <option value="3">Credit Card</option>
-                                    
-                                    
-                                    
+                                     
+                                      
+                                       
                                     </select>
                                 </div>
                                 {{-- <div class="form-group col-md-12 mt-3">
@@ -1285,8 +1285,8 @@
                                     <select id="gift_card_id_select" name="gift_card_id_select" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Gift Card..."></select>
                                 </div>
                                 
-                                
-                            
+                                 
+                               
                                 <div class="form-group col-md-12 cheque">
                                     <label>{{trans('file.Cheque Number')}} *</label>
                                     <input type="text" name="cheque_no" class="form-control">
@@ -1298,7 +1298,7 @@
                             </div>
 
                             <div class="row m-0">
-                            <div class="col-md-6 form-group">
+                               <div class="col-md-6 form-group">
                                     <label>{{trans('file.Sale Note')}}</label>
                                     <textarea rows="3" class="form-control" name="sale_note"></textarea>
                                 </div>
@@ -1328,7 +1328,6 @@
     </div>
     {!! Form::close() !!}
     
-    <!-- product edit modal -->
     <div id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
         <div role="document" class="modal-dialog">
             <div class="modal-content">
@@ -1340,17 +1339,8 @@
                     <form>
                         <div class="row m-0 modal-element">
                             <div class="col-md-4 form-group">
-                                <label>{{trans('file.Quantity')}}</label>
-                                <input type="text" name="edit_qty" class="form-control numkey">
-                            </div>
-                            <div class="col-md-4 form-group">
-                                <label>{{trans('file.Unit Discount')}}</label>
-                                <input type="text" name="edit_discount" class="form-control numkey">
-                            </div>
-                            <div class="col-md-4 form-group">
                                 <label>{{trans('file.Unit Price')}}</label>
                                 <input type="text" name="edit_unit_price" class="form-control numkey" step="any">
-                            </div>
                             <?php
                                 $tax_name_all[] = 'No Tax';
                                 $tax_rate_all[] = 0;
@@ -1567,8 +1557,9 @@
                       <button type="submit" class="btn btn-primary">{{trans('file.submit')}}</button>
                   </div>
                 </div>
-            </div> 
-
+            </div>
+            <!-- payment modal -->
+   
             {{ Form::close() }}
           </div>
         </div>
@@ -2384,6 +2375,13 @@ $('#featured-filter').on('click', function(){
         populateProduct(data);
     });
 });
+$('#top-sale-filter').on('click', function(){
+    $(".table-container").children().remove();
+    $.get('sales/get-top-sale', function(data) {
+        populateProduct(data);
+    });
+});
+
 
 function populateProduct(data) {
     var tableData = '<table id="product-table" class="table no-shadow product-list"> <thead class="d-none"> <tr> <th></th> <th></th> <th></th> <th></th> <th></th> </tr></thead> <tbody><tr>';
@@ -2526,7 +2524,7 @@ $("#myTable").on("change", ".batch-no", function () {
     var product_id = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.product-id').val();
     var warehouse_id = $('#warehouse_id').val();
     $.get('check-batch-availability/' + product_id + '/' + $(this).val() + '/' + warehouse_id, function(data) {
-        console.log(data);
+        // console.log(data);
         if(data['message'] != 'ok') {
             Alert("warning" , data['message']);
             $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.batch-no').val('');
@@ -2560,8 +2558,8 @@ $(document).on('click', '.sound-btn', function() {
     audio.play();
 });
 $('select[name="warehouse_id"]').change(function(){
-    console.log('called warehouse');
-    console.log($(this).val());
+    // console.log('called warehouse');
+    // console.log($(this).val());
 
 })
 $(document).on('click', '.product-img', function() {

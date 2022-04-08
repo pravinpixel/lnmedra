@@ -81,7 +81,7 @@ class PurchaseController extends Controller
         
         $warehouse_id = $request->input('warehouse_id');
         $supplier_id = $request->input('supplier_id');
-       
+    
         if(Auth::user()->role_id > 2 && config('staff_access') == 'own')
             $totalData = Purchase::where('user_id', Auth::id())
                         ->whereDate('created_at', '>=' ,$request->input('starting_date'))
@@ -114,9 +114,10 @@ class PurchaseController extends Controller
                             ->get();
             elseif($warehouse_id != 0 ){
                 
-                if($supplier_id != 0)
+                if($warehouse_id != 0 && $supplier_id != 0)
                 {
-                    
+                    $userId=  User::where('vendor_id',$supplier_id)->select('id')->first();
+                    $supplier_id = $userId->id;
                     $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
                     ->where('warehouse_id', $warehouse_id)
                     ->whereDate('created_at', '>=' ,$request->input('starting_date'))
@@ -127,6 +128,8 @@ class PurchaseController extends Controller
                     ->get();
                 }
                 else{
+                    $userId=  User::where('vendor_id',$supplier_id)->select('id')->first();
+                    $supplier_id = $userId->id;
                     $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
                     ->where('warehouse_id', $warehouse_id)
                     ->whereDate('created_at', '>=' ,$request->input('starting_date'))
@@ -137,6 +140,23 @@ class PurchaseController extends Controller
                 }
                
            
+            }
+            else if($supplier_id != 0){
+               
+                if($warehouse_id == 0 && $supplier_id != 0)
+                {
+                   
+                    $userId=  User::where('vendor_id',$supplier_id)->select('id')->first();
+                    $supplier_id = $userId->id;
+                    $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
+                    ->whereDate('created_at', '>=' ,$request->input('starting_date'))
+                    ->whereDate('created_at', '<=' ,$request->input('ending_date'))
+                    ->where('supplier_id','=',$supplier_id)
+                    ->limit($limit)
+                    ->orderBy($order, $dir)
+                    ->get();
+                }
+
             }
             else
                 $purchases = Purchase::with('supplier', 'warehouse')->offset($start)
@@ -442,7 +462,6 @@ class PurchaseController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request->all());
         $data = $request->except('document');
        
         // print_r( $data['product_id']);die();
@@ -571,7 +590,9 @@ class PurchaseController extends Controller
                     $lims_product_warehouse_data->imei_number = $imei_numbers[$i];
             }
             $lims_product_warehouse_data->save();
-            $product_purchase['vendor_product_id'] = $data['vendor_product_id'][$i];
+            if($data['supplier_id'] != getDefaultSupplier()) {
+                $product_purchase['vendor_product_id'] = $data['vendor_product_id'][$i];
+            }
             $product_purchase['purchase_id'] = $lims_purchase_data->id ;
             $product_purchase['product_id'] = $id;
             $product_purchase['imei_number'] = $imei_numbers[$i];

@@ -14,7 +14,7 @@
                                 <!-- <option value="0">{{trans('file.customer')}}</option> -->
                                 @foreach($lims_customer_list as $customer)
                         
-                                    <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                    <option {{ $customer['id'] == $customerId ? "selected" : "" }} value="{{$customer->id}}">{{$customer->name}}</option>
                             
                                 @endforeach
                             </select>
@@ -25,7 +25,7 @@
                                 <!-- <option value="0">{{trans('file.All Outlet')}}</option> -->
                                 @foreach($lims_warehouse_list as $warehouse)
                         
-                                    <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                    <option {{ $warehouse['id'] == $warehouseId ? "selected" : "" }} value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                             
                                 @endforeach
                             </select>

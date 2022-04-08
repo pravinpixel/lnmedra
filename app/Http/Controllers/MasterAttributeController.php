@@ -29,6 +29,7 @@ class MasterAttributeController extends Controller
     
     public function productTypeData(Request $request)
     {
+        // print_r($request->all());die();
         $columns = array( 
             2 => 'title', 
             3 => 'shorting',
@@ -48,7 +49,9 @@ class MasterAttributeController extends Controller
         $dir = $request->input('order.0.dir');
         if(empty($request->input('search.value'))){
           
-            $products = MasterAttribute::where('is_active', true)
+            $products = MasterAttribute::where('is_active', '!=',2)
+            ->where('is_active',true)
+            ->offset($start)
             ->limit($limit)
             ->orderBy($order, $dir)
             ->get();
@@ -67,16 +70,17 @@ class MasterAttributeController extends Controller
                             ['master_attributes.is_active', true]
                         ])
                         ->limit($limit)
-                        ->orderBy($order,$dir)->get()->toArray();
-
-            $totalFiltered = MasterAttribute::where([
-                                ['master_attributes.title','LIKE',"%{$search}%"],
-                                ['master_attributes.is_active', true]
-                            ])->orWhere([
-                                ['master_attributes.shorting', 'LIKE', "%{$search}%"],
-                                ['master_attributes.is_active', true]
+                        ->orderBy($order,$dir)->get();
+                        $totalFiltered = count($products);
+                        $totalData= $totalFiltered;
+            // $totalFiltered = MasterAttribute::where([
+            //                     ['master_attributes.title','LIKE',"%{$search}%"],
+            //                     ['master_attributes.is_active', true]
+            //                 ])->orWhere([
+            //                     ['master_attributes.shorting', 'LIKE', "%{$search}%"],
+            //                     ['master_attributes.is_active', true]
                                
-                            ])->count();
+            //                 ])->count();
         }
   
         $data = array();
@@ -85,15 +89,15 @@ class MasterAttributeController extends Controller
             foreach ($products as $key=>$product)
             {
                 // print_r($product);die();
-                $nestedData['id'] = $product->id;
+                $nestedData['id'] = $product['id'];
                 $nestedData['key'] = $key+1;
-                $product_image = explode(",", $product->image);
+                $product_image = explode(",", $product['image']);
                 $product_image = htmlspecialchars($product_image[0]);
                 $nestedData['image'] = '<img src="'.url('public/images/attribute', $product_image).'" height="60" width="60">';
-                $nestedData['title'] = $product->title;
-                $nestedData['shorting'] = $product->shorting;
+                $nestedData['title'] = $product['title'];
+                $nestedData['shorting'] = $product['shorting'];
 
-                $productType = ProductType::where('id',$product->product_type)->first();
+                $productType = ProductType::where('id',$product['product_type'])->first();
                 $nestedData['product_type'] = $productType->name;
 
                 $nestedData['options'] = '<div class="btn-group">
@@ -108,10 +112,10 @@ class MasterAttributeController extends Controller
                             // </li>
                 if(in_array("attribute-index", $request['all_permission']))
                     $nestedData['options'] .= '<li>
-                            <a href="'.route('master-attribute.edit', $product->id).'" class="btn btn-link"><i class="fa fa-edit"></i> '.trans('file.edit').'</a>
+                            <a href="'.route('master-attribute.edit', $product['id']).'" class="btn btn-link"><i class="fa fa-edit"></i> '.trans('file.edit').'</a>
                         </li>';
                 if(in_array("attribute-index", $request['all_permission']))
-                    $nestedData['options'] .= \Form::open(["route" => ["master-attribute.destroy", $product->id], "method" => "DELETE"] ).'
+                    $nestedData['options'] .= \Form::open(["route" => ["master-attribute.destroy", $product['id']], "method" => "DELETE"] ).'
                             <li>
                               <button type="submit" class="btn btn-link" onclick="return confirmDelete()"><i class="fa fa-trash"></i> '.trans("file.delete").'</button> 
                             </li>'.\Form::close().'
@@ -120,8 +124,8 @@ class MasterAttributeController extends Controller
                 // data for product details by one click
                
 
-                $nestedData['product'] = array( '[ "'.$product->title.'"', ' "'.$product->shorting.'"',' "'.$product->image.'"]'
-                );
+                // $nestedData['product'] = array( '[ "'.$product->title.'"', ' "'.$product->shorting.'"',' "'.$product->image.'"]'
+                // );
                 //$nestedData['imagedata'] = DNS1D::getBarcodePNG($product->code, $product->barcode_symbology);
                 $data[] = $nestedData;
             }

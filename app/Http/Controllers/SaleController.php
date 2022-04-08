@@ -1138,25 +1138,20 @@ class SaleController extends Controller
         if(($category_id != 0) && ($brand_id != 0)){
             $lims_product_list = DB::table('products')
                                 ->join('categories', 'products.category_id', '=', 'categories.id')
+                                ->where('products.qty','>',0)
                                 ->where([
                                     ['products.is_active', true],
                                     ['products.category_id', $category_id],
-                                    ['brand_id', $brand_id]
-                                ])->orWhere([
-                                    ['categories.parent_id', $category_id],
-                                    ['products.is_active', true],
                                     ['brand_id', $brand_id]
                                 ])->select('products.name', 'products.code', 'products.image')->get();
         }
         elseif(($category_id != 0) && ($brand_id == 0)){
             $lims_product_list = DB::table('products')
                                 ->join('categories', 'products.category_id', '=', 'categories.id')
+                                ->where('products.qty','>',0)
                                 ->where([
                                     ['products.is_active', true],
                                     ['products.category_id', $category_id],
-                                ])->orWhere([
-                                    ['categories.parent_id', $category_id],
-                                    ['products.is_active', true]
                                 ])->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')->get();
         }
         elseif(($category_id == 0) && ($brand_id != 0)){
@@ -1164,11 +1159,12 @@ class SaleController extends Controller
                                 ['brand_id', $brand_id],
                                 ['is_active', true]
                             ])
+                            ->where('products.qty','>',0)
                             ->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')
                             ->get();
         }
         else
-            $lims_product_list = Product::where('is_active', true)->get();
+            $lims_product_list = Product::where('is_active', true)->where('qty','>',0)->get();
 
         $index = 0;
         foreach ($lims_product_list as $product) {
@@ -1201,6 +1197,45 @@ class SaleController extends Controller
             ['is_active', true],
             ['featured', true]
         ])->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')->get();
+
+        $index = 0;
+        foreach ($lims_product_list as $product) {
+            if($product->is_variant) {
+                $lims_product_data = Product::select('id')->find($product->id);
+                $lims_product_variant_data = $lims_product_data->variant()->orderBy('position')->get();
+                foreach ($lims_product_variant_data as $key => $variant) {
+                    $data['name'][$index] = $product->name.' ['.$variant->name.']';
+                    $data['code'][$index] = $variant->pivot['item_code'];
+                    $images = explode(",", $product->image);
+                    $data['image'][$index] = $images[0];
+                    $index++;
+                }
+            }
+            else {
+                $data['name'][$index] = $product->name;
+                $data['code'][$index] = $product->code;
+                $images = explode(",", $product->image);
+                $data['image'][$index] = $images[0];
+                $index++;
+            }
+        }
+        return $data;
+    }
+    public function getTopSale()
+    {
+        $data = [];
+        
+       $product_sale =  Product_Sale::select(DB::raw('product_id,sum(total) as sold_amount'))
+        //    ->join('products','products.id','=','product_id')
+       ->groupBy('product_id')->orderBy('sold_amount','desc')->take(10)->get()->toArray();
+        $ids = [];  
+        foreach($product_sale as $key=>$val)
+        {
+            array_push($ids,$val['product_id']);
+        }
+        $lims_product_list = Product::whereIn('id',$ids)
+        ->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')
+        ->get();
 
         $index = 0;
         foreach ($lims_product_list as $product) {

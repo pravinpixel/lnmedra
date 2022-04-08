@@ -11,7 +11,7 @@
                             <div class="mr-3">{{trans('file.Supplier')}}</div>
                             <select id="supplier_id" name="supplier_id" class="selectpicker form-control w-100" title="Select Supplier" data-live-search="true" data-live-search-style="begins" >
                                 @foreach($lims_customer_list as $customer)
-                                    <option value="{{$customer->id}}">{{$customer->name}}</option>
+                                    <option {{ $customer['id'] == $supplierId ? "selected" : "" }} value="{{$customer->id}}">{{$customer->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -19,7 +19,7 @@
                             <div class="mr-3">{{trans('file.Outlet')}}</div>
                             <select id="warehouse_id" name="warehouse_id" class="selectpicker form-control w-100" title="Select Outlet" data-live-search="true" data-live-search-style="begins" >
                                 @foreach($lims_warehouse_list as $warehouse)
-                                    <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                                    <option {{ $warehouse['id'] == $warehouseId ? "selected" : "" }} value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                 @endforeach
                             </select>
                         </div>

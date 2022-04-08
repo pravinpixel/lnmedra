@@ -44,7 +44,8 @@ class Product extends Model
     {
         return $query->where([
             ['is_active', true],
-            ['featured', 1]
+            ['featured', 1],
+            ['qty','>',0]
         ]);
     }
 
