@@ -1146,6 +1146,19 @@
                             @endforeach
                         </div>
                     </div>
+                    <div class="subcategory">
+                        <div class="row m-0 ml-2 mr-2 px-2 p-3">
+                            <div class="col-7 h3">Choose Subcategory</div>
+                            <div class="col-5 text-right">
+                                <span class="btn btn-default btn-sm">
+                                    <i class="dripicons-cross"></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row m-0 ml-2 p-3" id="_subcategories_">
+                            
+                        </div>
+                    </div>
                     <div class="brand">
                         <div class="row m-0 ml-2 mr-2 px-2 p-3">
                             <div class="col-7 h3">Choose brand</div>
@@ -2340,12 +2353,24 @@ $('#category-filter').on('click', function(e){
     $('.filter-window').show('slide', {direction: 'right'}, 'fast');
     $('.category').show();
     $('.brand').hide();
+    $('.subcategory').hide();
 });
 
-$('.category-img').on('click', function(){
+$('.category-img').on('click', function(e){
+    e.stopPropagation();
+    var category_id = $(this).data('category');
+    $('.filter-window').show('slide', {direction: 'left'}, 'fast');
+    $.get("{{route('sales/get-subcategory')}}",{parent_id:category_id},function(data) {
+        $("#_subcategories_").html(data);
+    });
+    $('.subcategory').show();
+    $('.category').hide();
+    $('.brand').hide();
+});
+
+$(document).on('click',".subcategory-img", function(e){
     var category_id = $(this).data('category');
     var brand_id = 0;
-
     $(".table-container").children().remove();
     $.get('sales/getproduct/' + category_id + '/' + brand_id, function(data) {
         populateProduct(data);
@@ -2357,6 +2382,7 @@ $('#brand-filter').on('click', function(e){
     $('.filter-window').show('slide', {direction: 'right'}, 'fast');
     $('.brand').show();
     $('.category').hide();
+    $('.subcategory').hide();
 });
 
 $('.brand-img').on('click', function(){

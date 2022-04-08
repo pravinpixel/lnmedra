@@ -1107,8 +1107,7 @@ class SaleController extends Controller
             $product_number = count($lims_product_list);
             $lims_pos_setting_data = PosSetting::latest()->first();
             $lims_brand_list = Brand::where('is_active',true)->get();
-            $lims_category_list = Category::where('is_active',true)->get();
-            
+            $lims_category_list = Category::whereNull('parent_id')->where('is_active',true)->get();
             if(Auth::user()->role_id > 2 && config('staff_access') == 'own') {
                 $recent_sale = Sale::where([
                     ['sale_status', 1],
@@ -2761,5 +2760,12 @@ class SaleController extends Controller
         }
         $lims_sale_data->delete();
         return Redirect::to($url)->with('not_permitted', $message);
+    }
+
+    public function getSubcategory(Request $request) 
+    {
+        $parent_id = $request->input('parent_id');
+        $subcategories = Category::where(['is_active'=> true, 'parent_id' => $parent_id])->get();
+        return view('sale.get-subcategory', compact('subcategories'));
     }
 }

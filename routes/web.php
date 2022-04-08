@@ -186,6 +186,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('sales/getproduct/{category_id}/{brand_id}', 'SaleController@getProductByFilter');
 	Route::get('sales/getfeatured', 'SaleController@getFeatured');
 	Route::get('sales/get-top-sale', 'SaleController@getTopSale');
+	Route::get('sales/get-subcategory', 'SaleController@getSubcategory')->name('sales/get-subcategory');
 	
 	Route::get('sales/get_gift_card', 'SaleController@getGiftCard');
 	Route::get('sales/paypalSuccess', 'SaleController@paypalSuccess');
