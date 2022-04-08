@@ -1068,18 +1068,18 @@
                     <div class="mx-0 shadow" style="background: #0c324c !important">
                         <div class="row m-0  p-0 ">
                             <div class="col p-0">
-                                <button type="button" class="h-100 h3 text-white w-100  rounded-0 btn btn-info payment-btn" data-toggle="modal" data-target="#add-payment" id="paypal-btn">
+                                <button type="button" class="h-100 h3 text-white w-100  rounded-0 btn btn-info payment-btn" data-toggle="modal"  id="paypal-btn">
                                     <i class="fa fa-paypal"></i> <b>UPI</b>
                                 </button>
                             </div> 
                             
                             <div class="col p-0">
-                                <button type="button" class="h-100 w-100 h3 text-white rounded-0 btn btn-primary payment-btn" data-toggle="modal" data-target="#add-payment" id="credit-card-btn">
+                                <button type="button" class="h-100 w-100 h3 text-white rounded-0 btn btn-primary payment-btn" data-toggle="modal"  id="credit-card-btn">
                                     <i class="fa fa-credit-card"></i> <b>{{trans('file.Card')}}</b>
                                 </button>
                             </div>
                             <div class="col p-0">
-                                <button type="button" class="h-100 h3 text-white w-100 rounded-0 btn btn-warning payment-btn" data-toggle="modal" data-target="#add-payment" id="cash-btn">
+                                <button type="button" class="h-100 h3 text-white w-100 rounded-0 btn btn-warning payment-btn" data-toggle="modal"  id="cash-btn">
                                     <i class="fa fa-money"></i> <b>{{trans('file.Cash')}}</b>
                                 </button>
                             </div>
@@ -3471,6 +3471,36 @@ $(document).on('submit', '.payment-form', function(e) {
     $('input[name="paid_by_id"]').val($('select[name="paid_by_id_select"]').val());
     $('input[name="order_tax_rate"]').val($('select[name="order_tax_rate_select"]').val());
 
+});
+
+$(document).on('click', '#paypal-btn', function(){
+    $("#add-payment").modal('hide');
+    var rownumber = $('table.order-list tbody tr:last').index();
+    if (rownumber < 0) {
+        Alert( 'warning',"Please insert product to order table!")
+       return false;
+    }
+    $("#add-payment").modal('show');
+});
+
+$(document).on('click', '#credit-card-btn', function(){
+    $("#add-payment").modal('hide');
+    var rownumber = $('table.order-list tbody tr:last').index();
+    if (rownumber < 0) {
+        Alert( 'warning',"Please insert product to order table!")
+        return false;
+    }
+    $("#add-payment").modal('show');
+});
+
+$(document).on('click', '#cash-btn', function(){
+    $("#add-payment").modal('hide');
+    var rownumber = $('table.order-list tbody tr:last').index();
+    if (rownumber < 0) {
+        Alert( 'warning',"Please insert product to order table!")
+        return false;
+    }
+    $("#add-payment").modal('show');
 });
 
 $('#product-table').DataTable( {
