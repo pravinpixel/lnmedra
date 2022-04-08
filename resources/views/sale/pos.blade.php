@@ -985,11 +985,11 @@
                                         <td colspan="6" style="padding: 0 !important" class="text-center"><b>Order Table</b></td>
                                     </tr>
                                     <tr>
-                                        <th class="text-left">{{trans('file.product')}}</th>
+                                        <th style="text-align: left !important;padding: 0 0 0 20px !important">{{trans('file.product')}}</th>
                                         <th>Stock</th>
-                                        <th>{{trans('file.Price')}}</th>
-                                        <th>{{trans('file.Quantity')}}</th>
-                                        <th>{{trans('file.Subtotal')}}</th>
+                                        <th style="text-align: right !important ; padding-right:0 !important">{{trans('file.Price')}}</th>
+                                        <th style="text-align: right !important ; padding-right:23px !important">{{trans('file.Quantity')}}</th>
+                                        <th style="text-align: right !important ; padding-right:0 !important">{{trans('file.Subtotal')}}</th>
                                         <th><i class="fa fa-trash"></i></th>
                                     </tr>
                                 </thead>
@@ -1107,7 +1107,7 @@
                     <input type="text" name="product_code_name" id="lims_productcodeSearch" placeholder="Scan/Search product by name/code" class="form-control form-control-lg rounded-pill active text-dark"  />
                 </div>
                 <div class="row m-0 align-items-center">
-                    <div class="btn-group col-10 mt-3">
+                    <div class="btn-group col-10 mt-3  p-0">
                         <span class="btn btn-sm w-100 btn-primary" id="category-filter">{{trans('file.category')}}</span>
                         <span class="btn btn-sm w-100 btn-info" id="brand-filter">{{trans('file.Brand')}}</span>
                         <span class="btn btn-sm w-100 btn-danger" id="featured-filter">{{trans('file.Featured')}}</span>
@@ -1118,7 +1118,7 @@
                     </div>
                 </div>
             </div> 
-            <div class="card-body p-0"> 
+            <div class="card-body"> 
                 <div class="filter-window">
                     <div class="category ">
                         <div class="row m-0 ml-2 mr-2 px-2 p-3">
@@ -1174,7 +1174,7 @@
                     </div>
                 </div>
                 <div class="p-0 m-0 table-container" >
-                    <table id="product-table" class="table no-shadow product-list m-0 border-0" style="margin: 0 !important; border:none !important">
+                    <table id="product-table" class="change_grid table no-shadow product-list m-0 border-0" style="margin: 0 !important; border:none !important">
                         <thead class="d-none">
                             <tr>
                                 <th></th>
@@ -1188,13 +1188,13 @@
                             @for ($i=0; $i < ceil($product_number/5); $i++)
                                 <tr>
                                     <td class="product-img sound-btn" title="{{$lims_product_list[0+$i*5]->name}}" data-product ="{{$lims_product_list[0+$i*5]->code . ' (' . $lims_product_list[0+$i*5]->name . ')'}}">
-                                        {{-- <img  src="{{url('public/images/product',$lims_product_list[0+$i*5]->base_image)}}" width="100%" /> --}}
+                                        <img  src="{{url('public/images/product',$lims_product_list[0+$i*5]->base_image)}}" width="100%" />
                                         <p>{{$lims_product_list[0+$i*5]->name}}</p>
                                         <span>{{$lims_product_list[0+$i*5]->code}}</span>
                                     </td>
                                     @if(!empty($lims_product_list[1+$i*5]))
                                         <td class="product-img sound-btn" title="{{$lims_product_list[1+$i*5]->name}}" data-product ="{{$lims_product_list[1+$i*5]->code . ' (' . $lims_product_list[1+$i*5]->name . ')'}}">
-                                            {{-- <img  src="{{url('public/images/product',$lims_product_list[1+$i*5]->base_image)}}" width="100%" /> --}}
+                                            <img  src="{{url('public/images/product',$lims_product_list[1+$i*5]->base_image)}}" width="100%" />
                                             <p>{{$lims_product_list[1+$i*5]->name}}</p>
                                             <span>{{$lims_product_list[1+$i*5]->code}}</span>
                                         </td>
@@ -1203,7 +1203,7 @@
                                     @endif
                                     @if(!empty($lims_product_list[2+$i*5]))
                                         <td class="product-img sound-btn" title="{{$lims_product_list[2+$i*5]->name}}" data-product ="{{$lims_product_list[2+$i*5]->code . ' (' . $lims_product_list[2+$i*5]->name . ')'}}">
-                                            {{-- <img  src="{{url('public/images/product',$lims_product_list[2+$i*5]->base_image)}}" width="100%" /> --}}
+                                            <img  src="{{url('public/images/product',$lims_product_list[2+$i*5]->base_image)}}" width="100%" />
                                             <p>{{$lims_product_list[2+$i*5]->name}}</p>
                                             <span>{{$lims_product_list[2+$i*5]->code}}</span>
                                         </td>
@@ -1212,7 +1212,7 @@
                                     @endif
                                     @if(!empty($lims_product_list[3+$i*5]))
                                         <td class="product-img sound-btn" title="{{$lims_product_list[3+$i*5]->name}}" data-product ="{{$lims_product_list[3+$i*5]->code . ' (' . $lims_product_list[3+$i*5]->name . ')'}}">
-                                            {{-- <img  src="{{url('public/images/product',$lims_product_list[3+$i*5]->base_image)}}" width="100%" /> --}}
+                                            <img  src="{{url('public/images/product',$lims_product_list[3+$i*5]->base_image)}}" width="100%" />
                                             <p>{{$lims_product_list[3+$i*5]->name}}</p>
                                             <span>{{$lims_product_list[3+$i*5]->code}}</span>
                                         </td>
@@ -1221,7 +1221,7 @@
                                     @endif
                                     @if(!empty($lims_product_list[4+$i*5]))
                                         <td class="product-img sound-btn" title="{{$lims_product_list[4+$i*5]->name}}" data-product ="{{$lims_product_list[4+$i*5]->code . ' (' . $lims_product_list[4+$i*5]->name . ')'}}">
-                                            {{-- <img  src="{{url('public/images/product',$lims_product_list[4+$i*5]->base_image)}}" width="100%" /> --}}
+                                            <img  src="{{url('public/images/product',$lims_product_list[4+$i*5]->base_image)}}" width="100%" />
                                             <p>{{$lims_product_list[4+$i*5]->name}}</p>
                                             <span>{{$lims_product_list[4+$i*5]->code}}</span>
                                         </td>
@@ -2384,7 +2384,7 @@ $('#top-sale-filter').on('click', function(){
 
 
 function populateProduct(data) {
-    var tableData = '<table id="product-table" class="table no-shadow product-list"> <thead class="d-none"> <tr> <th></th> <th></th> <th></th> <th></th> <th></th> </tr></thead> <tbody><tr>';
+    var tableData = '<table id="product-table" class="change_grid table no-shadow product-list"> <thead class="d-none"> <tr> <th></th> <th></th> <th></th> <th></th> <th></th> </tr></thead> <tbody><tr>';
 
     if (Object.keys(data).length != 0) {
         $.each(data['name'], function(index) {
@@ -2953,7 +2953,7 @@ function addNewProduct(data){
     temp_unit_name = (data[6]).split(',');
     pos = product_code.indexOf(data[1]);
     cols += `
-        <td style="text-align:center;padding:0 !important" class=" product-title">
+        <td style="text-align:left;padding:0 0 0 15px !important" class=" product-title">
             <button type="button" class="edit-product btn btn-sm text-info btn-link" data-toggle="modal" data-target="#editModal">
                 <strong >${data[0]}</strong>
             </button> - ${data[1]} 
@@ -2970,9 +2970,9 @@ function addNewProduct(data){
     else {
         cols += '<td style="display:none !important ;text-align:center;padding:0 !important"><input type="text" class="form-control form-control-sm batch-no" disabled/> <input type="hidden" class="product-batch-id" name="product_batch_id[]"/> </td>';
     }
-    cols += '<td style="text-align:center;padding:0 !important" class="product-price fw-bold"></td>';
-    cols += '<td style="text-align:center;padding:0 !important"><div class="btn-group"><span class="btn-group-btn"><button type="button" class="btn btn-default minus"><span class="dripicons-minus"></span></button></span><input type="text" name="qty[]" class="form-control qty numkey input-number" step="any" required><span class="btn-group-btn"><button type="button" class="btn btn-default plus"><span class="dripicons-plus"></span></button></span></div></td>';
-    cols += '<td style="text-align:center;padding:0 !important" class="sub-total"></td>';
+    cols += '<td style="text-align:right;padding:0 !important" class="product-price fw-bold"></td>';
+    cols += '<td style="text-align:right;padding:0 !important"><div class="btn-group"><span class="btn-group-btn"><button type="button" class="btn btn-default minus"><span class="dripicons-minus"></span></button></span><input type="text" name="qty[]" class="form-control qty numkey input-number" step="any" required><span class="btn-group-btn"><button type="button" class="btn btn-default plus"><span class="dripicons-plus"></span></button></span></div></td>';
+    cols += '<td style="text-align:right;padding:0 !important" class="sub-total"></td>';
     cols += '<td style="text-align:center;padding:0 !important"> <i class="dripicons-cross ibtnDel text-danger btn"></i> </td>';
     cols += '<input type="hidden" class="product-code" name="product_code[]" value="' + data[1] + '"/>';
     cols += '<input type="hidden" class="product-id" name="product_id[]" value="' + data[9] + '"/>';
