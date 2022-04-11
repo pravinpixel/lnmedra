@@ -178,7 +178,8 @@ class UserController extends Controller
             $lims_user_data = User::find($id);
             $outlet_data = OutletUser::where('is_active',true)->where('user_id',$id)->get();
             $outlet_count = OutletUser::where('is_active',true)->where('user_id',$id)->count();
-            $lims_role_list = Roles::where('is_active', true)->get();
+            $notIncludeRole = config('global.vendor');
+            $lims_role_list = Roles::whereNotIn('name',$notIncludeRole)->where('is_active', true)->get();
             $lims_biller_list = Biller::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             // print_r($outlet_data);die();
@@ -249,41 +250,45 @@ class UserController extends Controller
 
         $lims_user_data->update($formatData);
        
+        if(($request['warehouse_id']))
+        {
+            foreach($input['warehouse_id'] as $key=>$val )
+            {
+               
+                    $ff = new OutletUser();
+                    $ff->user_id = $id;
+                    $ff->outlet_id = $val;
+                    if($key == $input['selected_outlet'])
+                    {
+                        $ff->is_default = 1;
+                    }
+                    else{
+                        $ff->is_default = 0;
+                    }
+                   
+                    $ff->is_active = 1;
+                    $ff->save();
+                   
+            }
+            foreach($input['warehouse_id'] as $key=>$val )
+            {
+               
+                  
+                    if($key == $input['selected_outlet'])
+                    {
+                   
+                      $defaultID = $val;
+                    }
+                
+            }
+    
+            $updateOutlet = User::where('id',$id)->first();
+            $updateOutlet->warehouse_id = $defaultID;
+            $updateOutlet->update();
+        }
 
       
-        foreach($input['warehouse_id'] as $key=>$val )
-        {
-           
-                $ff = new OutletUser();
-                $ff->user_id = $id;
-                $ff->outlet_id = $val;
-                if($key == $input['selected_outlet'])
-                {
-                    $ff->is_default = 1;
-                }
-                else{
-                    $ff->is_default = 0;
-                }
-               
-                $ff->is_active = 1;
-                $ff->save();
-               
-        }
-        foreach($input['warehouse_id'] as $key=>$val )
-        {
-           
-              
-                if($key == $input['selected_outlet'])
-                {
-               
-                  $defaultID = $val;
-                }
-            
-        }
-
-        $updateOutlet = User::where('id',$id)->first();
-        $updateOutlet->warehouse_id = $defaultID;
-        $updateOutlet->update();
+       
         return redirect('user')->with('message2', 'Data updated successfullly');
     }
 
