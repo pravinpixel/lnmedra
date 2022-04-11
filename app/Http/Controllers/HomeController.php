@@ -114,9 +114,14 @@ class HomeController extends Controller
         // print_r($default_outlet);die();
         // $ff= session()->put('default_outlet',$default_outlet);
         // dd(session()->get('default_outlet'));
-        $dashboardOrderables = json_decode(user()->sortable_order) ?? [];
+        $dashboardOrderables = json_decode(user()->sortable_order)[0] ?? [];
+        $columOrderables = json_decode(user()->sortable_order)[1] ?? [];
+
+       
+
         if(count($dashboardOrderables) != 7){
             $dashboardOrderables = ["sortable-1","sortable-2","sortable-3","sortable-4","sortable-5","sortable-6","sortable-7"];
+            $columOrderables = ["col-6","col-6","col-6","col-6","col-6","col-6","col-6"];
         }
         if(Auth::user()->role_id == 5) {
             $customer = Customer::select('id', 'points')->where('user_id', Auth::id())->first();
@@ -131,8 +136,8 @@ class HomeController extends Controller
 
             $lims_return_data = Returns::with('warehouse', 'customer', 'biller')->where('customer_id', $customer->id)->orderBy('created_at', 'desc')->get();
             $lims_reward_point_setting_data = RewardPointSetting::select('per_point_amount')->latest()->first();
-        
-            return view('customer_index', compact('dashboardOrderables','customer', 'lims_sale_data', 'lims_payment_data', 'lims_quotation_data', 'lims_return_data', 'lims_reward_point_setting_data'));
+            dd($columOrderables);
+            return view('customer_index', compact('dashboardOrderables','columOrderables','customer', 'lims_sale_data', 'lims_payment_data', 'lims_quotation_data', 'lims_return_data', 'lims_reward_point_setting_data'));
         }
 
         $start_date = date("Y").'-'.date("m").'-'.'01';
@@ -426,7 +431,7 @@ class HomeController extends Controller
         $customers = Customer::with(['sales','payments'])->get()->take(10);
             // print_r($customers);die();
 
-        return view('index', compact('dashboardOrderables','revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price','customers','accountData',));
+        return view('index', compact('dashboardOrderables','columOrderables','revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price','customers','accountData',));
         }
     }
 
