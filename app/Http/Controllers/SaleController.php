@@ -36,6 +36,7 @@ use App\ProductPurchase;
 use App\ProductBatch;
 use App\Purchase;
 use App\RewardPointSetting;
+use App\PosCustomerNotification;
 use DB;
 use App\GeneralSetting;
 use Stripe\Stripe;
@@ -49,6 +50,9 @@ use Srmklive\PayPal\Services\ExpressCheckout;
 use Srmklive\PayPal\Services\AdaptivePayments;
 use GeniusTS\HijriDate\Date;
 use Illuminate\Support\Facades\Validator;
+use Barryvdh\DomPDF\Facade as PDF;
+use App\Jobs\PosNotificationJob;
+use App\Jobs\ProcessPodcast;
 
 class SaleController extends Controller
 {
@@ -396,6 +400,8 @@ class SaleController extends Controller
 
     public function store(Request $request)
     {
+
+       // **********************************
         $data = $request->all();
         if(isset($request->reference_no)) {
             $this->validate($request, [
@@ -1942,7 +1948,6 @@ class SaleController extends Controller
         else
             $numberTransformer = $numberToWords->getNumberTransformer(\App::getLocale());
         $numberInWords = $numberTransformer->toWords($lims_sale_data->grand_total);
-
         return view('sale.invoice', compact('lims_sale_data', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords'));
     }
 
