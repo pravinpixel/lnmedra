@@ -57,6 +57,9 @@
 @push('scripts')
 <script type="text/javascript" src="{{ asset('public/dist/js/ajax-bootstrap-select.min.js') }}"></script>
 <script type="text/javascript">
+    function check_this_box(product_id) {
+   $(`#active_class${product_id}`).toggleClass('shadow border-primary border');
+}
  $('#attribute_div').hide();
     $("ul#vendorproduct").siblings('a').attr('aria-expanded','true');
     $("ul#vendorproduct").addClass("show");
@@ -100,8 +103,7 @@
                     let att = res.data[i];
                     console.log(res.data[i].id);
                     $('#attribute_img').append(`
-                    ${res.data[i].checkbox} 
-                    ${res.data[i].image}     
+                    ${res.data[i].checkbox_image}     
                     `)
                     } 
                 } 
@@ -126,54 +128,54 @@
       branding:false
     });
 
-    $('select[name="type"]').on('change', function() {
-        if($(this).val() == 'combo'){
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            hide();
-            $("#combo").show(300);
-            $("input[name='price']").prop('disabled',true);
-            $("#is-variant").prop("checked", false);
-            $("#is-diffPrice").prop("checked", false);
-            $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
-        }
-        else if($(this).val() == 'digital'){
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            $("input[name='file']").prop('required',true);
-            hide();
-            $("#digital").show(300);
-            $("#combo").hide(300);
-            $("input[name='price']").prop('disabled',false);
-            $("#is-variant").prop("checked", false);
-            $("#is-diffPrice").prop("checked", false);
-            $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
-        }
-        else if($(this).val() == 'service') {
-            $("input[name='cost']").prop('required',false);
-            $("select[name='unit_id']").prop('required',false);
-            $("input[name='file']").prop('required',true);
-            hide();
-            $("#combo").hide(300);
-            $("#digital").hide(300);
-            $("input[name='price']").prop('disabled',false);
-            $("#is-variant").prop("checked", false);
-            $("#variant-section, #variant-option").hide(300);
-        }
-        else if($(this).val() == 'standard') {
-            $("input[name='cost']").prop('required',true);
-            $("select[name='unit_id']").prop('required',true);
-            $("input[name='file']").prop('required',false);
-            $("#cost").show(300);
-            $("#unit").show(300);
-            $("#alert-qty").show(300);
-            $("#variant-option").show(300);
-            $("#diffPrice-option").show(300);
-            $("#digital").hide(300);
-            $("#combo").hide(300);
-            $("input[name='price']").prop('disabled',false);
-        }
-    });
+    // $('select[name="type"]').on('change', function() {
+    //     if($(this).val() == 'combo'){
+    //         $("input[name='cost']").prop('required',false);
+    //         $("select[name='unit_id']").prop('required',false);
+    //         hide();
+    //         $("#combo").show(300);
+    //         $("input[name='price']").prop('disabled',true);
+    //         $("#is-variant").prop("checked", false);
+    //         $("#is-diffPrice").prop("checked", false);
+    //         $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
+    //     }
+    //     else if($(this).val() == 'digital'){
+    //         $("input[name='cost']").prop('required',false);
+    //         $("select[name='unit_id']").prop('required',false);
+    //         $("input[name='file']").prop('required',true);
+    //         hide();
+    //         $("#digital").show(300);
+    //         $("#combo").hide(300);
+    //         $("input[name='price']").prop('disabled',false);
+    //         $("#is-variant").prop("checked", false);
+    //         $("#is-diffPrice").prop("checked", false);
+    //         $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
+    //     }
+    //     else if($(this).val() == 'service') {
+    //         $("input[name='cost']").prop('required',false);
+    //         $("select[name='unit_id']").prop('required',false);
+    //         $("input[name='file']").prop('required',true);
+    //         hide();
+    //         $("#combo").hide(300);
+    //         $("#digital").hide(300);
+    //         $("input[name='price']").prop('disabled',false);
+    //         $("#is-variant").prop("checked", false);
+    //         $("#variant-section, #variant-option").hide(300);
+    //     }
+    //     else if($(this).val() == 'standard') {
+    //         $("input[name='cost']").prop('required',true);
+    //         $("select[name='unit_id']").prop('required',true);
+    //         $("input[name='file']").prop('required',false);
+    //         $("#cost").show(300);
+    //         $("#unit").show(300);
+    //         $("#alert-qty").show(300);
+    //         $("#variant-option").show(300);
+    //         $("#diffPrice-option").show(300);
+    //         $("#digital").hide(300);
+    //         $("#combo").hide(300);
+    //         $("input[name='price']").prop('disabled',false);
+    //     }
+    // });
 
     $('select[name="unit_id"]').on('change', function() {
 
@@ -601,7 +603,16 @@
     function addProduct(e)
     {
         e.preventDefault();
-
+        $('input[type=checkbox').each(function () {
+                console.log($(this).is(":checked"))
+            if (!$(this).is(":checked")) {
+                $('input[type=checkbox').prop('required', true);
+                return false;
+            }
+        });
+     
+        if ( $("#add-product-form").valid() && validate() ) {
+          
         $.ajax({
             type:'POST',
             url:'{{route('vendorproducts.addproduct')}}',
@@ -622,6 +633,8 @@
                 Alert('danger', 'Something went wrong try agin');
             },
         });
+        
+    }
     }
 </script>
 @endpush

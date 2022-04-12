@@ -5,6 +5,9 @@
     <div class="container-fluid"> 
         <div class="card card-body">
             <div class="row m-0">
+            <?php $id = Auth::user()->role_id ?>
+           
+                @if($id != 6)
                 <div class="d-flex align-items-center col">
                     <div class="mr-3">Name</div>
                     <select id="vendor_id" name="vendor_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Vendor.." data-live-search-style="begins" >
@@ -13,6 +16,7 @@
                         @endforeach
                     </select>
                 </div>
+                @endif
                 <div class="d-flex align-items-center col">
                     <div class="mr-3">{{trans('file.category')}}</div>
                     <select id="category_id" name="category_id" class="selectpicker form-control w-100" data-live-search="true" title="Select Category.." data-live-search-style="begins" >

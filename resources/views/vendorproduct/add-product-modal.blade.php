@@ -47,15 +47,13 @@
                             <span class="validation-msg" id="code-error"></span>
                         </div>
                     </div>
-                    <div class="col-md-6" id="attribute_div">
-                        <div class="form-group">
-                            <label>{{trans('file.Attribute')}} *</strong> </label>
-                            
-                            <div id="attribute_img" >
-                                
-                            </div> 
-                        </div>
-                    </div>
+                    <div class="col-md-12" id="attribute_div">
+                                <div class="form-group">
+                                    <label>{{trans('file.Attribute')}} *</strong> </label>
+                                    <small class="validation-msg text-danger"></small>
+                                    <div id="attribute_img" class="row m-0"></div>  
+                                </div>
+                            </div>
 
                     <div id="digital" class="col-md-6">
                         <div class="form-group">

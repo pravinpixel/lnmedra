@@ -65,7 +65,7 @@ class ProductController extends Controller
             10 => 'stock_worth'
         );
         
-        $totalData = Product::where('is_active','!=',2)->count();
+        $totalData = Product::where('is_active','!=',2)->where('is_active', true)->count();
         $totalFiltered = $totalData; 
 
         if($request->input('length') != -1)
@@ -82,6 +82,7 @@ class ProductController extends Controller
                     ->with('category', 'brand', 'unit')
                     ->join('categories', 'products.category_id', '=', 'categories.id')
                     ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
+                    ->where('products.is_active', true)
                     ->when(!empty(request('category_id')), function($q){
                         $q->where('products.category_id', request('category_id'));
                     })
@@ -94,21 +95,25 @@ class ProductController extends Controller
                     ->when(!empty($search), function($q) use($search){
                         $q->where([
                             ['products.name', 'LIKE', "%{$search}%"],
-                            ['products.is_active','!=', 2]
+                            ['products.is_active','!=', 2],
+                            ['products.is_active', true]
                         ])
                         ->orWhere([
                             ['products.code', 'LIKE', "%{$search}%"],
-                            ['products.is_active','!=', 2]
+                            ['products.is_active','!=', 2],
+                            ['products.is_active', true]
                         ])
                         ->orWhere([
                             ['categories.name', 'LIKE', "%{$search}%"],
                             ['categories.is_active', true],
-                            ['products.is_active','!=', 2]
+                            ['products.is_active','!=', 2],
+                            ['products.is_active', true]
                         ])
                         ->orWhere([
                             ['brands.title', 'LIKE', "%{$search}%"],
                             ['brands.is_active', true],
-                            ['products.is_active','!=', 2]
+                            ['products.is_active','!=', 2],
+                            ['products.is_active', true]
                         ]);
                     })
                     
@@ -120,6 +125,7 @@ class ProductController extends Controller
         $totalFiltered = Product::
                         join('categories', 'products.category_id', '=', 'categories.id')
                         ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
+                        ->where('products.is_active', true)
                         ->when(!empty(request('category_id')), function($q){
                             $q->where('products.category_id', request('category_id'));
                         })
@@ -132,21 +138,25 @@ class ProductController extends Controller
                         ->when(!empty($search), function($q) use($search){
                             $q->where([
                                 ['products.name', 'LIKE', "%{$search}%"],
-                                ['products.is_active','!=', 2]
+                                ['products.is_active','!=', 2],
+                                ['products.is_active', true ]
                             ])
                             ->orWhere([
                                 ['products.code', 'LIKE', "%{$search}%"],
-                                ['products.is_active','!=', 2]
+                                ['products.is_active','!=', 2],
+                                ['products.is_active', true]
                             ])
                             ->orWhere([
                                 ['categories.name', 'LIKE', "%{$search}%"],
                                 ['categories.is_active', true],
-                                ['products.is_active','!=', 2]
+                                ['products.is_active','!=', 2],
+                                ['products.is_active', true]
                             ])
                             ->orWhere([
                                 ['brands.title', 'LIKE', "%{$search}%"],
                                 ['brands.is_active', true],
-                                ['products.is_active','!=', 2]
+                                ['products.is_active','!=', 2],
+                                ['products.is_active', true]
                             ]);
                         })
                         ->count();
