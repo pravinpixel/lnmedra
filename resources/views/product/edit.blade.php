@@ -464,6 +464,7 @@
                         <div class="col-md-12" id="attribute_div">
                             <div class="form-group">
                                 <label>{{trans('file.Attribute')}} *</strong> </label> 
+                                <small class="validation-msg text-danger"></small>
                                 <div id="attribute_img" class="row m-0">
                                 </div>  
                             </div>
@@ -621,6 +622,7 @@ var baseUrl = $('#baseUrl').val();
                   
               // alert(res.data.length)
               if(res.data.length){
+                $('#attribute_div').show();
                  for(var i=0;i<res.data.length;i++)
                  {
                   let att = res.data[i];
@@ -1102,6 +1104,7 @@ var baseUrl = $('#baseUrl').val();
             this.removeAllFiles(true);
         }
     });
+    $('#productType').trigger('change');
 
 </script>
 @endpush

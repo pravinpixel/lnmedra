@@ -420,7 +420,7 @@ function check_this_box(product_id) {
    $(`#active_class${product_id}`).toggleClass('shadow border-primary border');
 }
 
-$('#attribute_div').hide();
+    $('#attribute_div').hide();
     $("ul#product").siblings('a').attr('aria-expanded','true');
     $("ul#product").addClass("show");
     $("ul#product #product-create-menu").addClass("active");
