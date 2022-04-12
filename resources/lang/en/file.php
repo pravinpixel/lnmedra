@@ -271,6 +271,7 @@ return [
 	'In Words' => 'In Words',
 	'Stamp' => 'Stamp',
 	'Top Sale'=>'Top Sale',
+	'Download Invoice'=>'Download Invoice',
 	'Signature' => 'Signature',
 	'Developed' => 'Developed',
 	'Attach File' => 'Attach File',

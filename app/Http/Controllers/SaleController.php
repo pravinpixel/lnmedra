@@ -37,6 +37,7 @@ use App\ProductBatch;
 use App\Purchase;
 use App\RewardPointSetting;
 use App\PosCustomerNotification;
+use App\Http\Controllers\SmsSentController;
 use DB;
 use App\GeneralSetting;
 use Stripe\Stripe;
@@ -1935,12 +1936,15 @@ class SaleController extends Controller
 
     public function genInvoice($id)
     {
+         
         $lims_sale_data = Sale::find($id);
         $lims_product_sale_data = Product_Sale::where('sale_id', $id)->get();
         $lims_biller_data = Biller::find($lims_sale_data->biller_id);
         $lims_warehouse_data = Warehouse::find($lims_sale_data->warehouse_id);
         $lims_customer_data = Customer::find($lims_sale_data->customer_id);
         $lims_payment_data = Payment::where('sale_id', $id)->get();
+       
+        
 
         $numberToWords = new NumberToWords();
         if(\App::getLocale() == 'ar' || \App::getLocale() == 'hi' || \App::getLocale() == 'vi' || \App::getLocale() == 'en-gb')
@@ -1949,6 +1953,25 @@ class SaleController extends Controller
             $numberTransformer = $numberToWords->getNumberTransformer(\App::getLocale());
         $numberInWords = $numberTransformer->toWords($lims_sale_data->grand_total);
         return view('sale.invoice', compact('lims_sale_data', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords'));
+    }
+    public function downloadInvoice($id)
+    {
+        // dd("33");
+        $lims_sale_data = Sale::find($id);
+        $lims_product_sale_data = Product_Sale::where('sale_id', $id)->get();
+        $lims_biller_data = Biller::find($lims_sale_data->biller_id);
+        $lims_warehouse_data = Warehouse::find($lims_sale_data->warehouse_id);
+        $lims_customer_data = Customer::find($lims_sale_data->customer_id);
+        $lims_payment_data = Payment::where('sale_id', $id)->get();
+        $numberToWords = new NumberToWords();
+        
+        if(\App::getLocale() == 'ar' || \App::getLocale() == 'hi' || \App::getLocale() == 'vi' || \App::getLocale() == 'en-gb')
+            $numberTransformer = $numberToWords->getNumberTransformer('en');
+        else
+            $numberTransformer = $numberToWords->getNumberTransformer(\App::getLocale());
+        $numberInWords = $numberTransformer->toWords($lims_sale_data->grand_total);
+        $pdf = PDF::loadView('pos_mail_notification_PDF.pos_mail_notification',compact('lims_sale_data','lims_product_sale_data','lims_biller_data','lims_warehouse_data','lims_customer_data','lims_payment_data','numberInWords'));
+        return $pdf->download('invoice.pdf');   
     }
 
     public function addPayment(Request $request)

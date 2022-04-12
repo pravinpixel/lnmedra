@@ -166,6 +166,11 @@
                                         <div class="form-group">
                                             <label>{{trans('file.name')}} *</strong> </label>
                                             <input type="text" name="name" value="{{old('name')}}" required class="form-control">
+                                            @if($errors->has('name'))
+                                            <span id="lblError" >
+                                            <strong  style="color: red;">{{ $errors->first('name') }}</strong>
+                                            </span>
+                                            @endif
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -209,11 +214,11 @@
                                         <div class="form-group">
                                             <label>{{trans('file.Email')}} *</label>
                                             <input type="text" name="email" id="email" placeholder="example@example.com" onkeyup="ValidateEmail();" value="{{old('email')}}" required class="form-control">
-                                            <!-- @if($errors->has('email'))
+                                            @if($errors->has('email'))
                                             <span id="lblError" >
                                             <strong  style="color: red;">{{ $errors->first('email') }}</strong>
                                             </span>
-                                            @endif -->
+                                            @endif
                                             <!-- <input type="text" id="txtEmail" onkeyup="ValidateEmail();" /> -->
                                             <span id="lblError" style="color: red"></span>
                                           
@@ -224,8 +229,8 @@
                                             <label>{{trans('file.Password')}} *</label>
                                             <input type="password" name="password" value="{{old('password')}}" required class="form-control">
                                             @if($errors->has('password'))
-                                        <span>
-                                            <strong>{{ $errors->first('password') }}</strong>
+                                            <span>
+                                                <strong>{{ $errors->first('password') }}</strong>
                                             </span>
                                             @endif
                                         </div>
@@ -272,7 +277,7 @@
                                             <label>{{trans('file.Company Name')}} *</label>
                                             <input type="text" name="company_name" value="{{old('company_name')}}"  required class="form-control">
                                             @if($errors->has('company_name'))
-                                        <span>
+                                            <span>
                                             <strong style="color: red;">{{ $errors->first('company_name') }}</strong>
                                             </span>
                                             @endif

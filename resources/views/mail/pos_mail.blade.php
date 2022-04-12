@@ -87,20 +87,14 @@
         
     <div id="receipt-data">
         <div class="centered">
-            @if($general_setting->site_logo)
-                <img src="{{url('public/logo', $general_setting->site_logo)}}" height="42" width="50" style="margin:10px 0;filter: brightness(0);">
-            @endif
             
-            <h2>{{$details['lims_biller_data']->company_name}}</h2>
+            <h2>Dear {{$details['lims_customer_data']->name}}</h2>
             
-            <p>{{trans('file.Address')}}: {{$details['lims_warehouse_data']->address ?? ''}}
-                <br>{{trans('file.Phone Number')}}: {{$details['lims_warehouse_data']->phone ?? ''}}
-            </p>
+           
+            <p>Thanks for visiting our store and hope you had a great shopping. 
+                Download the PDF attached in the mail for the invoice <strong>{{ $details['lims_sale_data']->reference_no}}</strong>. Keep visiting us once again, Have a great day.</p>
         </div>
-        <p>{{trans('file.Date')}}: {{$details['lims_sale_data']->created_at}}<br>
-            {{trans('file.reference')}}: {{$details['lims_sale_data']->reference_no}}<br>
-            {{trans('file.customer')}}: {{$details['lims_customer_data']->name}}
-        </p>
+       
       
       
     </div>

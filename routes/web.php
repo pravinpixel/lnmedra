@@ -173,6 +173,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('biller/lims_biller_search', 'BillerController@limsBillerSearch')->name('biller.search');
 	Route::resource('biller', 'BillerController');
 
+	Route::get('sales/download_invoice/{id}', 'SaleController@downloadInvoice')->name('sales.download_invoice');;
+
+
 	Route::post('sales/sale-data', 'SaleController@saleData');
 	Route::post('sales/sendmail', 'SaleController@sendMail')->name('sale.sendmail');
 	Route::get('sales/sale_by_csv', 'SaleController@saleByCsv');

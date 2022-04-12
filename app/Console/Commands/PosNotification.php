@@ -10,6 +10,7 @@ use App\Biller;
 use App\Customer;
 use App\Payment;
 use App\Warehouse;
+use App\Http\Controllers\SmsSentController;
 use App\PosCustomerNotification;
 use Barryvdh\DomPDF\Facade as PDF;
 use NumberToWords\NumberToWords;
@@ -70,7 +71,7 @@ class PosNotification extends Command
         else
             $numberTransformer = $numberToWords->getNumberTransformer(\App::getLocale());
 
-        $numberInWords = $numberTransformer->toWords($val->grand_total);
+            $numberInWords = $numberTransformer->toWords($val->grand_total);
          
        
             $pdf = PDF::loadView('pos_mail_notification_PDF.pos_mail_notification',compact('lims_sale_data','lims_product_sale_data','lims_biller_data','lims_warehouse_data','lims_customer_data','lims_payment_data','numberInWords'));
@@ -94,8 +95,25 @@ class PosNotification extends Command
                 ];
 
             Mail::to($lims_customer_data['email'])->send(new \App\Mail\PosNotification($details));
+
+            $link='<a href="'.route('sales.download_invoice',$val['id']).'" class="btn btn-link"> '.trans('file.Download Invoice').'</a>';
+            
+            $customer_details = [
+                'attachment'=>$path.'/'.$fileName,
+                'firstname'=>$lims_customer_data['name'],
+                'mobileno'=>$lims_customer_data['phone_number'],
+                'invoiceNo'=>$lims_sale_data['reference_no'],
+                'link'=>$link,
+            ];
+
+            $tasks_controller = new SmsSentController;
+
+            $datas = array("firstname"=>$customer_details['firstname'],"invoiceNo"=>$customer_details['invoiceNo'],"attachment"=>$customer_details['attachment'],"mobileno"=>$customer_details['mobileno']);
+            // $tasks_controller->smsSent($customer_details,1);
+
             $saleData = Sale::find($val['id']);
             $saleData->mail_status = 1;
+            $saleData->sms_status = 1;
             $saleData->save();
 
             $pos_customer = new PosCustomerNotification();

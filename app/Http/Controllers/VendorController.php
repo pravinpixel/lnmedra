@@ -34,8 +34,14 @@ class VendorController extends Controller
                     return $query->where('is_active', 1);
                 }),
             ],
+            'name' => [
+                'max:255',
+                    Rule::unique('suppliers')->where(function ($query) {
+                    return $query->where('is_active', 1);
+                }),
+            ],
             'email' => 'required|email|max:255|unique:suppliers,email|regex:/(.+)@(.+)\.(.+)/i',
-            'phone_number' => 'required|digits:10|min:5',
+            'phone_number' => 'required|digits:10|unique:suppliers,phone_number|min:5',
          
         ]);
         

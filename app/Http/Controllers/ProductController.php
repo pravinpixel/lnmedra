@@ -91,7 +91,7 @@ class ProductController extends Controller
                     ->when(!empty(request('product_id')), function($q){
                         $q->where('products.type', request('product_id'));
                     })
-                    ->when(!empty($search), function($q){
+                    ->when(!empty($search), function($q) use($search){
                         $q->where([
                             ['products.name', 'LIKE', "%{$search}%"],
                             ['products.is_active','!=', 2]
@@ -112,6 +112,7 @@ class ProductController extends Controller
                         ]);
                     })
                     
+                  
                     ->offset($start)
                     ->limit($limit)
                     ->orderBy($order,$dir)->get();
@@ -128,7 +129,7 @@ class ProductController extends Controller
                         ->when(!empty(request('product_id')), function($q){
                             $q->where('products.type', request('product_id'));
                         })
-                        ->when(!empty($search), function($q){
+                        ->when(!empty($search), function($q) use($search){
                             $q->where([
                                 ['products.name', 'LIKE', "%{$search}%"],
                                 ['products.is_active','!=', 2]
