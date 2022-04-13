@@ -3188,8 +3188,10 @@ function checkQuantity(sale_qty, flag) {
     var actualQty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text();
     var currentQty = sale_qty -1;
     if(parseFloat(currentQty) >= parseFloat(actualQty)){
-        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(currentQty);
+        // $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(currentQty);
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(actualQty);
         Alert('warning', `Product out of stock`);
+        calculateRowProductData(actualQty);
         return false;
     }
     localStorageQty[rowindex] = sale_qty;
