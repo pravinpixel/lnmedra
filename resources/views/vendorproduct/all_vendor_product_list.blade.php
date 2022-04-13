@@ -185,9 +185,8 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                 
                var data = table.row( $(this).closest('tr') ).data();
                 console.log((data));
-                console.log(data.vendor_qty);
-                // console.log(row_qty_value);      
-                // alert(data.qty)
+                console.log(row_id);
+                // console.log(row_qty_value);
                 if(row_qty_value>data.vendor_qty)
                 {
                     alert("more then quantity..")
@@ -625,7 +624,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
         $("#selectedRow").val(selectedRow.join(','));
     }
 
-    function checkformvalidation(e){ 
+    function checkformvalidation(e){    
         e.preventDefault();  
         let roleChecked = $("input:checked").length;
         if (!roleChecked) {
