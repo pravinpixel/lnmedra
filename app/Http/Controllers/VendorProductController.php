@@ -1097,8 +1097,8 @@ class VendorProductController extends Controller
                                     ->when(!useInRole(config('global.all_access')) , function($q){
                                         $q->where('vendor_products.created_by', user()->id);
                                     })
-                                    ->when(!empty(request('status')), function($q){
-                                        $q->where('is_approve',request('status'));
+                                    ->when(is_numeric(request('status')), function($q){
+                                        $q->where('vendor_products.is_approve',request('status'));
                                     })
                                     ->when(!empty(request('vendor_id')), function($q){
                                         $q->where('vendor_products.created_by',request('vendor_id'));
@@ -1119,9 +1119,10 @@ class VendorProductController extends Controller
                                     ->when(!useInRole(config('global.all_access')), function($q){
                                         $q->where('vendor_products.created_by', user()->id);
                                     })
-                                    ->when(!empty(request('status')), function($q){
-                                        $q->where('is_approve',request('status'));
+                                    ->when(is_numeric(request('status')), function($q){
+                                        $q->where('vendor_products.is_approve',request('status'));
                                     })
+                                //    -> where('vendor_products.is_approve',request('status'))
                                     ->when(!empty(request('vendor_id')), function($q){
                                         $q->where('vendor_products.created_by',request('vendor_id'));
                                     })
