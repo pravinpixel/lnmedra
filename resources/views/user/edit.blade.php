@@ -28,8 +28,9 @@
                                     <div class="form-group">
                                         <label><strong>{{trans('file.Change Password')}}</strong> </label>
                                         <div class="input-group">
-                                            <input type="password" name="password" class="form-control">
+                                            <input type="password" name="password" id="password" class="form-control">
                                             <div class="input-group-append">
+                                            <button   id="togglePassword" type="button" class="btn btn-default"><i id="icon-eye" class="fa fa-eye-slash "></i></button>
                                                 <button id="genbutton" type="button" class="btn btn-default">{{trans('file.Generate')}}</button>
                                             </div>
                                         </div>
@@ -197,6 +198,22 @@
     $("ul#people").addClass("show");
     $('#biller-id').hide();
     $('#warehouseId').hide();
+
+
+    const password = document.querySelector("#password");
+
+$(document).on('click', '#togglePassword', function () {
+    const type = password.getAttribute("type") === "password" ? "text" : "password";
+    password.setAttribute("type", type);
+    if(type == 'password'){
+        $('#icon-eye').addClass('fa-eye-slash')
+        $('#icon-eye').removeClass('fa-eye')
+    } else {
+        $('#icon-eye').removeClass('fa-eye-slash')
+        $('#icon-eye').addClass('fa-eye')
+    }
+
+});
 
 
 

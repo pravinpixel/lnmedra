@@ -53,7 +53,7 @@
                                     <div class="form-group">
                                         <label>{{trans('file.requirement')}}</strong> </label>
                                         <div class="input-group">
-                                            <select name="requirement" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('requirement')}}"  title="Select Requirement..."  autocomplete="type" data-live-search="true" data-live-search-style="begins" required>
+                                            <select name="requirement" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('requirement')}}"   autocomplete="type" data-live-search="true" data-live-search-style="begins" required>
                                                
                                                     <option value="1" {{old ('requirement') == 1 ? 'selected' : ''}}>Landscape Design</option>
                                                     <option value="2" {{old ('requirement') == 2 ? 'selected' : ''}}>Execution</option>
@@ -124,6 +124,12 @@
                             required: true,
                             maxlength: 200
                         },
+                        
+                        'email': {
+                            required: true,
+                           
+                        },
+                        
                     
                     },
                   
