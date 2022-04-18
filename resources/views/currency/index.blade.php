@@ -41,14 +41,14 @@
                                     </button>
                                     <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                                         <li><button type="button" data-id="{{$currency->id}}" data-name="{{$currency->name}}" data-code="{{$currency->code}}" data-exchange_rate="{{$currency->exchange_rate}}" class="edit-btn btn btn-link" data-toggle="modal" data-target="#editModal"><i class="dripicons-document-edit"></i> {{trans('file.edit')}}</button></li>
-                                        @if($currency->exchange_rate != 1)
+                                        
                                         <li class="divider"></li>
                                         {{ Form::open(['route' => ['currency.destroy', $currency->id], 'method' => 'DELETE'] ) }}
                                         <li>
                                             <button type="submit" class="btn btn-link" onclick="return confirm('Are you sure want to delete?')"><i class="dripicons-trash"></i> {{trans('file.delete')}}</button>
                                         </li>
                                         {{ Form::close() }}
-                                        @endif
+                                       
                                     </ul>
                                 </div>
                             </td>

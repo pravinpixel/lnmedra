@@ -9,7 +9,7 @@
                     <div class="row m-0">
                         <div class="col-3 d-flex align-items-center">
                             <div class="mr-3">{{trans('file.Date')}}</div>
-                            <input type="text" class="daterangepicker-field form-control w-100" value="{{$starting_date}} To {{$ending_date}}" required />
+                            <input type="text" class="daterangepicker-field form-control w-100" value="{{ now()->subDays(30)->format('Y-m-d') }} To {{ now()->format('Y-m-d') }}" required />
                             <input type="hidden" name="starting_date" value="{{$starting_date}}" />
                             <input type="hidden" name="ending_date" value="{{$ending_date}}" />
                         </div>
@@ -461,6 +461,7 @@ else if(auth_id == 1)
         var ending_date = endDate.format('YYYY-MM-DD');
         var title = starting_date + ' To ' + ending_date;
         $(this).val(title);
+        $('.daterangepicker-field').val(title);
         $('input[name="starting_date"]').val(starting_date);
         $('input[name="ending_date"]').val(ending_date);
       }

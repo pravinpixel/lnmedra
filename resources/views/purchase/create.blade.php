@@ -409,7 +409,6 @@ $("#supplier_id").val($("#defaultSupplier").val());
     //Change quantity
     $("#myTable").on('input', '.qty', function() {
         rowindex = $(this).closest('tr').index();
-        // alert($(this).val())
         if($(this).val() < 1 && $(this).val() != '') {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(1);
         Alert("warning","Quantity can't be less than 1");
@@ -480,7 +479,6 @@ $("#supplier_id").val($("#defaultSupplier").val());
  $("#myTable").on('input', '.net_unit_cost', function() {
     var edit_unit_cost = 0;
         rowindex = $(this).closest('tr').index();
-        // alert($(this).val())
         if($(this).val() < 1 && $(this).val() != '') {
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val(1);
         Alert("warning","Net cost should not e empty");
@@ -492,25 +490,30 @@ $("#supplier_id").val($("#defaultSupplier").val());
         var edit_unit_cost =parseInt($(this).val());
     
         checkQuantity(edit_qty, false);
-        // alert(edit_discount)
-         
-        // alert(edit_unit_cost
  })
 
     $("#myTable").on('input', '.discount-value', function() {
-        // alert()
+       
         rowindex = $(this).closest('tr').index();
-        // alert($(this).val())
         if($(this).val() < 1 && $(this).val() != '') {
-        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val(1);
-        Alert("warning","Quantity can't be less than 1");
+        $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .discount-value').val(0);
+        Alert("warning","Discount can't be less than 1");
         }
         product_discount[rowindex] = parseInt($(this).val());
-        // checkQuantity($(this).val(), true);
         var edit_discount = parseInt($(this).val());
         var edit_qty = parseInt($('input[name="qty[]"]').val()); 
         var edit_unit_cost = parseInt($('input[name="net_unit_cost[]"]').val());
-        // alert(edit_discount)
+        if(isNaN(edit_discount))
+        {
+            var zero= 0;
+            $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val(zero);
+            product_discount[rowindex] = parseInt($(this).val());
+            var edit_qty = parseInt($('input[name="qty[]"]').val()); 
+            // checkQuantity(edit_qty, false);
+            // return false;
+        }
+        
+
         checkQuantity(edit_qty, false);
     });
 
@@ -589,7 +592,6 @@ $("#supplier_id").val($("#defaultSupplier").val());
             success: function(data) {
                 if(data.length>0){
                     console.log(lims_product_code)
-                //    alert(data.length)
                 lims_product_code.length = 0;
       
             
@@ -614,11 +616,9 @@ $("#supplier_id").val($("#defaultSupplier").val());
     })
     
     function productSearch(data) {
-        // alert(data)
        var _product = data;
        var supplier_id= $('#supplier_id').val();
        var defaulr_supplier_id = $('#defaultSupplier').val();
-        // alert(supplier_id)
         $.ajax({
             type: 'GET',
             url: 'lims_product_search',

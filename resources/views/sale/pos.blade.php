@@ -2362,13 +2362,30 @@ $('#category-filter').on('click', function(e){
 $('.category-img').on('click', function(e){
     e.stopPropagation();
     var category_id = $(this).data('category');
+    
     $('.filter-window').show('slide', {direction: 'left'}, 'fast');
-    $.get("{{route('sales/get-subcategory')}}",{parent_id:category_id},function(data) {
-        $("#_subcategories_").html(data);
+    $.get("{{route('sales/check-subcategory')}}",{parent_id:category_id},function(data) {
+        //    alert(data)
+        if(data)
+        {
+            $.get("{{route('sales/get-subcategory')}}",{parent_id:category_id},function(data) {
+                $("#_subcategories_").html(data);
+            
+            });
+                $('.subcategory').show();
+                $('.category').hide();
+                $('.brand').hide();
+        }
+        else{
+            
+            var brand_id = 0;
+            $.get('sales/getproduct/' + category_id + '/' + brand_id, function(data) {
+                populateProduct(data);
+                $('.filter-window').hide();
+            });
+        }
+
     });
-    $('.subcategory').show();
-    $('.category').hide();
-    $('.brand').hide();
 });
 
 $(document).on('click',".subcategory-img", function(e){
@@ -2434,6 +2451,7 @@ function populateProduct(data) {
         }
 
         tableData += '</tr></tbody></table>';
+        console.log(tableData)
         $(".table-container").html(tableData);
         $('#product-table').DataTable( {
           "order": [],

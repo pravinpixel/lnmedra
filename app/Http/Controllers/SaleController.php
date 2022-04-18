@@ -645,10 +645,10 @@ class SaleController extends Controller
             $lims_customer_data->save();
         if($mail_data['email'] && $data['sale_status'] == 1) {
             try {
-                Mail::send( 'mail.sale_details', $mail_data, function( $message ) use ($mail_data)
-                {
-                    $message->to( $mail_data['email'] )->subject( 'Sale Details');
-                });
+                // Mail::send( 'mail.sale_details', $mail_data, function( $message ) use ($mail_data)
+                // {
+                //     $message->to( $mail_data['email'] )->subject( 'Sale Details');
+                // });
             }
             catch(\Exception $e){
                 $message = ' Sale created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
@@ -2795,5 +2795,19 @@ class SaleController extends Controller
         $parent_id = $request->input('parent_id');
         $subcategories = Category::where(['is_active'=> true, 'parent_id' => $parent_id])->get();
         return view('sale.get-subcategory', compact('subcategories'));
+    }
+    public function checkSubcategory(Request $request)
+    {
+        $parent_id = $request->input('parent_id');
+        $subcategories = Category::where(['is_active'=> true, 'parent_id' => $parent_id])->count();
+        // print_r($subcategories);die();
+        if($subcategories)
+        {
+            return true;
+        }
+        else{
+            return false;
+        }
+        
     }
 }
