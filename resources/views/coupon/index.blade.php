@@ -128,7 +128,7 @@
                           <div class="input-group">
                               <input type="number" name="amount" step="any" required class="form-control">&nbsp;&nbsp;
                               <div class="input-group-append mt-1">
-                                  <span class="icon-text" style="font-size: 22px;"><strong>%</strong></span>
+                                  <span class="icon-text" style="font-size: 22px;"><strong>₹</strong></span>
                               </div>
                           </div>
                       </div>
@@ -197,7 +197,7 @@
                 </div>
                 <div class="col-md-6 form-group">
                     <label>{{trans('file.Expired Date')}}</label>
-                    <input type="text" name="expired_date" class="expired_date form-control">
+                    <input type="date" name="expired_date" class="expired_date form-control">
                 </div>
               </div>
               <div class="form-group">
@@ -235,7 +235,7 @@
       if ($(this).val() == 'fixed') {
           $("#create-modal .minimum-amount").show();
           $("#create-modal .minimum-amount").prop('required',true);
-          $("#create-modal .icon-text").text('$');
+          $("#create-modal .icon-text").text('₹');
       }
       else {
           $("#create-modal .minimum-amount").hide();
@@ -249,7 +249,7 @@
       if ($(this).val() == 'fixed') {
           $("#editModal .minimum-amount").show();
           $("#editModal .minimum-amount").prop('required',true);
-          $("#editModal .icon-text").text('$');
+          $("#editModal .icon-text").text('₹');
       }
       else {
           $("#editModal .minimum-amount").hide();
@@ -288,13 +288,13 @@
         });
     });
 
-    var expired_date = $('.expired_date');
-    expired_date.datepicker({
-     format: "yyyy-mm-dd",
-     startDate: "<?php echo date('Y-m-d'); ?>",
-     autoclose: true,
-     todayHighlight: true
-     });
+    // var expired_date = $('.expired_date');
+    // expired_date.datepicker({
+    //  format: "yyyy-mm-dd",
+    //  startDate: "<?php echo date('Y-m-d'); ?>",
+    //  autoclose: true,
+    //  todayHighlight: true
+    //  });
 
 function confirmDelete() {
     if (confirm("Are you sure want to delete?")) {

@@ -68,7 +68,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.Attachment')}} *</label>
-                                        <input type="file" name="filenames[]" value="{{old('attachment')}}" required class="form-control" multiple>
+                                        <input type="file" name="filenames[]" value="{{old('attachment')}}" required class="form-control" multiple 
+                                         accept="application/pdf"/>
                                         @if($errors->has('attachment'))
                                             <span>
                                                 <strong style="color: red;">{{ $errors->first('attachment') }}</strong>
@@ -92,7 +93,7 @@
                                 
                                 <div class="col-md-6">
                                     <div class="form-group mt-4">
-                                        <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
+                                        <input type="submit" value="{{trans('file.send')}}" class="btn btn-primary">
                                     </div>
                                 </div>
                                 <div class="col-md-6">

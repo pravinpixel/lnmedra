@@ -21,7 +21,7 @@ class CreateCouponsTable extends Migration
             $table->double('minimum_amount')->nullable();
             $table->integer('quantity');
             $table->integer('used');
-            $table->date('expired_date');
+            $table->date('expired_date')->nullable();
             $table->integer('user_id');
             $table->boolean('is_active');
             $table->timestamps();

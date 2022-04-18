@@ -270,6 +270,7 @@ return [
 	'Mode' => 'Mode',
 	'In Words' => 'In Words',
 	'Stamp' => 'Stamp',
+	'send'=>'Send',
 	'Top Sale'=>'Top Sale',
 	'Download Invoice'=>'Download Invoice',
 	'Signature' => 'Signature',
