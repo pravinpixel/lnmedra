@@ -28,7 +28,9 @@
                     <table id="product-data-table" class="table m-0" style="width: 100%">
                         <thead>
                             <tr>
-                                <th class="not-exported"></th>
+                                <th class="not-exported" data-orderable="false">
+                                    <div><input type="checkbox" class="dt-checkboxes" id="global_checkbox" onclick="global_checkbox()"></div>
+                                </th>
                                 <th>{{trans('file.Image')}}</th>
                                 <th>{{trans('file.name')}}</th>
                                 <th>{{trans('file.Vendor Name')}}</th>
@@ -140,7 +142,18 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
     $("ul#vendor_supplier #vendorproduct-product-list-menu").addClass("active");
 
 
-  
+  function global_checkbox()
+  {
+      $('#global_checkbox').change(function() {
+            if($(this).is(':checked'))
+            {
+                $("tbody input[type='checkbox']").prop('checked', true);
+            }else{
+                $("tbody input[type='checkbox']").prop('checked', false);
+            }
+        });
+
+  }
 
     function confirmDelete() {
         if (confirm("Are you sure want to delete?")) {
@@ -429,7 +442,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
         
         
         var table = $('#product-data-table').DataTable( {
-           
+            "pageLength": 50,
             responsive: true,
             fixedHeader: {
                 header: true,
@@ -478,7 +491,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
             order:[['2', 'asc']],
             'columnDefs': [
                 {
-                    "orderable": false
+                    "orderable": false,
                     //'targets': [0, 1, 9, 10, 11]
                 },
                 {
@@ -488,11 +501,11 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                             data = '<input type="checkbox" class="dt-checkboxes checkbox approve-checkbox" onclick="return checkoxvalidation(this)" id="check'+row.vendor_id+'" name="is_approve_row_data[]" value="'+row.vendor_id+'" ><label></label></div>';
                         }
                        return data;
-                    },
-                    'checkboxes': {
-                       'selectRow': true,
-                       'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
-                    },
+                    }, 
+                    // 'checkboxes': {
+                    //    'selectRow': false,
+                    //    'selectAllRender': '<div class="checkbox"><input type="checkbox" class="dt-checkboxes"><label></label></div>'
+                    // },
                     'targets': [0]
                 }
             ],
@@ -596,8 +609,18 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
             ],
             drawCallback: function( settings ) {
                 selectedRow.map(e => {
+                   
                     return $(`[value=${e}]`).prop("checked", true);
+                    
                 });
+                if($("#global_checkbox").is(':checked'))
+                        {
+                            console.log("yes");
+                            $("tbody input[type='checkbox']").prop('checked', true);
+                        }else{
+                            console.log("no");
+                            $("tbody input[type='checkbox']").prop('checked', false);
+                        }
             },
         } );
 
@@ -626,6 +649,26 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
 
     function checkformvalidation(e){    
         e.preventDefault();  
+        let check_condition = '';
+        $(':checkbox:checked').each(function(){
+           
+                var product_data = $(this).closest('tr').find('.ln_qty').val();
+                if(!product_data)
+                {
+                    Alert('warning', 'L&N Quantity Field Empty!');
+                    check_condition = 0;
+                    return false;
+                }
+                else{
+                    check_condition = 1;
+                }
+            
+        });
+        if(check_condition == 0)
+        {
+            return false;
+        }
+        console.log(check_condition);
         let roleChecked = $("input:checked").length;
         if (!roleChecked) {
             Alert("warning", "Please check at least one checkbox");
@@ -637,6 +680,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
             data: { selectedRow: selectedRow },
             success: function(res) {
                 Alert('success', res.msg);
+                selectedRow.length=0;
                 $('#product-data-table').DataTable().clear().draw();
             },
             error: function(e){

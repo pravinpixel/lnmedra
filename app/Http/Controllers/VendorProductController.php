@@ -1053,11 +1053,17 @@ class VendorProductController extends Controller
                         "action"            => $action
                     );
                 }
+                // $response = array(
+                //     "draw" => intval($draw),
+                //     "iTotalRecords" => $totalRecords,
+                //     "iTotalDisplayRecords" => $records->count(),
+                //     "aaData" => $data_arr
+                // );
                 $response = array(
-                    "draw" => intval($draw),
-                    "iTotalRecords" => $totalRecords,
-                    "iTotalDisplayRecords" => $records->count(),
-                    "aaData" => $data_arr
+                    "draw"      => intval($draw),
+                    "recordsTotal"    => $records->count(), 
+                    "recordsFiltered" => $totalRecords,  
+                    "data"            => $data_arr  
                 );
                 echo json_encode($response);
                 return false;
@@ -1187,7 +1193,7 @@ class VendorProductController extends Controller
                     else
                         $tax = "N/A";
 
-                    if($record->tax_method == 1)
+                        if($record->tax_method == 1)
                         $tax_method = trans('file.Exclusive');
                     else
                         $tax_method = trans('file.Inclusive');
@@ -1307,8 +1313,7 @@ class VendorProductController extends Controller
         
          $val['image'] = '<img src="'.url('public/images/attribute', $attribute_image).'" height="60" width="60">';
         }
-         // dd($data);
-         
+       
            return response()->json(['data' => $data]);
     }
 
@@ -1361,6 +1366,11 @@ class VendorProductController extends Controller
             $data['file'] = $fileName;
         }
         $lims_product_data = Product::create($data);
+        // dd($lims_product_data->id);
+        $vendorData = new VendorProduct();
+        $vendorData->product_id = $lims_product_data->id;
+        $vendorData->created_by = user()->id;
+        $vendorData->save();
         if($lims_product_data){
             $user = User::find(1);
             $user->notify(new ProductCreation($lims_product_data));
