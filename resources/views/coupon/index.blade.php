@@ -387,8 +387,10 @@ function confirmDelete() {
                                     couponIdArray: coupon_id
                                 },
                                 success:function(data){
+                                    
+                                    // alert(data);
+                                    Alert("warning" , data);
                                     location.reload();
-                                    alert(data);
                                     
                                 }
                             });

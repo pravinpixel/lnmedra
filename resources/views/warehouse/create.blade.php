@@ -310,7 +310,9 @@
                                     warehouseIdArray: warehouse_id
                                 },
                                 success:function(data){
+                                  // dt.rows({ page: 'current', selected: true }).remove().draw(false);
                                     Alert("warning" , data);
+                                    location.reload(); 
                                 }
                             });
                             dt.rows({ page: 'current', selected: true }).remove().draw(false);

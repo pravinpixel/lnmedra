@@ -110,7 +110,7 @@ class WarehouseController extends Controller
             $lims_warehouse_data->is_active = false;
             $lims_warehouse_data->save();
         }
-        return 'Warehouse deleted successfully!';
+        return 'Outlet deleted successfully!';
     }
 
     public function destroy($id)
