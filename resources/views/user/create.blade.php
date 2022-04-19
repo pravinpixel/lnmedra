@@ -2,6 +2,8 @@
 
 @if(session()->has('not_permitted'))
   <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
+@else if(session()->has('message'))
+<div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('message') }}</div>
 @endif
 <section class="forms">
     <div class="container-fluid">
@@ -185,13 +187,13 @@
                                             <a  class="btn btn-primary add_button" title="Add field" >Add</a>
                                         </li>
                                         <li class="list-group-item d-flex w-100 align-items-center rounded p-0 my-2">
-                                            <select name="warehouse_id[1]" required class="selectpicker form-control border-0" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
+                                            <select name="warehouse_id[1]"  class="selectpicker form-control border-0" data-live-search="true" data-live-search-style="begins" title="Select outlet..." required>
                                                 @foreach($lims_warehouse_list as $warehouse)
                                                     <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
                                                 @endforeach
                                             </select>
                                             <div class="btn btn-light border-0">
-                                                <input type="radio" name="outlet"  value="1" required onclick="setValue('1')">
+                                                <input type="radio" name="outlet"  value="1"  onclick="setValue('1')" required>
                                                 <input type="hidden" name="outletIn[1]" id="outletIn_1" >
                                                 <input type="hidden" name="selected_outlet" id="selected_outlet">
                                             </div>
@@ -250,6 +252,7 @@
 
     $('select[name="role_id"]').on('change', function() {
         // alert($(this).val())
+        $("input[name='outlet']").trigger("click");
         $('.cloneOutlet').remove();
         if($(this).val() == 5) {
             $('#biller-id').hide(300);
@@ -261,12 +264,16 @@
         }
         else if($(this).val() == 1) {
             $('select[name="biller_id"]').prop('required',false);
-            $('#biller-id').hide(300);
-            // $('#warehouseId').hide(300);
+            $('#biller-id').hide();
+            $('#warehouseId').hide();
+            $('select[name="warehouse_id[]"]').hide();
+            // $('select[name="warehouse_id[]"]').prop('required',false);
+            // $('input[name="outlet"]').prop('required',false);
             $('.customer-section').hide(300);
             $('.customer-input').prop('required',false);
         }
         else if($(this).val() !=5 ){
+            
             $('select[name="warehouse_id"]').prop('required',true);
             $('#warehouseId').show(300);
             
@@ -275,6 +282,14 @@
                 $('select[name="biller_id"]').prop('required',true);
                 $('#biller-id').show(300);
                 // $('#warehouseId').show(300);
+                $('.customer-section').hide(300);
+                $('.customer-input').prop('required',false);
+            }
+            else if($(this).val() == 2){
+                $('select[name="biller_id"]').prop('required',false);
+                $('#biller-id').hide();
+                $('#warehouseId').hide();
+                $('select[name="warehouse_id[]"]').hide();
                 $('.customer-section').hide(300);
                 $('.customer-input').prop('required',false);
             }
@@ -314,18 +329,6 @@ $(document).ready(function(){
         //Check maximum number of input fields
         if(x < maxField){ 
             x++; //Increment field counter
-            // alert(x)
-            // $(wrapper).append(fieldHTML); //Add field html
-            // <div class=">
-            //     <select name="warehouse_id[${x}]" id="warehouse_id[${x}]" class="selectpicker form-control" data-live-search="true" title="Select outlet..." required>
-            //         @foreach($lims_warehouse_list as $warehouse)
-            //             <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-            //         @endforeach
-            //     </select>
-            //     <input type="radio" value="1" name="outlet" onclick="setValue('${x}')" required>
-            //     <input type="hidden" name="outletIn[${x}]" id="outletIn_${x}">
-            //     <button class="btn btn-danger remove_button" >X</button>
-            // </div>
             $(wrapper).append(`
                
                 <li class="list-group-item d-flex w-100 align-items-center rounded p-0 my-2 field_wrapper cloneOutlet" id="warehouseId">

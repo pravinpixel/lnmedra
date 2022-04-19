@@ -124,40 +124,44 @@ class UserController extends Controller
         $formatData = collect($data)->except('warehouse_id')->toArray();
     
         $user_id =  User::create($formatData)->id;
-
-      
-        foreach($data['warehouse_id'] as $key=>$val )
-        {
-           
-                $ff = new OutletUser();
-                $ff->user_id = $user_id;
-                $ff->outlet_id = $val;
-                if($key == $data['selected_outlet'])
-                {
-                    $ff->is_default = 1;
-             
-                }
-                else{
-                    $ff->is_default = 0;
-                   
-                }
-                
-                $ff->is_active = 1;
-                $ff->save();
-               
-        }
-       
-        foreach($data['warehouse_id'] as $key=>$val )
-        {
-          
-                if($key == $data['selected_outlet'])
-                {
-                   
-                  $defaultID = $val;
-                }
+        $defaultID = "";
+        
+        
+            foreach($data['warehouse_id'] as $key=>$val )
+            {
             
-        }
-
+                    $ff = new OutletUser();
+                    $ff->user_id = $user_id;
+                    $ff->outlet_id = $val;
+                    if($key == $data['selected_outlet'])
+                    {
+                        $ff->is_default = 1;
+                
+                    }
+                    else{
+                        $ff->is_default = 0;
+                    
+                    }
+                    
+                    $ff->is_active = 1;
+                    $ff->save();
+                
+            }
+        
+            foreach($data['warehouse_id'] as $key=>$val )
+            {
+            
+                    if($key == $data['selected_outlet'])
+                    {
+                    
+                    $defaultID = $val;
+                    }
+                    else{
+                        $defaultID = "";
+                    }
+                
+            }
+        
         $updateOutlet = User::where('id',$user_id)->first();
         $updateOutlet->warehouse_id = $defaultID;
         $updateOutlet->update();
@@ -168,7 +172,7 @@ class UserController extends Controller
             $data['is_active'] = true;
             Customer::create($data);
         }
-        return redirect('user')->with('message1', $message); 
+        return redirect('user')->with('message', $message); 
     }
 
     public function edit($id)

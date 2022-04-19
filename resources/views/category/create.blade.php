@@ -66,10 +66,10 @@
                     <select name="parent_id" class="form-control selectpicker" title="Select Category..." id="parent">
                     @foreach($lims_categories as $category)
 
-                    @if($category->parent_id == '' || null)
+                    
                         <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
                        
-                    @endif
+                   
                     @endforeach
                 </select>
                     <!-- {{Form::select('parent_id', $lims_categories, null, ['class' => 'form-control','placeholder' => 'No Parent Category'])}} -->
