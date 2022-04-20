@@ -35,6 +35,7 @@ class CustomersTableSeeder extends Seeder
                 'address' => 'mohammadpur',
                 'city' => 'dhaka',
                 'state' => NULL,
+                'remark' => NULL,
                 'customer_marry_date' => NULL,
                 'customer_dob' => NULL,
                 'postal_code' => NULL,

@@ -4,11 +4,14 @@
 @endif
 <section class="forms">
     <div class="container-fluid">
-     
+    <p  class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
         {!! Form::open(['route' => ['customer.update',$lims_customer_data->id], 'method' => 'put', 'files' => true]) !!}
-            <div class="card">
+            <div class="card shadow">
+            <div class="custom-card-header">
+                    <h4>{{trans('file.Basic Information')}}</h4>
+                </div>
                 <div class="card-body">
-                    <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
+                    
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -126,6 +129,33 @@
                     </div> 
                 </div>
             </div>
+            <div class="card shadow">
+                <div class="custom-card-header">
+                    <h4>{{trans('file.Additional Information')}}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row m-0"> 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <p class="italic"><small>{{trans('file.Your Birth Day Date')}}.</small></p>
+                                <input type="date" value="{{$lims_customer_data->customer_dob}}" id="customer_dob" name="customer_dob" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <p class="italic"><small>{{trans('file.Your Marriage Date')}}.</small></p>
+                                <input type="date"  value="{{$lims_customer_data->customer_marry_date}}" name="marriage_date" id="marriage_date" class="form-control">
+                            </div>
+                        </div> 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{trans('file.Remark')}}</label>
+                                <textarea class="form-control" value="{{$lims_customer_data->remark}}" name="remark" id="remark" style="height: 100px;" >{{$lims_customer_data->remark}}</textarea>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </div> 
             <div class="text-right">
                 <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
             </div>

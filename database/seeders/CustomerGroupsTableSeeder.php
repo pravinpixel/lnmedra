@@ -23,7 +23,7 @@ class CustomerGroupsTableSeeder extends Seeder
             0 => 
             array (
                 'id' => 1,
-                'name' => 'general',
+                'name' => 'HNI',
                 'percentage' => '0',
                 'is_active' => 1,
                 'created_at' => '2018-05-12 13:39:36',
@@ -32,7 +32,7 @@ class CustomerGroupsTableSeeder extends Seeder
             1 => 
             array (
                 'id' => 2,
-                'name' => 'distributor',
+                'name' => 'Retail',
                 'percentage' => '-10',
                 'is_active' => 1,
                 'created_at' => '2018-05-12 13:42:14',
@@ -41,7 +41,7 @@ class CustomerGroupsTableSeeder extends Seeder
             2 => 
             array (
                 'id' => 3,
-                'name' => 'reseller',
+                'name' => 'Corporate',
                 'percentage' => '5',
                 'is_active' => 1,
                 'created_at' => '2018-05-12 13:42:26',

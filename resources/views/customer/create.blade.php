@@ -110,6 +110,12 @@
                                 <input type="date" name="marriage_date" id="marriage_date" class="form-control">
                             </div>
                         </div> 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>{{trans('file.Remark')}}</label>
+                                <textarea class="form-control" name="remark" id="remark" style="height: 100px;" ></textarea>
+                            </div>
+                        </div> 
                     </div>
                 </div>
             </div> 

@@ -271,6 +271,7 @@ return [
 	'In Words' => 'In Words',
 	'Stamp' => 'Stamp',
 	'send'=>'Send',
+	'Remark'=>'Remark',
 	'L&N Qty'=>'L&N Qty',
 	'Top Sale'=>'Top Sale',
 	'Download Invoice'=>'Download Invoice',

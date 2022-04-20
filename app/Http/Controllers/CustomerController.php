@@ -80,8 +80,8 @@ class CustomerController extends Controller
 
             $lims_customer_data['phone'] = $lims_customer_data['phone_number'];
             $lims_customer_data['role_id'] = 5;
-            $lims_customer_data['customer_marry_date'] =  $lims_customer_data['marriage_date'];
-            $lims_customer_data['customer_dob'] =  $lims_customer_data['customer_dob'];
+            
+            $lims_customer_data['remark'] =  $lims_customer_data['remark'];
             $lims_customer_data['is_deleted'] = false;
             // $lims_customer_data['password'] = bcrypt($lims_customer_data['password']);
             $user = User::create($lims_customer_data);
@@ -105,7 +105,8 @@ class CustomerController extends Controller
                 $message = 'Customer created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }   
         }
-
+        $lims_customer_data['customer_marry_date'] =  $lims_customer_data['marriage_date'];
+        $lims_customer_data['customer_dob'] =  $lims_customer_data['customer_dob'];
         Customer::create($lims_customer_data);
         if($lims_customer_data['pos'])
             return redirect('pos')->with('message', $message);
@@ -123,6 +124,7 @@ class CustomerController extends Controller
         if($role->hasPermissionTo('customers-edit')){
             $lims_customer_data = Customer::find($id);
             $lims_customer_group_all = CustomerGroup::where('is_active',true)->get();
+            // print_r($lims_customer_data);die();
             return view('customer.edit', compact('lims_customer_data','lims_customer_group_all'));
         }
         else
@@ -131,6 +133,7 @@ class CustomerController extends Controller
 
     public function update(Request $request, $id)
     {
+        // print_r($request->all());die();
         $this->validate($request, [
             'phone_number' => [
                 'max:255',
@@ -161,12 +164,14 @@ class CustomerController extends Controller
             ]);
 
             $input['phone'] = $input['phone_number'];
+            
             $input['role_id'] = 5;
             $input['is_active'] = true;
             $input['is_deleted'] = false;
             $input['password'] = bcrypt($input['password']);
             $user = User::create($input);
             $input['user_id'] = $user->id;
+
             $message = 'Customer updated and user created successfully';
         }
         else {
@@ -175,6 +180,9 @@ class CustomerController extends Controller
         
         $input['name'] = $input['customer_name'];
         $input['full_name'] = $input['customer_name'];
+        $input['customer_marry_date'] = $input['marriage_date'];
+        $input['customer_dob'] = $input['customer_dob'];
+        // print_r($input);die();
         $lims_customer_data->update($input);
         return redirect('customer')->with('edit_message', $message);
     }
