@@ -152,7 +152,7 @@ class EnquiryController extends Controller
     }
     public function enquirySentMail(Request $request)
     {
-        // print_r($request['mail_content']);die();
+        // print_r($request->all());die();
         $filePath = 'images/enquiry_attachment/';
         $path = public_path($filePath); 
         if(!file_exists($path))
@@ -161,9 +161,9 @@ class EnquiryController extends Controller
         }
             
         $files = [];
-        if($request->hasfile('filenames'))
+        if($request->hasfile('file'))
          {
-            foreach($request->file('filenames') as $file)
+            foreach($request->file('file') as $file)
             {
                if($file->extension() == "pdf")
                {

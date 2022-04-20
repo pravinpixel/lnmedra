@@ -9,6 +9,43 @@
         .mce-item-table{
             width: 100% !important;
         }
+
+        /* /////// */
+
+        #files-area{
+            width: 30%;
+            margin: 0 auto;
+        }
+        .file-block{
+            border-radius: 10px;
+            background-color: rgba(144, 163, 203, 0.2);
+            margin: 5px;
+            color: initial;
+            display: inline-flex;
+            & > span.name{
+                padding-right: 10px;
+                width: max-content;
+                display: inline-flex;
+            }
+        }
+    .file-delete{
+        display: flex;
+        width: 24px;
+        color: initial;
+        background-color: #6eb4ff00;
+        font-size: large;
+        justify-content: center;
+        margin-right: 3px;
+        cursor: pointer;
+        &:hover{
+            background-color: rgba(144, 163, 203, 0.2);
+            border-radius: 10px;
+        }
+        & > span{
+            transform: rotate(45deg);
+        }
+    }
+
         
           
         
@@ -65,10 +102,11 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <!-- <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.Attachment')}} *</label>
-                                        <input type="file" name="filenames[]" value="{{old('attachment')}}" required class="form-control" multiple 
+                                       
+                                        <input type="file" name="file[]" value="{{old('attachment')}}" required class="form-control" multiple 
                                          accept="application/pdf"/>
                                         @if($errors->has('attachment'))
                                             <span>
@@ -76,6 +114,23 @@
                                             </span>
                                         @endif
                                     </div>
+                                </div> -->
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{trans('file.Attachment')}} *</label>  
+                                        <input type="file" name="file[]" accept="application/pdf" class="form-control" required id="attachment" multiple/>
+                                    </div>
+                                        <br>
+                                        <br>
+                                       
+                                </div>
+                                <div class="col-md-6">
+                                    <p id="files-area">
+                                        <span id="filesList">
+                                            <span id="files-names"></span>
+                                        </span>
+                                    </p>
                                 </div>
 
                                 <div class="col-md-12">
@@ -88,6 +143,9 @@
                                         </textarea>
                                     </div>
                                 </div>
+
+
+                                
                                 
                                
                                 
@@ -184,7 +242,58 @@
           $(this).parents(".hdtuto").remove();
           $(this).parents(".hdtuto").val('');
       });
+
+
+
+
+      const dt = new DataTransfer(); // Permet de manipuler les fichiers de l'input file
+
+        $("#attachment").on('change', function(e){
+            for(var i = 0; i < this.files.length; i++){
+                let fileBloc = $('<span/>', {class: 'file-block'}),
+                    fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
+                fileBloc.append('<span class="file-delete"><span>+</span></span>')
+                    .append(fileName);
+                $("#filesList > #files-names").append(fileBloc);
+            };
+            // Ajout des fichiers dans l'objet DataTransfer
+            for (let file of this.files) {
+                dt.items.add(file);
+            }
+            // Mise à jour des fichiers de l'input file après ajout
+            this.files = dt.files;
+
+            // EventListener pour le bouton de suppression créé
+            $('span.file-delete').click(function(){
+                let name = $(this).next('span.name').text();
+                // Supprimer l'affichage du nom de fichier
+                $(this).parent().remove();
+                for(let i = 0; i < dt.items.length; i++){
+                    // Correspondance du fichier et du nom
+                    if(name === dt.items[i].getAsFile().name){
+                        // Suppression du fichier dans l'objet DataTransfer
+                        dt.items.remove(i);
+                        continue;
+                    }
+                }
+                // Mise à jour des fichiers de l'input file après suppression
+                document.getElementById('attachment').files = dt.files;
+            });
+        });
+
+
+
+
+
+
+
+
+
+
     });
+
+
+
 </script>
 
 <script type="text/javascript">
@@ -214,7 +323,7 @@
                             required: true,
                            
                         },
-                        'filenames': {
+                        'file': {
                             required: true,
                            
                         },
