@@ -26,7 +26,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{trans('file.name')}} *</strong> </label>
-                                <input type="text" id="name" name="customer_name" required class="form-control" onkeyup='saveValue(this);'>
+                                <input type="text" id="name" name="customer_name"  required class="form-control capitalize" onkeyup='saveValue(this);'>
                             </div>
                         </div>
                         
@@ -132,6 +132,12 @@
 @endsection
 
 @push('scripts')
+<style>
+   .capitalize{
+  text-transform: capitalize;
+ 
+}
+</style>
     <script type="text/javascript">
 
         $(document).ready(function(){

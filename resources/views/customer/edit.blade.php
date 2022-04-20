@@ -27,7 +27,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>{{trans('file.name')}} *</strong> </label>
-                                <input type="text" name="customer_name" value="{{$lims_customer_data->name}}" required class="form-control">
+                                <input type="text" name="customer_name" value="{{$lims_customer_data->name}}" required class="form-control capitalize">
                             </div>
                         </div>
                         <!-- <div class="col-md-6">
@@ -167,6 +167,12 @@
 @endsection
 
 @push('scripts')
+<style>
+   .capitalize{
+  text-transform: capitalize;
+ 
+}
+</style>
 <script type="text/javascript">
 
     $("ul#people").siblings('a').attr('aria-expanded','true');

@@ -16,7 +16,7 @@
       letter-spacing: 1px;
     }
     .count-title {
-      background:linear-gradient(1deg, #0095FF, #e9ffee) !important;
+      background:linear-gradient(#0095FF, #0095FF) !important;
       color : #032617 !important;
       border: 2px  solid white !important;
       text-shadow: 0 2px 5px white !important;
