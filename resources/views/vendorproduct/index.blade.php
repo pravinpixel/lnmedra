@@ -63,7 +63,9 @@
                             <th>{{trans('file.Code')}}</th>
                             <th>{{trans('file.Brand')}}</th>
                             <th>{{trans('file.category')}}</th>
+                            <th>{{trans('file.L&N Qty')}}</th>
                             <th>{{trans('file.Qty')}}</th>
+                            <th>{{trans('file.L&N Price')}}</th> 
                             <th>{{trans('file.Price')}}</th>                    
                             <th>{{trans('file.Status')}}</th>                    
                             <th class="not-exported">{{trans('file.action')}}</th>
@@ -287,7 +289,9 @@
                 {"data": "code"},
                 {"data": "brand_name"},
                 {"data": "category_name"},
+                {"data": "ln_qty"},
                 {"data": "vendor_qty"},
+                {"data": "ln_price"},
                 {"data": "vendor_price"},
                 {"data": "vendor_is_approve"},
                 {"data": "action", "orderable": false, "searchable": false},

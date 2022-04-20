@@ -1153,6 +1153,8 @@ class VendorProductController extends Controller
                                         'vendor_products.id as vendor_id',
                                         'vendor_products.price as vendor_price',
                                         'vendor_products.qty as vendor_qty',
+                                        'ln_qty',
+                                        'ln_price',
                                         'vendor_products.is_approve as vendor_is_approve'
                                     )
                                     ->orderBy($columnName,$columnSortOrder)
@@ -1169,6 +1171,8 @@ class VendorProductController extends Controller
                     $product_type         = $record->product_type_name;
                     $vendor_product_qty   = $record->vendor_qty;
                     $vendor_product_price = $record->vendor_price;
+                    $ln_qty   = $record->ln_qty;
+                    $ln_price = $record->ln_price;
                     if($record->vendor_is_approve == 1){
                         $approve_status = '<span class="badge badge-success">Approved</span>';
                     } else if($record->vendor_is_approve == 2){
@@ -1209,6 +1213,8 @@ class VendorProductController extends Controller
                         "category_name"     => $category_name,
                         "vendor_qty"        => $vendor_product_qty,
                         "vendor_price"      => $vendor_product_price,
+                        'ln_qty'            => $ln_qty,
+                        'ln_price'          => $ln_price,
                         "vendor_is_approve" => $approve_status,
                         "product"           => $product,
                         "action"            => $action
