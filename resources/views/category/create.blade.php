@@ -65,11 +65,7 @@
                     <label>{{trans('file.Parent Category')}}</label>
                     <select name="parent_id" class="form-control selectpicker" title="Select Category..." id="parent">
                     @foreach($lims_categories as $category)
-
-                    
                         <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
-                       
-                   
                     @endforeach
                 </select>
                     <!-- {{Form::select('parent_id', $lims_categories, null, ['class' => 'form-control','placeholder' => 'No Parent Category'])}} -->
@@ -201,6 +197,7 @@
     });
 
     $('#category-table').DataTable( {
+        "pageLength": 50,
         "processing": true,
         "serverSide": true,
         "ajax":{

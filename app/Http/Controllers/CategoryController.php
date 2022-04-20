@@ -22,9 +22,9 @@ class CategoryController extends Controller
            $lims_product_id = Product::where('is_active', true)
            ->groupBy('category_id')
            ->pluck('category_id');
-            $lims_categories = Category::where('is_active', true)->whereNotIn('id',$lims_product_id)->get();
-            $lims_category_all = Category::where('is_active', true)->whereNotIn('id',$lims_product_id)->get();
-            // print_r($lims_category_all);die();
+            $lims_categories = Category::where('is_active', true)->whereNull('parent_id')->whereNotIn('id',$lims_product_id)->get();
+            $lims_category_all = Category::where('is_active', true)->whereNull('parent_id')->whereNotIn('id',$lims_product_id)->get();
+            // print_r($lims_categories);die();
             // print_r($lims_product_id);die();
             return view('category.create',compact('lims_categories', 'lims_category_all'));
         }

@@ -103,16 +103,25 @@
                             <label>{{trans('file.category')}} *</strong> </label>
                             <div class="input-group">
                             <select name="category_id" required class="selectpicker form-control" data-live-search="true" title="Select Category...">
-                                @foreach($lims_category_list as $category)
-                                    @if($category->parent_id == '' || null)
+                            @foreach($lims_category_list as $category)
+                                
+                                @if($category->parent_id == '' || null)
+                                    
+                                    {{ $data = App\Category::where('parent_id', $category->id)->first() }}
+                                        @if($data)
+                                        <option value="{{$category->id}}" class="option_parent" disabled>{{$category->name}}</option>
+                                        @else
                                         <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
-                                        @foreach($lims_category_list as $subcategory)
-                                        @if($category->id == $subcategory->parent_id)
-                                        <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
-                                        @endif    
-                                        @endforeach
-                                    @endif
-                                @endforeach
+                                        @endif
+                                    
+                                    @foreach($lims_category_list as $subcategory)
+                                    @if($category->id == $subcategory->parent_id)
+                                    <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
+                                    @endif    
+                                    @endforeach
+                                @endif
+                                
+                            @endforeach
                             </select>
                             </div>
                             <span class="validation-msg"></span>

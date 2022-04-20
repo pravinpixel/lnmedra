@@ -13,6 +13,38 @@
                 <form id="product-form">
                     <input type="hidden" name="type_id" value="{{$lims_product_data->id}}" id="type_id" />
                     <div class="row">
+                    <div class="col-md-4">
+                            <div class="form-group">
+                                <input type="hidden" name="category" value="{{$lims_product_data->category_id}}">
+                                <label>{{trans('file.category')}} *</strong> </label>
+                                <div class="input-group">
+                                    <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
+                                    <!-- @foreach($lims_category_list as $category)
+                                        <option value="{{$category->id}}">{{$category->name}}</option>
+                                    @endforeach -->
+                                    @foreach($lims_category_list as $category)
+                                            
+                                            @if($category->parent_id == '' || null)
+                                               
+                                                {{ $data = App\Category::where('parent_id', $category->id)->first() }}
+                                                    @if($data)
+                                                    <option value="{{$category->id}}" class="option_parent" disabled>{{$category->name}}</option>
+                                                    @else
+                                                    <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                                                    @endif
+                                               
+                                                @foreach($lims_category_list as $subcategory)
+                                                @if($category->id == $subcategory->parent_id)
+                                                <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
+                                                @endif    
+                                                @endforeach
+                                            @endif
+                                            
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                        
@@ -33,13 +65,17 @@
                                 
                             </div>
                         </div>
-                        <input type="hidden" name="attributeInput" value="{{$lims_product_data->attribute}}"  id="attributeInput" >
-                        
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label>{{trans('file.Product Name')}} *</strong> </label>
-                                <input type="text" name="name" value="{{$lims_product_data->name}}" required class="form-control">
-                                <span class="validation-msg" id="name-error"></span>
+                                <label>{{trans('file.Brand')}}</strong> </label>
+                                <div class="input-group">
+                                    <input type="hidden" name="brand" value="{{ $lims_product_data->brand_id}}">
+                                    <select name="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
+                                    @foreach($lims_brand_list as $brand)
+                                        <option value="{{$brand->id}}">{{$brand->title}}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -54,7 +90,36 @@
                                 <span class="validation-msg" id="code-error"></span>
                             </div>
                         </div>
+                        <input type="hidden" name="attributeInput" value="{{$lims_product_data->attribute}}"  id="attributeInput" >
                         
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.Product Name')}} *</strong> </label>
+                                <input type="text" name="name" value="{{$lims_product_data->name}}" required class="form-control">
+                                <span class="validation-msg" id="name-error"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Family {{trans('file.name')}} *</strong> </label>
+                                <input type="text" name="family_name" value="{{ $lims_product_data->family_name}}"  required class="form-control">
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Common {{trans('file.name')}} *</strong> </label>
+                                <input type="text" name="common_name" value="{{ $lims_product_data->common_name}}"  required class="form-control">
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>{{trans('file.sku')}} *</strong> </label>
+                                <input type="text" name="sku" value="{{ $lims_product_data->sku}}" required class="form-control">
+                                <span class="validation-msg"></span>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>{{trans('file.Barcode Symbology')}} *</strong> </label>
@@ -127,46 +192,7 @@
                                 </table>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>{{trans('file.Brand')}}</strong> </label>
-                                <div class="input-group">
-                                    <input type="hidden" name="brand" value="{{ $lims_product_data->brand_id}}">
-                                    <select name="brand_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Brand...">
-                                    @foreach($lims_brand_list as $brand)
-                                        <option value="{{$brand->id}}">{{$brand->title}}</option>
-                                    @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <input type="hidden" name="category" value="{{$lims_product_data->category_id}}">
-                                <label>{{trans('file.category')}} *</strong> </label>
-                                <div class="input-group">
-                                    <select name="category_id" required class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Category...">
-                                    @foreach($lims_category_list as $category)
-                                        <option value="{{$category->id}}">{{$category->name}}</option>
-                                    @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>{{trans('file.sku')}} *</strong> </label>
-                                <input type="text" name="sku" value="{{ $lims_product_data->sku}}" required class="form-control">
-                                <span class="validation-msg"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Family {{trans('file.name')}} *</strong> </label>
-                                <input type="text" name="family_name" value="{{ $lims_product_data->family_name}}"  required class="form-control">
-                                <span class="validation-msg"></span>
-                            </div>
-                        </div>
+                                 
                         <div id="unit" class="col-md-12">
                             <div class="row ">
                                 <div class="col-md-4">
@@ -202,13 +228,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label>Common {{trans('file.name')}} *</strong> </label>
-                                <input type="text" name="common_name" value="{{ $lims_product_data->common_name}}"  required class="form-control">
-                                <span class="validation-msg"></span>
-                            </div>
-                        </div>
+                        
                         <div class="col-md-4">
                                 <div class="form-group">
                                 <label>{{trans('file.size')}} *</strong> </label> 

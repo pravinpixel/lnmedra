@@ -650,6 +650,7 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
     function checkformvalidation(e){    
         e.preventDefault();  
         let check_condition = '';
+        let check_price_condition = '';
         $(':checkbox:checked').each(function(){
            
                 var product_data = $(this).closest('tr').find('.ln_qty').val();
@@ -662,9 +663,26 @@ var user_verified = <?php echo json_encode(env('USER_VERIFIED')) ?>;
                 else{
                     check_condition = 1;
                 }
+
+                var product_price_data = $(this).closest('tr').find('.ln_price').val();
+                if(!product_price_data)
+                {
+                    Alert('warning', 'L&N Price Field Empty!');
+                    check_price_condition = 0;
+                    return false;
+                }
+                else{
+                    check_price_condition = 1;
+                }
+                
             
         });
+        
         if(check_condition == 0)
+        {
+            return false;
+        }
+        if(check_price_condition == 0)
         {
             return false;
         }

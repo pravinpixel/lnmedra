@@ -11,18 +11,24 @@
                 </div>
          
                 <div class="card-body">
-                
                     <form id="product-form" name="product-form">
                         <div class="row m-0">
                         <div class="col-md-6">
                                 <div class="form-group">
                                     <label>{{trans('file.category')}} *</strong> </label>
                                     <div class="input-group">
-                                    <select name="category_id" required class="selectpicker form-control" data-live-search="true" title="Select Category...">
+                                    <select name="category_id" id="category_id" required class="selectpicker form-control" data-live-search="true" title="Select Category...">
                                         @foreach($lims_category_list as $category)
                                             
                                             @if($category->parent_id == '' || null)
-                                                <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                                               
+                                                {{ $data = App\Category::where('parent_id', $category->id)->first() }}
+                                                    @if($data)
+                                                    <option value="{{$category->id}}" class="option_parent" disabled>{{$category->name}}</option>
+                                                    @else
+                                                    <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                                                    @endif
+                                               
                                                 @foreach($lims_category_list as $subcategory)
                                                 @if($category->id == $subcategory->parent_id)
                                                 <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
@@ -32,6 +38,11 @@
                                             
                                         @endforeach
                                     </select>
+                                    <!-- <select name="category_id" id="category_id" required class="selectpicker form-control" data-live-search="true" title="Select Category...">
+                                        @foreach($lims_category_list as $category)  
+                                                <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>                                            
+                                        @endforeach
+                                    </select> -->
                                     </div>
                                     <span class="validation-msg"></span>
                                 </div>
@@ -45,10 +56,6 @@
                                             @foreach($productType as $product)
                                             <option value="{{ $product->id }}">{{ $product->name }}</option>
                                             @endforeach
-                                            <!-- <option value="standard">Standard</option>
-                                            <option value="combo">Combo</option>
-                                            <option value="digital">Digital</option>
-                                            <option value="service">Service</option> -->
                                         </select>
                                     </div>
                                 </div>
@@ -492,54 +499,6 @@ function check_this_box(product_id) {
             });
     });
 
-    // $('select[name="type"]').on('change', function() {
-    //     if($(this).val() == 'combo'){
-    //         $("input[name='cost']").prop('required',false);
-    //         $("select[name='unit_id']").prop('required',false);
-    //         hide();
-    //         $("#combo").show(300);
-    //         $("input[name='price']").prop('disabled',true);
-    //         $("#is-variant").prop("checked", false);
-    //         $("#is-diffPrice").prop("checked", false);
-    //         $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
-    //     }
-    //     else if($(this).val() == 'digital'){
-    //         $("input[name='cost']").prop('required',false);
-    //         $("select[name='unit_id']").prop('required',false);
-    //         $("input[name='file']").prop('required',true);
-    //         hide();
-    //         $("#digital").show(300);
-    //         $("#combo").hide(300);
-    //         $("input[name='price']").prop('disabled',false);
-    //         $("#is-variant").prop("checked", false);
-    //         $("#is-diffPrice").prop("checked", false);
-    //         $("#variant-section, #variant-option, #diffPrice-option, #diffPrice-section").hide(300);
-    //     }
-    //     else if($(this).val() == 'service') {
-    //         $("input[name='cost']").prop('required',false);
-    //         $("select[name='unit_id']").prop('required',false);
-    //         $("input[name='file']").prop('required',true);
-    //         hide();
-    //         $("#combo").hide(300);
-    //         $("#digital").hide(300);
-    //         $("input[name='price']").prop('disabled',false);
-    //         $("#is-variant").prop("checked", false);
-    //         $("#variant-section, #variant-option").hide(300);
-    //     }
-    //     else if($(this).val() == 'standard') {
-    //         $("input[name='cost']").prop('required',true);
-    //         $("select[name='unit_id']").prop('required',true);
-    //         $("input[name='file']").prop('required',false);
-    //         $("#cost").show(300);
-    //         $("#unit").show(300);
-    //         $("#alert-qty").show(300);
-    //         $("#variant-option").show(300);
-    //         $("#diffPrice-option").show(300);
-    //         $("#digital").hide(300);
-    //         $("#combo").hide(300);
-    //         $("input[name='price']").prop('disabled',false);
-    //     }
-    // });
 
     $('select[name="unit_id"]').on('change', function() {
 

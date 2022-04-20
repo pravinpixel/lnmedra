@@ -1366,11 +1366,10 @@ class VendorProductController extends Controller
             $data['file'] = $fileName;
         }
         $lims_product_data = Product::create($data);
-        // dd($lims_product_data->id);
-        $vendorData = new VendorProduct();
-        $vendorData->product_id = $lims_product_data->id;
-        $vendorData->created_by = user()->id;
-        $vendorData->save();
+        // $vendorData = new VendorProduct();
+        // $vendorData->product_id = $lims_product_data->id;
+        // $vendorData->created_by = user()->id;
+        // $vendorData->save();
         if($lims_product_data){
             $user = User::find(1);
             $user->notify(new ProductCreation($lims_product_data));
