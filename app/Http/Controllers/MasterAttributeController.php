@@ -151,12 +151,12 @@ class MasterAttributeController extends Controller
     }
     public function store(Request $request)
     {
-        $this->validate($request, [
+
+        // $this->validate($request, [
            
-            'title' => 'required|max:255|unique:master_attributes',
-            
-         
-        ]);
+        //     'title' => 'required|max:255|unique:master_attributes',
+        
+        // ]);
         $data['title'] = $request->title;
         $data['shorting'] = $request->shorting;
         $data['product_type'] = $request->product_type;
@@ -170,6 +170,12 @@ class MasterAttributeController extends Controller
             $fileName = $fileName . '.' . $ext;
             $file->move('public/images/attribute', $fileName);
             $data['image'] = $fileName;
+        }
+        $masterData = MasterAttribute::where('is_active',true)->where(['product_type'=>$request->product_type,'title'=>$request->title])->get()->toArray();
+        // print_r($masterData);die();
+        if(!empty($masterData))
+        {
+            return back()->with('not_permitted', 'Title Alredy Added Same Product Type!');
         }
         MasterAttribute::create($data);
         return redirect('master-attribute')->with('message', 'Attribute Added Successfully');

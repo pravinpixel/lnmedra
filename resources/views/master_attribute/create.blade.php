@@ -1,6 +1,14 @@
 @extends('layout.main')
 
 @section('content')
+@if(session()->has('not_permitted'))
+  <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
+@endif
+<style>
+     .error{
+            color: red;
+        }
+</style> 
 <section class="forms">
     <div class="container-fluid">
         <div class="row">
@@ -15,12 +23,6 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="form-group">
-
-
-
-
-
-
                                         <label>{{trans('file.Title')}} *</strong> </label>
                                         <input type="text" name="title" value="{{old('title')}}" class="form-control" id="title"  required>
                                         <span class="validation-msg" id="title-error"></span>
