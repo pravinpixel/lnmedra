@@ -567,7 +567,8 @@ class VendorProductController extends Controller
                      <div>
                          <img class="mx-auto mb-2" src="'.$path.'" width="40">
                          <div class="text-center"> 
-                             <label  style="font-size: 12px;" for="att_'.$val->id.'_icon" class="card-text text-center fw-bold m-0"><input onclick="check_this_box('.$val->id.')" type="checkbox" id="att_'.$val->id.'_icon" name="attribute[]" value="'.$val->id.'" class="mr-1"> </label>
+                         <input onclick="check_this_box('.$val->id.')" type="checkbox" id="att_'.$val->id.'_icon" name="attribute[]" value="'.$val->id.'" class="mr-1">
+                             <label  style="font-size: 12px;" for="att_'.$val->id.'_icon" class="card-text text-center fw-bold m-0">'.$val->title.' </label>
                          </div>
                      </div>
                  </div>
