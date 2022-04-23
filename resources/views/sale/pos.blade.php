@@ -138,7 +138,41 @@
             ])->first();
 @endphp    
  
-
+ <!-- add cash register modal -->
+ <div id="cash-register-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+        <div role="document" class="modal-dialog">
+          <div class="modal-content">
+            {!! Form::open(['route' => 'cashRegister.store', 'method' => 'post']) !!}
+            <div class="modal-header">
+              <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Add Cash Register')}}</h5>
+              <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
+            </div>
+            <div class="modal-body">
+              <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
+                <div class="row m-0">
+                  <div class="col-md-6 form-group warehouse-section">
+                      <label>{{trans('file.Outlet')}} *</strong> </label>
+                      <select required name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
+                          @foreach($lims_warehouse_list as $warehouse)
+                          <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
+                          @endforeach
+                      </select>
+                  </div>
+                  <div class="col-md-6 form-group">
+                      <label>{{trans('file.Cash in Hand')}} *</strong> </label>
+                      <input type="number" name="cash_in_hand" required class="form-control">
+                  </div>
+                  <div class="col-md-12 form-group">
+                      <button type="submit" class="btn btn-primary">{{trans('file.submit')}}</button>
+                  </div>
+                </div>
+            </div>
+            <!-- payment modal -->
+   
+            {{ Form::close() }}
+          </div>
+        </div>
+    </div>
 <!-- Side Navbar -->
 <header class="header m-0 bg-primary text-white " style="border-bottom: 2px solid #272524">
     <div class="container-fluid">
@@ -1616,41 +1650,7 @@
           </div>
         </div>
     </div>
-    <!-- add cash register modal -->
-    <div id="cash-register-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-        <div role="document" class="modal-dialog">
-          <div class="modal-content">
-            {!! Form::open(['route' => 'cashRegister.store', 'method' => 'post']) !!}
-            <div class="modal-header">
-              <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Add Cash Register')}}</h5>
-              <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
-            </div>
-            <div class="modal-body">
-              <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
-                <div class="row m-0">
-                  <div class="col-md-6 form-group warehouse-section">
-                      <label>{{trans('file.Outlet')}} *</strong> </label>
-                      <select required name="warehouse_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
-                          @foreach($lims_warehouse_list as $warehouse)
-                          <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
-                          @endforeach
-                      </select>
-                  </div>
-                  <div class="col-md-6 form-group">
-                      <label>{{trans('file.Cash in Hand')}} *</strong> </label>
-                      <input type="number" name="cash_in_hand" required class="form-control">
-                  </div>
-                  <div class="col-md-12 form-group">
-                      <button type="submit" class="btn btn-primary">{{trans('file.submit')}}</button>
-                  </div>
-                </div>
-            </div>
-            <!-- payment modal -->
    
-            {{ Form::close() }}
-          </div>
-        </div>
-    </div>
     <!-- cash register details modal -->
     <div id="register-details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
         <div role="document" class="modal-dialog">
