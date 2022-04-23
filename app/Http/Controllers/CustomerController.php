@@ -105,8 +105,15 @@ class CustomerController extends Controller
                 $message = 'Customer created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }   
         }
-        $lims_customer_data['customer_marry_date'] =  $lims_customer_data['marriage_date'];
-        $lims_customer_data['customer_dob'] =  $lims_customer_data['customer_dob'];
+        if($request->marriage_date)
+        {
+            $lims_customer_data['customer_marry_date'] =  $lims_customer_data['marriage_date'];
+        }
+        if($request->customer_dob)
+        {
+            $lims_customer_data['customer_dob'] =  $lims_customer_data['customer_dob'];
+        }
+        
         Customer::create($lims_customer_data);
         if($lims_customer_data['pos'])
             return redirect('pos')->with('message', $message);

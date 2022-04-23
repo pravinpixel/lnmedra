@@ -101,7 +101,7 @@
               @if(Auth::user()->role_id == 6) 
               <li id="vendorDashboard-menu"><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
                           
-              @else
+              @elseif(Auth::user()->role_id != 7)
                 <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
               @endif
            

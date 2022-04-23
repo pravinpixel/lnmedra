@@ -426,12 +426,15 @@ class HomeController extends Controller
                 return view('vendor-dashboard', compact('dashboardOrderables','all_permission','sale','purchase','expense','product','approved','rejected','pending','toBePaid','paymentReceived','saleTotal'));
             }
        
+        }
+        
+        if(Auth::user()->role_id == 7) {
+           return redirect()->route('products.index'); 
         }else{
-   
         $customers = Customer::with(['sales','payments'])->get()->take(10);
             // print_r($customers);die();
 
-        return view('index', compact('dashboardOrderables','columOrderables','revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price','customers','accountData',));
+        return view('index', compact('dashboardOrderables','columOrderables','revenue', 'purchase', 'expense', 'return', 'purchase_return', 'profit', 'payment_recieved', 'payment_sent', 'month', 'yearly_sale_amount', 'yearly_purchase_amount', 'recent_sale', 'recent_purchase', 'recent_quotation', 'recent_payment', 'best_selling_qty', 'yearly_best_selling_qty', 'yearly_best_selling_price','customers','accountData'));
         }
     }
 

@@ -173,6 +173,65 @@
           </div>
         </div>
     </div>
+    <!-- add customer modal -->
+    <div id="addCustomer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+        <div role="document" class="modal-dialog">
+          <div class="modal-content">
+            {!! Form::open(['route' => 'customer.store', 'method' => 'post', 'files' => true]) !!}
+            <div class="modal-header">
+              <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Add Customer')}}</h5>
+              <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
+            </div>
+            <div class="modal-body">
+              <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
+                <div class="form-group">
+                    <label>{{trans('file.Customer Group')}} *</strong> </label>
+                    <select required class="form-control selectpicker" name="customer_group_id">
+                        @foreach($lims_customer_group_all as $customer_group)
+                            <option value="{{$customer_group->id}}">{{$customer_group->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>{{trans('file.name')}} *</strong> </label>
+                    <input type="text" name="customer_name" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>{{trans('file.Email')}}</label>
+                    <input type="text" name="email" placeholder="example@example.com" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>{{trans('file.Phone Number')}} *</label>
+                    <input type="text" name="phone_number" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>{{trans('file.Address')}} *</label>
+                    <input type="text" name="address" required class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>{{trans('file.City')}} *</label>
+                    <input type="text" name="city" required class="form-control">
+                </div>
+               
+                <div class="form-group">
+                    <label>{{trans('file.requirement')}}</strong> </label>
+                    <div class="btn-group">
+                        <select name="requirement" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('requirement')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" required>
+                            <option value="1" {{old ('requirement') == 1 ? 'selected' : ''}}>Landscape Design</option>
+                            <option value="2" {{old ('requirement') == 2 ? 'selected' : ''}}>Execution</option>
+                        </select>
+                    </div>
+                </div>
+                        
+                <div class="form-group">
+                <input type="hidden" name="pos" value="1">
+                  <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
+                </div>
+            </div>
+            {{ Form::close() }}
+          </div>
+        </div>
+    </div>
 <!-- Side Navbar -->
 <header class="header m-0 bg-primary text-white " style="border-bottom: 2px solid #272524">
     <div class="container-fluid">
@@ -1459,7 +1518,7 @@
                 <div class="modal-body">
                     <form>
                         <div class="row m-0 modal-element">
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-12 form-group">
                                 <label>{{trans('file.Unit Price')}}</label>
                                 <input type="text" name="edit_unit_price" class="form-control numkey" step="any">
                             <?php
@@ -1470,7 +1529,7 @@
                                     $tax_rate_all[] = $tax->rate;
                                 }
                             ?>
-                            <div class="col-md-4 form-group">
+                            <div class="col-md-12 mt-2 form-group p-0">
                                 <label>{{trans('file.Tax Rate')}}</label>
                                 <select name="edit_tax_rate" class="form-control selectpicker">
                                     @foreach($tax_name_all as $key => $name)
@@ -1490,65 +1549,7 @@
             </div>
         </div>
     </div>
-    <!-- add customer modal -->
-    <div id="addCustomer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
-        <div role="document" class="modal-dialog">
-          <div class="modal-content">
-            {!! Form::open(['route' => 'customer.store', 'method' => 'post', 'files' => true]) !!}
-            <div class="modal-header">
-              <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Add Customer')}}</h5>
-              <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
-            </div>
-            <div class="modal-body">
-              <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
-                <div class="form-group">
-                    <label>{{trans('file.Customer Group')}} *</strong> </label>
-                    <select required class="form-control selectpicker" name="customer_group_id">
-                        @foreach($lims_customer_group_all as $customer_group)
-                            <option value="{{$customer_group->id}}">{{$customer_group->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>{{trans('file.name')}} *</strong> </label>
-                    <input type="text" name="customer_name" required class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>{{trans('file.Email')}}</label>
-                    <input type="text" name="email" placeholder="example@example.com" class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>{{trans('file.Phone Number')}} *</label>
-                    <input type="text" name="phone_number" required class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>{{trans('file.Address')}} *</label>
-                    <input type="text" name="address" required class="form-control">
-                </div>
-                <div class="form-group">
-                    <label>{{trans('file.City')}} *</label>
-                    <input type="text" name="city" required class="form-control">
-                </div>
-               
-                <div class="form-group">
-                    <label>{{trans('file.requirement')}}</strong> </label>
-                    <div class="btn-group">
-                        <select name="requirement" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('requirement')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" required>
-                            <option value="1" {{old ('requirement') == 1 ? 'selected' : ''}}>Landscape Design</option>
-                            <option value="2" {{old ('requirement') == 2 ? 'selected' : ''}}>Execution</option>
-                        </select>
-                    </div>
-                </div>
-                        
-                <div class="form-group">
-                <input type="hidden" name="pos" value="1">
-                  <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
-                </div>
-            </div>
-            {{ Form::close() }}
-          </div>
-        </div>
-    </div>
+    
     <!-- recent transaction modal -->
     <div id="recentTransaction" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
         <div role="document" class="modal-dialog">

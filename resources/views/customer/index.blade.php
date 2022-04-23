@@ -52,7 +52,7 @@
                         <th>{{trans('file.Total transaction')}}</th>
                         <th>{{trans('file.Total Value')}}</th>
                         <th>{{trans('file.Last Visited')}}</th>
-                        <th>{{trans('file.Customer since')}}</th>
+                        <!-- <th>{{trans('file.Customer since')}}</th> -->
                         <th class="not-exported">{{trans('file.action')}}</th>
                     </tr>
                 </thead>
@@ -246,12 +246,11 @@
     });
 
     var table = $('#customer-table').DataTable( {
-        "pageLength": 50,
         aaSorting     : [[0, 'desc']],
         responsive: true,
         processing: true,    
         lengthMenu: [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        serverSide: true, pageLength: 10,
+        serverSide: true, pageLength: 50,
         ajax          : {
             url     : '{!! route('customer.list') !!}',
             dataType: 'json',
@@ -268,7 +267,7 @@
             { data: 'totalTransaction', name: 'totalTransaction'},
             { data: 'totalValue', name: 'totalValue'},
             { data: 'last_visited', name: 'last_visited'},
-            { data: 'created_at', name: 'created_at'},
+            // { data: 'created_at', name: 'created_at'},
             {
                 data         : 'action', name: 'action', orderable: false, searchable: false,
                 fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
