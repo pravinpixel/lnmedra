@@ -266,8 +266,7 @@
             $('select[name="biller_id"]').prop('required',false);
             $('#biller-id').hide();
             $('#warehouseId').hide();
-            $('select[name="warehouse_id[]"]').hide();
-            // $('select[name="warehouse_id[]"]').prop('required',false);
+            $('select[name="warehouse_id[1]"]').prop('required',false);
             // $('input[name="outlet"]').prop('required',false);
             $('.customer-section').hide(300);
             $('.customer-input').prop('required',false);
@@ -286,10 +285,13 @@
                 $('.customer-input').prop('required',false);
             }
             else if($(this).val() == 2){
+                // alert();
                 $('select[name="biller_id"]').prop('required',false);
                 $('#biller-id').hide();
                 $('#warehouseId').hide();
-                $('select[name="warehouse_id[]"]').hide();
+                $('select[name="warehouse_id[1]"]').prop('required',false);
+                // $('#warehouse_span').hide();
+            
                 $('.customer-section').hide(300);
                 $('.customer-input').prop('required',false);
             }
@@ -330,8 +332,8 @@ $(document).ready(function(){
         if(x < maxField){ 
             x++; //Increment field counter
             $(wrapper).append(`
-               
-                <li class="list-group-item d-flex w-100 align-items-center rounded p-0 my-2 field_wrapper cloneOutlet" id="warehouseId">
+
+            <li class="list-group-item d-flex w-100 align-items-center rounded p-0 my-2 field_wrapper cloneOutlet" id="warehouseId">
                     <select name="warehouse_id[${x}]" id="warehouse_id[${x}]" required class="selectpicker form-control border-0" data-live-search="true" data-live-search-style="begins" title="Select outlet...">
                         @foreach($lims_warehouse_list as $warehouse)
                             <option value="{{$warehouse->id}}">{{$warehouse->name}}</option>
