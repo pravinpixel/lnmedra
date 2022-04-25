@@ -366,6 +366,9 @@ class CustomerController extends Controller
             ->whereBetween('customers.created_at', [$start_date, $end_date])
             ->select('customers.*');
             return DataTables::eloquent($dataDb)
+                ->editColumn('full_name', function($dataDb){
+                    return "<div> {$dataDb->full_name}<br>({$dataDb->created_at})</div>";
+                })
                 ->addColumn('customerGroupName', function($dataDb){
                     return $dataDb->customerGroup->name;
                 })
@@ -397,7 +400,7 @@ class CustomerController extends Controller
                         </ul>
                 ';
                 })
-            ->rawColumns(['action','checkbox'])
+            ->rawColumns(['action','checkbox','full_name'])
             ->make(true);
         }
     }
