@@ -482,10 +482,10 @@ class PurchaseController extends Controller
 
             $documentName = $document->getClientOriginalName();
             $document->move('public/documents/purchase', $documentName);
-            $data['vendor_id'] = $request->vendor_id;
+            $data['vendor_id'] = $request->supplier_id;
             $data['document'] = $documentName;
         }
-       
+        $data['vendor_id'] = $request->supplier_id;
         Purchase::create($data);
 
         $lims_purchase_data = Purchase::latest()->first();

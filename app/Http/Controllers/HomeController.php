@@ -395,20 +395,19 @@ class HomeController extends Controller
             {
                 $saleTotal += $val->qty * $val->net_unit_cost;
             }
-        
+
             $paymentReceived = DB::table('purchases')
-            ->where('supplier_id',Auth::user()->vendor_id)
+            ->where('supplier_id',Auth::user()->id)
             
             // ->select('item')
             ->sum('paid_amount');
             $toBePaid = DB::table('purchases')
-            ->where('supplier_id',Auth::user()->vendor_id)
+            ->where('supplier_id',Auth::user()->id)
             ->where('payment_status',1)
             ->sum('total_cost');
             $role = Role::find(Auth::user()->role_id);
             $sale = Sale::sum('grand_total');
             $sale = round($sale);
-            
             
             $purchase = Purchase::sum('grand_total');
             $purchase = round($purchase);
@@ -417,7 +416,7 @@ class HomeController extends Controller
        
             if($role->hasPermissionTo('vendor-dashboard-index')){
             
-                $product = VendorProduct::where('created_by',user()->id)->groupBy('product_id')->count();
+                $product = VendorProduct::where('created_by',user()->id)->count();
                 $approved = VendorProduct::where('created_by',user()->id)->where('is_approve', '=',1)->count();
                 $rejected = VendorProduct::where('created_by',user()->id)->where('is_approve', '=',2)->count();
                 $pending = VendorProduct::where('created_by',user()->id)->where('is_approve', '=',0)->count();
