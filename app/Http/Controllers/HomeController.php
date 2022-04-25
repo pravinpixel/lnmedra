@@ -117,7 +117,10 @@ class HomeController extends Controller
         $dashboardOrderables = json_decode(user()->sortable_order)[0] ?? [];
         $columOrderables = json_decode(user()->sortable_order)[1] ?? [];
 
-       
+        if(!is_array($dashboardOrderables))
+        {
+         $dashboardOrderables = explode(" ",$dashboardOrderables);
+        }
 
         if(count($dashboardOrderables) != 7){
             $dashboardOrderables = ["sortable-1","sortable-2","sortable-3","sortable-4","sortable-5","sortable-6","sortable-7"];
