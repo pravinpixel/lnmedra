@@ -14,6 +14,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap.css') ?>" type="text/css">
 
+    <style>@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;900&display=swap');</style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="preload" href="<?php echo asset('vendor/bootstrap-toggle/css/bootstrap-toggle.min.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="<?php echo asset('vendor/bootstrap-toggle/css/bootstrap-toggle.min.css') ?>" rel="stylesheet"></noscript>
@@ -88,14 +89,13 @@
     <main>
       <div id="loader"></div>
       <!-- Side Navbar -->
-      <nav class="side-navbar h-100 bg-dark top-0"  style="background:linear-gradient(#fffffff1 60%,#ffffffab) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover;">
+      <nav class="side-navbar h-100 bg-dark top-0"  style="background:linear-gradient(#fffffff1 60%,#ffffffab) , url('{{ asset('public/logo/login_cover.png') }}');background-size:cover;">
         <div class="side-navbar-wrapper">
           <!-- Sidebar Header    -->
           <!-- Sidebar Navigation Menus-->
           <div class="main-menu">
             <div class="text-center my-3">
-              <a href="{{url('/')}}"><img src="{{url('public/logo/logo.png')}}" width="100px"></a>
-              {{-- <a id="toggle-btn" href="#" class="btn-pos rounded-pill"><i class="fa fa-bars"> </i></a> --}}
+              <a href="{{url('/')}}"><img src="{{url('public/logo/logo_two.png')}}" width="100px"></a>
             </div>
             <ul id="side-main-menu" class="side-menu list-unstyled">
               @if(Auth::user()->role_id == 6) 
@@ -103,9 +103,7 @@
                           
               @elseif(Auth::user()->role_id != 7)
                 <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
-              @endif
-           
-
+              @endif 
               <?php
                   $role = DB::table('roles')->find(Auth::user()->role_id);
                 
@@ -782,7 +780,7 @@
               <a id="toggle-btn" href="#" class="btn-pos rounded-pill"><i class="fa fa-bars"> </i></a>
               <span class="brand-big">
                 <?php $site_title = DB::table('general_settings')->select('site_title')->first(); ?>
-                <a href="{{url('/')}}"><h2>{{$site_title->site_title}} | Sales & POS Management</h2></a>
+                <a href="{{url('/')}}"><h2 style="font-weight: bold !important;font-family: 'Work Sans', sans-serif;">{{$site_title->site_title}} | Sales & POS Management</h2></a>
               </span>
            
               <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">

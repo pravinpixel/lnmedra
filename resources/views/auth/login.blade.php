@@ -19,96 +19,58 @@
     <link rel="stylesheet" href="<?php echo asset('css/style.default.css') ?>" id="theme-stylesheet" type="text/css">
     <!-- Custom stylesheet - for your changes-->
     <link rel="stylesheet" href="<?php echo asset('css/custom-'.$general_setting->theme) ?>" type="text/css">
-
     <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery.min.js') ?>"></script>
+    <style>img {user-select: none !important; pointer-events: none}</style>
+    <style>@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;900&display=swap');</style>
   </head>
-  <body>
-        
-    <div class="page login-page justify-content-center d-flex align-items-center " style="min-height: 100vh;background:linear-gradient(#000000c4,#00000070) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover ">
-      <div class="container  h-100">
-        <div class="row p-5 col-md-10 mx-auto shadow-lg align-items-center" style="backdrop-filter: blur(2px);background:#ffffffe8;border-radius:25px">
-          <div class="col-md-6 border-right-bold text-center">
-             <img src="{{ asset('public/logo/logo.png') }}" style="width: 350px" alt="">
-          </div>
-            
-          <div class="col-md-6">
-           @if(session()->has('not_permitted'))
-            <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
-            @endif
-            @if(session()->has('message'))
-                <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{!! session()->get('message') !!}</div>
-            @endif
-            <h1 class="display-4 text-center mb-3">Login</h1>
-           
-            <form method="POST" action="{{ route('login') }}" id="login-form" class="m-0 w-100 text-center" style="max-width: 100% !important">
+  <body> 
+    @if(session()->has('not_permitted'))
+      <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('not_permitted') }}</div>
+    @endif
+    @if(session()->has('message'))
+      <div class="alert alert-success alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{!! session()->get('message') !!}</div>
+    @endif
+    <div class="row m-0">
+      <div class="col-md-5 bg-primary p-0 d-md-block d-none" style="height: 100vh;">
+        <img src="{{ asset('public/logo/login_cover.png') }}" style="height: 100%;width:100%;object-fit:cover">
+      </div>
+      <div class="col-md-7 bg-primary" style="height: 100vh;">
+        <img src="{{ asset('public/logo/logo_one.png') }}" width="80px" class="m-3" style="filter: drop-shadow(1px 1px 4px #eee);">
+        <div class="d-flex justify-content-center align-items-center">
+          <div class="w-100">
+            <div class="text-center">
+              <img src="{{ asset('public/logo/logo_two_white.png') }}" width="180px">
+              <h3 style="text-transform:uppercase;font-weight: bold !important;font-family: 'Work Sans', sans-serif;font-size:2.5rem" class="my-4">
+                Sign in
+              </h3>
+            </div>
+            <form method="POST" action="{{ route('login') }}" id="login-form" class="text-center col-lg-6  mx-auto">
               @csrf
               @if(session()->has('error'))
                 <small style="left: 10px;margin-top:6px" class="text-danger">{{ session()->get('error') }}</small>
               @endif
               <div class="form-group-material">
                 <input id="login-username" type="text" name="name" required class="pl-3 input-material rounded-pill" value="">
-                <label for="login-username" class="label-material" style="left: 15px;">{{trans('file.Username')}}</label>
-                  
+                <label for="login-username" class="label-material text-dark" style="left: 15px;">{{trans('file.Username')}}</label>
               </div>
-              
               <div class="form-group-material">
                 <input id="login-password" type="password" name="password" required class="pl-3 input-material rounded-pill" value="">
-                <label for="login-password" class="label-material" style="left: 15px;">{{trans('file.Password')}}</label>
-    
+                <label for="login-password" class="label-material text-dark" style="left: 15px;">{{trans('file.Password')}}</label>
               </div>
-              <button type="submit" class="btn rounded-pill btn-primary btn-block">{{trans('file.LogIn')}}</button>
+              <button type="submit" class="btn rounded-pill lead btn-danger btn-block">
+                <b class="fw-bold">{{trans('file.LogIn')}}</b>
+              </button>
               <div class="mt-3">
-                <a href="{{ route('password.request') }}" class="forgot-pass my-2">{{trans('file.Forgot Password?')}}</a>
-                <h4 class="lead">{{trans('file.Are You a Vendor')}} ? </h4> <a href="{{url('vendor/vendor-register')}}" class="signup">{{trans('file.Click Here to Register')}}</a>
-                
+                <a href="{{ route('password.request') }}" class="forgot-pass text-white  my-2">{{trans('file.Forgot Password?')}}</a>
+                <div class="text-white">
+                  <span class="lead">{{trans('file.Are You a Vendor')}} ?</span>  
+                  <span class="mx-3">|</span>
+                  <a href="{{url('vendor/vendor-register')}}" class=" text-white signup">{{trans('file.Click Here to Register')}}</a>
+                </div> 
               </div>
             </form>
           </div>
-        </div>
-        {{-- <div class="form-outer text-center d-flex align-items-center">
-          <div class="form-inner">
-            <div class="logo">
-                @if($general_setting->site_logo)
-                  <img src="{{url('public/logo', $general_setting->site_logo)}}" width="110">
-                @else
-                  <span>{{$general_setting->site_title}}</span>
-                @endif
-            </div>
-            
-            @if(session()->has('delete_message'))
-              <div class="alert alert-danger alert-dismissible text-center"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ session()->get('delete_message') }}</div> 
-            @endif
-            <form method="POST" action="{{ route('login') }}" id="login-form">
-              @csrf
-              <div class="form-group-material">
-                <input id="login-username" type="text" name="name" required class="input-material" value="">
-                <label for="login-username" class="label-material">{{trans('file.UserName')}}</label>
-                @if(session()->has('error'))
-                    <p>
-                        <strong>{{ session()->get('error') }}</strong>
-                    </p>
-                @endif
-              </div>
-              
-              <div class="form-group-material">
-                <input id="login-password" type="password" name="password" required class="input-material" value="">
-                <label for="login-password" class="label-material">{{trans('file.Password')}}</label>
-                @if(session()->has('error'))
-                    <p>
-                        <strong>{{ session()->get('error') }}</strong>
-                    </p>
-                @endif
-              </div>
-              <button type="submit" class="btn btn-primary btn-block">{{trans('file.LogIn')}}</button>
-            </form>
-          
-             <a href="{{ route('password.request') }}" class="forgot-pass">{{trans('file.Forgot Password?')}}</a>
-            <p>{{trans('file.Are You a Vendor')}} ?</p><a href="{{url('vendor/vendor-register')}}" class="signup">{{trans('file.Click Here to Register')}}</a>
-          </div> --}}
-          <div class="copyrights text-center">
-            <p>{{trans('file.Developed By')}} <span class="external text-white">{{$general_setting->developed_by}}</span></p>
-          </div>
-        </div>
+        </div> 
       </div>
     </div>
   </body>

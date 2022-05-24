@@ -30,11 +30,11 @@
 }
 
 div.has-error > input {
-    border: 1px solid #dc3545;
+    border: 1px solid #D4524B;
 }
 
 div.has-error> .form-text {
-    color: #dc3545;
+    color: #D4524B;
 }
 
 #successModal .fa-thumbs-up {
@@ -80,12 +80,12 @@ box-shadow: none !important;
   padding: 0.8em 4em 0 !important
 }
 .table {
-    border: 1px solid #0095ff !important;
+    border: 1px solid #201D1E !important;
 }
 .table th{
   background: #f3f7ff !important;
-  color: #0095ff  !important;
-  border-bottom: 1px solid #0095ff !important;
+  color: #201D1E  !important;
+  border-bottom: 1px solid #201D1E !important;
   text-align: center !important;
   font-weight: bold !important;
 }
@@ -213,13 +213,13 @@ margin: 0 !important
 }
 
 .form-control.error {
-    border-color:  #dc3545 !important;
+    border-color:  #D4524B !important;
 }
 
 .section-title {
     margin-bottom: 1rem !important;
     padding: 0.5rem  1rem !important;
-    background:linear-gradient(90deg, #14AB69 , #0f8854) !important;
+    background:linear-gradient(90deg, #22B075 , #0f8854) !important;
     color: white !important;
     font-weight: bold !important;
     border-radius: 5px;
@@ -316,7 +316,7 @@ section {
   margin: 0 !important;
 }
 .custom-card-header {
-  background:linear-gradient(#2395FC, #2395FC);
+  background:linear-gradient(262deg, grey, #201D1E);
   color: white;
   padding: 10px !important;
   border-radius: 5px 5px 0 0 !important ;

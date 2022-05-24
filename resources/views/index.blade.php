@@ -14,13 +14,10 @@
       color: white;
       text-shadow: 0px 2px 3px #032617 !important;
       letter-spacing: 1px;
+      font-family: 'Work Sans', sans-serif;
     }
     .count-title {
-      background:linear-gradient(#0095FF, #0095FF) !important;
-      color : #032617 !important;
-      border: 2px  solid white !important;
-      text-shadow: 0 2px 5px white !important;
-      box-shadow: 0 5px 10px #9b9b9b !important
+      color: #032617 !important;
     }
     .icon i{
       font-size: 2rem !important
@@ -38,7 +35,7 @@
     <div class="container-fluid  my-4 ">
       <div class="col-md-12 d-flex align-items-center justify-content-between">
         <div class="brand-text float-left">
-            <h3 class="m-0">Dashboard</h3>
+            <h3 class="m-0" style="font-family: 'Work Sans', sans-serif;">Dashboard</h3>
         </div>
         <div class="filter-toggle btn-group shadow border rounded-pill m-0" style="overflow: hidden">
           <button class="btn btn-light  date-btn" data-start_date="{{date('Y-m-d')}}" data-end_date="{{date('Y-m-d')}}">{{trans('file.Today')}}</button>
@@ -54,8 +51,8 @@
   <br>
   <div class="row m-0">
     <!-- Count item widget-->
-    <div class="col">
-      <div class="wrapper count-title text-center shadow-sm">
+    <div class="col"> 
+      <div class="wrapper count-title" style="background:linear-gradient(40deg,#D4524B, #EEAA2F) !important">
         <div class="icon"><i class="dripicons-graph-bar" ></i></div>
         <div class="name"><strong >Sales</strong></div>
         <div class="count-number revenue-data">00.00</div>
@@ -63,7 +60,7 @@
     </div>
      <!-- Count item widget-->
      <div class="col">
-      <div class="wrapper count-title text-center shadow-sm">
+      <div class="wrapper count-title" style="background:linear-gradient(40deg,#B58675, #ffcbb8) !important;">
         <div class="icon"><i class="dripicons-media-loop" ></i></div>
         <div class="name"><strong >Purchase</strong></div>
         <div class="count-number purchase-data">00.00</div>
@@ -72,7 +69,7 @@
 
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title text-center shadow-sm">
+      <div class="wrapper count-title" style="background:linear-gradient(40deg,#7BC0C9, #bdf5fc) !important;">
         <div class="icon"><i class="dripicons-media-loop" ></i></div>
         <div class="name"><strong >Expense</strong></div>
         <div class="count-number expense-data">00.00</div>
@@ -81,7 +78,7 @@
     
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title text-center shadow-sm">
+      <div class="wrapper count-title" style="background:linear-gradient(40deg,#EEAA2F, #f6d495) !important;">
         <div class="icon"><i class="dripicons-return" ></i></div>
         <div class="name"><strong >Sale Return</strong></div>
         <div class="count-number return-data">00.00</div>
@@ -89,17 +86,15 @@
     </div>
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title text-center shadow-sm">
+      <div class="wrapper count-title"  style="background:linear-gradient(40deg,#D4524B, #fba29e) !important;">
         <div class="icon"><i class="dripicons-media-loop" ></i></div>
         <div class="name"><strong >Purchase Return</strong></div>
         <div class="count-number purchase_return-data">00.00</div>
       </div>
-    </div>
-
-   
+    </div> 
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title text-center shadow-sm">
+      <div class="wrapper count-title" style="background:linear-gradient(40deg,#28a745, #17a2b8) !important">
         <div class="icon"><i class="dripicons-trophy"></i></div>
         <div class="name"><strong>Profit</strong></div>
         <div class="count-number profit-data">00.00</div>
@@ -227,7 +222,7 @@
               </ul> 
               <div class="tab-content p-0">
                 <div role="tabpanel" class="tab-pane fade show active" id="sale-latest">
-                    <div class="table-responsive border-right border-info border-left">
+                    <div class="table-responsive border-right border-dark border-left">
                       <table class="table m-0 table-bordered">
                         <thead>
                           <tr>
@@ -260,7 +255,7 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="purchase-latest">
-                    <div class="table-responsive border-right border-info border-left">
+                    <div class="table-responsive border-right border-dark border-left">
                       <table class="table m-0 table-bordered">
                         <thead>
                           <tr>
@@ -299,7 +294,7 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="quotation-latest">
-                    <div class="table-responsive border-right border-info border-left">
+                    <div class="table-responsive border-right border-dark border-left">
                       <table class="table m-0 table-bordered">
                         <thead>
                           <tr>
@@ -330,7 +325,7 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="payment-latest">
-                    <div class="table-responsive border-right border-info border-left">
+                    <div class="table-responsive border-right border-dark border-left">
                       <table class="table m-0 table-bordered">
                         <thead>
                           <tr>
@@ -383,7 +378,7 @@
                 <i class="fa fa-th drag-icon mx-2 float-right" onclick="change_view_length('sortable-6')" ></i></h4>  
             </div>
             <div class="card-body p-3">
-              <div class="table-responsive border-right border-info border-left">
+              <div class="table-responsive border-right border-dark border-left">
                 <table class="table m-0 table-bordered">
                   <thead>
                     <tr>
@@ -420,7 +415,7 @@
               <div class="right-column"></div>
             </div>
             <div class="card-body p-3">
-              <div class="table-responsive border-right border-info border-left">
+              <div class="table-responsive border-right border-dark border-left">
                 <table class="table m-0 table-bordered">
                   <thead>
                     <tr>
@@ -462,14 +457,14 @@
             <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-graph-bar" style="color: #0095ff"></i></div>
-                <div class="name"><strong style="color: #14AB69">Sales</strong></div>
+                <div class="name"><strong style="color: #22B075">Sales</strong></div>
                 <div class="count-number revenue-data">00.00</div>
               </div>
             </div>
              <!-- Count item widget-->
              <div class="col">
               <div class="wrapper count-title text-center">
-                <div class="icon"><i class="dripicons-media-loop" style="color: #14AB69"></i></div>
+                <div class="icon"><i class="dripicons-media-loop" style="color: #22B075"></i></div>
                 <div class="name"><strong style="color: #0095ff">Purchase</strong></div>
                 <div class="count-number purchase-data">00.00</div>
               </div>
@@ -479,7 +474,7 @@
             <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div>
-                <div class="name"><strong style="color: #14AB69">Expense</strong></div>
+                <div class="name"><strong style="color: #22B075">Expense</strong></div>
                 <div class="count-number expense-data">00.00</div>
               </div>
             </div>
@@ -487,7 +482,7 @@
             <!-- Count item widget-->
             <div class="col">
               <div class="wrapper count-title text-center">
-                <div class="icon"><i class="dripicons-return" style="color: #14AB69"></i></div>
+                <div class="icon"><i class="dripicons-return" style="color: #22B075"></i></div>
                 <div class="name"><strong style="color: #0095ff">Sale Return</strong></div>
                 <div class="count-number return-data">00.00</div>
               </div>
@@ -496,7 +491,7 @@
             <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div>
-                <div class="name"><strong style="color: #14AB69">Purchase Return</strong></div>
+                <div class="name"><strong style="color: #22B075">Purchase Return</strong></div>
                 <div class="count-number purchase_return-data">00.00</div>
               </div>
             </div>
@@ -505,7 +500,7 @@
             <!-- Count item widget-->
             <div class="col">
               <div class="wrapper count-title text-center">
-                <div class="icon"><i class="dripicons-trophy" style="color: #14AB69"></i></div>
+                <div class="icon"><i class="dripicons-trophy" style="color: #22B075"></i></div>
                 <div class="name"><strong style="color: #0095ff">Profit</strong></div>
                 <div class="count-number profit-data">00.00</div>
               </div>
@@ -607,7 +602,7 @@
             <div class="card-header d-flex justify-content-between align-items-center">
               <h4>Cash flow Distribution</h4>  
             </div>
-            <div class="table-responsive border-right border-info border-left">
+            <div class="table-responsive border-right border-dark border-left">
                 <table class="table">
                   <thead>
                     <tr>
@@ -656,7 +651,7 @@
 
             <div class="tab-content p-3">
               <div role="tabpanel" class="tab-pane fade show active" id="sale-latest">
-                  <div class="table-responsive border-right border-info border-left">
+                  <div class="table-responsive border-right border-dark border-left">
                     <table class="table">
                       <thead>
                         <tr>
@@ -689,7 +684,7 @@
                   </div>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="purchase-latest">
-                  <div class="table-responsive border-right border-info border-left">
+                  <div class="table-responsive border-right border-dark border-left">
                     <table class="table">
                       <thead>
                         <tr>
@@ -728,7 +723,7 @@
                   </div>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="quotation-latest">
-                  <div class="table-responsive border-right border-info border-left">
+                  <div class="table-responsive border-right border-dark border-left">
                     <table class="table">
                       <thead>
                         <tr>
@@ -759,7 +754,7 @@
                   </div>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="payment-latest">
-                  <div class="table-responsive border-right border-info border-left">
+                  <div class="table-responsive border-right border-dark border-left">
                     <table class="table">
                       <thead>
                         <tr>
@@ -793,7 +788,7 @@
                 
               </div>
             </div>
-            <div class="table-responsive border-right border-info border-left">
+            <div class="table-responsive border-right border-dark border-left">
                 <table class="table">
                   <thead>
                     <tr>
