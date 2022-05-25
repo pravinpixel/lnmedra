@@ -1276,10 +1276,11 @@
                 </div>
                 <div class="row m-0 align-items-center">
                     <div class="btn-group col-10 mt-3  p-0">
-                        <span class="btn btn-sm w-100 btn-primary" id="category-filter">{{trans('file.category')}}</span>
-                        <span class="btn btn-sm w-100 btn-info" id="brand-filter">{{trans('file.Brand')}}</span>
                         <span class="btn btn-sm w-100 btn-danger" id="featured-filter">{{trans('file.Featured')}}</span>
                         <span class="btn btn-sm w-100 btn-success" id="top-sale-filter">{{trans('file.Top Sale')}}</span>
+                        <span class="btn btn-sm w-100 btn-info " id="category-filter">{{trans('file.category')}}</span>
+                        <span class="btn btn-sm w-100 btn-primary" id="brand-filter">{{trans('file.Brand')}}</span>
+                        
                     </div>
                     <div class="btn-group col mt-3 text-right">
                         <span onclick="change_grid()" class="btn btn-sm btn-light"><i id="grid_icon" class="fa fa-th" aria-hidden="true"></i></span>
@@ -1852,6 +1853,9 @@
  
 @push('scripts')
     <script>
+        $(document).ready(function() {
+        $('#featured-filter').trigger('click');
+        });
         function change_grid() {
             $("#product-table").toggleClass("change_grid"); 
 

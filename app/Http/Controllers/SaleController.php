@@ -54,6 +54,7 @@ use Illuminate\Support\Facades\Validator;
 use Barryvdh\DomPDF\Facade as PDF;
 use App\Jobs\PosNotificationJob;
 use App\Jobs\ProcessPodcast;
+use Stripe\Order;
 
 class SaleController extends Controller
 {
@@ -967,6 +968,7 @@ class SaleController extends Controller
         ->whereNull('product_warehouse.variant_id')
         ->whereNull('product_warehouse.product_batch_id')
         ->select('product_warehouse.*')
+        ->orderBy('products.name','asc')
         ->get();
 
         config()->set('database.connections.mysql.strict', false);
@@ -1132,7 +1134,7 @@ class SaleController extends Controller
             $lims_coupon_list = Coupon::where('is_active',true)->get();
             $flag = 0;
 
-            return view('sale.pos', compact('all_permission', 'lims_customer_list', 'lims_customer_group_all', 'lims_warehouse_list', 'lims_reward_point_setting_data', 'lims_product_list', 'product_number', 'lims_tax_list', 'lims_biller_list', 'lims_pos_setting_data', 'lims_brand_list', 'lims_category_list', 'recent_sale', 'recent_draft', 'lims_coupon_list', 'flag'));
+            return view('sale.pos', compact('all_permission', 'lims_customer_list', 'lims_customer_group_all', 'lims_warehouse_list', 'lims_reward_point_setting_data', 'lims_product_list', 'product_number', 'lims_tax_list', 'lims_biller_list', 'lims_pos_setting_data', 'lims_brand_list', 'lims_category_list', 'recent_sale', 'recent_draft', 'lims_coupon_list', 'flag'));   
         }
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
@@ -1149,7 +1151,9 @@ class SaleController extends Controller
                                     ['products.is_active', true],
                                     ['products.category_id', $category_id],
                                     ['brand_id', $brand_id]
-                                ])->select('products.name', 'products.code', 'products.image')->get();
+                                ])->select('products.name', 'products.code', 'products.image')
+                                ->orderBy('products.name','asc')
+                                ->get();
         }
         elseif(($category_id != 0) && ($brand_id == 0)){
             $lims_product_list = DB::table('products')
@@ -1158,7 +1162,9 @@ class SaleController extends Controller
                                 ->where([
                                     ['products.is_active', true],
                                     ['products.category_id', $category_id],
-                                ])->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')->get();
+                                ])->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')
+                                ->orderBy('products.name','asc')
+                                ->get();
         }
         elseif(($category_id == 0) && ($brand_id != 0)){
             $lims_product_list = Product::where([
@@ -1167,10 +1173,11 @@ class SaleController extends Controller
                             ])
                             ->where('products.qty','>',0)
                             ->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')
+                            ->orderBy('products.name','asc')
                             ->get();
         }
         else
-            $lims_product_list = Product::where('is_active', true)->where('qty','>',0)->get();
+            $lims_product_list = Product::where('is_active', true)->where('qty','>',0)->orderBy('products.name','asc')->get();
 
         $index = 0;
         foreach ($lims_product_list as $product) {
@@ -1202,8 +1209,7 @@ class SaleController extends Controller
         $lims_product_list = Product::where([
             ['is_active', true],
             ['featured', true]
-        ])->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')->get();
-
+        ])->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')->orderBy('products.name','ASC')->get();
         $index = 0;
         foreach ($lims_product_list as $product) {
             if($product->is_variant) {
@@ -1241,6 +1247,7 @@ class SaleController extends Controller
         }
         $lims_product_list = Product::whereIn('id',$ids)
         ->select('products.id', 'products.name', 'products.code', 'products.image', 'products.is_variant')
+        ->orderBy('products.name','asc')
         ->get();
 
         $index = 0;

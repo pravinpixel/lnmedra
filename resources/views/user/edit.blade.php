@@ -121,9 +121,9 @@
                                           @endforeach
                                         </select>
                                     </div> -->
-                                    <label><strong>{{trans('file.Add Store Outlet')}} *</strong></label>
+                                    
                                     <ul class="list-group field_wrapper" id="warehouseId">
-                                       
+                                        <label><strong>{{trans('file.Add Store Outlet')}} *</strong></label>
                                         <li class="list-group-item border-0 p-0 mb-3">
                                             <button  class="btn btn-primary add_button" title="Add field" >Add</button>
                                         </li>
@@ -223,6 +223,47 @@ $(document).on('click', '#togglePassword', function () {
         // $('select[name=warehouse_id]').val($("input[name='warehouse_id_hidden']").val());
         $('#biller-id').show();
         $('select[name=biller_id]').val($("input[name='biller_id_hidden']").val());
+        if($('select[name=role_id]').val() == 5) {
+            $('#biller-id').hide(300);
+            $('#warehouseId').hide(300);
+            $('.customer-section').show(300);
+            $('.customer-input').prop('required',true);
+            // $('select[name="warehouse_id"]').prop('required',false);
+            $('select[name="biller_id"]').prop('required',false);
+        }
+        else if($('select[name=role_id]').val() == 1) {
+            $('select[name="biller_id"]').prop('required',false);
+            $('#biller-id').hide();
+            $('#warehouseId').hide();
+            $('select[name="warehouse_id[1]"]').prop('required',false);
+            // $('input[name="outlet"]').prop('required',false);
+            $('.customer-section').hide(300);
+            $('.customer-input').prop('required',false);
+        }
+        else if($('select[name=role_id]').val() !=5 ){
+            
+            $('select[name="warehouse_id"]').prop('required',true);
+            $('#warehouseId').show(300);
+            
+            if($('select[name=role_id]').val() > 2 && $('select[name=role_id]').val() != 5)
+            {
+                $('select[name="biller_id"]').prop('required',true);
+                $('#biller-id').show(300);
+                // $('#warehouseId').show(300);
+                $('.customer-section').hide(300);
+                $('.customer-input').prop('required',false);
+            }
+            else if($('select[name=role_id]').val() == 2){
+                $('select[name="biller_id"]').prop('required',false);
+                $('#biller-id').hide();
+                $('#warehouseId').hide();
+                $('select[name="warehouse_id[1]"]').prop('required',false);
+                // $('#warehouse_span').hide();
+            
+                $('.customer-section').hide(300);
+                $('.customer-input').prop('required',false);
+            }
+        }
     }
     $('.selectpicker').selectpicker('refresh');
 
