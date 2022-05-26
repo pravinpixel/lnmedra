@@ -72,6 +72,11 @@
       .dataTable {
         width: 100% !important;
       }
+      .ui-sortable .card-body {
+        min-height: 300px !important;
+        max-height: 300px !important;
+        overflow: auto;
+      }
     </style>
   </head>
 

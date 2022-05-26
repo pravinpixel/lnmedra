@@ -62,7 +62,7 @@
               </button>
               <div class="mt-3">
                 <a href="{{ route('password.request') }}" class="forgot-pass text-white  my-2">{{trans('file.Forgot Password?')}}</a>
-                <div class="text-white">
+                <div class="text-white d-flex">
                   <span class="lead">{{trans('file.Are You a Vendor')}} ?</span>  
                   <span class="mx-3">|</span>
                   <a href="{{url('vendor/vendor-register')}}" class=" text-white signup">{{trans('file.Click Here to Register')}}</a>

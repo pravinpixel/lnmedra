@@ -238,7 +238,7 @@
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg bg-primary text-white">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ asset('logo/logo-sm.png') }}" height="40" style="filter:brightness(50)">
+                <img src="{{ asset('logo/logo_two_white.png') }}" height="40" >
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
