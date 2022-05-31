@@ -119,13 +119,13 @@
       font-size: 1rem;
       border-radius: 0.25rem;
       transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-      border: 1px solid #22B075;
+      border: 1px solid #204A24;
       margin: 5px;
       }
   
       .paginate_button.current {
       color: #fff;
-      background-color: #22B075;
+      background-color: #204A24;
       border-color: #198754;
       }
   

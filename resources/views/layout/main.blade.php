@@ -73,8 +73,8 @@
         width: 100% !important;
       }
       .ui-sortable .card-body {
-        min-height: 300px !important;
-        max-height: 300px !important;
+        min-height: 350px !important;
+        max-height: 350px !important;
         overflow: auto;
       }
     </style>
@@ -94,13 +94,13 @@
     <main>
       <div id="loader"></div>
       <!-- Side Navbar -->
-      <nav class="side-navbar h-100 bg-dark top-0"  style="background:linear-gradient(#fffffff1 60%,#ffffffab) , url('{{ asset('public/logo/login_cover.png') }}');background-size:cover;">
+      <nav class="side-navbar h-100 bg-dark top-0"  style="background:linear-gradient(#efe9d3c8 50%,#efe9d36f) , url('{{ asset('public/logo/login_cover.png') }}');background-size:cover;">
         <div class="side-navbar-wrapper">
           <!-- Sidebar Header    -->
           <!-- Sidebar Navigation Menus-->
           <div class="main-menu">
             <div class="text-center my-3">
-              <a href="{{url('/')}}"><img src="{{url('public/logo/logo_two.png')}}" width="100px"></a>
+              <a href="{{url('/')}}"><img src="{{url('public/logo/logo_two.png')}}" width="120px"></a>
             </div>
             <ul id="side-main-menu" class="side-menu list-unstyled">
               @if(Auth::user()->role_id == 6) 

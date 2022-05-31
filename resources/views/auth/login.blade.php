@@ -34,12 +34,12 @@
       <div class="col-md-5 bg-primary p-0 d-md-block d-none" style="height: 100vh;">
         <img src="{{ asset('public/logo/login_cover.png') }}" style="height: 100%;width:100%;object-fit:cover">
       </div>
-      <div class="col-md-7 bg-primary" style="height: 100vh;">
+      <div class="col-md-7" style="height: 100vh; background: #EFE9D3">
         <img src="{{ asset('public/logo/logo_one.png') }}" width="80px" class="m-3" style="filter: drop-shadow(1px 1px 4px #eee);">
         <div class="d-flex justify-content-center align-items-center">
           <div class="w-100">
             <div class="text-center">
-              <img src="{{ asset('public/logo/logo_two_white.png') }}" width="180px">
+              <img src="{{ asset('public/logo/logo_two.png') }}" width="180px">
               <h3 style="text-transform:uppercase;font-weight: bold !important;font-family: 'Work Sans', sans-serif;font-size:2.5rem" class="my-4">
                 Sign in
               </h3>
@@ -61,11 +61,11 @@
                 <b class="fw-bold">{{trans('file.LogIn')}}</b>
               </button>
               <div class="mt-3">
-                <a href="{{ route('password.request') }}" class="forgot-pass text-white  my-2">{{trans('file.Forgot Password?')}}</a>
-                <div class="text-white d-flex">
+                <a href="{{ route('password.request') }}" class="forgot-pass text-dark fw-bold my-2">{{trans('file.Forgot Password?')}}</a>
+                <div class="text-secondary d-flex">
                   <span class="lead">{{trans('file.Are You a Vendor')}} ?</span>  
                   <span class="mx-3">|</span>
-                  <a href="{{url('vendor/vendor-register')}}" class=" text-white signup">{{trans('file.Click Here to Register')}}</a>
+                  <a href="{{url('vendor/vendor-register')}}" class=" text-secondary signup">{{trans('file.Click Here to Register')}}</a>
                 </div> 
               </div>
             </form>

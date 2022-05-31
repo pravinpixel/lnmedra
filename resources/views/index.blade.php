@@ -52,7 +52,7 @@
   <div class="row m-0">
     <!-- Count item widget-->
     <div class="col"> 
-      <div class="wrapper count-title" style="background:linear-gradient(40deg,#D4524B, #EEAA2F) !important">
+      <div class="wrapper count-title border border-white" style="background:linear-gradient(40deg,#ABD5E1, #bdebf7) !important">
         <div class="icon"><i class="dripicons-graph-bar" ></i></div>
         <div class="name"><strong >Sales</strong></div>
         <div class="count-number revenue-data">00.00</div>
@@ -60,7 +60,7 @@
     </div>
      <!-- Count item widget-->
      <div class="col">
-      <div class="wrapper count-title" style="background:linear-gradient(40deg,#B58675, #ffcbb8) !important;">
+      <div class="wrapper count-title border border-white" style="background:linear-gradient(40deg,#F7A733, #F7A733) !important;">
         <div class="icon"><i class="dripicons-media-loop" ></i></div>
         <div class="name"><strong >Purchase</strong></div>
         <div class="count-number purchase-data">00.00</div>
@@ -69,16 +69,16 @@
 
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title" style="background:linear-gradient(40deg,#7BC0C9, #bdf5fc) !important;">
-        <div class="icon"><i class="dripicons-media-loop" ></i></div>
-        <div class="name"><strong >Expense</strong></div>
+      <div class="wrapper count-title border border-white" style="background:linear-gradient(40deg,#36282C, #36282C) !important;">
+        <div class="icon text-white"><i class="dripicons-media-loop" ></i></div>
+        <div class="name text-white"><strong >Expense</strong></div>
         <div class="count-number expense-data">00.00</div>
       </div>
     </div>
     
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title" style="background:linear-gradient(40deg,#EEAA2F, #f6d495) !important;">
+      <div class="wrapper count-title border border-white" style="background:linear-gradient(40deg,#FDD455, #FDD455) !important;">
         <div class="icon"><i class="dripicons-return" ></i></div>
         <div class="name"><strong >Sale Return</strong></div>
         <div class="count-number return-data">00.00</div>
@@ -86,7 +86,7 @@
     </div>
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title"  style="background:linear-gradient(40deg,#D4524B, #fba29e) !important;">
+      <div class="wrapper count-title border border-white"  style="background:linear-gradient(40deg,#EFE9D3, #eee) !important;">
         <div class="icon"><i class="dripicons-media-loop" ></i></div>
         <div class="name"><strong >Purchase Return</strong></div>
         <div class="count-number purchase_return-data">00.00</div>
@@ -94,9 +94,9 @@
     </div> 
     <!-- Count item widget-->
     <div class="col">
-      <div class="wrapper count-title" style="background:linear-gradient(40deg,#28a745, #17a2b8) !important">
-        <div class="icon"><i class="dripicons-trophy"></i></div>
-        <div class="name"><strong>Profit</strong></div>
+      <div class="wrapper count-title border border-white" style="background:linear-gradient(40deg,#1F4A23, #1F4A23) !important">
+        <div class="icon text-white"><i class="dripicons-trophy"></i></div>
+        <div class="name text-white"><strong>Profit</strong></div>
         <div class="count-number profit-data">00.00</div>
       </div>
     </div>
@@ -457,14 +457,14 @@
             <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-graph-bar" style="color: #0095ff"></i></div>
-                <div class="name"><strong style="color: #22B075">Sales</strong></div>
+                <div class="name"><strong style="color: #204A24">Sales</strong></div>
                 <div class="count-number revenue-data">00.00</div>
               </div>
             </div>
              <!-- Count item widget-->
              <div class="col">
               <div class="wrapper count-title text-center">
-                <div class="icon"><i class="dripicons-media-loop" style="color: #22B075"></i></div>
+                <div class="icon"><i class="dripicons-media-loop" style="color: #204A24"></i></div>
                 <div class="name"><strong style="color: #0095ff">Purchase</strong></div>
                 <div class="count-number purchase-data">00.00</div>
               </div>
@@ -474,7 +474,7 @@
             <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div>
-                <div class="name"><strong style="color: #22B075">Expense</strong></div>
+                <div class="name"><strong style="color: #204A24">Expense</strong></div>
                 <div class="count-number expense-data">00.00</div>
               </div>
             </div>
@@ -482,7 +482,7 @@
             <!-- Count item widget-->
             <div class="col">
               <div class="wrapper count-title text-center">
-                <div class="icon"><i class="dripicons-return" style="color: #22B075"></i></div>
+                <div class="icon"><i class="dripicons-return" style="color: #204A24"></i></div>
                 <div class="name"><strong style="color: #0095ff">Sale Return</strong></div>
                 <div class="count-number return-data">00.00</div>
               </div>
@@ -491,7 +491,7 @@
             <div class="col">
               <div class="wrapper count-title text-center">
                 <div class="icon"><i class="dripicons-media-loop" style="color: #0095ff"></i></div>
-                <div class="name"><strong style="color: #22B075">Purchase Return</strong></div>
+                <div class="name"><strong style="color: #204A24">Purchase Return</strong></div>
                 <div class="count-number purchase_return-data">00.00</div>
               </div>
             </div>
@@ -500,7 +500,7 @@
             <!-- Count item widget-->
             <div class="col">
               <div class="wrapper count-title text-center">
-                <div class="icon"><i class="dripicons-trophy" style="color: #22B075"></i></div>
+                <div class="icon"><i class="dripicons-trophy" style="color: #204A24"></i></div>
                 <div class="name"><strong style="color: #0095ff">Profit</strong></div>
                 <div class="count-number profit-data">00.00</div>
               </div>
