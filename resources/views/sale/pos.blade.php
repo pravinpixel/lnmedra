@@ -61,6 +61,11 @@
         border-radius: 0.25rem;
         margin: 0 10px !important
     }
+    .btn-info {
+        background:  #ABD5E1 !important;
+        border-color:  #ABD5E1 !important;
+        color: #272524 !important
+    }
 </style>
 @php
     if($lims_pos_setting_data)
@@ -234,11 +239,11 @@
         </div>
     </div>
 <!-- Side Navbar -->
-<header class="header m-0 bg-primary text-white " style="border-bottom: 2px solid #272524">
+<header class="header m-0 bg-dark text-white " style="border-bottom: 2px solid #272524">
     <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg bg-primary text-white">
+        <nav class="navbar navbar-expand-lg bg-dark text-white">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ asset('logo/logo_two_white.png') }}" height="40" >
+                <img src="{{ asset('logo/logo_dark.png') }}" height="40" style="transform: scale(1.3);" >
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -1072,10 +1077,10 @@
             <div>
                 <div class="p-3">  
                     <div class="m-0 card form-group border-0">
-                        <div class="border border-info border-top-0" style="min-height: 58vh;background:linear-gradient(#fffffff8, #fffffff8) , url('{{ asset('public/logo/logo_bg.png') }}');background-size: cover;background-position-y: -135px;">
+                        <div class="border border-success border-top-0" style="min-height: 58vh;background:linear-gradient(#fffffff8, #fffffff8) , url('{{ asset('public/logo/logo_two.png') }}');background-size: cover;background-position-y: -135px;">
                             <table id="myTable" class="table order-list m-0 border-0" style="border: none !important">
                                 <thead>
-                                    <tr class="text-white bg-info border border-info">
+                                    <tr class="text-white bg-success border border-success">
                                         <td colspan="6" style="padding: 0 !important" class="text-center"><b>Order Table</b></td>
                                     </tr>
                                     <tr>
@@ -1137,23 +1142,23 @@
                         </div>
                     </div>
                     <div class="col-12 totals p-0 shadow" >
-                        <div class="row m-0">
-                            <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0 border-right-0">
+                        <div class="row m-0 bg-white">
+                            <div class="col-sm-4 d-flex justify-content-between border border border-success border-top-0 border-right-0">
                                 <span class="totals-title">{{trans('file.Items')}}</span><b id="item">0</b>
                             </div>
-                            <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0 border-right-0">
+                            <div class="col-sm-4 d-flex justify-content-between border border border-success border-top-0 border-right-0">
                                 <span class="totals-title">{{trans('file.Total')}}</span><b id="subtotal">0.00</b>
                             </div>
-                            <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0">
+                            <div class="col-sm-4 d-flex justify-content-between border border border-success border-top-0">
                                 <span class="totals-title">{{trans('file.Discount')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#order-discount-modal"> <i class="dripicons-document-edit"></i></button></span><b id="discount">0.00</b>
                             </div>
-                            <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0 border-right-0">
+                            <div class="col-sm-4 d-flex justify-content-between border border border-success border-top-0 border-right-0">
                                 <span class="totals-title">{{trans('file.Coupon')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#coupon-modal"><i class="dripicons-document-edit"></i></button></span><b id="coupon-text">0.00</b>
                             </div>
-                            <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0 border-right-0">
+                            <div class="col-sm-4 d-flex justify-content-between border border border-success border-top-0 border-right-0">
                                 <span class="totals-title">{{trans('file.Tax')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#order-tax"><i class="dripicons-document-edit"></i></button></span><b id="tax">0.00</b>
                             </div>
-                            <div class="col-sm-4 d-flex justify-content-between border border border-info border-top-0">
+                            <div class="col-sm-4 d-flex justify-content-between border border border-success border-top-0">
                                 <span class="totals-title">{{trans('file.Shipping')}} <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#shipping-cost-modal"><i class="dripicons-document-edit"></i></button></span><b id="shipping-cost">0.00</b>
                             </div>
                         </div>
@@ -1233,7 +1238,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mx-0 shadow" style="background: #0c324c !important">
+                    <div class="mx-0 shadow bg-dark">
                         <div class="row m-0  p-0 ">
                             <div class="col p-0">
                                 <button type="button" class="h-100 h3 text-white w-100  rounded-0 btn btn-info payment-btn" data-toggle="modal"  id="paypal-btn">
@@ -1276,10 +1281,10 @@
                 </div>
                 <div class="row m-0 align-items-center">
                     <div class="btn-group col-10 mt-3  p-0">
-                        <span class="btn btn-sm w-100 btn-danger" id="featured-filter">{{trans('file.Featured')}}</span>
-                        <span class="btn btn-sm w-100 btn-success" id="top-sale-filter">{{trans('file.Top Sale')}}</span>
-                        <span class="btn btn-sm w-100 btn-info " id="category-filter">{{trans('file.category')}}</span>
-                        <span class="btn btn-sm w-100 btn-primary" id="brand-filter">{{trans('file.Brand')}}</span>
+                        <span class="btn btn-sm w-100 btn-success" id="featured-filter">{{trans('file.Featured')}}</span>
+                        <span class="btn btn-sm w-100 btn-info" id="top-sale-filter">{{trans('file.Top Sale')}}</span>
+                        <span class="btn btn-sm w-100 btn-warning " id="category-filter">{{trans('file.category')}}</span>
+                        <span class="btn btn-sm w-100 btn-dark" id="brand-filter">{{trans('file.Brand')}}</span>
                         
                     </div>
                     <div class="btn-group col mt-3 text-right">
@@ -3007,7 +3012,7 @@ function addNewProduct(data){
     pos = product_code.indexOf(data[1]);
     cols += `
         <td style="text-align:left;padding:0 0 0 15px !important" class=" product-title">
-            <button type="button" class="edit-product btn btn-sm text-info btn-link" data-toggle="modal" data-target="#editModal">
+            <button type="button" class="edit-product btn btn-sm text-success btn-link" data-toggle="modal" data-target="#editModal">
                 <strong >${data[0]}</strong>
             </button> - ${data[1]} 
         </td>

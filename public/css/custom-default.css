@@ -4,6 +4,7 @@ nav.navbar a.menu-btn:hover {
 
 .pos-page .container-fluid {
 	padding: 0 15px;
+	
 }
 
 .side-navbar {
@@ -740,7 +741,7 @@ nav.navbar .nav-item li.notifications a i{
 }
 
 .buttons-csv {
-	background: #ffc107;
+	background: #F7A733;
 	border: none;
 }
 
