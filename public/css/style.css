@@ -1,9 +1,9 @@
-@font-face {
+/* @font-face {
   font-family: LNMFont;
   src:  url('../../public/fonts/zAesthet-Bold.otf');
-}
+} */
 body {
-  font: LNMFont
+  /* font: LNMFont */
 }
 .logo-container{
     width: 100px;

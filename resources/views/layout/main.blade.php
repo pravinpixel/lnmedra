@@ -14,7 +14,7 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap.css') ?>" type="text/css">
 
-    <style>@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;900&display=swap');</style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;700;800;900&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="preload" href="<?php echo asset('vendor/bootstrap-toggle/css/bootstrap-toggle.min.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="<?php echo asset('vendor/bootstrap-toggle/css/bootstrap-toggle.min.css') ?>" rel="stylesheet"></noscript>
@@ -33,8 +33,8 @@
     <link rel="preload" href="<?php echo asset('vendor/dripicons/webfont.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="<?php echo asset('vendor/dripicons/webfont.css') ?>" rel="stylesheet"></noscript>
     <!-- Google fonts - Roboto -->
-    <link rel="preload" href="https://fonts.googleapis.com/css?family=Nunito:400,500,700" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css?family=Nunito:400,500,700" rel="stylesheet"></noscript>
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Outfit:400,500,700" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css?family=Outfit:400,500,700" rel="stylesheet"></noscript>
     <!-- jQuery Circle-->
     <link rel="preload" href="<?php echo asset('css/grasp_mobile_progress_circle-1.0.0.min.css') ?>" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript><link href="<?php echo asset('css/grasp_mobile_progress_circle-1.0.0.min.css') ?>" rel="stylesheet"></noscript>
@@ -785,7 +785,7 @@
               <a id="toggle-btn" href="#" class="btn-pos rounded-pill"><i class="fa fa-bars"> </i></a>
               <span class="brand-big">
                 <?php $site_title = DB::table('general_settings')->select('site_title')->first(); ?>
-                <a href="{{url('/')}}"><h2 style="font-weight: bold !important;font-family: 'Work Sans', sans-serif;">{{$site_title->site_title}} | Sales & POS Management</h2></a>
+                <a href="{{url('/')}}"><h2 style="font-weight: bold !important;font-family: 'Outfit', sans-serif;">{{$site_title->site_title}} | Sales & POS Management</h2></a>
               </span>
            
               <ul class="nav-menu list-unstyled d-flex flex-md-row align-items-md-center">

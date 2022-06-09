@@ -13,8 +13,8 @@
     <!-- Bootstrap CSS-->
     <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap.css') ?>" type="text/css">
     <!-- Google fonts - Roboto -->
-    <link rel="preload" href="https://fonts.googleapis.com/css?family=Nunito:400,500,700" as="style" onload="this.onload=null;this.rel='stylesheet'">
-    <noscript><link href="https://fonts.googleapis.com/css?family=Nunito:400,500,700" rel="stylesheet"></noscript>
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Outfit:400,500,700" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link href="https://fonts.googleapis.com/css?family=Outfit:400,500,700" rel="stylesheet"></noscript>
     <!-- theme stylesheet-->
     <link rel="stylesheet" href="<?php echo asset('css/style.default.css') ?>" id="theme-stylesheet" type="text/css">
     <!-- Custom stylesheet - for your changes-->
@@ -40,7 +40,7 @@
           <div class="w-100">
             <div class="text-center">
               <img src="{{ asset('public/logo/logo_two.png') }}" width="180px">
-              <h3 style="text-transform:uppercase;font-weight: bold !important;font-family: 'Work Sans', sans-serif;font-size:2.5rem" class="my-4">
+              <h3 style="text-transform:uppercase;font-weight: bold !important;font-family: 'Outfit', sans-serif;font-size:2.5rem" class="my-4">
                 Sign in
               </h3>
             </div>
