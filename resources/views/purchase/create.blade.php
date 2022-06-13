@@ -582,37 +582,37 @@ $("#supplier_id").val($("#defaultSupplier").val());
         if($("#defaultSupplier").val() == $(this).val()) {
             return false;
         }
-        $.ajax({
-            type: 'GET',
-            url: 'supplier_search',
-            data: {
+        // $.ajax({
+        //     type: 'GET',
+        //     url: 'supplier_search',
+        //     data: {
                
-                supplierId:$(this).val()
-            },
-            success: function(data) {
-                if(data.length>0){
-                    console.log(lims_product_code)
-                lims_product_code.length = 0;
+        //         supplierId:$(this).val()
+        //     },
+        //     success: function(data) {
+        //         if(data.length>0){
+        //             console.log(lims_product_code)
+        //         lims_product_code.length = 0;
       
             
-                    for(var i=0;i<data.length;i++)
-                    {
-                        lims_product_code.push((data[i].code +' (' + data[i].name + ')'));
-                    }
-                lims_product_code.map((item) => {
-                    productSearch(item);
-                });
-                    console.log(lims_product_code);
-                    return false;
-                }
-                else(data.length)
-                {
-                    Alert("warning","Product is not avaialable in the selected supplier")
-                }
+        //             for(var i=0;i<data.length;i++)
+        //             {
+        //                 lims_product_code.push((data[i].code +' (' + data[i].name + ')'));
+        //             }
+        //         lims_product_code.map((item) => {
+        //             productSearch(item);
+        //         });
+        //             console.log(lims_product_code);
+        //             return false;
+        //         }
+        //         else(data.length)
+        //         {
+        //             Alert("warning","Product is not avaialable in the selected supplier")
+        //         }
                 
                
-            }
-        });
+        //     }
+        // });
     })
     
     function productSearch(data) {
@@ -656,7 +656,7 @@ $("#supplier_id").val($("#defaultSupplier").val());
                         if(defaulr_supplier_id == supplier_id) {
                             cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" required/></td>';
                         } else {
-                            cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" max="'+data['actual_qty']+'" required/></td>';
+                            cols += '<td style="padding: 0 !important; text-align:center !important"><input type="number" class="form-control qty" name="qty[]" value="1" step="any" max="'+data['ln_qty']+'" required/></td>';
                         }
                         cols += '<input type="hidden" class="form-control" name="vendor_product_id[]"  step="any" value="'+data['vendor_product_id']+'" required/>';
                         if($('select[name="status"]').val() == 1)
