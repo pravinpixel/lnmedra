@@ -1432,5 +1432,15 @@ class VendorProductController extends Controller
        return response(['status' => true, 'data' => $lims_product_data]);
     }
 
+    public function ImportByCsv()
+    {   
+        return view('vendorproduct.import-by-csv');
+    }
+
+    public function Import(Request $request)
+    {
+        
+    }
+
 }
     

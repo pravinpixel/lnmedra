@@ -729,5 +729,9 @@ return [
 	"Rejected" => "Rejected",
 	"Select" => "Select",
 	"All" => "All",
+	"import_quantity_by_csv" => "Import Quantity By CSV",
+	"Download File" => "Download File",
+	"vendor" => "Vendor",
+	"export" => "Export",
 ];
 ?>

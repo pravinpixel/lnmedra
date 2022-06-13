@@ -390,5 +390,12 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('/home', 'HomeController@index')->name('home');
 	Route::get('my-transactions/{year}/{month}', 'HomeController@myTransaction');
 	Route::post('dashboard-sortable-order', 'HomeController@DashboardSortableOrder')->name('dashboard-sortable-order');
+
+
+	//vendor
+	Route::get('vendor-products/import-quantity-by-csv', 'VendorProductController@ImportByCsv')->name('vendorproducts.import-quantity-by-csv');
+	
+	Route::get('vendor-products/import', 'VendorProductController@Import')->name('vendorproducts.import');
+
 });
 

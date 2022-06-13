@@ -1,10 +1,11 @@
 @php
-    $find       =  ['vendorproducts.edit', 'customer.edit' ,"product.printBarcode","sales.edit","all-vendor-products-list", "welcome_dashboard",".create", ".index", "vendorproducts " , "customer_group ", "setting.general" , "master-attribute"];
-    $replace    =  ['Vendor products / Update','customer / Update', "Product / Print Barcode","Sales / Edit","vendor / all products list", "Weolcome ".Auth::user()->name." !"," / Add", " / List", "vendor products ", "customer group ", "general setting" , "master attribute"];
+    $find       =  ['vendorproducts.import-quantity-by-csv','vendorproducts.edit', 'customer.edit' ,"product.printBarcode","sales.edit","all-vendor-products-list", "welcome_dashboard",".create", ".index", "vendorproducts " , "customer_group ", "setting.general" , "master-attribute"];
+    $replace    =  ['Vendorproducts / Import Quantity By Csv','Vendor products / Update','customer / Update', "Product / Print Barcode","Sales / Edit","vendor / all products list", "Weolcome ".Auth::user()->name." !"," / Add", " / List", "vendor products ", "customer group ", "general setting" , "master attribute"];
     $route      =  str_replace($find, $replace, Route::currentRouteName());
 
     // ========== For Section Titles ========
     $find_title     =   [
+                            'vendorproducts.import-quantity-by-csv',
                             'customer.index', 'customer.edit','customer.create',
                             'sales.index' ,'sales.edit' ,'sales.create','coupons.index',
                             'stock-count.index','category.index','products.index','products.edit',
@@ -17,6 +18,7 @@
                         ];
 
     $replace_title  =   [
+                            'Vendorproducts / Import Quantity By Csv',
                             'customer listing table', "Update Customer Details",'add new customer',
                             'sales listing table', 'Update Sale Details','add new sale','coupons list',
                             'stock counts list','product category list','product listing table','update products details',
