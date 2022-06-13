@@ -2066,13 +2066,13 @@ button {
     line-height: 1.5
 }
 
-body {
+body , main{
     font-family: 'Outfit', sans-serif;
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
     color: #303030;
-    background-color: #fafbfe
+    background-color: #EFE9D4
 }
 
 a:focus,

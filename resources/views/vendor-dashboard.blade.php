@@ -1,10 +1,9 @@
 @extends('layout.main') @section('content')
 @section('content') 
-
     <div class="container-fluid">
-        <div class="col-md-8 mb-3 my-4 mx-auto">
+        <div class="col-md-8 mb-3 my-4 mx-auto card card-body">
             <div class="row align-items-center">
-            <div class="col text-end">Choose the date period</div>
+            <div class="col text-end lead">Choose the Date Period</div>
             <div class="col d-flex p-0">
                 <input type="date" name="fromDate" id="fromDate" class="form-control mx-1">
                 <input type="date" name="toDate" id="toDate" class="form-control mx-1">
@@ -17,26 +16,26 @@
                 <h3 class="mb-3">Sales</h3>
             </div>
             <div class="col-4">
-                <div class="card">
+                <div class="card" style="background:linear-gradient(40deg,#ABD5E1, #bdebf7) !important">
                     <div class="card-body">
-                        <span class="text-info h3 m-0"><strong>Sales</strong></span>
+                        <span class="text-primary"><strong>Sales</strong></span>
                         <div class="float-right laed h1">{{ $saleTotal }}</div>
                     </div>
                 </div>
             </div>
             <div class="col-4">
-                <div class="card">
+                <div class="card" style="background:linear-gradient(40deg,#F7A733, #F7A733) !important;">
                     <div class="card-body">
-                        <span class="text-info h3 m-0"><strong>Paid</strong></span>
+                        <span class="text-primary"><strong>Paid</strong></span>
                         <div class="float-right laed h1">{{ $paymentReceived }}</div>
                     </div>
                 </div>
             </div>
             <div class="col-4">
-                <div class="card">
+                <div class="card" style="background:linear-gradient(40deg,#36282C, #36282C) !important;">
                     <div class="card-body">
-                        <span class="text-info h3 m-0"><strong>To Be Paid</strong></span>
-                        <div class="float-right laed h1">{{ $toBePaid }}</div>
+                        <span class="text-white"><strong>To Be Paid</strong></span>
+                        <div class="float-right text-whitelaed h1">{{ $toBePaid }}</div>
                     </div>
                 </div>
             </div>
@@ -44,33 +43,33 @@
                 <h3 class="mb-3">Products</h3>
             </div>
             <div class="col-3">
-                <div class="card">
+                <div class="card" style="background:linear-gradient(40deg,#FDD455, #FDD455) !important;">
                     <div class="card-body">
-                        <span class="text-info h3 m-0"><strong>Products</strong></span>
+                        <span class="text-primary"><strong>Products</strong></span>
                         <div class="float-right laed h1">{{ $product }}</div>
                     </div>
                 </div>
             </div>
             <div class="col-3">
-                <div class="card">
+                <div class="card border border-light" style="background:linear-gradient(40deg,#EFE9D3, #eee) !important;">
                     <div class="card-body">
-                        <span class="text-info h3 m-0"><strong>Approved</strong></span>
+                        <span class="text-primary"><strong>Approved</strong></span>
                         <div class="float-right laed h1">{{ $approved }}</div>
                     </div>
                 </div>
             </div>
             <div class="col-3">
-                <div class="card">
+                <div class="card" style="background:linear-gradient(40deg,#1F4A23, #1F4A23) !important">
                     <div class="card-body">
-                        <span class="text-info h3 m-0"><strong>Pending</strong></span>
-                        <div class="float-right laed h1">{{ $pending }}</div>
+                        <span class="text-white"><strong>Pending</strong></span>
+                        <div class="float-right text-white laed h1">{{ $pending }}</div>
                     </div>
                 </div>
             </div>
             <div class="col-3">
-                <div class="card">
+                <div class="card" style="background:linear-gradient(40deg,#ABD5E1, #bdebf7) !important">
                     <div class="card-body">
-                        <span class="text-info h3 m-0"><strong>Rejected</strong></span>
+                        <span class="text-primary"><strong>Rejected</strong></span>
                         <div class="float-right laed h1">{{ $rejected }}</div>
                     </div>
                 </div>
