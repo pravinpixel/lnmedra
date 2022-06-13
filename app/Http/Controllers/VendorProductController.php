@@ -971,6 +971,15 @@ class VendorProductController extends Controller
                                     ->leftJoin('brands','brands.id','=','products.brand_id')
                                     ->leftJoin('categories','categories.id','=','products.category_id')
                                     ->leftJoin('product_types','product_types.id','=','products.type')
+                                    ->when(!empty($searchValue), function($q) use($searchValue){
+                                        $q->where('products.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('categories.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('brands.title', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('product_types.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('vendor_products.qty', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('vendor_products.price', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('products.code', 'like', '%' .$searchValue. '%');
+                                    })
                                     ->get()
                                     ->count();
 
@@ -1116,6 +1125,15 @@ class VendorProductController extends Controller
                                     ->when(!empty(request('brand_id')), function($q){
                                         $q->where('brands.id',request('brand_id'));
                                     })
+                                    ->when(!empty($searchValue), function($q) use($searchValue){
+                                        $q->where('products.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('categories.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('brands.title', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('product_types.name', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('vendor_products.qty', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('vendor_products.price', 'like', '%' .$searchValue. '%')
+                                        ->orWhere('products.code', 'like', '%' .$searchValue. '%');
+                                    })
                                     ->get()
                                     ->count();
 
@@ -1223,7 +1241,7 @@ class VendorProductController extends Controller
                 }
                 $response = array(
                     "draw" => intval($draw),
-                    "recordsTotal" => $totalRecords,
+                    "recordsTotal" => $records->count(),
                     "recordsFiltered" => $totalRecords,
                     "aaData" => $data_arr
                 );
