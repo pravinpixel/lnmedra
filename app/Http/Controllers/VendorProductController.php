@@ -1223,8 +1223,8 @@ class VendorProductController extends Controller
                 }
                 $response = array(
                     "draw" => intval($draw),
-                    "iTotalRecords" => $totalRecords,
-                    "iTotalDisplayRecords" => $records->count(),
+                    "recordsTotal" => $totalRecords,
+                    "recordsFiltered" => $totalRecords,
                     "aaData" => $data_arr
                 );
                 echo json_encode($response);
