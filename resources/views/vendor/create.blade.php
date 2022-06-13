@@ -87,7 +87,7 @@
     </style>
   </head>
 
-  <body   style="min-height: 100vh;background:linear-gradient(#000000c4,#00000070) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover ">
+  <body   style="min-height: 100vh;background:linear-gradient(30deg,#efe9d4af,#EFE9D4) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover ">
 
     {{-- <header class="header">
         <nav class="navbar" style="background: #00000062">
@@ -150,7 +150,8 @@
             <div class="container align-items-center d-flex justify-content-center " style="min-height: 90vh">
                 <div class="row m-0 bg-white align-items-center  rounded-pill" >
                     <div class="col-md-4 border-right text-center">
-                        <img src="{{url('public/logo', $general_setting->site_logo)}}" width="250px" class="mx-auto">
+                        <img src="{{url('public/logo/logo_two.png')}}" width="250px" class="mx-auto">
+                        {{-- <img src="{{url('public/logo', $general_setting->site_logo)}}" width="250px" class="mx-auto"> --}}
                     </div>
                     <div class="col-md-8 p p-0 py-4" >
                         <div class="cardx">
@@ -363,9 +364,7 @@
                 </div>
             </div>
         </section>
-
-
-        
+ 
 
         <div style="display:none" id="content" class="animate-bottom">
             @yield('content')
