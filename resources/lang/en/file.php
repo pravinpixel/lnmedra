@@ -616,6 +616,7 @@ return [
 	"contact_person"=>"Contact Person",
 	"gst"=>"GST",
 	"entity_name"=>"Entity Name",
+	"pan_no"=>"Pan No",
 	"Bank Name"=>"Bank Name",
 	"Bank Info"=>"Bank Info",
 	"Message" => "Message",

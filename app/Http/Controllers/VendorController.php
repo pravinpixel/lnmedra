@@ -27,6 +27,9 @@ class VendorController extends Controller
     public function vendorRegister(Request $request)
     {
         // print_r($request->all());die();
+        $attributeNames = array(
+            'entity_name'  => 'Pan No',
+        );
         $this->validate($request, [
             'company_name' => [
                 'max:255',
@@ -42,8 +45,9 @@ class VendorController extends Controller
             ],
             'email' => 'required|email|max:255|unique:suppliers,email|regex:/(.+)@(.+)\.(.+)/i',
             'phone_number' => 'required|digits:10|unique:suppliers,phone_number|min:5',
+            'entity_name' => 'required|min:10'
          
-        ]);
+        ],[],$attributeNames);
         
         $lims_supplier_data = $request->all();
         $lims_supplier_data['is_active'] = true;
