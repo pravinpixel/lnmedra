@@ -264,7 +264,7 @@
 
                       @if(userHasAccess('vendor-approval-index'))
                       <li id="vendorproduct-product-list-menu"><a href="{{route('all-vendor-products-list')}}">{{__('file.vendor_product_list')}}</a></li>
-                      <li id="vendorproduct-product-list-menu"><a href="{{route('all-vendor-products-list')}}">{{__('file.import_quantity_by_csv')}}</a></li>
+                   
                       @endif
                   
                     </ul>

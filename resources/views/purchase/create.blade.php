@@ -591,7 +591,6 @@ $("#supplier_id").val($("#defaultSupplier").val());
         //     },
         //     success: function(data) {
         //         if(data.length>0){
-        //             console.log(lims_product_code)
         //         lims_product_code.length = 0;
       
             
@@ -602,15 +601,15 @@ $("#supplier_id").val($("#defaultSupplier").val());
         //         lims_product_code.map((item) => {
         //             productSearch(item);
         //         });
-        //             console.log(lims_product_code);
+                    
         //             return false;
         //         }
         //         else(data.length)
         //         {
         //             Alert("warning","Product is not avaialable in the selected supplier")
         //         }
-                
-               
+
+        
         //     }
         // });
     })
@@ -627,8 +626,7 @@ $("#supplier_id").val($("#defaultSupplier").val());
                 supplierId:supplier_id
             },
             success: function(data) {
-               
-                console.log(data);
+          
                 var flag = 1;
                 if(data != "false"){
 

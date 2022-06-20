@@ -318,8 +318,8 @@ class PurchaseController extends Controller
             $lims_supplier_list = User::where('is_active', true)->whereNotNull('vendor_id')->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
-            $lims_product_list_without_variant = $this->productWithoutVariant();
-            $lims_product_list_with_variant = $this->productWithVariant();
+            $lims_product_list_without_variant = [];//$this->productWithoutVariant();
+            $lims_product_list_with_variant = [];//$this->productWithVariant();
             return view('purchase.create', compact('lims_supplier_list', 'lims_warehouse_list', 'lims_tax_list', 'lims_product_list_without_variant', 'lims_product_list_with_variant'));
         }
         else
@@ -399,9 +399,9 @@ class PurchaseController extends Controller
         // }
         
         // print_r($lims_product_data->cost);die();
-        if($lims_product_data->price == ''|| Null){
-            return "false";
-        }
+        if( $lims_product_data->price != '' && !is_null($lims_product_data->price)  && $lims_product_data->price != 0 ) {
+           
+   
         $product[] = $lims_product_data->name;
         if($lims_product_data->is_variant)
             $product[] = $lims_product_data->item_code;
@@ -456,14 +456,14 @@ class PurchaseController extends Controller
             $product['vendor_product_id'] = $lims_product_data->vendor_product_id;
             $product['actual_qty'] = $lims_product_data->actual_qty;
         }
-      
-        return $product;
+    }
+    return $product ?? false;
     }
 
     public function store(Request $request)
     {
         $data = $request->except('document');
-       
+        
         // print_r( $data['product_id']);die();
         $data['user_id'] = Auth::id();
         $data['reference_no'] = 'pr-' . date("Ymd") . '-'. date("his");
