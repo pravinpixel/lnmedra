@@ -582,36 +582,36 @@ $("#supplier_id").val($("#defaultSupplier").val());
         if($("#defaultSupplier").val() == $(this).val()) {
             return false;
         }
-        // $.ajax({
-        //     type: 'GET',
-        //     url: 'supplier_search',
-        //     data: {
+        $.ajax({
+            type: 'GET',
+            url: 'supplier_search',
+            data: {
                
-        //         supplierId:$(this).val()
-        //     },
-        //     success: function(data) {
-        //         if(data.length>0){
-        //         lims_product_code.length = 0;
+                supplierId:$(this).val()
+            },
+            success: function(data) {
+                if(data.length>0){
+                lims_product_code.length = 0;
       
             
-        //             for(var i=0;i<data.length;i++)
-        //             {
-        //                 lims_product_code.push((data[i].code +' (' + data[i].name + ')'));
-        //             }
-        //         lims_product_code.map((item) => {
-        //             productSearch(item);
-        //         });
+                    for(var i=0;i<data.length;i++)
+                    {
+                        lims_product_code.push((data[i].code +' (' + data[i].name + ')'));
+                    }
+                // lims_product_code.map((item) => {
+                //     productSearch(item);
+                // });
                     
-        //             return false;
-        //         }
-        //         else(data.length)
-        //         {
-        //             Alert("warning","Product is not avaialable in the selected supplier")
-        //         }
+                    return false;
+                }
+                else(data.length)
+                {
+                    Alert("warning","Product is not avaialable in the selected supplier")
+                }
 
         
-        //     }
-        // });
+            }
+        });
     })
     
     function productSearch(data) {

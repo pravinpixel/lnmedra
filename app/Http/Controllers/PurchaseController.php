@@ -457,7 +457,8 @@ class PurchaseController extends Controller
             $product['actual_qty'] = $lims_product_data->actual_qty;
         }
     }
-    return $product ?? false;
+    
+    return $product ?? 'false';
     }
 
     public function store(Request $request)
