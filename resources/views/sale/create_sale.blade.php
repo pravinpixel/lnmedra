@@ -1845,7 +1845,7 @@ $('.category-img').on('click', function(){
             $('table.product-list').show(500);
         }
         else{
-            tableData += '<td class="text-center">No data avaialable</td></tr></tbody></table>'
+            tableData += '<td class="text-center">No data available</td></tr></tbody></table>'
             $(".table-container").html(tableData);
         }
     });
@@ -1901,7 +1901,7 @@ $('.brand-img').on('click', function(){
             $('table.product-list').show(500);
         }
         else{
-            tableData += '<td class="text-center">No data avaialable</td></tr></tbody></table>'
+            tableData += '<td class="text-center">No data available</td></tr></tbody></table>'
             $(".table-container").html(tableData);
         }
     });
@@ -1947,7 +1947,7 @@ $('#featured-filter').on('click', function(){
             $('table.product-list').show(500);
         }
         else{
-            tableData += '<td class="text-center">No data avaialable</td></tr></tbody></table>'
+            tableData += '<td class="text-center">No data available</td></tr></tbody></table>'
             $(".table-container").html(tableData);
         }
     });
@@ -2069,7 +2069,7 @@ $(document).on('click', '.product-img', function(){
         data = data.split(" ");
         pos = product_code.indexOf(data[0]);
         if(pos < 0)
-            alert('Product is not avaialable in the selected warehouse');
+            alert('Product is not available in the selected warehouse');
         else{
            productSearch(data[0]);
         }

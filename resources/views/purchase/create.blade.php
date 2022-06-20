@@ -606,7 +606,7 @@ $("#supplier_id").val($("#defaultSupplier").val());
                 }
                 else(data.length)
                 {
-                    Alert("warning","Product is not avaialable in the selected supplier")
+                    Alert("warning","Product is not available in the selected supplier")
                 }
 
         

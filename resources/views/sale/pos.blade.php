@@ -2479,7 +2479,7 @@ function populateProduct(data) {
         $('table.product-list').show(500);
     }
     else{
-        tableData += '<td class="text-center">No data avaialable</td></tr></tbody></table>'
+        tableData += '<td class="text-center">No data available</td></tr></tbody></table>'
         $(".table-container").html(tableData);
     }
 }

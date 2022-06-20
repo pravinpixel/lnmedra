@@ -13,5 +13,5 @@
     </div>
 @endforeach
 @if(count($subcategories) == 0) 
-<p class="text-center mx-auto">No data avaialable</p>
+<p class="text-center mx-auto">No data available</p>
 @endif
