@@ -84,6 +84,19 @@
         .error{
             color: red;
         }
+        .option_parent .text{
+            font-weight: bold !important;
+            text-transform: capitalize;
+            font-size: 15px;
+            
+        }
+        .option_sub .text{
+        
+            text-transform: capitalize;
+            font-size: 15px;
+            
+        }
+
     </style>
   </head>
 
@@ -178,9 +191,16 @@
                                                 <div class="input-group">
                                                 <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins">
                                                   
-                                                    @foreach($category as $key=>$val)
-                                                        <option value="{{$val['id']}}" {{old ('category') == $val['id'] ? 'selected' : ''}}>{{$val['name']}}</option>
+                                                    @foreach($categories as $parentCategory => $category)
+                                                        <option  class="option_parent" disabled>{{$parentCategory}}</option>
+                                                        @if(isset($category)  &&  count($category) > 0 ) 
+                                                            @foreach($category as $key => $item)
+                                                                <option  class="option_sub" value="{{$item->id}}" {{old ('category') == $item->id ? 'selected' : ''}}> &nbsp -  {{$item->name}}</option>
+                                                            @endforeach
+                                                        @endif
                                                     @endforeach
+                                                    
+                                              
                                                 </select>
 
                                             </div>

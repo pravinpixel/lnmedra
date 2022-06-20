@@ -19,9 +19,17 @@ class VendorController extends Controller
 {
     public function vendorregisterview()
     {
-        $category = Category::get()->toArray();
-        // print_r($category);die();
-        return view('vendor.create',compact('category'));
+        $parentCategories = Category::whereNull('parent_id')
+                                    ->get();
+        $subCategories = Category::get()
+                                    ->groupBy('parent_id');
+        $categories = [];        
+        foreach($parentCategories as $parent) {
+            if(!empty($subCategories[$parent->id])){
+                $categories[$parent->name] = $subCategories[$parent->id];
+            }
+        }
+        return view('vendor.create',compact('categories'));
         
     }
     public function vendorRegister(Request $request)
