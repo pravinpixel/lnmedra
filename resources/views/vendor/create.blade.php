@@ -1,20 +1,11 @@
 <?php $general_setting = DB::table('general_settings')->find(1); ?>
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{$general_setting->site_title}}</title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="all,follow">
-    <link rel="manifest" href="{{url('manifest.json')}}"><!DOCTYPE html>
-<html dir="@if( Config::get('app.locale') == 'ar' || $general_setting->is_rtl){{'rtl'}}@endif">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="icon" type="image/png" href="{{url('public/logo', $general_setting->site_logo)}}" />
-    <title>{{$general_setting->site_title}}</title>
+    <title>{{ $general_setting->site_title }}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
@@ -100,7 +91,30 @@
     </style>
   </head>
 
-  <body   style="min-height: 100vh;background:linear-gradient(30deg,#efe9d4af,#EFE9D4) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover ">
+
+        @if (Config::get('app.locale') == 'ar' || $general_setting->is_rtl)
+            <!-- RTL css -->
+            <link rel="stylesheet" href="<?php echo asset('vendor/bootstrap/css/bootstrap-rtl.min.css'); ?>" type="text/css">
+            <link rel="stylesheet" href="<?php echo asset('css/custom-rtl.css'); ?>" type="text/css" id="custom-style">
+        @endif
+        <style>
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            .error {
+                color: red;
+            }
+            .btn.dropdown-toggle {
+                border-radius: 50% !important
+            }
+        </style>
+    </head>
+
+<body
+    style="min-height: 100vh;background:linear-gradient(30deg,#efe9d4af,#EFE9D4) , url('{{ asset('public/images/leaf-bg.jpg') }}');background-size:cover ">
 
     {{-- <header class="header">
         <nav class="navbar" style="background: #00000062">
@@ -110,7 +124,7 @@
                  
               </a>
               <span class="brand-big">
-                @if($general_setting->site_logo)
+                @if ($general_setting->site_logo)
                 <a href="{{url('/')}}"><img src="{{url('public/logo', $general_setting->site_logo)}}" width="115"></a>
                 @else
                   <a href="{{url('/')}}"><h1 class="d-inline">{{$general_setting->site_title}}</h1></a>
@@ -156,25 +170,28 @@
         </nav>
     </header> --}}
     {{-- =========================== --}}
-    <div>
-       
-
-        <section class="forms mx-auto">
-            <div class="container align-items-center d-flex justify-content-center " style="min-height: 90vh">
-                <div class="row m-0 bg-white align-items-center  rounded-pill" >
-                    <div class="col-md-4 border-right text-center">
-                        <img src="{{url('public/logo/logo_two.png')}}" width="250px" class="mx-auto">
-                        {{-- <img src="{{url('public/logo', $general_setting->site_logo)}}" width="250px" class="mx-auto"> --}}
+    <div class="row m-0">
+        <div class="col-md-5 bg-primary p-0 d-md-block d-none" style="height: 100vh;">
+            <img src="{{ asset('public/logo/login_cover.png') }}" style="height: 100%;width:100%;object-fit:cover">
+        </div>
+        <div class="col-md-7" style="height: 100vh; background: #EFE9D3">
+            <img src="{{ asset('public/logo/logo_two.png') }}" width="60px" class="m-3 position-absolute"
+                style="filter: drop-shadow(1px 1px 4px #eee);"> <br><br>
+            <div class="d-flex justify-content-center align-items-center w-100">
+                <div class="w-100">
+                    <div class="text-center">
+                        <img src="{{ asset('public/logo/logo_one.png') }}" width="150px">
+                        <h4 style="text-transform:uppercase;font-weight: bold !important;font-family: 'Outfit', sans-serif;font-size:1.5rem"
+                            class="my-4">
+                            {{ trans('file.Vendor Register') }}
+                        </h4>
                     </div>
-                    <div class="col-md-8 p p-0 py-4" >
-                        <div class="cardx">
-                            <div class="card-header d-flex text-center  align-items-center">
-                                <h1 class="text-center"><strong class="text-center">{{trans('file.Vendor Register')}}</strong></h1>
-                            </div>
-                            <div class="card-body " style="max-height: 70vh;overflow:auto">
-                                <div class="px-3">
-                                    <p class="italic"><small>{{trans('file.The field labels marked with * are required input fields')}}.</small></p>
-                                {!! Form::open(['route' => 'vendor.vendor-register-form','name'=>'vendorForm','id'=>'vendorForm', 'method' => 'post', 'files' => true]) !!}
+                    <div class="card-body " style="max-height: 70vh;overflow:auto">
+                        <div class="px-3">
+                            <p class="italic">
+                                <small>{{ trans('file.The field labels marked with * are required input fields') }}.</small>
+                            </p>
+                            {!! Form::open(['route' => 'vendor.vendor-register-form', 'name' => 'vendorForm', 'id' => 'vendorForm', 'method' => 'post', 'files' => true]) !!}
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -204,19 +221,8 @@
                                                 </select>
 
                                             </div>
-                                            </div>
                                         </div>
-                                    <!-- <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>{{trans('file.Image')}}</label>
-                                            <input type="file" name="image" class="form-control">
-                                            @if($errors->has('image'))
-                                        <span>
-                                            <strong>{{ $errors->first('image') }}</strong>
-                                            </span>
-                                            @endif
-                                        </div>
-                                    </div> -->
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.Mobile')}} *</label>
@@ -234,9 +240,7 @@
                                             @if($errors->has('email'))
                                             <label  class="error" for="email">{{ $errors->first('email') }}</label>
                                             @endif
-                                            <!-- <input type="text" id="txtEmail" onkeyup="ValidateEmail();" /> -->
                                             <span id="lblError" style="color: red"></span>
-                                          
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -251,40 +255,41 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.Address')}} *</label>
-                                            <input type="text" name="address" value="{{old('address')}}" required class="form-control">
+                                            <label>{{ trans('file.Address') }} *</label>
+                                            <input type="text" name="address" value="{{ old('address') }}"
+                                                required class="form-control rounded-pill">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.City')}} *</label>
-                                            <input type="text" name="city" value="{{old('city')}}" required class="form-control">
+                                            <label>{{ trans('file.City') }} *</label>
+                                            <input type="text" name="city" value="{{ old('city') }}"
+                                                required class="form-control rounded-pill">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.State')}}</label>
-                                            <input type="text" name="state" value="{{old('state')}}"   class="form-control">
+                                            <label>{{ trans('file.State') }}</label>
+                                            <input type="text" name="state" value="{{ old('state') }}"
+                                                class="form-control rounded-pill">
                                         </div>
-                                    </div>
-                                    
+                                    </div> 
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.Country')}}</label>
-                                            <input type="text" name="country" value="{{old('country')}}"  class="form-control">
+                                            <label>{{ trans('file.Country') }}</label>
+                                            <input type="text" name="country" value="{{ old('country') }}"
+                                                class="form-control rounded-pill">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.Postal Code')}}</label>
-                                            <input type="text" name="postal_code" value="{{old('postal_code')}}" class="form-control">
+                                            <label>{{ trans('file.Postal Code') }}</label>
+                                            <input type="text" name="postal_code"
+                                                value="{{ old('postal_code') }}" class="form-control rounded-pill">
                                         </div>
-                                    </div>
-                                    
-                                    <div  class="col-md-12">
-                                    <div class="card-header d-flex align-items-center">
-                                        <h4><strong>{{trans('file.Company Info')}}</strong></h4>
-                                    </div>
+                                    </div> 
+                                    <div class="col-md-12 py-3">
+                                        <h4><strong>{{ trans('file.Company Info') }}</strong></h4>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -303,8 +308,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.contact_person')}}</label>
-                                            <input type="text" name="contact_person" value="{{old('contact_person')}}"  class="form-control">
+                                            <label>{{ trans('file.contact_person') }}</label>
+                                            <input type="text" name="contact_person"
+                                                value="{{ old('contact_person') }}" class="form-control rounded-pill">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -316,10 +322,8 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div  class="col-md-12">
-                                    <div class="card-header d-flex align-items-center">
-                                        <h4><strong>{{trans('file.Bank Info')}}</strong></h4>
-                                    </div>
+                                    <div class="col-md-12 py-3">
+                                        <h4><strong>{{ trans('file.Bank Info') }}</strong></h4>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -332,46 +336,266 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.Account No')}}</label>
-                                            <input type="text" name="account_no" value="{{old('account_no')}}" class="form-control">
+                                            <label>{{ trans('file.Account No') }}</label>
+                                            <input type="text" name="account_no"
+                                                value="{{ old('account_no') }}" class="form-control rounded-pill">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.IFS Code')}}</label>
-                                            <input type="text" name="ifs_code" value="{{old('ifs_code')}}" class="form-control">
+                                            <label>{{ trans('file.IFS Code') }}</label>
+                                            <input type="text" name="ifs_code"
+                                                value="{{ old('ifs_code') }}" class="form-control rounded-pill">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.Branch')}}</label>
-                                            <input type="text" name="branch" value="{{old('branch')}}" class="form-control">
+                                            <label>{{ trans('file.Branch') }}</label>
+                                            <input type="text" name="branch" value="{{ old('branch') }}"
+                                                class="form-control rounded-pill">
                                         </div>
-                                    </div>
-                                    {{-- <!-- <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label>{{trans('file.VAT Number')}}</label>
-                                            <input type="text" name="vat_number" class="form-control">
-                                        </div>
-                                    </div> -->
-                                 --}}
-                                
-                                
+                                    </div> 
                                     <div class="col-md-12">
                                         <div class="form-group mt-4">
-                                            <input type="submit" value="{{trans('file.submit')}}" class="btn rounded-pill btn-primary">
+                                            <input type="submit" value="{{ trans('file.submit') }}"
+                                                class="btn rounded-pill btn-primary">
                                         </div>
                                     </div>
+                                    </div>
                                 </div>
-                                </div>
-                                {!! Form::close() !!}
+                            {!! Form::close() !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        {{-- <section class="forms mx-auto">
+            <div class="container align-items-center d-flex justify-content-center " style="min-height: 90vh">
+                <div class="row m-0 bg-white align-items-center  rounded-pill">
+                    <div class="col-md-4 border-right text-center">
+                        <img src="{{ url('public/logo/logo_two.png') }}" width="250px" class="mx-auto">
+                    </div>
+                    <div class="col-md-8 p p-0 py-4">
+                        <div class="cardx">
+                            <div class="card-header d-flex text-center  align-items-center">
+                                <h1 class="text-center"><strong
+                                        class="text-center">{{ trans('file.Vendor Register') }}</strong></h1>
+                            </div>
+                            <div class="card-body " style="max-height: 70vh;overflow:auto">
+                                <div class="px-3">
+                                    <p class="italic">
+                                        <small>{{ trans('file.The field labels marked with * are required input fields') }}.</small>
+                                    </p>
+                                    {!! Form::open(['route' => 'vendor.vendor-register-form', 'name' => 'vendorForm', 'id' => 'vendorForm', 'method' => 'post', 'files' => true]) !!}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.name') }} *</strong> </label>
+                                                    <input type="text" name="name" value="{{ old('name') }}"
+                                                        required class="form-control rounded-pill">
+                                                    @if ($errors->has('name'))
+                                                        <span id="lblError">
+                                                            <strong
+                                                                style="color: red;">{{ $errors->first('name') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.category') }}</strong> </label>
+                                                    <div class="input-group">
+                                                        <select name="category"
+                                                            class="selectpicker form-control @error('type') is-invalid @enderror"
+                                                            title="Select Category..." value="{{ old('category') }}"
+                                                            autocomplete="type" data-live-search="true"
+                                                            data-live-search-style="begins">
+
+                                                            @foreach ($category as $key => $val)
+                                                                <option value="{{ $val['id'] }}"
+                                                                    {{ old('category') == $val['id'] ? 'selected' : '' }}>
+                                                                    {{ $val['name'] }}</option>
+                                                            @endforeach
+                                                        </select>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.Mobile') }} *</label>
+                                                    <input type="number" name="phone_number" min="0"
+                                                        value="{{ old('phone_number') }}" required
+                                                        class="form-control noscroll" />
+                                                    @if ($errors->has('phone_number'))
+                                                        <span>
+                                                            <strong
+                                                                style="color: red;">{{ $errors->first('phone_number') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.Email') }} *</label>
+                                                    <input type="text" name="email" id="email"
+                                                        placeholder="example@example.com" onkeyup="ValidateEmail();"
+                                                        value="{{ old('email') }}" required class="form-control rounded-pill">
+                                                    @if ($errors->has('email'))
+                                                        <span id="lblError">
+                                                            <strong
+                                                                style="color: red;">{{ $errors->first('email') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                    <span id="lblError" style="color: red"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.Password') }} *</label>
+                                                    <input type="password" name="password"
+                                                        value="{{ old('password') }}" required class="form-control rounded-pill">
+                                                    @if ($errors->has('password'))
+                                                        <span>
+                                                            <strong>{{ $errors->first('password') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.Address') }} *</label>
+                                                    <input type="text" name="address" value="{{ old('address') }}"
+                                                        required class="form-control rounded-pill">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.City') }} *</label>
+                                                    <input type="text" name="city" value="{{ old('city') }}"
+                                                        required class="form-control rounded-pill">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.State') }}</label>
+                                                    <input type="text" name="state" value="{{ old('state') }}"
+                                                        class="form-control rounded-pill">
+                                                </div>
+                                            </div> 
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.Country') }}</label>
+                                                    <input type="text" name="country" value="{{ old('country') }}"
+                                                        class="form-control rounded-pill">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.Postal Code') }}</label>
+                                                    <input type="text" name="postal_code"
+                                                        value="{{ old('postal_code') }}" class="form-control rounded-pill">
+                                                </div>
+                                            </div> 
+                                            <div class="col-md-12">
+                                                <div class="card-header d-flex align-items-center">
+                                                    <h4><strong>{{ trans('file.Company Info') }}</strong></h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.Company Name') }} *</label>
+                                                    <input type="text" name="company_name"
+                                                        value="{{ old('company_name') }}" required
+                                                        class="form-control rounded-pill">
+                                                    @if ($errors->has('company_name'))
+                                                        <span>
+                                                            <strong
+                                                                style="color: red;">{{ $errors->first('company_name') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.gst') }}</label>
+                                                    <input type="text" name="gst" value="{{ old('gst') }}"
+                                                        class="form-control rounded-pill">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.contact_person') }}</label>
+                                                    <input type="text" name="contact_person"
+                                                        value="{{ old('contact_person') }}" class="form-control rounded-pill">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.entity_name') }} *</label>
+                                                    <input type="text" name="entity_name"
+                                                        value="{{ old('entity_name') }}" required class="form-control rounded-pill">
+                                                    @if ($errors->has('entity_name'))
+                                                        <span>
+                                                            <strong>{{ $errors->first('entity_name') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="card-header d-flex align-items-center">
+                                                    <h4><strong>{{ trans('file.Bank Info') }}</strong></h4>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.Bank Name') }} *</label>
+                                                    <input type="text" name="bank_name"
+                                                        value="{{ old('bank_name') }}" required class="form-control rounded-pill">
+                                                    @if ($errors->has('bank_name'))
+                                                        <span>
+                                                            <strong>{{ $errors->first('bank_name') }}</strong>
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.Account No') }}</label>
+                                                    <input type="text" name="account_no"
+                                                        value="{{ old('account_no') }}" class="form-control rounded-pill">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.IFS Code') }}</label>
+                                                    <input type="text" name="ifs_code"
+                                                        value="{{ old('ifs_code') }}" class="form-control rounded-pill">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ trans('file.Branch') }}</label>
+                                                    <input type="text" name="branch" value="{{ old('branch') }}"
+                                                        class="form-control rounded-pill">
+                                                </div>
+                                            </div> 
+                                            <div class="col-md-12">
+                                                <div class="form-group mt-4">
+                                                    <input type="submit" value="{{ trans('file.submit') }}"
+                                                        class="btn rounded-pill btn-primary">
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    {!! Form::close() !!}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
- 
+        </section> --}}
+
 
         <div style="display:none" id="content" class="animate-bottom">
             @yield('content')
@@ -379,43 +603,42 @@
 
         <footer class="main-footer">
             <div class="container-fluid">
-            <div class="row">
-                <div class="col-sm-12">
-                <p>&copy; {{$general_setting->site_title}} | {{trans('file.Developed')}} {{trans('file.By')}} <span class="external text-white">{{$general_setting->developed_by}}</span></p>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p>&copy; {{ $general_setting->site_title }} | {{ trans('file.Developed') }}
+                            {{ trans('file.By') }} <span
+                                class="external text-white">{{ $general_setting->developed_by }}</span></p>
+                    </div>
                 </div>
             </div>
-            </div>
         </footer>
-    </div> 
-    <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery-ui.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo asset('vendor/jquery-validation/jquery.validate.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo asset('vendor/jquery/bootstrap-datepicker.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery.timepicker.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo asset('vendor/popper.js/umd/popper.min.js') ?>">
-    </script>
-    <script type="text/javascript" src="<?php echo asset('vendor/bootstrap/js/bootstrap.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo asset('vendor/bootstrap-toggle/js/bootstrap-toggle.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo asset('vendor/bootstrap/js/bootstrap-select.min.js') ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery-ui.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/jquery-validation/jquery.validate.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/jquery/bootstrap-datepicker.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/jquery/jquery.timepicker.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/popper.js/umd/popper.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/bootstrap/js/bootstrap.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/bootstrap-toggle/js/bootstrap-toggle.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/bootstrap/js/bootstrap-select.min.js'); ?>"></script>
 
-    <script type="text/javascript" src="<?php echo asset('js/grasp_mobile_progress_circle-1.0.0.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo asset('vendor/jquery.cookie/jquery.cookie.js') ?>">
-    </script>
-    <script type="text/javascript" src="<?php echo asset('vendor/chart.js/Chart.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo asset('js/charts-custom.js') ?>"></script>
-    
+    <script type="text/javascript" src="<?php echo asset('js/grasp_mobile_progress_circle-1.0.0.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/jquery.cookie/jquery.cookie.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('vendor/chart.js/Chart.min.js'); ?>"></script>
+    <script type="text/javascript" src="<?php echo asset('js/charts-custom.js'); ?>"></script>
+
     <script type="text/javascript">
-    
         function ValidateEmail() {
             var email = document.getElementById("email").value;
             // alert(email)
             var lblError = document.getElementById("lblError");
-        lblError.innerHTML = "";
-            var expr = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
+            lblError.innerHTML = "";
+            var expr =
+                /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/;
             if (!expr.test(email)) {
-            lblError.innerHTML = "Invalid email address.";
+                lblError.innerHTML = "Invalid email address.";
+            }
         }
-    }
     </script>
     <script>
         
@@ -450,19 +673,21 @@
                     },
 
 
+                    'company_name': {
+                        required: true,
+                        maxlength: 200
+                    },
 
-                  
-        }); 
+                },
 
-               
-     });
-   </script>
-   
- 
-    
-  
 
-  </body>
+
+
+            });
+
+
+        });
+    </script>
+</body>
+
 </html>
-
-

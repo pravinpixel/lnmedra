@@ -242,8 +242,8 @@
 <header class="header m-0 bg-dark text-white " style="border-bottom: 2px solid #272524">
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg bg-dark text-white">
-            <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ asset('logo/logo_dark.png') }}" height="40" style="transform: scale(1.3);" >
+            <a class="navbar-brand py-2" href="{{ route('home') }}">
+                <img src="{{ asset('logo/logo_dark.png') }}" height="90"/>
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
