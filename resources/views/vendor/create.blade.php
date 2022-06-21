@@ -102,13 +102,15 @@
             input::-webkit-inner-spin-button {
                 -webkit-appearance: none;
                 margin: 0;
-            }
-
+            } 
             .error {
                 color: red;
-            }
-            .btn.dropdown-toggle {
-                border-radius: 50% !important
+            
+            } 
+            .bootstrap-select.btn-group.show-tick .dropdown-menu a.selected span.dropdown-item-inner span.check-mark {
+                left: 0 !important;
+                margin: 6px;
+                top: 3px;
             }
         </style>
     </head>
@@ -180,7 +182,7 @@
             <div class="d-flex justify-content-center align-items-center w-100">
                 <div class="w-100">
                     <div class="text-center">
-                        <img src="{{ asset('public/logo/logo_one.png') }}" width="150px">
+                        <img src="{{ asset('public/logo/logo_one.png') }}" width="130px">
                         <h4 style="text-transform:uppercase;font-weight: bold !important;font-family: 'Outfit', sans-serif;font-size:1.5rem"
                             class="my-4">
                             {{ trans('file.Vendor Register') }}
@@ -206,18 +208,16 @@
                                             <div class="form-group">
                                                 <label>{{trans('file.category')}}</strong> </label>
                                                 <div class="input-group">
-                                                <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins">
+                                                <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" multiple>
                                                   
                                                     @foreach($categories as $parentCategory => $category)
                                                         <option  class="option_parent" disabled>{{$parentCategory}}</option>
                                                         @if(isset($category)  &&  count($category) > 0 ) 
                                                             @foreach($category as $key => $item)
-                                                                <option  class="option_sub" value="{{$item->id}}" {{old ('category') == $item->id ? 'selected' : ''}}> &nbsp -  {{$item->name}}</option>
+                                                                <option  class="option_sub" value="{{$item->id}}" {{old ('category') == $item->id ? 'selected' : ''}}> &nbsp; &nbsp;&nbsp; &nbsp;  {{$item->name}}</option>
                                                             @endforeach
                                                         @endif
-                                                    @endforeach
-                                                    
-                                              
+                                                    @endforeach 
                                                 </select>
 
                                             </div>
@@ -257,35 +257,35 @@
                                         <div class="form-group">
                                             <label>{{ trans('file.Address') }} *</label>
                                             <input type="text" name="address" value="{{ old('address') }}"
-                                                required class="form-control rounded-pill">
+                                                required class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{ trans('file.City') }} *</label>
                                             <input type="text" name="city" value="{{ old('city') }}"
-                                                required class="form-control rounded-pill">
+                                                required class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{ trans('file.State') }}</label>
                                             <input type="text" name="state" value="{{ old('state') }}"
-                                                class="form-control rounded-pill">
+                                                class="form-control">
                                         </div>
                                     </div> 
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{ trans('file.Country') }}</label>
                                             <input type="text" name="country" value="{{ old('country') }}"
-                                                class="form-control rounded-pill">
+                                                class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{ trans('file.Postal Code') }}</label>
                                             <input type="text" name="postal_code"
-                                                value="{{ old('postal_code') }}" class="form-control rounded-pill">
+                                                value="{{ old('postal_code') }}" class="form-control">
                                         </div>
                                     </div> 
                                     <div class="col-md-12 py-3">
@@ -310,7 +310,7 @@
                                         <div class="form-group">
                                             <label>{{ trans('file.contact_person') }}</label>
                                             <input type="text" name="contact_person"
-                                                value="{{ old('contact_person') }}" class="form-control rounded-pill">
+                                                value="{{ old('contact_person') }}" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -338,27 +338,27 @@
                                         <div class="form-group">
                                             <label>{{ trans('file.Account No') }}</label>
                                             <input type="text" name="account_no"
-                                                value="{{ old('account_no') }}" class="form-control rounded-pill">
+                                                value="{{ old('account_no') }}" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{ trans('file.IFS Code') }}</label>
                                             <input type="text" name="ifs_code"
-                                                value="{{ old('ifs_code') }}" class="form-control rounded-pill">
+                                                value="{{ old('ifs_code') }}" class="form-control">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{ trans('file.Branch') }}</label>
                                             <input type="text" name="branch" value="{{ old('branch') }}"
-                                                class="form-control rounded-pill">
+                                                class="form-control">
                                         </div>
                                     </div> 
                                     <div class="col-md-12">
                                         <div class="form-group mt-4">
                                             <input type="submit" value="{{ trans('file.submit') }}"
-                                                class="btn rounded-pill btn-primary">
+                                                class="btn btn-primary">
                                         </div>
                                     </div>
                                     </div>
@@ -371,7 +371,7 @@
     </div>
         {{-- <section class="forms mx-auto">
             <div class="container align-items-center d-flex justify-content-center " style="min-height: 90vh">
-                <div class="row m-0 bg-white align-items-center  rounded-pill">
+                <div class="row m-0 bg-white align-items-center ">
                     <div class="col-md-4 border-right text-center">
                         <img src="{{ url('public/logo/logo_two.png') }}" width="250px" class="mx-auto">
                     </div>
@@ -392,7 +392,7 @@
                                                 <div class="form-group">
                                                     <label>{{ trans('file.name') }} *</strong> </label>
                                                     <input type="text" name="name" value="{{ old('name') }}"
-                                                        required class="form-control rounded-pill">
+                                                        required class="form-control">
                                                     @if ($errors->has('name'))
                                                         <span id="lblError">
                                                             <strong
@@ -440,7 +440,7 @@
                                                     <label>{{ trans('file.Email') }} *</label>
                                                     <input type="text" name="email" id="email"
                                                         placeholder="example@example.com" onkeyup="ValidateEmail();"
-                                                        value="{{ old('email') }}" required class="form-control rounded-pill">
+                                                        value="{{ old('email') }}" required class="form-control">
                                                     @if ($errors->has('email'))
                                                         <span id="lblError">
                                                             <strong
@@ -454,7 +454,7 @@
                                                 <div class="form-group">
                                                     <label>{{ trans('file.Password') }} *</label>
                                                     <input type="password" name="password"
-                                                        value="{{ old('password') }}" required class="form-control rounded-pill">
+                                                        value="{{ old('password') }}" required class="form-control">
                                                     @if ($errors->has('password'))
                                                         <span>
                                                             <strong>{{ $errors->first('password') }}</strong>
@@ -466,35 +466,35 @@
                                                 <div class="form-group">
                                                     <label>{{ trans('file.Address') }} *</label>
                                                     <input type="text" name="address" value="{{ old('address') }}"
-                                                        required class="form-control rounded-pill">
+                                                        required class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>{{ trans('file.City') }} *</label>
                                                     <input type="text" name="city" value="{{ old('city') }}"
-                                                        required class="form-control rounded-pill">
+                                                        required class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>{{ trans('file.State') }}</label>
                                                     <input type="text" name="state" value="{{ old('state') }}"
-                                                        class="form-control rounded-pill">
+                                                        class="form-control">
                                                 </div>
                                             </div> 
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>{{ trans('file.Country') }}</label>
                                                     <input type="text" name="country" value="{{ old('country') }}"
-                                                        class="form-control rounded-pill">
+                                                        class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>{{ trans('file.Postal Code') }}</label>
                                                     <input type="text" name="postal_code"
-                                                        value="{{ old('postal_code') }}" class="form-control rounded-pill">
+                                                        value="{{ old('postal_code') }}" class="form-control">
                                                 </div>
                                             </div> 
                                             <div class="col-md-12">
@@ -507,7 +507,7 @@
                                                     <label>{{ trans('file.Company Name') }} *</label>
                                                     <input type="text" name="company_name"
                                                         value="{{ old('company_name') }}" required
-                                                        class="form-control rounded-pill">
+                                                        class="form-control">
                                                     @if ($errors->has('company_name'))
                                                         <span>
                                                             <strong
@@ -520,21 +520,21 @@
                                                 <div class="form-group">
                                                     <label>{{ trans('file.gst') }}</label>
                                                     <input type="text" name="gst" value="{{ old('gst') }}"
-                                                        class="form-control rounded-pill">
+                                                        class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>{{ trans('file.contact_person') }}</label>
                                                     <input type="text" name="contact_person"
-                                                        value="{{ old('contact_person') }}" class="form-control rounded-pill">
+                                                        value="{{ old('contact_person') }}" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>{{ trans('file.entity_name') }} *</label>
                                                     <input type="text" name="entity_name"
-                                                        value="{{ old('entity_name') }}" required class="form-control rounded-pill">
+                                                        value="{{ old('entity_name') }}" required class="form-control">
                                                     @if ($errors->has('entity_name'))
                                                         <span>
                                                             <strong>{{ $errors->first('entity_name') }}</strong>
@@ -551,7 +551,7 @@
                                                 <div class="form-group">
                                                     <label>{{ trans('file.Bank Name') }} *</label>
                                                     <input type="text" name="bank_name"
-                                                        value="{{ old('bank_name') }}" required class="form-control rounded-pill">
+                                                        value="{{ old('bank_name') }}" required class="form-control">
                                                     @if ($errors->has('bank_name'))
                                                         <span>
                                                             <strong>{{ $errors->first('bank_name') }}</strong>
@@ -563,27 +563,27 @@
                                                 <div class="form-group">
                                                     <label>{{ trans('file.Account No') }}</label>
                                                     <input type="text" name="account_no"
-                                                        value="{{ old('account_no') }}" class="form-control rounded-pill">
+                                                        value="{{ old('account_no') }}" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>{{ trans('file.IFS Code') }}</label>
                                                     <input type="text" name="ifs_code"
-                                                        value="{{ old('ifs_code') }}" class="form-control rounded-pill">
+                                                        value="{{ old('ifs_code') }}" class="form-control">
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label>{{ trans('file.Branch') }}</label>
                                                     <input type="text" name="branch" value="{{ old('branch') }}"
-                                                        class="form-control rounded-pill">
+                                                        class="form-control">
                                                 </div>
                                             </div> 
                                             <div class="col-md-12">
                                                 <div class="form-group mt-4">
                                                     <input type="submit" value="{{ trans('file.submit') }}"
-                                                        class="btn rounded-pill btn-primary">
+                                                        class="btn btn-primary">
                                                 </div>
                                             </div>
                                             </div>
@@ -676,12 +676,8 @@
                     'company_name': {
                         required: true,
                         maxlength: 200
-                    },
-
-                },
-
-
-
+                    }, 
+                }, 
 
             });
 
