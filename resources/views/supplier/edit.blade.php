@@ -35,9 +35,40 @@
                                     <div class="form-group">
                                             <label>{{trans('file.category')}}</strong> </label>
                                             <div class="input-group">
-                                            <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" title="Select Category..." required>
-                                                @foreach($category as $key=>$val)
+                                            {{-- <select name="category[]" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" title="Select Category..." required>
+                                                @foreach($lims_category_list as $key=>$val)
+                                                {{$val['id']}}
                                                     <option value="{{$val['id']}}" <?php echo "{{$lims_supplier_data->category}}" == "{{$val['id']}}" ?   "selected" : '' ;?> >{{$val['name']}}</option>
+                                                @endforeach
+                                            </select> --}}
+                                            
+                                            <?php $datas = json_decode($lims_supplier_data->category)?>
+                                            {{-- <?php print_r($datas); ?> --}}
+                                            <select name="category[]"  class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" multiple>
+                                                @foreach($lims_category_list as $category)
+                                                   
+                                                    @if($category->parent_id == '' || null)
+                                                        
+                                                        {{ $data = App\Category::where('parent_id', $category->id)->first() }}
+                                                            @if($data)
+                                                            {{-- @php echo "111"; @endphp --}}
+                                                            <option value="{{$category->id}}" <?php echo "{{$lims_supplier_data->category}}" == "{{$category['id']}}" ?   "selected" : '' ;?> class="option_parent" disabled>{{$category->name}}</option>
+                                                            @else
+                                                           
+                                                            <option value="{{$category->id}}" <?php echo "{{$lims_supplier_data->category}}" == "{{$category['id']}}" ?   "selected" : '' ;?> class="option_parent">{{$category->name}}</option>
+                                                            @endif
+                                                        
+                                                        @foreach($lims_category_list as $subcategory)
+                                                        @if($category->id == $subcategory->parent_id)
+                                                        
+                                                        <option value="{{$subcategory->id}}" @if(in_array($subcategory->id, $datas)) selected @endif class="option_sub">&nbsp - {{$subcategory->name}}   </option>    
+                                                        
+                                                        @endif    
+                                                        @endforeach
+
+                                                        
+                                                    @endif
+                                                  
                                                 @endforeach
                                             </select>
 

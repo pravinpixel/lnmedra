@@ -208,7 +208,7 @@
                                             <div class="form-group">
                                                 <label>{{trans('file.category')}}</strong> </label>
                                                 <div class="input-group">
-                                                <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" multiple>
+                                                <select name="category[]" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" multiple>
                                                   
                                                     @foreach($categories as $parentCategory => $category)
                                                         <option  class="option_parent" disabled>{{$parentCategory}}</option>
@@ -315,11 +315,9 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.pan_no')}}</label>
+                                            <label>{{trans('file.pan_no')}} *</label>
                                             <input type="text" name="entity_name" value="{{old('entity_name')}}" class="form-control">
-                                            @if($errors->has('entity_name'))
-                                                <label  class="error" for="entity_name">{{ $errors->first('entity_name') }}</label>
-                                            @endif
+                                           
                                         </div>
                                     </div>
                                     <div class="col-md-12 py-3">

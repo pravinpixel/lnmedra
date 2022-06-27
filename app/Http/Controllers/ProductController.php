@@ -34,27 +34,26 @@ class ProductController extends Controller
     public function index()
     {
         $role = Role::find(Auth::user()->role_id);
-        if($role->hasPermissionTo('products-index')){            
+        if ($role->hasPermissionTo('products-index')) {
             $permissions = Role::findByName($role->name)->permissions;
 
             foreach ($permissions as $permission)
                 $all_permission[] = $permission->name;
-            if(empty($all_permission))
+            if (empty($all_permission))
                 $all_permission[] = 'dummy text';
 
-                $lims_productType_list =  ProductType::where('is_active',true)->where('is_active','!=',2)->get();
-            $lims_category_list = Category::where('is_active',true)->get();
-            $lims_brand_list = Brand::where('is_active',true)->get();
-            return view('product.index', compact('all_permission','lims_category_list','lims_brand_list','lims_productType_list'));
-        }
-        else
+            $lims_productType_list =  ProductType::where('is_active', true)->where('is_active', '!=', 2)->get();
+            $lims_category_list = Category::where('is_active', true)->get();
+            $lims_brand_list = Brand::where('is_active', true)->get();
+            return view('product.index', compact('all_permission', 'lims_category_list', 'lims_brand_list', 'lims_productType_list'));
+        } else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
 
     public function productData(Request $request)
     {
-        $columns = array( 
-            2 => 'name', 
+        $columns = array(
+            2 => 'name',
             3 => 'code',
             4 => 'brand_id',
             5 => 'category_id',
@@ -64,150 +63,145 @@ class ProductController extends Controller
             9 => 'cost',
             10 => 'stock_worth'
         );
-        
-        $totalData = Product::where('is_active','!=',2)->where('is_active', true)->count();
-        $totalFiltered = $totalData; 
 
-        if($request->input('length') != -1)
+        $totalData = Product::where('is_active', '!=', 2)->where('is_active', true)->count();
+        $totalFiltered = $totalData;
+
+        if ($request->input('length') != -1)
             $limit = $request->input('length');
         else
             $limit = $totalData;
         $start = $request->input('start');
-        $order = 'products.'.$columns[$request->input('order.0.column')];
+        $order = 'products.' . $columns[$request->input('order.0.column')];
         $dir = $request->input('order.0.dir');
 
-  
-        $search = $request->input('search.value'); 
-        $products =  Product::select('products.*')
-                    ->with('category', 'brand', 'unit')
-                    ->join('categories', 'products.category_id', '=', 'categories.id')
-                    ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
-                    ->where('products.is_active', true)
-                    ->when(!empty(request('category_id')), function($q){
-                        $q->where('products.category_id', request('category_id'));
-                    })
-                    ->when(!empty(request('brand_id')), function($q){
-                        $q->where('products.brand_id', request('brand_id'));
-                    })
-                    ->when(!empty(request('product_id')), function($q){
-                        $q->where('products.type', request('product_id'));
-                    })
-                    ->when(!empty($search), function($q) use($search){
-                        $q->where([
-                            ['products.name', 'LIKE', "%{$search}%"],
-                            ['products.is_active','!=', 2],
-                            ['products.is_active', true]
-                        ])
-                        ->orWhere([
-                            ['products.code', 'LIKE', "%{$search}%"],
-                            ['products.is_active','!=', 2],
-                            ['products.is_active', true]
-                        ])
-                        ->orWhere([
-                            ['categories.name', 'LIKE', "%{$search}%"],
-                            ['categories.is_active', true],
-                            ['products.is_active','!=', 2],
-                            ['products.is_active', true]
-                        ])
-                        ->orWhere([
-                            ['brands.title', 'LIKE', "%{$search}%"],
-                            ['brands.is_active', true],
-                            ['products.is_active','!=', 2],
-                            ['products.is_active', true]
-                        ]);
-                    })
-                    
-                  
-                    ->offset($start)
-                    ->limit($limit)
-                    ->orderBy($order,$dir)->get();
 
-        $totalFiltered = Product::
-                        join('categories', 'products.category_id', '=', 'categories.id')
-                        ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
-                        ->where('products.is_active', true)
-                        ->when(!empty(request('category_id')), function($q){
-                            $q->where('products.category_id', request('category_id'));
-                        })
-                        ->when(!empty(request('brand_id')), function($q){
-                            $q->where('products.brand_id', request('brand_id'));
-                        })
-                        ->when(!empty(request('product_id')), function($q){
-                            $q->where('products.type', request('product_id'));
-                        })
-                        ->when(!empty($search), function($q) use($search){
-                            $q->where([
-                                ['products.name', 'LIKE', "%{$search}%"],
-                                ['products.is_active','!=', 2],
-                                ['products.is_active', true ]
-                            ])
-                            ->orWhere([
-                                ['products.code', 'LIKE', "%{$search}%"],
-                                ['products.is_active','!=', 2],
-                                ['products.is_active', true]
-                            ])
-                            ->orWhere([
-                                ['categories.name', 'LIKE', "%{$search}%"],
-                                ['categories.is_active', true],
-                                ['products.is_active','!=', 2],
-                                ['products.is_active', true]
-                            ])
-                            ->orWhere([
-                                ['brands.title', 'LIKE', "%{$search}%"],
-                                ['brands.is_active', true],
-                                ['products.is_active','!=', 2],
-                                ['products.is_active', true]
-                            ]);
-                        })
-                        ->count();
-    
+        $search = $request->input('search.value');
+        $products =  Product::select('products.*')
+            ->with('category', 'brand', 'unit')
+            ->join('categories', 'products.category_id', '=', 'categories.id')
+            ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
+            ->where('products.is_active', true)
+            ->when(!empty(request('category_id')), function ($q) {
+                $q->where('products.category_id', request('category_id'));
+            })
+            ->when(!empty(request('brand_id')), function ($q) {
+                $q->where('products.brand_id', request('brand_id'));
+            })
+            ->when(!empty(request('product_id')), function ($q) {
+                $q->where('products.type', request('product_id'));
+            })
+            ->when(!empty($search), function ($q) use ($search) {
+                $q->where([
+                    ['products.name', 'LIKE', "%{$search}%"],
+                    ['products.is_active', '!=', 2],
+                    ['products.is_active', true]
+                ])
+                    ->orWhere([
+                        ['products.code', 'LIKE', "%{$search}%"],
+                        ['products.is_active', '!=', 2],
+                        ['products.is_active', true]
+                    ])
+                    ->orWhere([
+                        ['categories.name', 'LIKE', "%{$search}%"],
+                        ['categories.is_active', true],
+                        ['products.is_active', '!=', 2],
+                        ['products.is_active', true]
+                    ])
+                    ->orWhere([
+                        ['brands.title', 'LIKE', "%{$search}%"],
+                        ['brands.is_active', true],
+                        ['products.is_active', '!=', 2],
+                        ['products.is_active', true]
+                    ]);
+            })
+
+
+            ->offset($start)
+            ->limit($limit)
+            ->orderBy($order, $dir)->get();
+
+        $totalFiltered = Product::join('categories', 'products.category_id', '=', 'categories.id')
+            ->leftjoin('brands', 'products.brand_id', '=', 'brands.id')
+            ->where('products.is_active', true)
+            ->when(!empty(request('category_id')), function ($q) {
+                $q->where('products.category_id', request('category_id'));
+            })
+            ->when(!empty(request('brand_id')), function ($q) {
+                $q->where('products.brand_id', request('brand_id'));
+            })
+            ->when(!empty(request('product_id')), function ($q) {
+                $q->where('products.type', request('product_id'));
+            })
+            ->when(!empty($search), function ($q) use ($search) {
+                $q->where([
+                    ['products.name', 'LIKE', "%{$search}%"],
+                    ['products.is_active', '!=', 2],
+                    ['products.is_active', true]
+                ])
+                    ->orWhere([
+                        ['products.code', 'LIKE', "%{$search}%"],
+                        ['products.is_active', '!=', 2],
+                        ['products.is_active', true]
+                    ])
+                    ->orWhere([
+                        ['categories.name', 'LIKE', "%{$search}%"],
+                        ['categories.is_active', true],
+                        ['products.is_active', '!=', 2],
+                        ['products.is_active', true]
+                    ])
+                    ->orWhere([
+                        ['brands.title', 'LIKE', "%{$search}%"],
+                        ['brands.is_active', true],
+                        ['products.is_active', '!=', 2],
+                        ['products.is_active', true]
+                    ]);
+            })
+            ->count();
+
         $data = array();
-        if(!empty($products))
-        {
-            foreach ($products as $key=>$product)
-            {
+        if (!empty($products)) {
+            foreach ($products as $key => $product) {
                 $nestedData['id'] = $product->id;
                 $nestedData['key'] = $key;
                 $product_image = explode(",", $product->image);
                 $product_image = htmlspecialchars($product_image[0]);
-                $nestedData['image'] = '<img src="'.url('public/images/product', $product_image).'" height="60" width="60">';
+                $nestedData['image'] = '<img src="' . url('public/images/product', $product_image) . '" height="60" width="60">';
                 $nestedData['name'] = $product->name;
                 $nestedData['code'] = $product->code;
-                if($product->brand_id)
+                if ($product->brand_id)
                     $nestedData['brand'] = $product->brand->title;
                 else
                     $nestedData['brand'] = "N/A";
                 $nestedData['category'] = $product->category->name;
                 $nestedData['qty'] = $product->qty;
-                if($product->unit_id)
+                if ($product->unit_id)
                     $nestedData['unit'] = $product->unit->unit_name;
                 else
                     $nestedData['unit'] = 'N/A';
 
 
-                    if($product->is_active == 1)
-                    {
-                        $nestedData['status'] = '
+                if ($product->is_active == 1) {
+                    $nestedData['status'] = '
                         <div class="btn-group">
-                                <button type="button" onclick="vendorProductId('.$product->id.')" class="btn btn-primary"  aria-haspopup="true" aria-expanded="false">Active</button>
+                                <button type="button" onclick="vendorProductId(' . $product->id . ')" class="btn btn-primary"  aria-haspopup="true" aria-expanded="false">Active</button>
                                 </div>
                         ';
-                    }
-                    else if($product->is_active == 0){
-                        $nestedData['status'] = '
+                } else if ($product->is_active == 0) {
+                    $nestedData['status'] = '
                         <div class="btn-group">
-                                <button type="button" onclick="vendorProductId('.$product->id.')" class="btn btn-danger"  aria-haspopup="true" aria-expanded="false">In Active</button>
+                                <button type="button" onclick="vendorProductId(' . $product->id . ')" class="btn btn-danger"  aria-haspopup="true" aria-expanded="false">In Active</button>
                                 </div>
                         ';
-                    }
-                   
+                }
+
                 $nestedData['price'] = $product->price;
                 $nestedData['cost'] = $product->cost;
 
-                if(config('currency_position') == 'prefix')
-                    $nestedData['stock_worth'] = config('currency').' '.($product->qty * $product->price).' / '.config('currency').' '.($product->qty * $product->cost);
+                if (config('currency_position') == 'prefix')
+                    $nestedData['stock_worth'] = config('currency') . ' ' . ($product->qty * $product->price) . ' / ' . config('currency') . ' ' . ($product->qty * $product->cost);
                 else
-                    $nestedData['stock_worth'] = ($product->qty * $product->price).' '.config('currency').' / '.($product->qty * $product->cost).' '.config('currency');
+                    $nestedData['stock_worth'] = ($product->qty * $product->price) . ' ' . config('currency') . ' / ' . ($product->qty * $product->cost) . ' ' . config('currency');
                 //$nestedData['stock_worth'] = ($product->qty * $product->price).'/'.($product->qty * $product->cost);
 
                 $nestedData['options'] = '<div class="btn-group">
@@ -217,31 +211,32 @@ class ProductController extends Controller
                             </button>
                             <ul class="dropdown-menu edit-options dropdown-menu-right dropdown-default" user="menu">
                             <li>
-                                <button="type" class="btn btn-link view"><i class="fa fa-eye"></i> '.trans('file.View').'</button>
+                                <button="type" class="btn btn-link view"><i class="fa fa-eye"></i> ' . trans('file.View') . '</button>
                             </li>';
-                if(in_array("products-edit", $request['all_permission']))
+                if (in_array("products-edit", $request['all_permission']))
                     $nestedData['options'] .= '<li>
-                            <a href="'.route('products.edit', $product->id).'" class="btn btn-link"><i class="fa fa-edit"></i> '.trans('file.edit').'</a>
+                            <a href="' . route('products.edit', $product->id) . '" class="btn btn-link"><i class="fa fa-edit"></i> ' . trans('file.edit') . '</a>
                         </li>';
-                if(in_array("products-delete", $request['all_permission']))
-                    $nestedData['options'] .= \Form::open(["route" => ["products.destroy", $product->id], "method" => "DELETE", 'onsubmit' => 'return confirmDeleteAlert(this);'] ).'
+                if (in_array("products-delete", $request['all_permission']))
+                    $nestedData['options'] .= \Form::open(["route" => ["products.destroy", $product->id], "method" => "DELETE", 'onsubmit' => 'return confirmDeleteAlert(this);']) . '
                             <li>
-                              <button type="submit" class="btn btn-link" ><i class="fa fa-trash"></i> '.trans("file.delete").'</button> 
-                            </li>'.\Form::close().'
+                              <button type="submit" class="btn btn-link" ><i class="fa fa-trash"></i> ' . trans("file.delete") . '</button> 
+                            </li>' . \Form::close() . '
                         </ul>
                     </div>';
                 // data for product details by one click
-                if($product->tax_id)
+                if ($product->tax_id)
                     $tax = Tax::find($product->tax_id)->name ??  "N/A";
                 else
                     $tax = "N/A";
 
-                if($product->tax_method == 1)
+                if ($product->tax_method == 1)
                     $tax_method = trans('file.Exclusive');
                 else
                     $tax_method = trans('file.Inclusive');
 
-                $nestedData['product'] = array( '[ "'.$product->type.'"', ' "'.$product->name.'"', ' "'.$product->code.'"', ' "'.$nestedData['brand'].'"', ' "'.$nestedData['category'].'"', ' "'.$nestedData['unit'].'"', ' "'.$product->cost.'"', ' "'.$product->price.'"', ' "'.$tax.'"', ' "'.$tax_method.'"', ' "'.$product->alert_quantity.'"', ' "'.preg_replace('/\s+/S', " ", $product->product_details).'"', ' "'.$product->id.'"', ' "'.$product->product_list.'"', ' "'.$product->variant_list.'"', ' "'.$product->qty_list.'"', ' "'.$product->price_list.'"', ' "'.$product->qty.'"', ' "'.$product->image.'"]'
+                $nestedData['product'] = array(
+                    '[ "' . $product->type . '"', ' "' . $product->name . '"', ' "' . $product->code . '"', ' "' . $nestedData['brand'] . '"', ' "' . $nestedData['category'] . '"', ' "' . $nestedData['unit'] . '"', ' "' . $product->cost . '"', ' "' . $product->price . '"', ' "' . $tax . '"', ' "' . $tax_method . '"', ' "' . $product->alert_quantity . '"', ' "' . preg_replace('/\s+/S', " ", $product->product_details) . '"', ' "' . $product->id . '"', ' "' . $product->product_list . '"', ' "' . $product->variant_list . '"', ' "' . $product->qty_list . '"', ' "' . $product->price_list . '"', ' "' . $product->qty . '"', ' "' . $product->image . '"]'
                 );
                 //$nestedData['imagedata'] = DNS1D::getBarcodePNG($product->code, $product->barcode_symbology);
                 $data[] = $nestedData;
@@ -250,19 +245,19 @@ class ProductController extends Controller
         // $totalFiltered = count($products);
         // $totalData = $totalFiltered;
         $json_data = array(
-            "draw"            => intval($request->input('draw')),  
-            "recordsTotal"    => intval($totalData),  
-            "recordsFiltered" => intval($totalFiltered), 
-            "data"            => $data   
+            "draw"            => intval($request->input('draw')),
+            "recordsTotal"    => intval($totalData),
+            "recordsFiltered" => intval($totalFiltered),
+            "data"            => $data
         );
-            
+
         echo json_encode($json_data);
     }
-    
+
     public function create()
     {
         $role = Role::firstOrCreate(['id' => Auth::user()->role_id]);
-        if ($role->hasPermissionTo('products-add')){
+        if ($role->hasPermissionTo('products-add')) {
             $lims_product_list_without_variant = $this->productWithoutVariant();
             $lims_product_list_with_variant = $this->productWithVariant();
             $productType = ProductType::get();
@@ -272,43 +267,43 @@ class ProductController extends Controller
             $lims_unit_list = Unit::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-            return view('product.create',compact('lims_product_list_without_variant', 'lims_product_list_with_variant','productType','lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_warehouse_list'));
+            return view('product.create',compact('lims_product_list_without_variant', 'lims_product_list_with_variant', 'productType', 'lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_warehouse_list'));
         }
-        else
+         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
     public function vendorProductStatus(Request $request)
     {
         // return $request->id;
-        $data = Product::where('id',$request->id)->first();
-        if($data->is_active == true){
+        $data = Product::where('id', $request->id)->first();
+        if ($data->is_active == true) {
             $data->is_active = false;
         }else{
             $data->is_active = true;
         }
-      
-       $res = $data->save();
-       if($res)
-       {
-        return response()->json(['status', 'Status Updated successfully!']);
-       }
+
+        $res = $data->save();
+        if($res)
+        {
+            return response()->json(['status', 'Status Updated successfully!']);
+        }
 
     }
     public function store(Request $request)
     {
-       
+
         // $attribute = $request['attribute'];
         // dd(json_encode($attribute));die();
         $this->validate($request, [
             'code' => [
                 'max:255',
-                    Rule::unique('products')->where(function ($query) {
+                Rule::unique('products')->where(function ($query) {
                     return $query->where('is_active', 1);
                 }),
             ],
             'name' => [
                 'max:255',
-                    Rule::unique('products')->where(function ($query) {
+                Rule::unique('products')->where(function ($query) {
                     return $query->where('is_active', 1);
                 }),
             ]
@@ -331,11 +326,11 @@ class ProductController extends Controller
         // $data['qty_list'] = implode(",", $data['product_qty']);
         // $data['price_list'] = implode(",", $data['unit_price']);
         $data['product_details'] = str_replace('"', '@', $data['product_details']);
-        if($request['attribute']){
-            $data['attribute'] = implode(',',$request['attribute']);
+        if($request['attribute']) {
+            $data['attribute'] = implode(',', $request['attribute']);
         }
-         
-            // dd(implode(',',$request['attribute']));
+
+        // dd(implode(',',$request['attribute']));
         if($data['starting_date'])
             $data['starting_date'] = date('Y-m-d', strtotime($data['starting_date']));
         if($data['last_date'])
@@ -343,7 +338,7 @@ class ProductController extends Controller
         $data['is_active'] = true;
         $images = $request->image;
         $image_names = [];
-        if($images) {            
+        if($images) {
             foreach ($images as $key => $image) {
                 $imageName = $image->getClientOriginalName();
                 $image->move('public/images/product', $imageName);
@@ -378,7 +373,7 @@ class ProductController extends Controller
                 $lims_variant_data = Variant::firstOrCreate(['name' => $data['variant_name'][$key]]);
                 $lims_variant_data->name = $data['variant_name'][$key];
                 $lims_variant_data->save();
-                $lims_product_variant_data = new ProductVariant;             
+                $lims_product_variant_data = new ProductVariant;
                 $lims_product_variant_data->product_id = $lims_product_data->id;
                 $lims_product_variant_data->variant_id = $lims_variant_data->id;
                 $lims_product_variant_data->position = $key + 1;
@@ -417,8 +412,8 @@ class ProductController extends Controller
             $lims_product_data = Product::where('id', $id)->first();
             $lims_product_variant_data = $lims_product_data->variant()->orderBy('position')->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-            return view('product.edit',compact('lims_product_list_without_variant','productType', 'lims_product_list_with_variant', 'lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_product_data', 'lims_product_variant_data', 'lims_warehouse_list'));
-        }
+            return view('product.edit', compact('lims_product_list_without_variant', 'productType', 'lims_product_list_with_variant', 'lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_product_data', 'lims_product_variant_data', 'lims_warehouse_list'));
+        } 
         else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
@@ -428,7 +423,7 @@ class ProductController extends Controller
         // dd($request);
         if(!env('USER_VERIFIED')) {
             \Session::flash('not_permitted', 'This feature is disable for demo!');
-        }
+        } 
         else {
             $this->validate($request, [
                 'name' => [
@@ -472,11 +467,11 @@ class ProductController extends Controller
 
             if(!isset($data['is_imei']))
                 $data['is_imei'] = null;
-                if($request['attribute']){
-                    $data['attribute'] = implode(',',$request['attribute']);
-                }
-               
-                $lims_product_data->attribute = json_encode($request['attribute']);
+            if($request['attribute']) {
+                $data['attribute'] = implode(',', $request['attribute']);
+            }
+
+            $lims_product_data->attribute = json_encode($request['attribute']);
             $data['product_details'] = str_replace('"', '@', $data['product_details']);
             $data['product_details'] = $data['product_details'];
             if(!empty($data['starting_date']))
@@ -488,7 +483,7 @@ class ProductController extends Controller
             //dealing with previous images
             if($request->prev_img) {
                 foreach ($request->prev_img as $key => $prev_img) {
-                    if(!in_array($prev_img, $previous_images))
+                    if (!in_array($prev_img, $previous_images))
                         $previous_images[] = $prev_img;
                 }
                 $lims_product_data->image = implode(",", $previous_images);
@@ -507,15 +502,15 @@ class ProductController extends Controller
                 foreach ($images as $key => $image) {
                     $ext = pathinfo($image->getClientOriginalName(), PATHINFO_EXTENSION);
                     /*$image = Image::make($image)->resize(512, 512);*/
-                    $imageName = date("Ymdhis") . ($length + $key+1) . '.' . $ext;
+                    $imageName = date("Ymdhis") . ($length + $key + 1) . '.' . $ext;
                     $image->move('public/images/product', $imageName);
                     $image_names[] = $imageName;
                 }
                 if($lims_product_data->image)
-                    $data['image'] = $lims_product_data->image. ',' . implode(",", $image_names);
+                    $data['image'] = $lims_product_data->image . ',' . implode(",", $image_names);
                 else
                     $data['image'] = implode(",", $image_names);
-            }
+            } 
             else
                 $data['image'] = $lims_product_data->image;
 
@@ -625,20 +620,20 @@ class ProductController extends Controller
 
     public function saleUnit($id)
     {
-        $unit = Unit::where("base_unit", $id)->orWhere('id', $id)->pluck('unit_name','id');
+        $unit = Unit::where("base_unit", $id)->orWhere('id', $id)->pluck('unit_name', 'id');
         return json_encode($unit);
     }
     public function subcategoryId($id)
     {
         // print_r($id);die();
-        $unit = Category::where("parent_id", $id)->pluck('name','id');
+        $unit = Category::where("parent_id", $id)->pluck('name', 'id');
         return json_encode($unit);
     }
-    
+
 
     public function getData($id, $variant_id)
     {
-        if($variant_id) {
+        if ($variant_id) {
             $data = Product::join('product_variants', 'products.id', 'product_variants.product_id')
                 ->select('products.name', 'product_variants.item_code')
                 ->where([
@@ -646,8 +641,7 @@ class ProductController extends Controller
                     ['product_variants.variant_id', $variant_id]
                 ])->first();
             $data->code = $data->item_code;
-        }
-        else
+        } else
             $data = Product::select('name', 'code')->find($id);
         return $data;
     }
@@ -665,7 +659,7 @@ class ProductController extends Controller
         $product_warehouse = [];
         $product_variant_warehouse = [];
         $lims_product_data = Product::select('id', 'is_variant')->find($id);
-        if($lims_product_data->is_variant) {
+        if ($lims_product_data->is_variant) {
             $lims_product_variant_warehouse_data = Product_Warehouse::where('product_id', $lims_product_data->id)->orderBy('warehouse_id')->get();
             $lims_product_warehouse_data = Product_Warehouse::select('warehouse_id', DB::raw('sum(qty) as qty'))->where('product_id', $id)->groupBy('warehouse_id')->get();
             foreach ($lims_product_variant_warehouse_data as $key => $product_variant_warehouse_data) {
@@ -675,18 +669,16 @@ class ProductController extends Controller
                 $variant_name[] = $lims_variant_data->name;
                 $variant_qty[] = $product_variant_warehouse_data->qty;
             }
-        }
-        else {
+        } else {
             $lims_product_warehouse_data = Product_Warehouse::where('product_id', $id)->orderBy('warehouse_id', 'asc')->get();
         }
         foreach ($lims_product_warehouse_data as $key => $product_warehouse_data) {
             $lims_warehouse_data = Warehouse::find($product_warehouse_data->warehouse_id);
-            if($product_warehouse_data->product_batch_id) {
+            if ($product_warehouse_data->product_batch_id) {
                 $product_batch_data = ProductBatch::select('batch_no', 'expired_date')->find($product_warehouse_data->product_batch_id);
                 $batch_no = $product_batch_data->batch_no;
                 $expiredDate = date(config('date_format'), strtotime($product_batch_data->expired_date));
-            }
-            else {
+            } else {
                 $batch_no = 'N/A';
                 $expiredDate = 'N/A';
             }
@@ -694,7 +686,7 @@ class ProductController extends Controller
             $batch[] = $batch_no;
             $expired_date[] = $expiredDate;
             $qty[] = $product_warehouse_data->qty;
-            if($product_warehouse_data->imei_number)
+            if ($product_warehouse_data->imei_number)
                 $imei_number[] = $product_warehouse_data->imei_number;
             else
                 $imei_number[] = 'N/A';
@@ -715,16 +707,16 @@ class ProductController extends Controller
     public function productWithoutVariant()
     {
         return Product::ActiveStandard()->select('id', 'name', 'code')
-                ->whereNull('is_variant')->get();
+            ->whereNull('is_variant')->get();
     }
 
     public function productWithVariant()
     {
         return Product::join('product_variants', 'products.id', 'product_variants.product_id')
-                ->ActiveStandard()
-                ->whereNotNull('is_variant')
-                ->select('products.id', 'products.name', 'product_variants.item_code')
-                ->orderBy('position')->get();
+            ->ActiveStandard()
+            ->whereNotNull('is_variant')
+            ->select('products.id', 'products.name', 'product_variants.item_code')
+            ->orderBy('position')->get();
     }
 
     public function limsProductSearch(Request $request)
@@ -732,10 +724,10 @@ class ProductController extends Controller
         $product_code = explode("(", $request['data']);
         $product_code[0] = rtrim($product_code[0], " ");
         $lims_product_data = Product::where([
-            ['code', $product_code[0] ],
+            ['code', $product_code[0]],
             ['is_active', true]
         ])->first();
-        if(!$lims_product_data) {
+        if (!$lims_product_data) {
             $lims_product_data = Product::join('product_variants', 'products.id', 'product_variants.product_id')
                 ->select('products.*', 'product_variants.item_code', 'product_variants.variant_id', 'product_variants.additional_price')
                 ->where('product_variants.item_code', $product_code[0])
@@ -743,17 +735,16 @@ class ProductController extends Controller
 
             $variant_id = $lims_product_data->variant_id;
             $additional_price = $lims_product_data->additional_price;
-        }
-        else {
+        } else {
             $variant_id = '';
             $additional_price = 0;
         }
         $product[] = $lims_product_data->name;
-        if($lims_product_data->is_variant)
+        if ($lims_product_data->is_variant)
             $product[] = $lims_product_data->item_code;
         else
             $product[] = $lims_product_data->code;
-        
+
         $product[] = $lims_product_data->price + $additional_price;
         $product[] = DNS1D::getBarcodePNG($lims_product_data->code, $lims_product_data->barcode_symbology);
         $product[] = $lims_product_data->promotion_price;
@@ -776,111 +767,107 @@ class ProductController extends Controller
             ['product_id', $product_id],
             ['batch_no', $batch_no]
         ])->first();
-        if($product_batch_data) {
+        if ($product_batch_data) {
             $product_warehouse_data = Product_Warehouse::select('qty')
-            ->where([
-                ['product_batch_id', $product_batch_data->id],
-                ['warehouse_id', $warehouse_id]
-            ])->first();
-            if($product_warehouse_data) {
+                ->where([
+                    ['product_batch_id', $product_batch_data->id],
+                    ['warehouse_id', $warehouse_id]
+                ])->first();
+            if ($product_warehouse_data) {
                 $data['qty'] = $product_warehouse_data->qty;
                 $data['product_batch_id'] = $product_batch_data->id;
                 $data['expired_date'] = date(config('date_format'), strtotime($product_batch_data->expired_date));
                 $data['message'] = 'ok';
-            }
-            else {
+            } else {
                 $data['qty'] = 0;
                 $data['message'] = 'This Batch does not exist in the selected warehouse!';
-            }            
-        }
-        else {
+            }
+        } else {
             $data['message'] = 'Wrong Batch Number!';
         }
         return $data;
     }
 
     public function importProduct(Request $request)
-    {   
+    {
         //get file
-        $upload=$request->file('file');
+        $upload = $request->file('file');
         $ext = pathinfo($upload->getClientOriginalName(), PATHINFO_EXTENSION);
-        if($ext != 'csv')
+        if ($ext != 'csv')
             return redirect()->back()->with('message', 'Please upload a CSV file');
 
-        $filePath=$upload->getRealPath();
+        $filePath = $upload->getRealPath();
         //open and read
-    
-        $file=fopen($filePath, 'r');
-        $header= fgetcsv($file);
-        $escapedHeader=[];
-      
+
+        $file = fopen($filePath, 'r');
+        $header = fgetcsv($file);
+        $escapedHeader = [];
+
         //validate
         foreach ($header as $key => $value) {
-            $lheader=strtolower($value);
-            $escapedItem=preg_replace('/[^a-z]/', '', $lheader);
+            $lheader = strtolower($value);
+            $escapedItem = preg_replace('/[^a-z]/', '', $lheader);
             array_push($escapedHeader, $escapedItem);
         }
         //looping through other columns
-        while($columns=fgetcsv($file))
-        {
+        while ($columns = fgetcsv($file)) {
             foreach ($columns as $key => $value) {
-                $value=preg_replace('/\D/','',$value);
+                $value = preg_replace('/\D/', '', $value);
             }
-           $data= array_combine($escapedHeader, $columns);
-           $configProductHeader = config('product.import_product');
-           $isDifferentHeader = array_diff($configProductHeader,$escapedHeader);
-           if(!empty($isDifferentHeader)){
+            $data = array_combine($escapedHeader, $columns);
+            $configProductHeader = config('product.import_product');
+            $isDifferentHeader = array_diff($configProductHeader, $escapedHeader);
+            if (!empty($isDifferentHeader)) {
                 return redirect('products')->with('not_permitted', 'Invalid header please download sample file and try again');
-           }
-           if($data['brand'] != 'N/A' && $data['brand'] != ''){
+            }
+            if ($data['brand'] != 'N/A' && $data['brand'] != '') {
                 $lims_brand_data = Brand::firstOrCreate(['title' => $data['brand'], 'is_active' => true]);
                 $brand_id = $lims_brand_data->id;
-           }
-            else
+            } else
                 $brand_id = null;
 
-           $lims_category_data = Category::firstOrCreate(['name' => $data['category'], 'is_active' => true]);
+            $lims_category_data = Category::firstOrCreate(['name' => $data['category'], 'is_active' => true]);
 
-           $lims_unit_data = Unit::where('unit_code', $data['unitcode'])->first();
-           if(!$lims_unit_data)
+            $lims_unit_data = Unit::where('unit_code', $data['unitcode'])->first();
+            if (!$lims_unit_data)
                 return redirect()->back()->with('not_permitted', 'Unit code does not exist in the database.');
 
-           $product = Product::firstOrNew([ 'name'=>$data['name'], 'is_active'=>true ]);
-            if($data['image'])
+            $product = Product::firstOrNew(['name' => $data['name'], 'is_active' => true]);
+            if ($data['image'])
                 $product->image = $data['image'];
             else
                 $product->image = 'zummXD2dvAtI.png';
 
-           $product->name = $data['name'];
-           $product->code = $data['code'];
-           $product->type = strtolower($data['type']);
-           $product->barcode_symbology = 'C128';
-           $product->brand_id = $brand_id;
-           $product->category_id = $lims_category_data->id;
-           $product->unit_id = $lims_unit_data->id;
-           $product->purchase_unit_id = $lims_unit_data->id;
-           $product->sale_unit_id = $lims_unit_data->id;
-           $product->cost = $data['cost'];
-           $product->price = $data['price'];
-           $product->tax_method = 1;
-           $product->qty = 0;
-           $product->product_details = $data['productdetails'];
-           $product->is_active = true;
-           $product->save();
+            $product->name = $data['name'];
+            $product->code = $data['code'];
+            $product->type = strtolower($data['type']);
+            $product->barcode_symbology = 'C128';
+            $product->brand_id = $brand_id;
+            $product->category_id = $lims_category_data->id;
+            $product->unit_id = $lims_unit_data->id;
+            $product->purchase_unit_id = $lims_unit_data->id;
+            $product->sale_unit_id = $lims_unit_data->id;
+            $product->cost = $data['cost'];
+            $product->price = $data['price'];
+            $product->tax_method = 1;
+            $product->qty = 0;
+            $product->product_details = $data['productdetails'];
+            $product->is_active = true;
+            $product->save();
 
-            if($data['variantname']) {
+            if ($data['variantname']) {
                 //dealing with variants
                 $variant_names = explode(",", $data['variantname']);
                 $item_codes = explode(",", $data['itemcode']);
                 $additional_prices = explode(",", $data['additionalprice']);
                 foreach ($variant_names as $key => $variant_name) {
                     $variant = Variant::firstOrCreate(['name' => $variant_name]);
-                    if($data['itemcode'])
+                    if ($data['itemcode'])
                         $item_code = $item_codes[$key];
                     else
                         $item_code = $variant_name . '-' . $data['code'];
-                    
-                    if($data['additionalprice'])
+
+                    if ($data['additionalprice'])
                         $additional_price = $additional_prices[$key];
                     else
                         $additional_price = 0;
@@ -897,8 +884,8 @@ class ProductController extends Controller
                 $product->is_variant = true;
                 $product->save();
             }
-         }
-         return redirect('products')->with('import_message', 'Product imported successfully');
+        }
+        return redirect('products')->with('import_message', 'Product imported successfully');
     }
 
     public function deleteBySelection(Request $request)
@@ -916,11 +903,11 @@ class ProductController extends Controller
     {
         $lims_product_data = Product::findOrFail($id);
         $lims_product_data->is_active = 2;
-        if($lims_product_data->image != 'zummXD2dvAtI.png') {
+        if ($lims_product_data->image != 'zummXD2dvAtI.png') {
             $images = explode(",", $lims_product_data->image);
             foreach ($images as $key => $image) {
-                if(file_exists('public/images/product/'.$image))
-                    unlink('public/images/product/'.$image);
+                if (file_exists('public/images/product/' . $image))
+                    unlink('public/images/product/' . $image);
             }
         }
         $lims_product_data->save();
@@ -928,84 +915,96 @@ class ProductController extends Controller
     }
     public function getAttributeImage($id)
     {
-        
-       $data = MasterAttribute::where('product_type',$id)->get();
-       foreach($data as $key=>$val)
-       {
-        // $attribute_image = explode(",", );
-        // $attribute_image = htmlspecialchars($attribute_image[0]);
-        $path = asset('public/images/attribute').'/'.$val->image;
-         
-        $val['checkbox_image'] = '
+
+        $data = MasterAttribute::where('product_type', $id)->get();
+        foreach ($data as $key => $val) {
+            // $attribute_image = explode(",", );
+            // $attribute_image = htmlspecialchars($attribute_image[0]);
+            $path = asset('public/images/attribute') . '/' . $val->image;
+
+            $val['checkbox_image'] = '
             <div class="col-2 p-2 mb-2">
-                <div class="card p-1 shadow-sm d-flex justify-content-center align-items-center text-center m-0 " style="min-height:100px" id="active_class'.$val->id.'">
+                <div class="card p-1 shadow-sm d-flex justify-content-center align-items-center text-center m-0 " style="min-height:100px" id="active_class' . $val->id . '">
                     <div>
-                        <img class="mx-auto mb-2" src="'.$path.'" width="40">
+                        <img class="mx-auto mb-2" src="' . $path . '" width="40">
                         <div class="text-center"> 
-                            <label  style="font-size: 12px;" for="att_'.$val->id.'_icon" class="card-text text-center fw-bold m-0"><input onclick="check_this_box('.$val->id.')" type="checkbox" id="att_'.$val->id.'_icon" name="attribute[]" value="'.$val->id.'" required class="mr-1"> '.$val->title.'</label>
+                            <label  style="font-size: 12px;" for="att_' . $val->id . '_icon" class="card-text text-center fw-bold m-0"><input onclick="check_this_box(' . $val->id . ')" type="checkbox" id="att_' . $val->id . '_icon" name="attribute[]" value="' . $val->id . '" required class="mr-1"> ' . $val->title . '</label>
                         </div>
                     </div>
                 </div>
             </div>            
         ';
-       }
-          return response()->json(['data' => $data]);
+        }
+        return response()->json(['data' => $data]);
     }
-    public function getEditAttributeImage(Request $request,$id)
+    public function getEditAttributeImage(Request $request, $id)
     {
-       $dd = explode(",",$request->data);
-        $data = MasterAttribute::where('product_type',$id)->get();
-        foreach($data as $key=>$val)
-        {
+        $dd = explode(",", $request->data);
+        $data = MasterAttribute::where('product_type', $id)->get();
+        foreach ($data as $key => $val) {
             $attribute_image = explode(",", $val->image);
             $attribute_image = htmlspecialchars($attribute_image[0]);
-            if(in_array("$val->id",$dd))
-            {
-                $path = asset('public/images/attribute').'/'.$val->image;
-         
+            if (in_array("$val->id", $dd)) {
+                $path = asset('public/images/attribute') . '/' . $val->image;
+
                 $val['checkbox_image'] = '
                     <div class="col-2 p-2 mb-2">
-                        <div class="card p-1 shadow-sm d-flex justify-content-center align-items-center text-center m-0 " style="min-height:100px" id="active_class'.$val->id.'">
+                        <div class="card p-1 shadow-sm d-flex justify-content-center align-items-center text-center m-0 " style="min-height:100px" id="active_class' . $val->id . '">
                             <div>
-                                <img class="mx-auto mb-2" src="'.$path.'" width="40">
+                                <img class="mx-auto mb-2" src="' . $path . '" width="40">
                                 <div class="text-center"> 
-                                    <label  style="font-size: 12px;" for="att_'.$val->id.'_icon" class="card-text text-center fw-bold m-0"><input onclick="check_this_box('.$val->id.')" type="checkbox" id="att_'.$val->id.'_icon" name="attribute[]" checked value="'.$val->id.'" required class="mr-1"> '.$val->title.'</label>
+                                    <label  style="font-size: 12px;" for="att_' . $val->id . '_icon" class="card-text text-center fw-bold m-0"><input onclick="check_this_box(' . $val->id . ')" type="checkbox" id="att_' . $val->id . '_icon" name="attribute[]" checked value="' . $val->id . '" required class="mr-1"> ' . $val->title . '</label>
                                 </div>
                             </div>
                         </div>
                     </div>            
                 ';
-            }
-            else{
-                $path = asset('public/images/attribute').'/'.$val->image;
-         
-            $val['checkbox_image'] = '
+            } else {
+                $path = asset('public/images/attribute') . '/' . $val->image;
+
+                $val['checkbox_image'] = '
                 <div class="col-2 p-2 mb-2">
-                    <div class="card p-1 shadow-sm d-flex justify-content-center align-items-center text-center m-0 " style="min-height:100px" id="active_class'.$val->id.'">
+                    <div class="card p-1 shadow-sm d-flex justify-content-center align-items-center text-center m-0 " style="min-height:100px" id="active_class' . $val->id . '">
                         <div>
-                            <img class="mx-auto mb-2" src="'.$path.'" width="40">
+                            <img class="mx-auto mb-2" src="' . $path . '" width="40">
                             <div class="text-center"> 
-                                <label  style="font-size: 12px;" for="att_'.$val->id.'_icon" class="card-text text-center fw-bold m-0"><input onclick="check_this_box('.$val->id.')" type="checkbox" id="att_'.$val->id.'_icon" name="attribute[]" value="'.$val->id.'" required class="mr-1"> '.$val->title.'</label>
+                                <label  style="font-size: 12px;" for="att_' . $val->id . '_icon" class="card-text text-center fw-bold m-0"><input onclick="check_this_box(' . $val->id . ')" type="checkbox" id="att_' . $val->id . '_icon" name="attribute[]" value="' . $val->id . '" required class="mr-1"> ' . $val->title . '</label>
                             </div>
                         </div>
                     </div>
                 </div>            
             ';
-            } 
+            }
         }
-           return response()->json(['data' => $data]);
+        return response()->json(['data' => $data]);
     }
 
-    public function getDropdown(Request $request){
+    public function getDropdown(Request $request)
+    {
+        // $query = $request->input('q');
+        // return Product::where('name','like', '%' .  $query. '%') 
+        //                 ->orWhere('code', 'like', '%' .  $query. '%')
+        //                 ->where('is_active', 1)
+        //                 ->limit(25)
+        //                 ->get()
+        //                 ->map(function($row) {
+        //                     return  ["value" => $row->id, "text" => "$row->name [{$row->code}]"];
+        //                 });
+        // $data = Supplier::where('id', Auth::user()->vendor_id)->select('category')->first();
+        $sup = Supplier::where('id', Auth::user()->vendor_id)->where('is_active', true)->select('category')->first();
+        $sup = json_decode($sup['category']);
+        // $ids = json_decode($data);
+        // print_r($sup);
+        // die();
         $query = $request->input('q');
-        return Product::where('name','like', '%' .  $query. '%') 
-                        ->orWhere('code', 'like', '%' .  $query. '%')
-                        ->where('is_active', 1)
-                        ->limit(25)
-                        ->get()
-                        ->map(function($row) {
-                            return  ["value" => $row->id, "text" => "$row->name [{$row->code}]"];
-                        });
+        return Product::where('name', 'like', '%' .  $query . '%')
+            // ->where('code', 'like', '%' .  $query . '%')
+            ->where('is_active', 1)
+            ->whereIN('category_id', $sup)
+            ->limit(25)
+            ->get()
+            ->map(function ($row) {
+                return  ["value" => $row->id, "text" => "$row->name [{$row->code}]"];
+            });
     }
-
 }

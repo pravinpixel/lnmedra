@@ -28,9 +28,31 @@
                             <div class="form-group">
                                 <label>{{trans('file.category')}}</strong> </label>
                                 <div class="input-group">
-                                <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins"  required>
+                                {{-- <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror" value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins"  required>
                                     @foreach($category as $key=>$val)
                                         <option value="{{$val['id']}}" {{old ('category') == $val['id'] ? 'selected' : ''}}>{{$val['name']}}</option>
+                                    @endforeach
+                                </select> --}}
+
+                                <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" multiple>
+                                    @foreach($lims_category_list as $category)
+                                        
+                                        @if($category->parent_id == '' || null)
+                                            
+                                            {{ $data = App\Category::where('parent_id', $category->id)->first() }}
+                                                @if($data)
+                                                <option value="{{$category->id}}" class="option_parent" disabled>{{$category->name}}</option>
+                                                @else
+                                                <option value="{{$category->id}}" class="option_parent">{{$category->name}}</option>
+                                                @endif
+                                            
+                                            @foreach($lims_category_list as $subcategory)
+                                            @if($category->id == $subcategory->parent_id)
+                                            <option value="{{$subcategory->id}}" class="option_sub">&nbsp - {{$subcategory->name}}</option>    
+                                            @endif    
+                                            @endforeach
+                                        @endif
+                                        
                                     @endforeach
                                 </select>
 
