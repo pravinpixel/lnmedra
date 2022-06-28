@@ -192,9 +192,14 @@ class SupplierController extends Controller
 
     public function destroy($id)
     {
+        // dd($id);
         $lims_supplier_data = Supplier::findOrFail($id);
         $lims_supplier_data->is_active = 2;
         $lims_supplier_data->save();
+        $lims_user_data = User::where('vendor_id', $id)->where('is_active', 1)->first();
+        $lims_user_data->is_active = 0;
+        $lims_user_data->is_deleted = 1;
+        $lims_user_data->save();
         return redirect('supplier')->with('not_permitted', 'Data deleted successfully');
     }
     public function vendorStatus(Request $request)

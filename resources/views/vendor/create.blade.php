@@ -208,7 +208,7 @@
                                             <div class="form-group">
                                                 <label>{{trans('file.category')}}</strong> </label>
                                                 <div class="input-group">
-                                                <select name="category[]" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" multiple>
+                                                <select name="category[]" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." required value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" multiple>
                                                   
                                                     @foreach($categories as $parentCategory => $category)
                                                         <option  class="option_parent" disabled>{{$parentCategory}}</option>
@@ -219,6 +219,10 @@
                                                         @endif
                                                     @endforeach 
                                                 </select>
+                                                @if($errors->has('category'))
+                                            
+                                                <label  class="error" for="category">{{ $errors->first('category') }}</label>
+                                                @endif
 
                                             </div>
                                         </div>

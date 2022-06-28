@@ -335,7 +335,7 @@ class VendorProductController extends Controller
             $productType = ProductType::get();
             $lims_brand_list = Brand::where('is_active', true)->get();
             // $lims_category_list = Category::where('is_active', true)->get();
-            $sup = Supplier::where('id', Auth::user()->vendor_id)->where('is_active', true)->first();
+            $sup = Supplier::where('id', Auth::user()->vendor_id)->where('is_active', '!=', 2)->where('is_active', true)->first();
             $sup = json_decode($sup['category']);
 
             $lims_category_list = Category::whereIN('id', $sup)->where('is_active', true)->get()->toArray();
