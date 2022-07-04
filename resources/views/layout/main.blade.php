@@ -371,7 +371,7 @@
               @endif
 
 
-            
+{{--             
                @if(userHasAccess('pos_setting'))
               <li><a href="#point_of_sale_setup" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-return"></i><span>{{trans('file.point_of_sale_setup')}}</span></a>
                 <ul id="point_of_sale_setup" class="collapse list-unstyled ">
@@ -383,7 +383,7 @@
                   
                 </ul>
               </li>
-              @endif
+              @endif --}}
 
 
               

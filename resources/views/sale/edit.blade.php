@@ -248,7 +248,7 @@
                             </div>
                         </div>
                     
-                        <div class="col-md-6">
+                        <div class="col-md-6">                    
                             <div class="form-group">
                                 <input type="hidden" name="order_tax_rate_hidden" value="{{$lims_sale_data->order_tax_rate}}">
                                 <label>{{trans('file.Order Tax')}}</label>
@@ -268,6 +268,8 @@
                                 <input type="number" name="order_discount" class="form-control" value="{{$lims_sale_data->order_discount}}" step="any" />
                             </div>
                         </div>
+                        <input type="hidden" name="order_discount_method" class="form-control" value="{{$lims_sale_data->order_discount_method}}" step="any" />
+                        <input type="hidden" value="" name="order_total_discount" id="order_total_discount">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>
@@ -1024,6 +1026,7 @@
         var order_tax = parseFloat($('select[name="order_tax_rate"]').val());
         var order_discount = parseFloat($('input[name="order_discount"]').val());
         var shipping_cost = parseFloat($('input[name="shipping_cost"]').val());
+        var order_discount_method = $('input[name="order_discount_method"]').val();
 
         if (!order_discount)
             order_discount = 0.00;
@@ -1032,7 +1035,18 @@
 
         item = ++item + '(' + total_qty + ')';
         order_tax = (subtotal - order_discount) * (order_tax / 100);
-        var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+        // alert(order_discount_method);
+        // var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+        if(order_discount_method == 'discount')
+        {
+            var grand_total1 = (((subtotal + order_tax + shipping_cost) * order_discount)/100);
+            var grand_total = (subtotal + order_tax + shipping_cost) - grand_total1;
+            $("#order_total_discount").val(order_discount);
+        }
+        else{
+            var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+            $("#order_total_discount").val('');
+        }
         $('input[name="grand_total"]').val(grand_total.toFixed(2));
         if($('input[name="coupon_active"]').val()) {
             couponDiscount();

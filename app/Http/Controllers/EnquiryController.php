@@ -24,77 +24,71 @@ class EnquiryController extends Controller
     {
         # code...
         $role = Role::find(Auth::user()->role_id);
-      
-        if($role->hasPermissionTo('enquiry-index')){
+
+        if ($role->hasPermissionTo('enquiry-index')) {
             // print_r("ddd");die();
             $permissions = Role::findByName($role->name)->permissions;
             foreach ($permissions as $permission)
                 $all_permission[] = $permission->name;
-            if(empty($all_permission))
+            if (empty($all_permission))
                 $all_permission[] = 'dummy text';
             $lims_supplier_all = Enquiry::where('is_active', true)->get();
-            return view('enquiry.index',compact('lims_supplier_all', 'all_permission'));
-        }
-        else
+            return view('enquiry.index', compact('lims_supplier_all', 'all_permission'));
+        } else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
     public function create(Type $var = null)
     {
         # code...
         $role = Role::find(Auth::user()->role_id);
-       
-        if($role->hasPermissionTo('enquiry-add')){
+
+        if ($role->hasPermissionTo('enquiry-add')) {
             return view('enquiry.create');
-        }
-        else
+        } else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
     public function store(Request $request)
     {
         $this->validate($request, [
-            
+
             'email' => 'required|email|max:255|unique:enquiries,email|regex:/(.+)@(.+)\.(.+)/i',
             'mobile' => 'required|digits:10|min:5',
         ]);
-        
+
         $lims_enquiry_data = $request->all();
         $lims_enquiry_data['is_active'] = true;
-      
+
         Enquiry::create($lims_enquiry_data);
 
-       if($lims_enquiry_data['requirement'] == 1)
-       {
-        $lims_enquiry_data['requirement'] = "Landscape Design";
-       }
-       if($lims_enquiry_data['requirement'] == 2)
-       {
-        $lims_enquiry_data['requirement'] = "Execution";
-       }
+        if ($lims_enquiry_data['requirement'] == 1) {
+            $lims_enquiry_data['requirement'] = "Landscape Design";
+        }
+        if ($lims_enquiry_data['requirement'] == 2) {
+            $lims_enquiry_data['requirement'] = "Execution";
+        }
         $details = [
             'name'     =>   $lims_enquiry_data['name'],
             'email'    =>  $lims_enquiry_data['email'],
             'mobile'    =>   $lims_enquiry_data['mobile'],
             'requirement'     =>   $lims_enquiry_data['requirement']
-            ]; 
-            // print_r($details);die();
+        ];
+        // print_r($details);die();
         $message = 'Data inserted successfully';
-        try{
+        try {
             $res = Mail::to($lims_enquiry_data['email'])->send(new \App\Mail\EnquiryMail($details));
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             $message = 'Data inserted successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
         }
         return redirect('enquiry')->with('message', $message);
     }
-    
+
     public function edit($id)
     {
         $role = Role::find(Auth::user()->role_id);
-        if($role->hasPermissionTo('enquiry-edit')){
-            $lims_enquiry_data = Enquiry::where('id',$id)->first();
-            return view('enquiry.edit',compact('lims_enquiry_data'));
-        }
-        else
+        if ($role->hasPermissionTo('enquiry-edit')) {
+            $lims_enquiry_data = Enquiry::where('id', $id)->first();
+            return view('enquiry.edit', compact('lims_enquiry_data'));
+        } else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
     public function update(Request $request, $id)
@@ -102,7 +96,7 @@ class EnquiryController extends Controller
         $this->validate($request, [
             'email' => [
                 'max:255',
-                    Rule::unique('enquiries')->ignore($id)->where(function ($query) {
+                Rule::unique('enquiries')->ignore($id)->where(function ($query) {
                     return $query->where('is_active', 1);
                 }),
             ],
@@ -113,7 +107,7 @@ class EnquiryController extends Controller
         $input['is_active'] = true;
         $lims_enquiry_data->update($input);
 
-        return redirect('enquiry')->with('message','Data updated successfully');
+        return redirect('enquiry')->with('message', 'Data updated successfully');
     }
     public function destroy($id)
     {
@@ -122,7 +116,7 @@ class EnquiryController extends Controller
         $lims_enquiry_data->is_active = false;
         $lims_enquiry_data->save();
         $lims_enquiry_data->delete();
-        return redirect('enquiry')->with('not_permitted','Data deleted successfully');
+        return redirect('enquiry')->with('not_permitted', 'Data deleted successfully');
     }
     public function deleteBySelection(Request $request)
     {
@@ -137,50 +131,44 @@ class EnquiryController extends Controller
     public function enquiryMail($id)
     {
         # code...
-        
-        $data = Enquiry::where('id',$id)->first()->toArray();
+
+        $data = Enquiry::where('id', $id)->first()->toArray();
         $mailDetail = MailTemplate::where('is_active', true)->get();
         // print_r($mailDetail[0]['mail_content']);die();
         $documentData =  $mailDetail[0]['mail_content'];
         $keyData  = array_keys($data);
         $valueData  = array_values($data);
-        $new_string = str_replace($keyData,$valueData,strval($documentData));
+        $new_string = str_replace($keyData, $valueData, strval($documentData));
 
-        $search = array('{','}');
-        $mailDetail[0]['mail_content'] = str_replace($search,"",$new_string);
-        return view('enquiry.enquiry-mail',compact('data','mailDetail'));
+        $search = array('{', '}');
+        $mailDetail[0]['mail_content'] = str_replace($search, "", $new_string);
+        return view('enquiry.enquiry-mail', compact('data', 'mailDetail'));
     }
     public function enquirySentMail(Request $request)
     {
         // print_r($request->all());die();
         $filePath = 'images/enquiry_attachment/';
-        $path = public_path($filePath); 
-        if(!file_exists($path))
-        {
+        $path = public_path($filePath);
+        if (!file_exists($path)) {
             mkdir($path, 0777, true);
         }
-            
+
         $files = [];
-        if($request->hasfile('file'))
-         {
-            foreach($request->file('file') as $file)
-            {
-               if($file->extension() == "pdf")
-               {
-                // print_r("if"." ".$file->getClientOriginalName()." ");
-                $name = $file->getClientOriginalName().'.'.$file->extension();
-                $file->move(public_path('images/enquiry_attachment'), $name);  
-                $files[] = $name; 
-               $attachPath= public_path('images/enquiry_attachment');
-                $attachement[] =  $attachPath.'/'.$name;
-               } 
-        
+        if ($request->hasfile('file')) {
+            foreach ($request->file('file') as $file) {
+                if ($file->extension() == "pdf") {
+                    // print_r("if"." ".$file->getClientOriginalName()." ");
+                    $name = $file->getClientOriginalName() . '.' . $file->extension();
+                    $file->move(public_path('images/enquiry_attachment'), $name);
+                    $files[] = $name;
+                    $attachPath = public_path('images/enquiry_attachment');
+                    $attachement[] =  $attachPath . '/' . $name;
+                }
             }
-           
-         }
+        }
 
         // print_r($attachement);die();
-        
+
         $data = new EnquiryMailAttachment();
         $data->enquiry_id = $request['enquiry_id'];
         $data->enquiry_email = $request['email'];
@@ -191,32 +179,25 @@ class EnquiryController extends Controller
         $data->is_active = true;
         $data->save();
         $details = [
-            
+
             'email'    =>  $request['email'],
-           
+
             'mail_content'    =>  $request['mail_content'],
-            'attachment'=>$attachement
-            ]; 
-            // print_r($details);die();
-        $ccMail = explode(",",$request['cc']);
-        $bccMail = explode(",",$request['bcc']);
+            'attachment' => $attachement
+        ];
+        // print_r($details);die();
+        $ccMail = explode(",", $request['cc']);
+        $bccMail = explode(",", $request['bcc']);
         // $pdf = PDF::loadView('emails.myTestMail', $data);
-       
-        try{
-       
+
+        try {
+
             $res = Mail::to($request['email'])->cc($ccMail)->bcc($bccMail)->send(new \App\Mail\EnquiryMailTemplate($details));
-   
-               
-            
-        }
-        catch(\Exception $e) {
+        } catch (\Exception $e) {
             $message = $e;
             $message = 'Data inserted successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
         }
 
-        return redirect('enquiry')->with('message','Enquiry Mail Sent Successfully');
-
+        return redirect('enquiry')->with('message', 'Enquiry Mail Sent Successfully');
     }
-
-
 }

@@ -40,9 +40,11 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                   
+                                  
                                     <div class="form-group">
                                         <label>Stripe Publishable key</label>
-                                        <input type="text" name="stripe_public_key" class="form-control" value="@if($lims_pos_setting_data){{$lims_pos_setting_data->stripe_public_key}}@endif" required />
+                                        <input type="text" name="stripe_public_key" class="form-control" value="@if($lims_pos_setting_data){{$lims_pos_setting_data->stripe_public_key}}@endif" />
                                     </div>
                                     <div class="form-group">
                                         <label>Paypal Pro API Username</label>
@@ -51,6 +53,16 @@
                                     <div class="form-group">
                                         <label>Paypal Pro API Signature</label>
                                         <input type="text" name="paypal_signature" class="form-control" value="{{env('PAYPAL_SANDBOX_API_SECRET')}}" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{trans('file.discount_method')}} *</label>
+                                        @if($lims_pos_setting_data)
+                                        <input type="hidden" name="discount_method_hidden" value="{{$lims_pos_setting_data->discount_method}}">
+                                        @endif
+                                        <select required name="discount_method" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Discount...">
+                                            <option value="amount"  >Amount</option>
+                                            <option value="discount">Discount</option>
+                                        </select>
                                     </div>
                                     <div class="form-group">
                                         <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
@@ -91,6 +103,7 @@
                                         <label>Paypal Pro API Password</label>
                                         <input type="password" name="paypal_password" class="form-control" value="{{env('PAYPAL_SANDBOX_API_PASSWORD')}}" />
                                     </div>
+                                    
                                     <div class="form-group">
                                         @if($lims_pos_setting_data && $lims_pos_setting_data->keybord_active)
                                         <input class="mt-2" type="checkbox" name="keybord_active" value="1" checked>
@@ -114,15 +127,16 @@
 @push('scripts')
 <script type="text/javascript">
 
-    $("ul#point_of_sale_setup").siblings('a').attr('aria-expanded','true');
-    $("ul#point_of_sale_setup").addClass("show");
-    $("ul#point_of_sale_setup #pos-setting-menu").addClass("active");
+    $("ul#setting").siblings('a').attr('aria-expanded','true');
+    $("ul#setting").addClass("show");
+    $("ul#setting #pos-setting-menu").addClass("active");
 
 
 
     $('select[name="customer_id"]').val($("input[name='customer_id_hidden']").val());
     $('select[name="biller_id"]').val($("input[name='biller_id_hidden']").val());
     $('select[name="warehouse_id"]').val($("input[name='warehouse_id_hidden']").val());
+    $('select[name="discount_method"]').val($("input[name='discount_method_hidden']").val());
     $('select[name="supplier_id"]').val($("input[name='supplier_id_hidden']").val());
     $('.selectpicker').selectpicker('refresh');
 

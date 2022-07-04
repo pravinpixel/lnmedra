@@ -167,10 +167,31 @@
                 @endif
                 @if($lims_sale_data->order_discount)
                 <tr>
+                    <th colspan="2" style="text-align:left">{{trans('file.discount_type')}}</th>
+                    @if($lims_sale_data->order_discount_method == 'amount')
+                    <th style="text-align:right">Flat</th>
+                    @else
+                    <th style="text-align:right">Percentage</th>
+                    @endif
+
+                </tr>
+                @endif
+                @if($lims_sale_data->order_discount)
+                <tr>
+                    <th colspan="2" style="text-align:left">{{trans('file.Order Discount')}}({{$lims_sale_data->order_discount}}<?php if($lims_sale_data->order_discount_method=='discount')echo"%"?>)
+                        
+                    </th>
+                    
+                    <th style="text-align:right">{{number_format((float)$lims_sale_data->total_price, 2, '.', '') - number_format((float)$lims_sale_data->grand_total, 2, '.', '')}}</th>
+                </tr>
+                @endif
+                {{-- @if($lims_sale_data->order_discount)
+                <tr>
                     <th colspan="2" style="text-align:left">{{trans('file.Order Discount')}}</th>
                     <th style="text-align:right">{{number_format((float)$lims_sale_data->order_discount, 2, '.', '')}}</th>
                 </tr>
-                @endif
+                @endif --}}
+               
                 @if($lims_sale_data->coupon_discount)
                 <tr>
                     <th colspan="2" style="text-align:left">{{trans('file.Coupon Discount')}}</th>

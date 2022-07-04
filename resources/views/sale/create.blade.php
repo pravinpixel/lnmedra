@@ -48,13 +48,14 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <?php $outletId = Auth::user()->warehouse_id ?>
+                                    {{-- <?php $outletId = Auth::user()->warehouse_id ?> --}}
                                     <div class="col-md-4" id="outletStoreDiv">
                                         <div class="form-group">
                                             <label>{{trans('file.Warehouse')}} *</label>
                                             <select required name="warehouse_id" id="warehouse_id" class="selectpicker form-control outletStore" data-live-search="true" data-live-search-style="begins" title="Select warehouse...">
                                                 @foreach($lims_warehouse_list as $warehouse)
-                                                <option value="{{$warehouse->id}}" <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?>>{{$warehouse->name}}</option>
+                                                {{-- <option value="{{$warehouse->id}}" <?php echo "{{$warehouse->id}}" == "{{$outletId}}" ?   "selected" : '' ;?>>{{$warehouse->name}}</option> --}}
+                                                <option value="{{$warehouse->id}}" >{{$warehouse->name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -163,6 +164,18 @@
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="col-md-4">
+                                        <label>{{trans('file.discount_method')}} *</label>
+                                        @if($lims_pos_setting_data)
+                                    <input type="hidden" value="" name="order_total_discount" id="order_total_discount">
+                                        <input type="hidden" name="discount_method_hidden" value="{{$lims_pos_setting_data->discount_method}}">
+                                        @endif
+                                        <select required name="order_discount_method" id="order_discount_method" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Discount...">
+                                            <option value="amount" >Amount</option>
+                                            <option value="discount">Discount</option>
+                                        </select>
+                                    </div>
+
                                     <div class="col-md-4">
                                         <div class="form-group">
                                             <label>
@@ -420,12 +433,13 @@
 
 @push('scripts')
 <script type="text/javascript">
+$('select[name="order_discount_method"]').val($("input[name='discount_method_hidden']").val());
 <?php $id =Auth::user()->role_id ?>
     var auth_id = {{$id}};
     if(auth_id != 1)
     {
     
-        $('.outletStore').prop('disabled',true);
+        // $('.outletStore').prop('disabled',true);
         $('#outletStoreDiv').hide();
         
     }
@@ -956,6 +970,8 @@ function calculateGrandTotal() {
     var order_tax = parseFloat($('select[name="order_tax_rate"]').val());
     var order_discount = parseFloat($('input[name="order_discount"]').val());
     var shipping_cost = parseFloat($('input[name="shipping_cost"]').val());
+    var order_discount_method = $('#order_discount_method').val();
+
 
     if (!order_discount)
         order_discount = 0.00;
@@ -964,8 +980,19 @@ function calculateGrandTotal() {
 
     item = ++item + '(' + total_qty + ')';
     order_tax = (subtotal - order_discount) * (order_tax / 100);
-    var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
-
+    // alert(order_discount_method)
+    // var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+    if(order_discount_method == 'discount')
+    {
+        var grand_total1 = (((subtotal + order_tax + shipping_cost) * order_discount)/100);
+        var grand_total = (subtotal + order_tax + shipping_cost) - grand_total1;
+        $("#order_total_discount").val(order_discount);
+    }
+    else{
+        
+        var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+        $("#order_total_discount").val('');
+    }
     $('#item').text(item);
     $('input[name="item"]').val($('table.order-list tbody tr:last').index() + 1);
     $('#subtotal').text(subtotal.toFixed(2));

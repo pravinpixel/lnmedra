@@ -1173,6 +1173,24 @@
                                     <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
                                 </div>
                                 <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-check border shadow-sm p-2 rounded">
+                                            
+                                            <input type="radio" name="order_discount_method"  class="mr-2" value="amount" <?php if('amount' == $lims_pos_setting_data->discount_method) echo 'checked="checked"'; ?> class="form-control numkey" id="order-total-discount" >
+                                            <label  class="form-check-label" for="exampleRadios2">Flat</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-check border shadow-sm p-2 rounded">
+                                            <input type="radio" name="order_discount_method"  class="mr-2" value="discount" <?php if('discount' == $lims_pos_setting_data->discount_method) echo 'checked="checked"'; ?> class="form-control numkey" id="order-total-discount" >
+                                            <label  class="form-check-label" for="exampleRadios2">Percentage</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <input type="hidden" value="" name="order_total_discount" id="order_total_discount">
+                                <div class="modal-body">
                                     <div class="form-group">
                                         <input type="text" name="order_discount" class="form-control numkey" id="order-discount" onkeyup='saveValue(this);'>
                                     </div>
@@ -1859,6 +1877,8 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+        $('#customer_id').val('');
+        $('#order-discount').val('');
         $('#featured-filter').trigger('click');
         });
         function change_grid() {
@@ -2489,6 +2509,7 @@ $('select[name="customer_id"]').on('change', function() {
     var id = $(this).val();
     $("#customer_id_hidden").val(id);
     $.get('sales/getcustomergroup/' + id, function(data) {
+        // alert(data/100)
         customer_group_rate = (data / 100);
     });
 });
@@ -2633,7 +2654,7 @@ $(document).on('click', '.product-img', function() {
         pos = product_code.indexOf(data[0]);
         if(pos < 0)
             Alert('warning', 'Product is not available in the selected outlet !');
-        else{
+        else{     
             productSearch(data[0]);
         }
     }
@@ -3046,7 +3067,7 @@ function addNewProduct(data){
     cols += '<input type="hidden" class="sale-unit-operation-value" value="'+data[8]+'" />';
     cols += '<input type="hidden" class="subtotal-value" name="subtotal[]" />';
     cols += '<input type="hidden" class="imei-number" name="imei_number[]" />';
-
+   
     newRow.append(cols);
     if(keyboard_active==1) {
         $("table.order-list tbody").prepend(newRow).find('.qty').keyboard({usePreview: false, layout: 'custom', display: { 'accept'  : '&#10004;', 'cancel'  : '&#10006;' }, customLayout : {
@@ -3058,9 +3079,13 @@ function addNewProduct(data){
     rowindex = newRow.index();
 
     if(!data[11] && product_warehouse_price[pos]) {
+       
         product_price.splice(rowindex, 0, parseFloat(product_warehouse_price[pos] * currency['exchange_rate']) + parseFloat(product_warehouse_price[pos] * currency['exchange_rate'] * customer_group_rate));
     }
     else {
+        // alert(parseFloat(customer_group_rate)); //customer_group_rate is null so that product price is showing NaN value
+        // alert(parseFloat(data[2] * currency['exchange_rate'] * customer_group_rate));
+        // alert("aaa");
         product_price.splice(rowindex, 0, parseFloat(data[2] * currency['exchange_rate']) + parseFloat(data[2] * currency['exchange_rate'] * customer_group_rate));
     }
     product_discount.splice(rowindex, 0, '0.00');
@@ -3097,7 +3122,7 @@ function addNewProduct(data){
     localStorage.setItem("localStorageTaxMethod", localStorageTaxMethod);
     localStorage.setItem("localStorageTempUnitName", localStorageTempUnitName);
     localStorage.setItem("localStorageSaleUnitOperator", localStorageSaleUnitOperator);
-    localStorage.setItem("localStorageSaleUnitOperationValue", localStorageSaleUnitOperationValue);
+    localStorage.setItem("localStorageSaleUnitOperationValue", localStorageSaleUnitOperationValue); 
     checkQuantity(1, true);
     localStorage.setItem("tbody-id", $("table.order-list tbody").html());
     if(data[13]) {
@@ -3206,6 +3231,7 @@ function couponDiscount() {
 }
 
 function checkQuantity(sale_qty, flag) {
+   
     var row_product_code = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.product-code').val();
     pos = product_code.indexOf(row_product_code);
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text(product_qty[pos]);
@@ -3272,6 +3298,7 @@ function checkQuantity(sale_qty, flag) {
         $('#editModal').modal('hide');
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.qty').val(sale_qty);
     }
+  
     calculateRowProductData(sale_qty);
 
 }
@@ -3284,7 +3311,7 @@ function unitConversion() {
         row_product_price = product_price[rowindex] * row_unit_operation_value;
     } else {
         row_product_price = product_price[rowindex] / row_unit_operation_value;
-    }
+    }  
 }
 
 function calculateRowProductData(quantity) {
@@ -3293,8 +3320,9 @@ function calculateRowProductData(quantity) {
     else
         row_product_price = product_price[rowindex];
 
+        // alert(product_price[rowindex])
     if (tax_method[rowindex] == 1) {
-        var net_unit_price = row_product_price - product_discount[rowindex];
+        var net_unit_price = row_product_price - product_discount[rowindex];      
         var tax = net_unit_price * quantity * (tax_rate[rowindex] / 100);
         var sub_total = (net_unit_price * quantity) + tax;
 
@@ -3381,6 +3409,7 @@ function calculateGrandTotal() {
     //Alert( 'warning',order_tax);
     localStorage.setItem("order-tax-rate-select", order_tax);
     var order_discount = parseFloat($('input[name="order_discount"]').val());
+    var order_discount_method = ($('input[name="order_discount_method"]:checked').val());
     if (!order_discount)
         order_discount = 0.00;
     $("#discount").text(order_discount.toFixed(2));
@@ -3391,7 +3420,18 @@ function calculateGrandTotal() {
 
     item = ++item + '(' + total_qty + ')';
     order_tax = (subtotal - order_discount) * (order_tax / 100);
-    var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+    // alert((subtotal + order_tax + shipping_cost))
+    if(order_discount_method == 'discount')
+    {
+        var grand_total1 = (((subtotal + order_tax + shipping_cost) * order_discount)/100);
+        var grand_total = (subtotal + order_tax + shipping_cost) - grand_total1;
+        $("#order_total_discount").val(order_discount);
+        // alert(grand_total);
+    }
+    else{
+        var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+        $("#order_total_discount").val('');
+    }
     $('input[name="grand_total"]').val(grand_total.toFixed(2));
 
     couponDiscount();
