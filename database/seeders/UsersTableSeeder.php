@@ -14,13 +14,13 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        
+
 
         \DB::table('users')->delete();
-        
-        \DB::table('users')->insert(array (
-            0 => 
-            array (
+
+        \DB::table('users')->insert(array(
+            0 =>
+            array(
                 'id' => '1',
                 'name' => 'admin',
                 'email' => 'admin@gmail.com',
@@ -40,13 +40,13 @@ class UsersTableSeeder extends Seeder
                 'id_proof' => NULL,
                 'address_proof' => NULL,
             ),
-            1 => 
-            array (
+            1 =>
+            array(
                 'id' => '2',
                 'name' => 'vendor',
                 'email' => 'vendor@gmail.com',
                 'password' => '$2y$10$w.b2bzWwbCP1Ud41QSfRAuzL7NTu3s0i.ZWIN6fi6Qwm5UhnhmYeq',
-                'vendor_id' => NULL,
+                'vendor_id' => '1',
                 'remember_token' => NULL,
                 'created_at' => '2022-03-04 15:59:03',
                 'updated_at' => '2022-03-17 17:51:20',
@@ -61,8 +61,8 @@ class UsersTableSeeder extends Seeder
                 'id_proof' => NULL,
                 'address_proof' => NULL,
             ),
-            2 => 
-            array (
+            2 =>
+            array(
                 'id' => '3',
                 'name' => 'ceo',
                 'email' => 'ceo@gmail.com',
@@ -71,7 +71,7 @@ class UsersTableSeeder extends Seeder
                 'remember_token' => NULL,
                 'created_at' => '2022-03-17 17:47:09',
                 'updated_at' => '2022-03-25 11:54:25',
-            'phone' => '+1 (572) 487-8275',
+                'phone' => '+1 (572) 487-8275',
                 'company_name' => 'Bugs & Bees',
                 'role_id' => '2',
                 'is_active' => '1',
@@ -82,8 +82,8 @@ class UsersTableSeeder extends Seeder
                 'id_proof' => NULL,
                 'address_proof' => NULL,
             ),
-            3 => 
-            array (
+            3 =>
+            array(
                 'id' => '4',
                 'name' => 'staff',
                 'email' => 'staff@gmail.com',
@@ -92,7 +92,7 @@ class UsersTableSeeder extends Seeder
                 'remember_token' => NULL,
                 'created_at' => '2022-03-17 17:49:21',
                 'updated_at' => '2022-03-17 17:49:21',
-            'phone' => '+1 (274) 945-94971',
+                'phone' => '+1 (274) 945-94971',
                 'company_name' => 'Bugs & Bees',
                 'role_id' => '3',
                 'is_active' => '1',
@@ -103,8 +103,8 @@ class UsersTableSeeder extends Seeder
                 'id_proof' => NULL,
                 'address_proof' => NULL,
             ),
-            4 => 
-            array (
+            4 =>
+            array(
                 'id' => '5',
                 'name' => 'Super Admin',
                 'email' => 'superadmin@gmail.com',
@@ -124,8 +124,8 @@ class UsersTableSeeder extends Seeder
                 'id_proof' => NULL,
                 'address_proof' => NULL,
             ),
-            5 => 
-            array (
+            5 =>
+            array(
                 'id' => '6',
                 'name' => 'Ajith',
                 'email' => 'ajith@gmail.com',
@@ -145,8 +145,8 @@ class UsersTableSeeder extends Seeder
                 'id_proof' => NULL,
                 'address_proof' => NULL,
             ),
-            6 => 
-            array (
+            6 =>
+            array(
                 'id' => '7',
                 'name' => 'pravin',
                 'email' => 'pravin@pixel-studios.com',
@@ -166,8 +166,8 @@ class UsersTableSeeder extends Seeder
                 'id_proof' => NULL,
                 'address_proof' => NULL,
             ),
-            7 => 
-            array (
+            7 =>
+            array(
                 'id' => '8',
                 'name' => 'lnmsupplier',
                 'email' => 'lnmsupplier@gmail.com',

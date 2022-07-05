@@ -171,7 +171,7 @@
                                         <input type="hidden" name="discount_method_hidden" value="{{$lims_pos_setting_data->discount_method}}">
                                         @endif
                                         <select required name="order_discount_method" id="order_discount_method" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Discount...">
-                                            <option value="amount" >Amount</option>
+                                            <option value="amount" >Flat</option>
                                             <option value="discount">Discount</option>
                                         </select>
                                     </div>

@@ -40,6 +40,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CategoriesTableSeeder::class);
         $this->call(CurrenciesTableSeeder::class);
         $this->call(PermissionsTableSeeder::class);
+        $this->call(SupplierTableSeeder::class);
         $this->call(RoleHasPermissionsTableSeeder::class);
         $this->call(GeneralSettingsTableSeeder::class);
         $this->call(HrmSettingsTableSeeder::class);
