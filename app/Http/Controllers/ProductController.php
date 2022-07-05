@@ -267,9 +267,8 @@ class ProductController extends Controller
             $lims_unit_list = Unit::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
-            return view('product.create',compact('lims_product_list_without_variant', 'lims_product_list_with_variant', 'productType', 'lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_warehouse_list'));
-        }
-         else
+            return view('product.create', compact('lims_product_list_without_variant', 'lims_product_list_with_variant', 'productType', 'lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_warehouse_list'));
+        } else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
     public function vendorProductStatus(Request $request)
@@ -278,16 +277,14 @@ class ProductController extends Controller
         $data = Product::where('id', $request->id)->first();
         if ($data->is_active == true) {
             $data->is_active = false;
-        }else{
+        } else {
             $data->is_active = true;
         }
 
         $res = $data->save();
-        if($res)
-        {
+        if ($res) {
             return response()->json(['status', 'Status Updated successfully!']);
         }
-
     }
     public function store(Request $request)
     {
@@ -326,27 +323,26 @@ class ProductController extends Controller
         // $data['qty_list'] = implode(",", $data['product_qty']);
         // $data['price_list'] = implode(",", $data['unit_price']);
         $data['product_details'] = str_replace('"', '@', $data['product_details']);
-        if($request['attribute']) {
+        if ($request['attribute']) {
             $data['attribute'] = implode(',', $request['attribute']);
         }
 
         // dd(implode(',',$request['attribute']));
-        if($data['starting_date'])
+        if ($data['starting_date'])
             $data['starting_date'] = date('Y-m-d', strtotime($data['starting_date']));
-        if($data['last_date'])
+        if ($data['last_date'])
             $data['last_date'] = date('Y-m-d', strtotime($data['last_date']));
         $data['is_active'] = true;
         $images = $request->image;
         $image_names = [];
-        if($images) {
+        if ($images) {
             foreach ($images as $key => $image) {
                 $imageName = $image->getClientOriginalName();
                 $image->move('public/images/product', $imageName);
                 $image_names[] = $imageName;
             }
             $data['image'] = implode(",", $image_names);
-        }
-        else {
+        } else {
             $data['image'] = 'zummXD2dvAtI.png';
         }
         $file = $request->file;
@@ -361,14 +357,14 @@ class ProductController extends Controller
         // dd($data);
 
         $lims_product_data = Product::create($data);
-        if($lims_product_data){
+        if ($lims_product_data) {
             $user = User::find(1);
             $user->notify(new ProductCreation($lims_product_data));
         }
         //dealing with product variant
-        if(!isset($data['is_batch']))
+        if (!isset($data['is_batch']))
             $data['is_batch'] = null;
-        if(isset($data['is_variant'])) {
+        if (isset($data['is_variant'])) {
             foreach ($data['variant_name'] as $key => $variant_name) {
                 $lims_variant_data = Variant::firstOrCreate(['name' => $data['variant_name'][$key]]);
                 $lims_variant_data->name = $data['variant_name'][$key];
@@ -383,9 +379,9 @@ class ProductController extends Controller
                 $lims_product_variant_data->save();
             }
         }
-        if(isset($data['is_diffPrice'])) {
+        if (isset($data['is_diffPrice'])) {
             foreach ($data['diff_price'] as $key => $diff_price) {
-                if($diff_price) {
+                if ($diff_price) {
                     Product_Warehouse::create([
                         "product_id" => $lims_product_data->id,
                         "warehouse_id" => $data["warehouse_id"][$key],
@@ -413,18 +409,16 @@ class ProductController extends Controller
             $lims_product_variant_data = $lims_product_data->variant()->orderBy('position')->get();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             return view('product.edit', compact('lims_product_list_without_variant', 'productType', 'lims_product_list_with_variant', 'lims_brand_list', 'lims_category_list', 'lims_unit_list', 'lims_tax_list', 'lims_product_data', 'lims_product_variant_data', 'lims_warehouse_list'));
-        } 
-        else
+        } else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
 
     public function updateProduct(Request $request)
     {
         // dd($request);
-        if(!env('USER_VERIFIED')) {
+        if (!env('USER_VERIFIED')) {
             \Session::flash('not_permitted', 'This feature is disable for demo!');
-        } 
-        else {
+        } else {
             $this->validate($request, [
                 'name' => [
                     'max:255',
@@ -456,46 +450,45 @@ class ProductController extends Controller
             // elseif($data['type'] == 'digital' || $data['type'] == 'service')
             //     $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
             // $data['cost'] = $data['unit_id'] = $data['purchase_unit_id'] = $data['sale_unit_id'] = 0;
-            if(!isset($data['featured']))
+            if (!isset($data['featured']))
                 $data['featured'] = 0;
 
-            if(!isset($data['promotion']))
+            if (!isset($data['promotion']))
                 $data['promotion'] = null;
 
-            if(!isset($data['is_batch']))
+            if (!isset($data['is_batch']))
                 $data['is_batch'] = null;
 
-            if(!isset($data['is_imei']))
+            if (!isset($data['is_imei']))
                 $data['is_imei'] = null;
-            if($request['attribute']) {
+            if ($request['attribute']) {
                 $data['attribute'] = implode(',', $request['attribute']);
             }
 
             $lims_product_data->attribute = json_encode($request['attribute']);
             $data['product_details'] = str_replace('"', '@', $data['product_details']);
             $data['product_details'] = $data['product_details'];
-            if(!empty($data['starting_date']))
+            if (!empty($data['starting_date']))
                 $data['starting_date'] = date('Y-m-d', strtotime($data['starting_date']));
-            if(!empty($data['last_date']))
+            if (!empty($data['last_date']))
                 $data['last_date'] = date('Y-m-d', strtotime($data['last_date']));
 
             $previous_images = [];
             //dealing with previous images
-            if($request->prev_img) {
+            if ($request->prev_img) {
                 foreach ($request->prev_img as $key => $prev_img) {
                     if (!in_array($prev_img, $previous_images))
                         $previous_images[] = $prev_img;
                 }
                 $lims_product_data->image = implode(",", $previous_images);
                 $lims_product_data->save();
-            }
-            else {
+            } else {
                 $lims_product_data->image = null;
                 $lims_product_data->save();
             }
 
             //dealing with new images
-            if($request->image) {
+            if ($request->image) {
                 $images = $request->image;
                 $image_names = [];
                 $length = count(explode(",", $lims_product_data->image));
@@ -506,12 +499,11 @@ class ProductController extends Controller
                     $image->move('public/images/product', $imageName);
                     $image_names[] = $imageName;
                 }
-                if($lims_product_data->image)
+                if ($lims_product_data->image)
                     $data['image'] = $lims_product_data->image . ',' . implode(",", $image_names);
                 else
                     $data['image'] = implode(",", $image_names);
-            } 
-            else
+            } else
                 $data['image'] = $lims_product_data->image;
 
             $file = $request->file;
@@ -594,7 +586,7 @@ class ProductController extends Controller
             $lims_product_data->update($data);
             // \Session::flash('edit_message', 'Product updated successfully');
             // return redirect('/products/index')->with('edit_message', 'Product updated successfully');
-            return redirect()->route('products.index')->with('edit_message','Product updated successfully.');
+            return redirect()->route('products.index')->with('edit_message', 'Product updated successfully.');
             // return back()->with('edit_message', 'Product updated successfully');
         }
     }
