@@ -54,7 +54,7 @@ class VendorController extends Controller
             ],
             'email' => 'required|email|max:255|unique:suppliers,email|regex:/(.+)@(.+)\.(.+)/i',
             'phone_number' => 'required|digits:10|unique:suppliers,phone_number|min:5',
-            'entity_name' => 'required|min:10'
+            'entity_name' => 'required'
 
         ], []);
         // ], [],$attributeNames);
@@ -66,7 +66,7 @@ class VendorController extends Controller
         $lims_supplier_data['password'] =  $password;
 
         $lims_supplier_data['category'] = json_encode($lims_supplier_data['category']);
-
+        $lims_supplier_data['nursery_code'] = strtoupper($lims_supplier_data['nursery_code']);
         $vendor_id = Supplier::create($lims_supplier_data)->id;
 
         $data['name'] =  $lims_supplier_data['name'];

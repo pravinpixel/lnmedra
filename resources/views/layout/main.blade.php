@@ -96,7 +96,9 @@
           <!-- Sidebar Navigation Menus-->
           <div class="main-menu">
             <div class="text-center my-3">
-              <a href="{{url('/')}}"><img src="{{url('public/logo/logo_two.png')}}" width="120px"></a>
+            <?php $site_title = DB::table('general_settings')->first(); ?>
+              {{-- <a href="{{url('/')}}"><img src="{{url('public/logo/logo_two.png')}}" width="120px"></a> --}}
+              <a href="{{url('/')}}"><img src="{{asset('public/logo/'.$site_title->site_logo)}}" width="120px"></a>  
             </div>
             <ul id="side-main-menu" class="side-menu list-unstyled">
               @if(Auth::user()->role_id == 6) 

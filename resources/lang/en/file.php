@@ -468,6 +468,7 @@ return [
 	'Update Brand' => 'Update Brand',
 	'Import Unit' => 'Import Unit',
 	'Update Unit' => 'Update Unit',
+	'nursery_code' => 'Nursery Code',
 	'Import Tax' => 'Import Tax',
 	'discount_type' => 'Discount Type',
 	'discount_amount' => 'Discount Amount',

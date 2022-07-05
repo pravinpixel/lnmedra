@@ -230,9 +230,9 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.Mobile')}} *</label>
-                                            <input type="number" name="phone_number" min="0" value="{{old('phone_number')}}" required class="form-control noscroll"/>
+                                            <input type="text" name="phone_number"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"  maxlength="10" min="0" value="{{old('phone_number')}}" required class="form-control noscroll"/>
                                             @if($errors->has('phone_number'))
-                                            
+
                                             <label  class="error" for="phone_number">{{ $errors->first('phone_number') }}</label>
                                             @endif
                                         </div>
@@ -290,6 +290,13 @@
                                             <label>{{ trans('file.Postal Code') }}</label>
                                             <input type="text" name="postal_code"
                                                 value="{{ old('postal_code') }}" class="form-control">
+                                        </div>
+                                    </div> 
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>{{ trans('file.nursery_code') }}*</label>
+                                            <input type="text" name="nursery_code"
+                                                value="{{ old('nursery_code') }}" maxlength="3" onkeydown="return /[a-z]/i.test(event.key)"  style="text-transform:uppercase" required class="form-control">
                                         </div>
                                     </div> 
                                     <div class="col-md-12 py-3">
@@ -679,12 +686,9 @@
                         required: true,
                         maxlength: 200
                     }, 
-                }, 
+                }), 
 
             });
-
-
-        });
     </script>
 </body>
 

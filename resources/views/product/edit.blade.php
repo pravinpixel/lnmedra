@@ -959,7 +959,8 @@ var baseUrl = $('#baseUrl').val();
         var barcode_symbology = $('select[name="barcode_symbology"]').val();
         var exp = /^\d+$/;
 
-        if(!(product_code.match(exp)) && (barcode_symbology == 'UPCA' || barcode_symbology == 'UPCE' || barcode_symbology == 'EAN8' || barcode_symbology == 'EAN13') ) {
+        // if(!(product_code.match(exp)) && (barcode_symbology == 'UPCA' || barcode_symbology == 'UPCE' || barcode_symbology == 'EAN8' || barcode_symbology == 'EAN13') ) {
+        if(! (barcode_symbology == 'UPCA' || barcode_symbology == 'UPCE' || barcode_symbology == 'EAN8' || barcode_symbology == 'EAN13') ) {
             alert('Product code must be numeric.');
             return false;
         }

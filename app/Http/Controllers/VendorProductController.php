@@ -1353,6 +1353,8 @@ class VendorProductController extends Controller
             $file->move('public/product/files', $fileName);
             $data['file'] = $fileName;
         }
+        $supplier = Supplier::select('nursery_code')->where('id', Auth::user()->vendor_id)->first();
+        $data['code'] = $supplier['nursery_code'] . '-' . $data['code'];
         $lims_product_data = Product::create($data);
         // $vendorData = new VendorProduct();
         // $vendorData->product_id = $lims_product_data->id;
