@@ -71,6 +71,7 @@ class SupplierController extends Controller
         $password = Hash::make($lims_supplier_data['password']);
         $lims_supplier_data['password'] =  $password;
         $lims_supplier_data['category'] = json_encode($lims_supplier_data['category']);
+        $lims_supplier_data['nursery_code'] = strtoupper($lims_supplier_data['nursery_code']);
         // $image = $request->image;
         // if ($image) {
         //     $ext = pathinfo($image->getClientOriginalName(), PATHINFO_EXTENSION);
@@ -152,6 +153,7 @@ class SupplierController extends Controller
         $lims_supplier_data['password'] =  $password;
         $input['password'] =  $password;
         $lims_supplier_data['category'] = json_encode($lims_supplier_data['category']);
+        $input['nursery_code'] = strtoupper($input['nursery_code']);
         $lims_supplier_data->update($input);
 
 

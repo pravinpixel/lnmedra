@@ -140,6 +140,13 @@
                                         <input type="text" name="postal_code" value="{{$lims_supplier_data->postal_code}}"  class="form-control">
                                     </div>
                                 </div> 
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>{{ trans('file.nursery_code') }}*</label>
+                                        <input type="text" name="nursery_code"
+                                            value="{{$lims_supplier_data->nursery_code}}" maxlength="3" onkeydown="return /[a-z]/i.test(event.key)"  style="text-transform:uppercase" required class="form-control">
+                                    </div>
+                                </div> 
                                 {{-- <!-- <div class="col-md-6">
                                     <div class="form-group">
                                         <label>{{trans('file.VAT Number')}}</label>

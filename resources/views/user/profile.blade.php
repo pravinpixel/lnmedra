@@ -17,7 +17,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label>{{trans('file.UserName')}} *</strong> </label>
-                                    <input type="text" name="name" value="{{$lims_user_data->name}}" required class="form-control" />
+                                    <input type="text" name="name" value="{{$lims_user_data['name']}}" required class="form-control" />
                                     @if($errors->has('name'))
                                     <span>
                                        <strong>{{ $errors->first('name') }}</strong>
@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>{{trans('file.Email')}} *</strong> </label>
-                                    <input type="email" name="email" value="{{$lims_user_data->email}}" required class="form-control">
+                                    <input type="email" name="email" value="{{$lims_user_data['email']}}" required class="form-control">
                                     @if($errors->has('email'))
                                     <span>
                                        <strong>{{ $errors->first('email') }}</strong>
@@ -35,12 +35,19 @@
                                 </div>
                                 <div class="form-group">
                                     <label>{{trans('file.Phone Number')}} *</strong> </label>
-                                    <input type="text" name="phone" value="{{$lims_user_data->phone}}" required class="form-control" />
+                                    <input type="text" name="phone" value="{{$lims_user_data['phone']}}" required class="form-control" />
                                 </div>
                                 <div class="form-group">
                                     <label>{{trans('file.Company Name')}}</strong> </label>
-                                    <input type="text" name="company_name" value="{{$lims_user_data->company_name}}" class="form-control" />
+                                    <input type="text" name="company_name" value="{{$lims_user_data['company_name']}}" class="form-control" />
                                 </div>
+                                @if(isset($lims_user_data['vendor_id']))
+                                <div class="form-group">
+                                    <label>{{ trans('file.nursery_code') }}*</label>
+                                    <input type="text" name="nursery_code"
+                                        value="{{$lims_user_data['nursery_code']}}" maxlength="3" onkeydown="return /[a-z]/i.test(event.key)"  style="text-transform:uppercase" required class="form-control">
+                                </div>
+                                @endif
                                 <div class="form-group">
                                     <input type="submit" value="{{trans('file.submit')}}" class="btn btn-primary">
                                 </div>

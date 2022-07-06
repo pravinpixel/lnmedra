@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Auth::routes();
 
-Route::group(['middleware' => 'auth'], function() {
+Route::group(['middleware' => 'auth'], function () {
 	Route::get('/dashboard', 'HomeController@dashboard');
 });
 
@@ -27,7 +27,7 @@ Route::group(['middleware' => 'auth'], function() {
 Route::get('vendor/vendor-register', 'VendorController@vendorregisterview')->name('vendor.vendor-register');
 Route::post('vendor/vendor-register-form', 'VendorController@vendorRegister')->name('vendor.vendor-register-form');
 
-Route::group(['middleware' => ['auth', 'active']], function() {
+Route::group(['middleware' => ['auth', 'active']], function () {
 
 	Route::get('/', 'HomeController@index')->name("welcome_dashboard");
 	Route::get('/dashboard-filter/{start_date}/{end_date}', 'HomeController@dashboardFilter');
@@ -63,15 +63,15 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('importsupplier', 'SupplierController@importSupplier')->name('supplier.import');
 	Route::post('supplier/deletebyselection', 'SupplierController@deleteBySelection');
 	Route::get('supplier/vendorStatus', 'SupplierController@vendorStatus')->name('supplier.vendorStatus');
-	
+
 	Route::get('supplier/lims_supplier_search', 'SupplierController@limsSupplierSearch')->name('supplier.search');
 	Route::resource('supplier', 'SupplierController');
-	
+
 	Route::get('supplier/vendor-password/{id}', 'SupplierController@vendorPasswordResetView')->name('supplier.vendor-password');
-	
+
 	Route::put('supplier/vendor-reset-password/{id}', 'SupplierController@vendorReset')->name('supplier.vendor-reset-password');
-	
-	Route::get('purchases/default-outlet/{id}','WarehouseController@getOutlet')->name('purchases.default-outlet');
+
+	Route::get('purchases/default-outlet/{id}', 'WarehouseController@getOutlet')->name('purchases.default-outlet');
 
 	Route::post('importwarehouse', 'WarehouseController@importWarehouse')->name('warehouse.import');
 	Route::post('warehouse/deletebyselection', 'WarehouseController@deleteBySelection');
@@ -84,7 +84,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::resource('tax', 'TaxController');
 
 	//Route::get('products/getbarcode', 'ProductController@getBarcode');
-	
+
 	Route::get('products/subcategoryId/{id}', 'ProductController@subcategoryId')->name('product.subcategoryId');
 	Route::post('products/product-data', 'ProductController@productData');
 	Route::get('products/gencode', 'ProductController@generateCode');
@@ -94,9 +94,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('products/product_warehouse/{id}', 'ProductController@productWarehouseData');
 	Route::post('importproduct', 'ProductController@importProduct')->name('product.import');
 	Route::post('exportproduct', 'ProductController@exportProduct')->name('product.export');
-	Route::get('products/print_barcode','ProductController@printBarcode')->name('product.printBarcode');
-	Route::get('products/get-dropdown','ProductController@getDropdown')->name('product.get-dropdown');
-	
+	Route::get('products/print_barcode', 'ProductController@printBarcode')->name('product.printBarcode');
+	Route::get('products/get-dropdown', 'ProductController@getDropdown')->name('product.get-dropdown');
+
 	Route::get('products/lims_product_search', 'ProductController@limsProductSearch')->name('product.search');
 	Route::post('products/deletebyselection', 'ProductController@deleteBySelection');
 	Route::post('products/update', 'ProductController@updateProduct');
@@ -104,9 +104,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('products/get-attribute-image/{id}', 'ProductController@getAttributeImage')->name('product.get-attribute-image');
 	Route::get('products/get-edit-attribute-image/{id}', 'ProductController@getEditAttributeImage')->name('product.get-attribute-image');
 	Route::post('products/vendor-product-status', 'ProductController@vendorProductStatus')->name('product.vendor-product-status');
-	
+
 	########### vendor product ############
-	
+
 
 	Route::get('vendorproducts/get-attribute-image/{id}', 'VendorProductController@getAttributeImage')->name('vendorproducts.get-attribute-image');
 	Route::get('vendorproducts/get-edit-attribute-image/{id}', 'VendorProductController@getEditAttributeImage')->name('product.get-attribute-image');
@@ -117,9 +117,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('vendorproducts/saleunit/{id}', 'VendorProductController@saleUnit');
 	Route::get('vendorproducts/getdata/{id}/{variant_id}', 'VendorProductController@getData');
 	Route::get('vendorproducts/product_warehouse/{id}', 'VendorProductController@productWarehouseData');
-	 
+
 	Route::get('vendorproducts/lims_product_search', 'VendorProductController@limsProductSearch')->name('product.search');
-	
+
 	Route::post('vendorproducts/deletebyselection', 'VendorProductController@deleteBySelection');
 	Route::post('vendorproducts/vendorProductDeny', 'VendorProductController@vendorProductDeny');
 	Route::post('vendorproducts/addproduct', 'VendorProductController@addproduct')->name('vendorproducts.addproduct');
@@ -130,22 +130,22 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('vendor-dashboard', 'VendorProductController@vendorDashboard')->name('vendor-dashboard');
 	Route::get('vendor-dashboard-data', 'VendorProductController@vendorDashboardData')->name('vendor-dashboard-data');
 	Route::delete('vendorproducts/deletebyVendorDashboard/{id}', 'VendorProductController@deletebyVendorDashboard')->name('vendorproducts.deletebyVendorDashboard');
-	
+
 	Route::post('vendorproducts/ln-qty', 'VendorProductController@lnQtyStore')->name('vendorproducts.ln-qty');
 	Route::post('vendorproducts/ln-price', 'VendorProductController@lnPriceStore')->name('vendorproducts.ln-price');
 	Route::post('vendorproducts/ln-discount', 'VendorProductController@lnDiscountStore')->name('vendorproducts.ln-discount');
-	
+
 	Route::post('vendorproducts/approve-products', 'VendorProductController@approveProducts')->name('vendorproducts.approve-products');
 
 	Route::post('vendorproducts/vendor-dashboard-status', 'VendorProductController@vendorDashboardStatus')->name('vendor-dashboard-status');
 
-	
+
 	Route::resource('master-attribute', 'MasterAttributeController');
-	
+
 	Route::post('products/product-type-data', 'MasterAttributeController@productTypeData')->name('products.product-type-data');
 
 	Route::get('vendorproducts/dashboardEdit/{id}', 'VendorProductController@vendorDashboardEdit')->name('vendorproducts.dashboardEdit');
-	
+
 	######## end vendor product#########
 
 	Route::post('importcustomer_group', 'CustomerGroupController@importCustomerGroup')->name('customer_group.import');
@@ -161,11 +161,11 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('customer/deletebyselection', 'CustomerController@deleteBySelection');
 	Route::get('customer/lims_customer_search', 'CustomerController@limsCustomerSearch')->name('customer.search');
 	Route::get('customer/list', 'CustomerController@datatable')->name('customer.list');
-	
+
 	Route::resource('customer', 'CustomerController');
 	// Route::post('customer/additionalData', 'CustomerController@additionalData')->name('customer.additionalData');
 	Route::resource('accounts-date', 'AccountsDateController');
-	
+
 	Route::post('accounts-date/product-type-data', 'AccountsDateController@AccountsData')->name('accounts-date.product-type-data');
 
 	Route::post('importbiller', 'BillerController@importBiller')->name('biller.import');
@@ -179,7 +179,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('sales/sale-data', 'SaleController@saleData');
 	Route::post('sales/sendmail', 'SaleController@sendMail')->name('sale.sendmail');
 	Route::get('sales/sale_by_csv', 'SaleController@saleByCsv');
-	Route::get('sales/product_sale/{id}','SaleController@productSaleData');
+	Route::get('sales/product_sale/{id}', 'SaleController@productSaleData');
 	Route::post('importsale', 'SaleController@importSale')->name('sale.import');
 	Route::get('pos', 'SaleController@posSale')->name('sale.pos');
 	Route::get('sales/lims_sale_search', 'SaleController@limsSaleSearch')->name('sale.search');
@@ -191,8 +191,8 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('sales/get-top-sale', 'SaleController@getTopSale');
 	Route::get('sales/get-subcategory', 'SaleController@getSubcategory')->name('sales/get-subcategory');
 	Route::get('sales/check-subcategory', 'SaleController@checkSubcategory')->name('sales/check-subcategory');
-	
-	
+
+
 	Route::get('sales/get_gift_card', 'SaleController@getGiftCard');
 	Route::get('sales/paypalSuccess', 'SaleController@paypalSuccess');
 	Route::get('sales/paypalPaymentSuccess/{id}', 'SaleController@paypalPaymentSuccess');
@@ -207,9 +207,9 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::get('sales/today-sale', 'SaleController@todaySale');
 	Route::get('sales/today-profit/{warehouse_id}', 'SaleController@todayProfit');
 	Route::resource('sales', 'SaleController');
-	
+
 	Route::get('delivery', 'DeliveryController@index')->name('delivery.index');
-	Route::get('delivery/product_delivery/{id}','DeliveryController@productDeliveryData');
+	Route::get('delivery/product_delivery/{id}', 'DeliveryController@productDeliveryData');
 	Route::get('delivery/create/{id}', 'DeliveryController@create');
 	Route::post('delivery/store', 'DeliveryController@store')->name('delivery.store');
 	Route::post('delivery/sendmail', 'DeliveryController@sendMail')->name('delivery.sendMail');
@@ -218,7 +218,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('delivery/deletebyselection', 'DeliveryController@deleteBySelection');
 	Route::post('delivery/delete/{id}', 'DeliveryController@delete')->name('delivery.delete');
 
-	Route::get('quotations/product_quotation/{id}','QuotationController@productQuotationData');
+	Route::get('quotations/product_quotation/{id}', 'QuotationController@productQuotationData');
 	Route::get('quotations/lims_product_search', 'QuotationController@limsProductSearch')->name('product_quotation.search');
 	Route::get('quotations/getcustomergroup/{id}', 'QuotationController@getCustomerGroup')->name('quotation.getcustomergroup');
 	Route::get('quotations/getproduct/{id}', 'QuotationController@getProduct')->name('quotation.getproduct');
@@ -229,7 +229,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::resource('quotations', 'QuotationController');
 
 	Route::post('purchases/purchase-data', 'PurchaseController@purchaseData')->name('purchases.data');
-	Route::get('purchases/product_purchase/{id}','PurchaseController@productPurchaseData');
+	Route::get('purchases/product_purchase/{id}', 'PurchaseController@productPurchaseData');
 	Route::get('purchases/lims_product_search', 'PurchaseController@limsProductSearch')->name('product_purchase.search');
 	Route::get('purchases/supplier_search', 'PurchaseController@supplierSearch')->name('product_purchase.supplierSearch');
 
@@ -243,7 +243,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('purchases/deletebyselection', 'PurchaseController@deleteBySelection');
 	Route::resource('purchases', 'PurchaseController');
 
-	Route::get('transfers/product_transfer/{id}','TransferController@productTransferData');
+	Route::get('transfers/product_transfer/{id}', 'TransferController@productTransferData');
 	Route::get('transfers/transfer_by_csv', 'TransferController@transferByCsv');
 	Route::post('importtransfer', 'TransferController@importTransfer')->name('transfer.import');
 	Route::get('transfers/getproduct/{id}', 'TransferController@getProduct')->name('transfer.getproduct');
@@ -260,12 +260,12 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('return-sale/sendmail', 'ReturnController@sendMail')->name('return-sale.sendmail');
 	Route::get('return-sale/getproduct/{id}', 'ReturnController@getProduct')->name('return-sale.getproduct');
 	Route::get('return-sale/lims_product_search', 'ReturnController@limsProductSearch')->name('product_return-sale.search');
-	Route::get('return-sale/product_return/{id}','ReturnController@productReturnData');
+	Route::get('return-sale/product_return/{id}', 'ReturnController@productReturnData');
 	Route::post('return-sale/deletebyselection', 'ReturnController@deleteBySelection');
 
 	Route::post('return-sale/getProductList', 'ReturnController@getProductList')->name('return-sale.getProductList');
 
-	
+
 
 
 	Route::resource('return-sale', 'ReturnController');
@@ -274,7 +274,7 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('return-purchase/sendmail', 'ReturnPurchaseController@sendMail')->name('return-purchase.sendmail');
 	Route::get('return-purchase/getproduct/{id}', 'ReturnPurchaseController@getProduct')->name('return-purchase.getproduct');
 	Route::get('return-purchase/lims_product_search', 'ReturnPurchaseController@limsProductSearch')->name('product_return-purchase.search');
-	Route::get('return-purchase/product_return/{id}','ReturnPurchaseController@productReturnData');
+	Route::get('return-purchase/product_return/{id}', 'ReturnPurchaseController@productReturnData');
 	Route::post('return-purchase/deletebyselection', 'ReturnPurchaseController@deleteBySelection');
 	Route::resource('return-purchase', 'ReturnPurchaseController');
 
@@ -303,16 +303,16 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 	Route::post('report/supplier', 'ReportController@supplierReport')->name('report.supplier');
 	Route::post('report/due_report_by_date', 'ReportController@dueReportByDate')->name('report.dueByDate');
 
-	Route::get('user/profile', 'UserController@profile')->name('user.profile');
+	Route::get('user/profile/{id}', 'UserController@profile')->name('user.profile');
 	Route::put('user/update_profile/{id}', 'UserController@profileUpdate')->name('user.profileUpdate');
 	Route::put('user/changepass/{id}', 'UserController@changePassword')->name('user.password');
 	Route::get('user/genpass', 'UserController@generatePassword');
 	Route::post('user/deletebyselection', 'UserController@deleteBySelection');
-	Route::resource('user','UserController');
+	Route::resource('user', 'UserController');
 
 	Route::get('setting/general_setting', 'SettingController@generalSetting')->name('setting.general');
 	Route::post('setting/general_setting_store', 'SettingController@generalSettingStore')->name('setting.generalStore');
-	
+
 	Route::get('setting/reward-point-setting', 'SettingController@rewardPointSetting')->name('setting.rewardPoint');
 	Route::post('setting/reward-point-setting_store', 'SettingController@rewardPointSettingStore')->name('setting.rewardPointStore');
 
@@ -394,8 +394,6 @@ Route::group(['middleware' => ['auth', 'active']], function() {
 
 	//vendor
 	Route::get('vendor-products/import-quantity-by-csv', 'VendorProductController@ImportByCsv')->name('vendorproducts.import-quantity-by-csv');
-	
+
 	Route::get('vendor-products/import', 'VendorProductController@Import')->name('vendorproducts.import');
-
 });
-

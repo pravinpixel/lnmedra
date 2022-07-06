@@ -34,7 +34,7 @@
                                     @endforeach
                                 </select> --}}
 
-                                <select name="category" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" multiple>
+                                <select name="category[]" class="selectpicker form-control @error('type') is-invalid @enderror"  title="Select Category..." value="{{old('category')}}"  autocomplete="type" data-live-search="true" data-live-search-style="begins" multiple>
                                     @foreach($lims_category_list as $category)
                                         
                                         @if($category->parent_id == '' || null)
@@ -135,7 +135,14 @@
                             <label>{{trans('file.Postal Code')}}</label>
                             <input type="text" name="postal_code" value="{{old('postal_code')}}" class="form-control">
                         </div>
-                    </div> 
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>{{ trans('file.nursery_code') }}*</label>
+                            <input type="text" name="nursery_code"
+                                value="{{ old('nursery_code') }}" maxlength="3" onkeydown="return /[a-z]/i.test(event.key)"  style="text-transform:uppercase" required class="form-control">
+                        </div>
+                    </div>  
                 </div> 
             </div>
         </div>
