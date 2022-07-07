@@ -226,10 +226,10 @@ class SettingController extends Controller
         $data = $request->all();
         //writting mail info in .env file
         $path = '.env';
-        $searchArray = array('MAIL_HOST="' . env('MAIL_HOST') . '"', 'MAIL_PORT=' . env('MAIL_PORT'), 'MAIL_FROM_ADDRESS="' . env('MAIL_FROM_ADDRESS') . '"', 'MAIL_FROM_NAME="' . env('MAIL_FROM_NAME') . '"', 'MAIL_USERNAME="' . env('MAIL_USERNAME') . '"', 'MAIL_PASSWORD="' . env('MAIL_PASSWORD') . '"', 'MAIL_ENCRYPTION="' . env('MAIL_ENCRYPTION') . '"');
+        $searchArray = array('MAIL_HOST=' . env('MAIL_HOST'), 'MAIL_PORT=' . env('MAIL_PORT'), 'MAIL_FROM_ADDRESS=' . env('MAIL_FROM_ADDRESS'), 'MAIL_FROM_NAME=' . env('MAIL_FROM_NAME'), 'MAIL_USERNAME=' . env('MAIL_USERNAME'), 'MAIL_PASSWORD=' . env('MAIL_PASSWORD'), 'MAIL_ENCRYPTION=' . env('MAIL_ENCRYPTION'));
         //return $searchArray;
 
-        $replaceArray = array('MAIL_HOST="' . $data['mail_host'] . '"', 'MAIL_PORT=' . $data['port'], 'MAIL_FROM_ADDRESS="' . $data['mail_address'] . '"', 'MAIL_FROM_NAME="' . $data['mail_name'] . '"', 'MAIL_USERNAME="' . $data['mail_address'] . '"', 'MAIL_PASSWORD="' . $data['password'] . '"', 'MAIL_ENCRYPTION="' . $data['encryption'] . '"');
+        $replaceArray = array('MAIL_HOST=' . $data['mail_host'], 'MAIL_PORT=' . $data['port'], 'MAIL_FROM_ADDRESS=' . $data['mail_address'], 'MAIL_FROM_NAME=' . $data['mail_name'], 'MAIL_USERNAME=' . $data['mail_address'], 'MAIL_PASSWORD=' . $data['password'], 'MAIL_ENCRYPTION=' . $data['encryption']);
 
         file_put_contents($path, str_replace($searchArray, $replaceArray, file_get_contents($path)));
 

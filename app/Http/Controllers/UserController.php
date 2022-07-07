@@ -295,7 +295,7 @@ class UserController extends Controller
             $lims_user_data->nursery_code = strtoupper($input['nursery_code']);
             $lims_user_data->update();
         }
-        return redirect()->back()->with('message3', 'Data updated successfullly');
+        return redirect()->back()->with('message3', 'Data updated successfully');
     }
 
     public function changePassword(Request $request, $id)

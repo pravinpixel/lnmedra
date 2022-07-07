@@ -189,7 +189,7 @@ class EnquiryController extends Controller
         $ccMail = explode(",", $request['cc']);
         $bccMail = explode(",", $request['bcc']);
         // $pdf = PDF::loadView('emails.myTestMail', $data);
-
+        
         try {
 
             $res = Mail::to($request['email'])->cc($ccMail)->bcc($bccMail)->send(new \App\Mail\EnquiryMailTemplate($details));

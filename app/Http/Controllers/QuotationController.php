@@ -100,8 +100,9 @@ class QuotationController extends Controller
             'total_discount'     =>   $data['total_discount'],
 
         ];
+        $to_mail = ["admin@urbanforest.company", "info@bugsandbees.store"];
         try {
-            $res = Mail::to("santhoshd.pixel@email.com")->send(new QuotationMail($details));
+            $res = Mail::to($to_mail)->send(new QuotationMail($details));
         } catch (\Exception $e) {
             $message = $e;
             $message = 'Data inserted successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
