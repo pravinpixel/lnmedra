@@ -340,6 +340,7 @@
             var discount = data[5];
             var subtotal = data[6];
             var batch_no = data[7];
+            var discout_method = data[8];
             var newBody = $("<tbody>");
             $.each(name_code, function(index){
                 var newRow = $("<tr>");
@@ -372,6 +373,13 @@
             newRow.append(cols);
             newBody.append(newRow);
 
+            var newRow = $("<tr>");
+            cols = '';
+            cols += '<td colspan=7><strong>{{trans("file.discount_type")}}:</strong></td>';
+            cols += '<td>' + discout_method +'</td>';
+            newRow.append(cols);
+            newBody.append(newRow);
+            
             var newRow = $("<tr>");
             cols = '';
             cols += '<td colspan=7><strong>{{trans("file.Order Discount")}}:</strong></td>';

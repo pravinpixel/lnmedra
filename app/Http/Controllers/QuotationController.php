@@ -89,7 +89,7 @@ class QuotationController extends Controller
             $data['document'] = $documentName;
         }
         $data['reference_no'] = 'qr-' . date("Ymd") . '-' . date("his");
-        
+
         $lims_quotation_data = Quotation::create($data);
         $lims_customer = Customer::find($data['customer_id']);
 
@@ -415,7 +415,14 @@ class QuotationController extends Controller
                 $unit = $unit_data->unit_code;
             } else
                 $unit = '';
-
+            $productQuotation = Quotation::find($id);
+            // dd($productQuotation->order_discount_method);
+            $quotation_method = '';
+            if ($productQuotation->order_discount_method == 'amount') {
+                $quotation_method = 'Flat';
+            } else {
+                $quotation_method = 'Percentage';
+            }
             $product_quotation[0][$key] = $product->name . ' [' . $product->code . ']';
             $product_quotation[1][$key] = $product_quotation_data->qty;
             $product_quotation[2][$key] = $unit;
@@ -428,6 +435,8 @@ class QuotationController extends Controller
                 $product_quotation[7][$key] = $product_batch_data->batch_no;
             } else
                 $product_quotation[7][$key] = 'N/A';
+
+            $product_quotation[8][$key] = $quotation_method;
         }
         return $product_quotation;
     }
