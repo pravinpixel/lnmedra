@@ -89,7 +89,7 @@ class QuotationController extends Controller
             $data['document'] = $documentName;
         }
         $data['reference_no'] = 'qr-' . date("Ymd") . '-' . date("his");
-
+        
         $lims_quotation_data = Quotation::create($data);
         $lims_customer = Customer::find($data['customer_id']);
 

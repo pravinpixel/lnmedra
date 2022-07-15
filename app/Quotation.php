@@ -6,29 +6,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Quotation extends Model
 {
-    protected $fillable =[
+    protected $fillable = [
 
-        "reference_no", "user_id", "biller_id", "supplier_id", "customer_id", "warehouse_id", "item", "total_qty", "total_discount", "total_tax", "total_price", "order_tax_rate", "order_tax", "order_discount", "shipping_cost", "grand_total", "quotation_status","document", "note"
+        "reference_no", "user_id", "biller_id", "supplier_id", "customer_id", "warehouse_id", "item", "total_qty", "total_discount", "total_tax", "total_price", "order_tax_rate", "order_tax", "order_discount", "shipping_cost", "grand_total", "quotation_status", "document", "note", "order_total_discount", "order_discount_method"
     ];
 
     public function biller()
     {
-    	return $this->belongsTo('App\Biller');
+        return $this->belongsTo('App\Biller');
     }
 
     public function customer()
     {
-    	return $this->belongsTo('App\Customer');
+        return $this->belongsTo('App\Customer');
     }
 
     public function supplier()
     {
-    	return $this->belongsTo('App\Supplier');
+        return $this->belongsTo('App\Supplier');
     }
 
     public function user()
     {
-    	return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User');
     }
 
     public function warehouse()

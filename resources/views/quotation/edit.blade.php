@@ -265,6 +265,17 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
+                                        <label>{{trans('file.discount_method')}} *</label>
+                                        @if($lims_quotation_data)
+                                        <input type="hidden" value="" name="order_total_discount" id="order_total_discount">
+                                        <input type="hidden" name="discount_method_hidden" value="{{$lims_quotation_data->order_discount_method}}">
+                                        @endif
+                                        <select required name="order_discount_method" id="order_discount_method" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Discount...">
+                                            <option value="amount" >Flat</option>
+                                            <option value="discount">Discount</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
                                         <div class="form-group">
                                             <label>
                                                 <strong>{{trans('file.Order Discount')}}</strong>
@@ -404,6 +415,9 @@
     $("ul#quotation").siblings('a').attr('aria-expanded','true');
     $("ul#quotation").addClass("show");
 
+    $('select[name="order_discount_method"]').val($("input[name='discount_method_hidden']").val());
+    $('#order_discount_method').trigger('change');
+    calculateGrandTotal();
 // array data depend on warehouse
 var lims_product_array = [];
 var product_code = [];
@@ -940,7 +954,9 @@ function calculateTotal() {
 
     calculateGrandTotal();
 }
-
+        $('#order_discount_method').on('change', function() {
+          calculateGrandTotal();
+      });
 function calculateGrandTotal() {
 
     var item = $('table.order-list tbody tr:last').index();
@@ -950,7 +966,7 @@ function calculateGrandTotal() {
     var order_tax = parseFloat($('select[name="order_tax_rate"]').val());
     var order_discount = parseFloat($('input[name="order_discount"]').val());
     var shipping_cost = parseFloat($('input[name="shipping_cost"]').val());
-
+    var order_discount_method = $('#order_discount_method').val();
     if (!order_discount)
         order_discount = 0.00;
     if (!shipping_cost)
@@ -958,8 +974,20 @@ function calculateGrandTotal() {
 
     item = ++item + '(' + total_qty + ')';
     order_tax = (subtotal - order_discount) * (order_tax / 100);
-    var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
-
+    // var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+    if(order_discount_method == 'discount')
+        {
+           
+            var grand_total1 = (((subtotal + order_tax + shipping_cost) * order_discount)/100);
+            var grand_total = (subtotal + order_tax + shipping_cost) - grand_total1;
+            $("#order_total_discount").val(order_discount);
+        }
+        else{
+           
+            var grand_total = (subtotal + order_tax + shipping_cost) - order_discount;
+            $("#order_total_discount").val('');
+        }
+        
     $('#item').text(item);
     $('input[name="item"]').val($('table.order-list tbody tr:last').index() + 1);
     $('#subtotal').text(subtotal.toFixed(2));

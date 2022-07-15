@@ -1016,7 +1016,9 @@
 
         calculateGrandTotal();
     }
-
+    $('#order_discount_method').on('change', function() {
+          calculateGrandTotal();
+      });
     function calculateGrandTotal() {
 
         var item = $('table.order-list tbody tr:last').index();
