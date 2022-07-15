@@ -197,7 +197,7 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label>{{trans('file.name')}} *</strong> </label>
+                                            <label>{{trans('file.Username')}} *</strong> </label>
                                             <input type="text" name="name" value="{{old('name')}}" required class="form-control">
                                             @if($errors->has('name'))
                                             <label  class="error" for="name">{{ $errors->first('name') }}</label>
