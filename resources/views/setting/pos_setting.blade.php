@@ -40,6 +40,17 @@
                                             @endforeach
                                         </select>
                                     </div>
+                                    <div class="form-group">
+                                        <label>{{trans('file.Default Quotation')}} *</label>
+                                        @if($lims_pos_setting_data)
+                                        <input type="hidden" name="quotation_id_hidden" value="{{$lims_pos_setting_data->quotation_id}}">
+                                        @endif
+                                        <select required name="quotation_id" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Quotation...">
+                                            @foreach($lims_biller_list as $biller)
+                                            <option value="{{$biller->id}}">{{$biller->name . ' (' . $biller->company_name . ')'}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                    
                                   
                                     <div class="form-group">
@@ -135,6 +146,7 @@
 
     $('select[name="customer_id"]').val($("input[name='customer_id_hidden']").val());
     $('select[name="biller_id"]').val($("input[name='biller_id_hidden']").val());
+    $('select[name="quotation_id"]').val($("input[name='quotation_id_hidden']").val());
     $('select[name="warehouse_id"]').val($("input[name='warehouse_id_hidden']").val());
     $('select[name="discount_method"]').val($("input[name='discount_method_hidden']").val());
     $('select[name="supplier_id"]').val($("input[name='supplier_id_hidden']").val());
