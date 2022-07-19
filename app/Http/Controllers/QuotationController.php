@@ -56,12 +56,13 @@ class QuotationController extends Controller
         $role = Role::find(Auth::user()->role_id);
         if ($role->hasPermissionTo('quotes-add')) {
             $lims_biller_list = Biller::where('is_active', true)->get();
+            $lims_pos_setting_data = PosSetting::latest()->first();
             $lims_warehouse_list = Warehouse::where('is_active', true)->get();
             $lims_customer_list = Customer::where('is_active', true)->get();
             $lims_supplier_list = Supplier::where('is_active', true)->get();
             $lims_tax_list = Tax::where('is_active', true)->get();
 
-            return view('quotation.create', compact('lims_biller_list', 'lims_warehouse_list', 'lims_customer_list', 'lims_supplier_list', 'lims_tax_list'));
+            return view('quotation.create', compact('lims_biller_list', 'lims_pos_setting_data', 'lims_warehouse_list', 'lims_customer_list', 'lims_supplier_list', 'lims_tax_list'));
         } else
             return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
@@ -92,15 +93,17 @@ class QuotationController extends Controller
 
         $lims_quotation_data = Quotation::create($data);
         $lims_customer = Customer::find($data['customer_id']);
+        $pos_setting = Biller::where('id', $data['biller_id'])->first();
 
         $details = [
+            'from'     =>   $pos_setting['email'],
             'name'     =>   $lims_customer['name'],
             'reference_no'     =>   $data['reference_no'],
             'grand_total'     =>   $data['grand_total'],
             'total_discount'     =>   $data['total_discount'],
 
         ];
-        $to_mail = ["admin@urbanforest.company", "info@bugsandbees.store"];
+        $to_mail = $lims_customer['email'];
         try {
             $res = Mail::to($to_mail)->send(new QuotationMail($details));
         } catch (\Exception $e) {
@@ -180,12 +183,20 @@ class QuotationController extends Controller
 
     public function sendMail(Request $request)
     {
+        // dd($request->all());
         $data = $request->all();
         $lims_quotation_data = Quotation::find($data['quotation_id']);
         $lims_product_quotation_data = ProductQuotation::where('quotation_id', $data['quotation_id'])->get();
         $lims_customer_data = Customer::find($lims_quotation_data->customer_id);
         if ($lims_customer_data->email) {
             //collecting male data
+            $mail_data['order_discount_method'] = '';
+            if ($lims_quotation_data->order_discount_method == 'discount') {
+                $mail_data['order_discount_method'] = 'Percentage';
+            } else if ($lims_quotation_data->order_discount_method == 'amount') {
+                $mail_data['order_discount_method'] = 'Flat';
+            }
+
             $mail_data['email'] = $lims_customer_data->email;
             $mail_data['reference_no'] = $lims_quotation_data->reference_no;
             $mail_data['total_qty'] = $lims_quotation_data->total_qty;
@@ -213,9 +224,13 @@ class QuotationController extends Controller
                 $mail_data['total'][$key] = $product_quotation_data->total;
             }
 
+            $billerDetails = Biller::where('id', $lims_quotation_data->biller_id)->first();
+            $fromEmail = $billerDetails['email'];
+            // dd($billerDetails['email']);
+            $mail_data['from'] =  $fromEmail;
             try {
                 Mail::send('mail.quotation_details', $mail_data, function ($message) use ($mail_data) {
-                    $message->to($mail_data['email'])->subject('Quotation Details');
+                    $message->from($mail_data['from'])->to($mail_data['email'])->subject('Quotation Details');
                 });
                 $message = 'Mail sent successfully';
             } catch (\Exception $e) {
@@ -416,7 +431,8 @@ class QuotationController extends Controller
             } else
                 $unit = '';
             $productQuotation = Quotation::find($id);
-            // dd($productQuotation->order_discount_method);
+            // dd($productQuotation->biller_id);
+            $billerLable = Biller::where('id', $productQuotation->biller_id)->select('name')->first();
             $quotation_method = '';
             if ($productQuotation->order_discount_method == 'amount') {
                 $quotation_method = 'Flat';
@@ -437,6 +453,7 @@ class QuotationController extends Controller
                 $product_quotation[7][$key] = 'N/A';
 
             $product_quotation[8][$key] = $quotation_method;
+            $product_quotation[9][$key] = $billerLable['name'];
         }
         return $product_quotation;
     }

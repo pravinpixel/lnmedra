@@ -264,7 +264,12 @@ Route::group(['middleware' => ['auth', 'active']], function () {
 	Route::post('return-sale/deletebyselection', 'ReturnController@deleteBySelection');
 
 	Route::post('return-sale/getProductList', 'ReturnController@getProductList')->name('return-sale.getProductList');
+	Route::post('hold_bill', 'HoldBillController@storeHoldBill')->name('hold_bill');
+	Route::get('hold_bill_data', 'HoldBillController@holdBillData')->name('hold_bill_data');
+	Route::get('hold_bill_delete/{id}', 'HoldBillController@holdBillDelete')->name('hold_bill_delete');
 
+
+	Route::get('hold-bill-get/{id}', 'HoldBillController@holdBillGetData')->name('hold-bill-get');
 
 
 
@@ -367,7 +372,7 @@ Route::group(['middleware' => ['auth', 'active']], function () {
 
 	Route::resource('stock-count', 'StockCountController');
 	Route::post('stock-count/finalize', 'StockCountController@finalize')->name('stock-count.finalize');
-	Route::get('stock-count/stockdif/{id}', 'StockCountController@stockDif');
+	Route::get('stock-count/stockdif)/{id}', 'StockCountController@stockDif');
 	Route::get('stock-count/{id}/qty_adjustment', 'StockCountController@qtyAdjustment')->name('stock-count.adjustment');
 
 	Route::post('holidays/deletebyselection', 'HolidayController@deleteBySelection');

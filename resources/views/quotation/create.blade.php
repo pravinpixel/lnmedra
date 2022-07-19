@@ -19,6 +19,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label>{{trans('file.Biller')}} *</label>
+                                        <input type="hidden" name="quotation_id_hidden" value="{{$lims_pos_setting_data->quotation_id}}">
                                             <select required name="biller_id" class="selectpicker form-control" data-live-search="true" id="biller-id" data-live-search-style="begins" title="Select Biller...">
                                                 @foreach($lims_biller_list as $biller)
                                                 <option value="{{$biller->id}}">{{$biller->name . ' (' . $biller->company_name . ')'}}</option>
@@ -146,9 +147,9 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <label>{{trans('file.discount_method')}} *</label>
+                                        <label>{{trans('file.discount_method')}} </label>
                                     <input type="hidden" value="" name="order_total_discount" id="order_total_discount">
-                                        <select required name="order_discount_method" id="order_discount_method" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Discount...">
+                                        <select name="order_discount_method" id="order_discount_method" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Discount...">
                                             <option value="amount" >Flat</option>
                                             <option value="discount">Discount</option>
                                         </select>
@@ -289,6 +290,8 @@
 
     $("ul#quotation").siblings('a').attr('aria-expanded','true');
     $("ul#quotation").addClass("show");
+    $('select[name="biller_id"]').val($("input[name='quotation_id_hidden']").val());
+
     $("ul#quotation #quotation-create-menu").addClass("active");
 
 var lims_product_array = [];
@@ -362,7 +365,7 @@ var currency = <?php echo json_encode($currency) ?>;
 	    }
 	    else if(!warehouse_id){
 	        $('#lims_productcodeSearch').val(temp_data.substring(0, temp_data.length - 1));
-	        alert('Please select Warehouse!');
+	        alert('Please select Outlet!');
 	    }
 	});
 

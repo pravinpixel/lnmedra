@@ -30,6 +30,16 @@
 			<td colspan="4" style="border: 1px solid #000; padding: 5px"><strong>Order Tax </strong> </td>
 			<td style="border: 1px solid #000; padding: 5px">{{$order_tax.'('.$order_tax_rate.'%)'}}</td>
 		</tr>
+		@if($order_discount_method)
+		<tr>
+			<td colspan="4" style="border: 1px solid #000; padding: 5px"><strong>Order Method </strong> </td>
+			<td style="border: 1px solid #000; padding: 5px">
+				@if($order_discount_method)
+				{{$order_discount_method}}
+				@endif
+			</td>
+		</tr>
+		@endif
 		<tr>
 			<td colspan="4" style="border: 1px solid #000; padding: 5px"><strong>Order discount </strong> </td>
 			<td style="border: 1px solid #000; padding: 5px">

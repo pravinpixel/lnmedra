@@ -28,7 +28,7 @@ class QuotationMail extends Mailable
      */
     public function build()
     {
-        $this->from('example@example.com')->with('details', $this->details)
+        $this->from($this->details['from'])->with('details', $this->details)
             ->markdown('mail.quotation_create');
     }
 }

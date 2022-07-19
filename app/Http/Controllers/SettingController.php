@@ -353,6 +353,7 @@ class SettingController extends Controller
         $pos_setting->customer_id = $data['customer_id'];
         $pos_setting->warehouse_id = $data['warehouse_id'];
         $pos_setting->biller_id = $data['biller_id'];
+        $pos_setting->quotation_id = $data['quotation_id'];
         $pos_setting->supplier_id = $data['supplier_id'];
         $pos_setting->discount_method = $data['discount_method'];
         $pos_setting->product_number = $data['product_number'];
