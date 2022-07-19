@@ -432,7 +432,7 @@ class QuotationController extends Controller
                 $unit = '';
             $productQuotation = Quotation::find($id);
             // dd($productQuotation->biller_id);
-            $billerLable = Biller::where('id', $productQuotation->biller_id)->select('name')->first();
+            $billerLable = Biller::where('id', $productQuotation->biller_id)->select('name', 'image')->first();
             $quotation_method = '';
             if ($productQuotation->order_discount_method == 'amount') {
                 $quotation_method = 'Flat';
@@ -451,9 +451,10 @@ class QuotationController extends Controller
                 $product_quotation[7][$key] = $product_batch_data->batch_no;
             } else
                 $product_quotation[7][$key] = 'N/A';
-
+                
             $product_quotation[8][$key] = $quotation_method;
             $product_quotation[9][$key] = $billerLable['name'];
+            $product_quotation[10][$key] = $billerLable['image'];
         }
         return $product_quotation;
     }

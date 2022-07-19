@@ -112,11 +112,14 @@
                 <div class="col-md-6 d-print-none">
                     <button type="button" id="close-btn" data-dismiss="modal" aria-label="Close" class="close d-print-none"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
                 </div>
-                <div class="col-md-12">
-                    <h3 id="exampleModalLabel" class="modal-title text-center container-fluid hrader_title">{{$general_setting->site_title}}</h3>
-                </div>
-                <div class="col-md-12 text-center">
+                <div class="row col-md-12">
+                    <div class="col-md-6 text-right" >
+                        <img id="view_img" src="" style="height: 50px;"  alt="no image"/>
+                    </div>
+                   <div class="col-md-6 p-0">
+                    <h3 id="exampleModalLabel" class="hrader_title">{{$general_setting->site_title}}</h3>
                     <i style="font-size: 15px;">{{trans('file.Quotation Details')}}</i>
+                   </div>
                 </div>
             </div>
         </div>
@@ -330,7 +333,7 @@
     function quotationDetails(quotation){
         
         $('input[name="quotation_id"]').val(quotation[13]);
-        var htmltext = '<strong>{{trans("file.Date")}}: </strong>'+quotation[0]+'<br><strong>{{trans("file.reference")}}: </strong>'+quotation[1]+'<br><strong>{{trans("file.Status")}}: </strong>'+quotation[2]+'<br><br><div class="row"><div class="col-md-6"><strong>{{trans("file.From")}}:</strong><br>'+quotation[3]+'<br>'+quotation[4]+'<br>'+quotation[5]+'<br>'+quotation[6]+'<br>'+quotation[7]+'<br>'+quotation[8]+'</div><div class="col-md-6"><div class="float-right"><strong>{{trans("file.To")}}:</strong><br>'+quotation[9]+'<br>'+quotation[10]+'<br>'+quotation[11]+'<br>'+quotation[12]+'</div></div></div>';
+        var htmltext = '<strong>{{trans("file.Date")}}: </strong>'+quotation[0]+'<br><strong>{{trans("file.reference")}}: </strong>'+quotation[1]+'<br><strong>{{trans("file.Status")}}: </strong>'+quotation[2]+'<br><br><div class="row"><div class="col-md-6"><strong>{{trans("file.From")}}:</strong><br>'+quotation[4]+'<br>'+quotation[5]+'<br>'+quotation[6]+'<br>'+quotation[7]+'<br>'+quotation[8]+'</div><div class="col-md-6"><div class="float-right"><strong>{{trans("file.To")}}:</strong><br>'+quotation[9]+'<br>'+quotation[10]+'<br>'+quotation[11]+'<br>'+quotation[12]+'</div></div></div>';
         $.get('quotations/product_quotation/' + quotation[13], function(data){
             console.log(data);
             $(".product-quotation-list tbody").remove();
@@ -345,6 +348,7 @@
             var discout_method = data[8];
             var newBody = $("<tbody>");
                 $('.hrader_title').text(data[9]);
+                $('#view_img').attr("src", '{{ URL::asset('/public/images/biller') }}/'+ data[10] );
             $.each(name_code, function(index){
                 var newRow = $("<tr>");
                 var cols = '';
