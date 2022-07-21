@@ -239,6 +239,31 @@
         </div>
     </div>
 <!-- Side Navbar -->
+<div id="holdbillModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" class="modal fade text-left">
+    <div role="document" class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 id="exampleModalLabel" class="modal-title">{{trans('file.Hold Bill')}}</h5>
+          <button type="button" data-dismiss="modal" aria-label="Close" class="close"><span aria-hidden="true"><i class="dripicons-cross"></i></span></button>
+        </div>
+        <div class="modal-body">
+            {{-- <div class="form-group">
+                <p>Hold Bill ?</p>
+                <div class="row">
+                    <button class="btn btn-light" onclick="holdbillsave('yes')" >Yes</button>
+                    <button class="btn btn-light " onclick="holdbillsave('no')">No</button>
+                </div>
+            </div> --}}
+            <table class="table m-0 border-0" style="cursor: pointer;"> 
+                <tbody id="modalHoldBill">
+                    
+                </tbody>
+            </table>
+            
+        </div>
+      </div>
+    </div>
+</div>
 <header class="header m-0 bg-dark text-white " style="border-bottom: 2px solid #272524">
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg bg-dark text-white">
@@ -256,6 +281,10 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
+                        <button type="button" class="btn btn-warning" onclick="holldbillModal()" >Hold Bill</button>
+                        {{-- <button type="button" class="btn btn-info" onclick="localStorageClear()" >clear</button> --}}
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('home') }}" class="nav-link"><i class="dripicons-home text-white"></i></a>
                     </li>
                     <li class="nav-item">
@@ -269,7 +298,11 @@
                             <a class="dropdown-item" href="{{route('user.profile', ['id' => Auth::id()])}}">
                                 <i class="dripicons-user"></i> {{trans('file.profile')}}
                             </a>
-                            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                            {{-- <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();document.getElementById('logout-form').submit();">
+                                <i class="dripicons-power"></i>
+                                {{trans('file.logout')}}
+                            </a> --}}
+                            <a class="dropdown-item" href="#" onclick="logoutFun()">
                                 <i class="dripicons-power"></i>
                                 {{trans('file.logout')}}
                             </a>
@@ -1018,7 +1051,7 @@
                     <div class="col px-1">
                         <div class="form-group m-0">
                             <small class="text-dark fw-bold">Sales Person Code</small>
-                            <input type="text" name="salesPersonCode" class="form-control" onkeyup='saveValue(this);'  placeholder="Type sales person code.." >
+                            <input type="text" name="salesPersonCode" class="form-control" value="" onkeyup='saveValue(this);'  placeholder="Type sales person code.." >
                         </div>
                     </div>
                     <div class="col pl-1 pr-0">
@@ -1093,6 +1126,8 @@
                                     </tr>
                                 </thead>
                                 <tbody id="tbody-id" ></tbody>
+                                <input type="hidden" name="holdbillnum" id="holdbillnum" >
+                                {{-- <input type="hidden" name="holdbillId" id="holdbillId" > --}}
                             </table>
                         </div>
                     </div>
@@ -1912,6 +1947,19 @@
     </script>
 
 <script type="text/javascript">
+function logoutFun()
+{
+    $.ajax({
+          url: 'holdbill-clear',
+          type: "GET",
+          success:function(data) {
+            localStorage.clear();
+                event.preventDefault();document.getElementById('logout-form').submit();
+          }
+        
+        });
+        // return false;
+}
 <?php $id =Auth::user()->role_id ?>
     var auth_id = {{$id}};
     // if(auth_id != 1)
@@ -2065,11 +2113,11 @@ if(getSavedValue("localStorageQty")) {
     tax_rate.push(parseFloat($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.tax-rate').val()));
     tax_name.push($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.tax-name').val());
     tax_method.push($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.tax-method').val());
-    temp_unit_name = $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit').val().split(',');
+    temp_unit_name = $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit').val();
     unit_name.push(localStorageTempUnitName[i]);
     unit_operator.push($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit-operator').val());
     unit_operation_value.push($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit-operation-value').val());
-    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit').val(temp_unit_name[0]);
+    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit').val(temp_unit_name);
     calculateTotal();
     //calculateRowProductData(localStorageQty[i]);
   }
@@ -2821,9 +2869,22 @@ $("#draft-btn").on("click",function(){
 });
 
 $("#submit-btn").on("click", function() {
-   
-  
-    $('.payment-form').submit();
+
+     var holdbillNumber = $('#holdbillnum').val();
+    if(holdbillNumber)
+    {
+        $.ajax({
+                type: 'GET',
+                url: 'hold_bill_delete/'+holdbillNumber,
+                // data : {id:ids}
+                success: function(data) {
+                $('.payment-form').submit();
+                }
+            });
+    }
+    else{
+        $('.payment-form').submit();
+    }      
 });
 
 $("#gift-card-btn").on("click",function() {
@@ -3178,7 +3239,7 @@ function edit(){
 function couponDiscount() {
     var rownumber = $('table.order-list tbody tr:last').index();
     if (rownumber < 0) {
-        Alert('warning', "Please insert product to order table!")
+        // Alert('warning', "Please insert product to order table!") //commended
     }
     else if($("#coupon-code").val() != ''){
         valid = 0;
@@ -3196,8 +3257,8 @@ function couponDiscount() {
                         $('#grand-total').text(parseFloat($('input[name="grand_total"]').val()).toFixed(2));
                         if(!$('input[name="coupon_active"]').val())
                             alert('Congratulation! You got '+value['amount']+' '+currency+' discount');
-                        $(".coupon-check").prop("disabled",true);
-                        $("#coupon-code").prop("disabled",true);
+                        // $(".coupon-check").prop("disabled",true);
+                        // $("#coupon-code").prop("disabled",true);
                         $('input[name="coupon_active"]').val(1);
                         $("#coupon-modal").modal('hide');
                         $('input[name="coupon_id"]').val(value['id']);
@@ -3215,8 +3276,8 @@ function couponDiscount() {
                     $('#grand-total').text(parseFloat(grand_total).toFixed(2));
                     if(!$('input[name="coupon_active"]').val())
                     Alert('success','Congratulation! You got '+value['amount']+'% discount');
-                    $(".coupon-check").prop("disabled",true);
-                    $("#coupon-code").prop("disabled",true);
+                    // $(".coupon-check").prop("disabled",true);
+                    // $("#coupon-code").prop("disabled",true);
                     $('input[name="coupon_active"]').val(1);
                     $("#coupon-modal").modal('hide');
                     $('input[name="coupon_id"]').val(value['id']);
@@ -3231,7 +3292,7 @@ function couponDiscount() {
 }
 
 function checkQuantity(sale_qty, flag) {
-   
+
     var row_product_code = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.product-code').val();
     pos = product_code.indexOf(row_product_code);
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text(product_qty[pos]);
@@ -3242,10 +3303,14 @@ function checkQuantity(sale_qty, flag) {
     }
     var actualQty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text();
     var currentQty = sale_qty -1;
+    // console.log($('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text());
+    // console.log("product-price",$('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.product-price').text());
     if(parseFloat(currentQty) >= parseFloat(actualQty)){
         // $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(currentQty);
         $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val(actualQty);
         Alert('warning', `Product out of stock`);
+        // console.log("actualQty",actualQty);
+        // console.log("actualQty",actualQty);
         calculateRowProductData(actualQty);
         return false;
     }
@@ -3320,7 +3385,6 @@ function calculateRowProductData(quantity) {
     else
         row_product_price = product_price[rowindex];
 
-        // alert(product_price[rowindex])
     if (tax_method[rowindex] == 1) {
         var net_unit_price = row_product_price - product_discount[rowindex];      
         var tax = net_unit_price * quantity * (tax_rate[rowindex] / 100);
@@ -3337,7 +3401,7 @@ function calculateRowProductData(quantity) {
         var tax = (sub_total_unit - net_unit_price) * quantity;
         var sub_total = sub_total_unit * quantity;
     }
-
+   
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.discount-value').val((product_discount[rowindex] * quantity).toFixed(2));
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.tax-rate').val(tax_rate[rowindex].toFixed(2));
     $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.net_unit_price').val(net_unit_price.toFixed(2));
@@ -3352,7 +3416,6 @@ function calculateRowProductData(quantity) {
     localStorageTaxValue.splice(rowindex, 1, tax.toFixed(2));
     localStorageSubTotalUnit.splice(rowindex, 1, sub_total_unit.toFixed(2));
     localStorageSubTotal.splice(rowindex, 1, sub_total.toFixed(2));
-    console.log(localStorageNetUnitPrice);
     localStorage.setItem("localStorageProductDiscount", localStorageProductDiscount);
     localStorage.setItem("localStorageTaxRate", localStorageTaxRate);
     localStorage.setItem("localStorageNetUnitPrice", localStorageNetUnitPrice);
@@ -3407,7 +3470,7 @@ function calculateGrandTotal() {
     var subtotal = parseFloat($('input[name="total_price"]').val());
     var order_tax = parseFloat($('select[name="order_tax_rate_select"]').val());
     //Alert( 'warning',order_tax);
-    localStorage.setItem("order-tax-rate-select", order_tax);
+    localStorage.setItem("order-tax-rate-select", order_tax); //////////// commended this order tax
     var order_discount = parseFloat($('input[name="order_discount"]').val());
     var order_discount_method = ($('input[name="order_discount_method"]:checked').val());
     if (!order_discount)
@@ -3552,7 +3615,16 @@ function confirmCancel() {
           confirmButtonText: 'Yes, delete it!'
     }).then((result) => {
         if (result.isConfirmed) {
-            cancel($('table.order-list tbody tr:last').index());
+            $("#customer_id").selectpicker('val', '');
+            $("#holdbillnum").val('');
+            localStorage.clear();
+            localStorage.removeItem("holdbillnum");
+            // cancel($('table.order-list tbody tr:last').index());
+            clearTableData();
+            localStorageClear();
+            $('#coupon-code').val('');
+            $('#grand-total').text('0.00');
+            location.reload();
         } 
     })
     return false;
@@ -3615,9 +3687,429 @@ $('#product-table').DataTable( {
     dom: 'tp'
 });
 </script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    window.addEventListener('keydown', function (e) {
+           
+           if(`${e.key}` == "F4")
+           {
+            if( $("#tbody-id").html() && $("#customer_id").val())
+                {
+                    if($('#holdbillnum').val())
+                    {
+                        // alert("edit");
+                        var holdbill = [];
+                        var holdbillSum = '' ;
+                        $('.sub-total').each(function(){
+                            holdbillSum+=($(this).text()+",");  
+                        });
+                        holdbillSum= holdbillSum.slice(0, -1);
+                        holdbillSum = holdbillSum.split(",");
+
+                        holdbill[0] = $("#customer_id").val();
+                        holdbill[1] =  $('#customer_id').find(":selected").text();
+                        holdbill[2] =  $("table.order-list tbody").html();
+
+                        holdbill[3]  = getSavedValue("localStorageProductCode").split(",");
+                        holdbill[4]  = getSavedValue("localStorageQty").split(",");
+                        holdbill[5]  = getSavedValue("localStorageProductDiscount").split(",");
+                        holdbill[6]  = getSavedValue("localStorageTaxRate").split(",");
+                        holdbill[7]  = getSavedValue("localStorageNetUnitPrice").split(",");
+                        holdbill[8]  = getSavedValue("localStorageTaxValue").split(",");
+                        holdbill[9]  = getSavedValue("localStorageTaxName").split(",");
+                        holdbill[10]  = getSavedValue("localStorageTaxMethod").split(",");
+                        holdbill[11]  = getSavedValue("localStorageSubTotalUnit").split(",");
+                        holdbill[12]  = holdbillSum;
+                        holdbill[13]  = getSavedValue("localStorageProductId").split(",");
+                        holdbill[14] = getSavedValue("localStorageSaleUnit").split(",");
+                        holdbill[15]  = getSavedValue("localStorageTempUnitName").split(",,");
+                        holdbill[16]  = getSavedValue("localStorageSaleUnitOperator").split(",,");
+                        holdbill[17]  = getSavedValue("localStorageSaleUnitOperationValue").split(",,");
+
+                        holdbill[18]  = $("#shipping-cost-val").val();
+                        holdbill[19]  = $("#order-discount").val();
+                        holdbill[20]  = $('#order-tax-rate-select').val();
+                        holdbill[21] = $("#subtotal").html();
+                        holdbill[22] = $('input[name="order_discount_method"]:checked').val();
+                        holdbill[23] = $('#holdbillnum').val();
+                        holdbill[24] = $('#coupon-code').val();
+                        holdbill[25] = $('input[name="salesPersonCode"]').val();
+
+                    }else{
+                        // alert("add");
+                        // alert($('input[name="salesPersonCode"]').val());
+                        
+                        var holdbill = [];
+// alert($('#coupon-code').val());
+// return false;
+                        holdbill[0] = $("#customer_id").val();
+                        holdbill[1] =  $('#customer_id').find(":selected").text();
+                        holdbill[2] =  $("table.order-list tbody").html();
+                        holdbill[3]  = getSavedValue("localStorageProductCode").split(",");
+                        holdbill[4]  = getSavedValue("localStorageQty").split(",");
+                        holdbill[5]  = getSavedValue("localStorageProductDiscount").split(",");
+                        holdbill[6]  = getSavedValue("localStorageTaxRate").split(",");
+                        holdbill[7]  = getSavedValue("localStorageNetUnitPrice").split(",");
+                        holdbill[8]  = getSavedValue("localStorageTaxValue").split(",");
+                        holdbill[9]  = getSavedValue("localStorageTaxName").split(",");
+                        holdbill[10]  = getSavedValue("localStorageTaxMethod").split(",");
+                        holdbill[11]  = getSavedValue("localStorageSubTotalUnit").split(",");
+                        holdbill[12]  = getSavedValue("localStorageSubTotal").split(",");
+                        holdbill[13]  = getSavedValue("localStorageProductId").split(",");
+                        holdbill[14] = getSavedValue("localStorageSaleUnit").split(",");
+                        holdbill[15]  = getSavedValue("localStorageTempUnitName").split(",,");
+                        holdbill[16]  = getSavedValue("localStorageSaleUnitOperator").split(",,");
+                        holdbill[17]  = getSavedValue("localStorageSaleUnitOperationValue").split(",,");
+                        holdbill[18]  = $("#shipping-cost-val").val();
+                        holdbill[19]  = $("#order-discount").val();
+                        holdbill[20]  = $('#order-tax-rate-select').val();
+                        holdbill[21] = $("#subtotal").html();
+                        holdbill[22] = $('input[name="order_discount_method"]:checked').val();
+                        holdbill[23] = $('#holdbillnum').val();
+                        holdbill[24] = $('#coupon-code').val();
+                        holdbill[25] = $('input[name="salesPersonCode"]').val();
+
+                    }
+                   
+                    $.ajax({
+                            type: 'POST',
+                            url: 'hold_bill',
+                            data: {
+                                data: holdbill,
+                            },
+                            success: function(data) {
+                            // alert(data)
+                            if(data == "2")
+                            {
+                                Alert('warning', "Hold Bill limit exceeded!")
+                                return false; 
+                            }
+                            clearTableData();
+                            localStorageClear();
+                            $('#coupon-code').val('');
+                            $('#grand-total').text('0.00');
+                            // location.reload();
+                            }
+                            });
+                }
+           }
+        }); 
+        function clearTableData(){
+            $("table.order-list tbody").html('');
+            $("#customer_id").selectpicker('val','');
+            $("#customer_id").val('');
+            $('#order-discount').val('');
+            $('#coupon-text').html('0.00');
+            $('input[name="salesPersonCode"]').val('');
+            $('select[name="order_tax_rate_select"]').val(0);
+            $('#shipping-cost-val').val('');
+            $('#coupon-code').val('');
+            $('#tax').text('0.00');
+            $('#grand-total').text('0.00');
+
+            calculateTotal();
+        }
+        function holldbillModal(){
+            $('#modalHoldBill').html('');
+          $('#holdbillModal').modal('show');
+          $.ajax({
+                type: 'GET',
+                url: 'hold_bill_data',
+               
+                success: function(data) {
+                // alert((data.length))
+                // $('#modalHoldBill').html('');
+                // return false;
+                if(data.length == 0)
+                {
+                    $('#modalHoldBill').append('<h1 style="text-align: center;">No Bill</h1>');
+                    return false;
+                }
+                for(var i=0;i<data.length;i++)
+                {
+                    $('#modalHoldBill').append('<tr><td class="holdbilldata holdbilldata1 sound-btn" data-id="'+ data[i].id +'"  title="product"><span id="product1_product_name">Bill '+ data[i].hold_bill_no +'</span></td><td><span id="product1_product_code">'+ data[i].customer_name +'</span></td><td><div  id="product1_product_total">'+ data[i].localStorageSubTotal +'</div></td><td class="text-right"><i class="dripicons-cross text-danger btn"  onclick="deletehodlbill('+data[i].id+')"></i></td></tr>');
+                }
+                
+                }
+            });
+        }  
+      function deletehodlbill(ids){
+        // alert(ids)
+        // return false;
+        $.ajax({
+                type: 'GET',
+                url: 'hold_bill_delete/'+ids,
+                // data : {id:ids}
+               
+                success: function(data) {
+                // alert(JSON.stringify(data.message))
+                $('#holdbillModal').modal('hide');
+                Alert('warning', data.message);
+                // window.location.reload();
+                clearTableData();
+                localStorageClear();
+                // localStorage.clear();
+                }
+            });
+
+                
+        }
+      $(document).on('click', '.holdbilldata', function() {
+        $('#holdbillModal').modal('hide');
+        clearTableData();
+        localStorageClear();
+        localStorage.setItem("holdbillnum",$(this).data('id'));
+        var holdBillId = $(this).data('id');
+        $.ajax({
+                type: 'GET',
+                url: 'hold-bill-get/'+holdBillId,
+            //    url: 'get-attribute-image/' + typeId,
+                success: function(data) {
+                    var ddd= JSON.parse(data.localStorageQty);
+                // alert((ddd.length));
+                // console.log(ddd);
+              
+                // localStorageClear();
+
+                localStorageStoreData(data);
+               var cust_id = data.customer_id;
+               
+                $("#tbody-id").html(data.tbody_id);
+                // edit();
+                // alert(JSON.parse(data.localStorageQty).length)
+                for(var i = 0; i < JSON.parse(data.localStorageQty).length; i++) {
+                    // alert(i);
+                    // alert(JSON.parse(data.localStorageSubTotalUnit)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ') .qty').val(JSON.parse(data.localStorageQty)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.discount-value').val(JSON.parse(data.localStorageProductDiscount)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.tax-rate').val(JSON.parse(data.localStorageTaxRate)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.net_unit_price').val(JSON.parse(data.localStorageNetUnitPrice)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.tax-value').val(JSON.parse(data.localStorageTaxValue)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.tax-name').val(JSON.parse(data.localStorageTaxName)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.tax-method').val(JSON.parse(data.localStorageTaxMethod)[i]);
+                    // alert(JSON.parse(data.localStorageSubTotalUnit)[i]);
+                    // alert(JSON.parse(data.localStorageSubTotal)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.product-price').text(JSON.parse(data.localStorageSubTotalUnit)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sub-total').text(JSON.parse(data.localStorageSubTotal)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.subtotal-value').val(JSON.parse(data.localStorageSubTotal)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.product-id').val(JSON.parse(data.localStorageProductId)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.product-code').val(JSON.parse(data.localStorageProductCode)[i]);
+                    $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit').val(JSON.parse(data.localStorageSaleUnit)[i]);
+                        if(i==0) {
+                            JSON.parse(data.localStorageTempUnitName)[i] += ',';
+                            JSON.parse(data.localStorageSaleUnitOperator)[i] += ',';
+                            JSON.parse(data.localStorageSaleUnitOperationValue)[i] += ',';
+                        }
+                        $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit-operator').val( JSON.parse(data.localStorageSaleUnitOperator)[i]);
+                        $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit-operation-value').val(JSON.parse(data.localStorageSaleUnitOperationValue)[i]);
+                        product_price.push(parseFloat($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.product_price').val()));
+                        var quantity = parseFloat($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.qty').val());
+                        product_discount.push(parseFloat( JSON.parse(data.localStorageProductDiscount)[i] /  JSON.parse(data.localStorageQty)[i]).toFixed(2));
+                        tax_rate.push(parseFloat($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.tax-rate').val()));
+                        tax_name.push($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.tax-name').val());
+                        tax_method.push($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.tax-method').val());
+                        temp_unit_name = $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit').val();
+                        unit_name.push( JSON.parse(data.localStorageTempUnitName)[i]);
+                        unit_operator.push($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit-operator').val());
+                        unit_operation_value.push($('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit-operation-value').val());
+                        $('table.order-list tbody tr:nth-child(' + (i + 1) + ')').find('.sale-unit').val(temp_unit_name);
+                        // alert("AA");
+                        
+                        calculateTotal();
+                    }
+                    rowindex = $(this).closest('tr').index();
+                    
+                    var qty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ') .qty').val();
+                    var actualQty = $('table.order-list tbody tr:nth-child(' + (rowindex + 1) + ')').find('.in-stock').text();
+                    var cust_id = localStorage.getItem('customer_id');
+                    $("#customer_id").selectpicker('val', localStorage.getItem('customer_id'));
+                    var cust_id =  $("#customer_id").val();
+                    var cust_id = localStorage.getItem('customer_id');
+                    $("#customer_id").trigger('change'); 
+                    $.get('sales/getcustomergroup/' + cust_id, function(datagroup) {
+                            // alert(datagroup/100)
+                            console.log( 'set group', cust_id);
+                            customer_group_rate = (datagroup / 100);
+                            console.log( 'se customer_group_rate ', customer_group_rate);
+
+                        }); 
+
+
+                        var order_discount_method = localStorage.getItem('order_discount_method');
+                        // alert(order_discount_method)
+                        $("#holdbillnum").val(localStorage.getItem('holdbillnum'));
+                        $('#shipping-cost-val').val(localStorage.getItem('shipping-cost-val'));
+                        $("#order-discount").val(localStorage.getItem('order-discount'));
+                        $('#order-discount').val( localStorage.getItem('order-discount'));
+                        // $("#order-tax-rate-select").select('val', localStorage.getItem('order-tax-rate-select'));
+                        // $('select[name="order_tax_rate_select"]').val(localStorage.getItem('order-tax-rate-select'));
+                        if(order_discount_method)
+                        {
+                            $(`input[name=order_discount_method][value=${order_discount_method}]`).prop("checked",true);
+                        }
+                        if(localStorage.getItem('coupon-code'))
+                        {
+                        $("#coupon-code").val(localStorage.getItem('coupon-code'));
+                        }
+                        
+                        $('input[name="salesPersonCode"]').val(localStorage.getItem('sales-person-code'));
+
+
+                location.reload();   
+                calculateTotal();         
+                // return false;
+                }
+            });
+
+      });
+      function localStorageStoreData(data)
+      {
+            // alert(data.coupon_code)
+            localStorage.setItem("tbody-id", data.tbody_id);
+            localStorage.setItem("order-tax-rate-select", data.order_tax_rate_select );
+            // localStorage.setItem("localStorageQty", JSON.parse(data.localStorageQty));
+            localStorage.setItem("localStorageProductId", JSON.parse(data.localStorageProductId));
+            localStorage.setItem("localStorageQty", JSON.parse(data.localStorageQty));
+            localStorage.setItem("localStorageSaleUnit", JSON.parse(data.localStorageSaleUnit));
+            localStorage.setItem("localStorageProductCode", JSON.parse(data.localStorageProductCode));
+            localStorage.setItem("localStorageProductDiscount", JSON.parse(data.localStorageProductDiscount));
+            localStorage.setItem("localStorageTaxRate", JSON.parse(data.localStorageTaxRate));
+            localStorage.setItem("localStorageTaxName", JSON.parse(data.localStorageTaxName));
+            localStorage.setItem("localStorageTaxMethod", JSON.parse(data.localStorageTaxMethod));
+            localStorage.setItem("localStorageTempUnitName", JSON.parse(data.localStorageTempUnitName));
+            localStorage.setItem("localStorageSaleUnitOperator", JSON.parse(data.localStorageSaleUnitOperator));
+            localStorage.setItem("localStorageSaleUnitOperationValue", JSON.parse(data.localStorageSaleUnitOperationValue));
+            localStorage.setItem("localStorageNetUnitPrice", JSON.parse(data.localStorageNetUnitPrice));
+            localStorage.setItem("localStorageTaxValue", JSON.parse(data.localStorageTaxValue));
+            localStorage.setItem("localStorageSubTotalUnit", JSON.parse(data.localStorageSubTotalUnit));
+            localStorage.setItem("localStorageSubTotal", JSON.parse(data.localStorageSubTotal));
+            
+            localStorage.setItem("order_discount_method",data.discount_method);
+            localStorage.setItem("holdbillnum",data.id);
+            localStorage.setItem("customer_id", data.customer_id);
+           var order_tax_rate =  $("#order-tax-rate-select").val();
+
+        //    alert(order_tax_rate)
+        //    alert(data.order_tax_rate_select)
+            if(data.sales_person_code)
+            {
+                localStorage.setItem("sales-person-code", data.sales_person_code);
+            }
+            else{
+                localStorage.setItem("sales-person-code",'');
+            }
+            if( data.order_tax_rate_select != 0)
+            {
+                localStorage.setItem("order-tax-rate-select",data.order_tax_rate_select);
+                $('#order-tax-rate-select').val(data.order_tax_rate_select);
+                
+            }
+            if(data.coupon_code)
+            {
+                localStorage.setItem("coupon-code",data.coupon_code);
+                // $('#coupon-code').val(data.coupon_code);
+            }
+            else{
+                localStorage.setItem("coupon-code",'');
+                $('#coupon-code').val('');
+            }
+            if(data.order_discount)
+            {
+                localStorage.setItem("order-discount",data.order_discount);
+            }
+            else{
+                localStorage.setItem("order-discount",'');
+            }
+            if(data.shipping_cost_val)
+            {
+                localStorage.setItem("shipping-cost-val", data.shipping_cost_val);
+            }
+            else{
+                localStorage.setItem("shipping-cost-val",'');
+            }
+           
+            
+           
+            
+            
+      }
+      function localStorageClear()
+        {
+            localStorage.removeItem("localStorageProductCode"); 
+            localStorage.removeItem("localStorageQty"); 
+            localStorage.removeItem("localStorageProductDiscount"); 
+            localStorage.removeItem("localStorageTaxRate"); 
+            localStorage.removeItem("localStorageNetUnitPrice"); 
+            localStorage.removeItem("localStorageTaxValue"); 
+            localStorage.removeItem("localStorageTaxName"); 
+            localStorage.removeItem("localStorageTaxMethod");
+            localStorage.removeItem("localStorageSubTotalUnit"); 
+            localStorage.removeItem("localStorageSubTotal"); 
+            localStorage.removeItem("localStorageProductId");
+            localStorage.removeItem("localStorageSaleUnit"); 
+            localStorage.removeItem("localStorageTempUnitName"); 
+            localStorage.removeItem("localStorageSaleUnitOperator"); 
+            localStorage.removeItem("localStorageSaleUnitOperationValue"); 
+            localStorage.removeItem("order-tax-rate-select"); 
+            localStorage.removeItem("customer_id"); 
+            localStorage.removeItem("tbody-id");
+            localStorage.removeItem("order-discount");
+            localStorage.removeItem("order_discount_method");
+            // localStorage.removeItem("holdBillId");
+            localStorage.removeItem("holdbillnum");
+            localStorage.removeItem("shipping-cost-val");
+            localStorage.removeItem("order-tax-rate-select");
+            localStorage.removeItem("coupon-code");
+            localStorage.removeItem("sales-person-code");
+             calculateTotal();
+            // localStorage.clear();
+        }
+</script>
 <script type="text/javascript" src="https://js.stripe.com/v3/"></script>
 <script>
+    $(document).ready(function(){
+        // $('select[name="order_tax_rate_select"]').val(0);
+    $("#customer_id").selectpicker('val', localStorage.getItem('customer_id'));
+    $("#customer_id").val(localStorage.getItem('customer_id'));
+    var order_discount_method = localStorage.getItem('order_discount_method');
+    // alert(order_discount_method)
+    $("#holdbillnum").val(localStorage.getItem('holdbillnum'));
+    $('#shipping-cost-val').val(localStorage.getItem('shipping-cost-val'));
+    $("#order-discount").val(localStorage.getItem('order-discount'));
+    $('#order-discount').val( localStorage.getItem('order-discount'));
+    // $("#order-tax-rate-select").select('val', localStorage.getItem('order-tax-rate-select'));
+    // $('select[name="order_tax_rate_select"]').val(localStorage.getItem('order-tax-rate-select'));
+    if(order_discount_method)
+    {
+        $(`input[name=order_discount_method][value=${order_discount_method}]`).prop("checked",true);
+    }
+    if(localStorage.getItem('coupon-code'))
+    {
+    $("#coupon-code").val(localStorage.getItem('coupon-code'));
+    }
+    
+    $('input[name="salesPersonCode"]').val(localStorage.getItem('sales-person-code'));
+    // alert(localStorage.getItem('order_discount_method'))
+    // $("input[name=background][value='some value']").prop("checked",true);
+    
+    var cust_id =  $("#customer_id").val();
+    var cust_id = localStorage.getItem('customer_id');
+    $.get('sales/getcustomergroup/' + cust_id, function(datagroup) {
+            console.log( 'set group', cust_id);
+            customer_group_rate = (datagroup / 100);
+            console.log( 'se customer_group_rate ', customer_group_rate);
+
+        }); 
+    calculateTotal();
+
+    
+});
 $(document).ready(function(){
+    $("#customer_id").selectpicker('val', localStorage.getItem('customer_id'));
     var docEl = doc.documentElement;
     var requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
     requestFullScreen.call(docEl);

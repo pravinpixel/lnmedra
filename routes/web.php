@@ -270,6 +270,7 @@ Route::group(['middleware' => ['auth', 'active']], function () {
 
 
 	Route::get('hold-bill-get/{id}', 'HoldBillController@holdBillGetData')->name('hold-bill-get');
+	Route::get('holdbill-clear', 'HoldBillController@holdBillClear')->name('holdbill-clear');
 
 
 
