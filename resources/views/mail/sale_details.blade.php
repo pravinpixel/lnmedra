@@ -13,6 +13,31 @@
 	@elseif($payment_status==3){{'Partial'}}
 	@else{{'Paid'}}@endif
 </p>
+
+<div class="row">
+	<div class="col-md-6">
+        <strong>{{trans("file.From")}}:</strong>
+        <br>
+        {{$from_biller_name}}
+        <br>
+        {{$from_biller_email}}
+        <br> {{$from_phone_number}}
+        <br> {{$from_address}}
+        <br> {{$from_city}}
+    </div>
+    <div class="col-md-6">
+        <strong>Customer Detail:</strong>
+        <br>
+        {{$customer_name}}
+        <br>
+        {{$customer_email}}
+        <br> {{$customer_phone_number}}
+        <br> {{$customer_address}}
+        <br> {{$customer_city}}
+    </div>
+    
+</div>
+
 <h3>Order Table</h3>
 <table style="border-collapse: collapse; width: 100%;">
 	<thead>
@@ -48,6 +73,17 @@
 			<td colspan="5" style="border: 1px solid #000; padding: 5px"><strong>Order Tax </strong> </td>
 			<td style="border: 1px solid #000; padding: 5px">{{$order_tax.'('.$order_tax_rate.'%)'}}</td>
 		</tr>
+		@if($order_discount_method)
+		<tr>
+			<td colspan="5" style="border: 1px solid #000; padding: 5px"><strong>Order Method </strong> </td>
+			
+			<td style="border: 1px solid #000; padding: 5px">
+				@if($order_discount_method)
+				{{$order_discount_method}}
+				@endif
+			</td>
+		</tr>
+		@endif
 		<tr>
 			<td colspan="5" style="border: 1px solid #000; padding: 5px"><strong>Order discount </strong> </td>
 			<td style="border: 1px solid #000; padding: 5px">

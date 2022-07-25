@@ -55,6 +55,7 @@ use Barryvdh\DomPDF\Facade as PDF;
 use App\Jobs\PosNotificationJob;
 use App\Jobs\ProcessPodcast;
 use Stripe\Order;
+use Stripe\ShippingRate;
 
 class SaleController extends Controller
 {
@@ -462,6 +463,11 @@ class SaleController extends Controller
 
         //collecting male data
         $mail_data['email'] = $lims_customer_data->email;
+        $mail_data['customer_name'] = $lims_customer_data->name;
+        $mail_data['customer_phone_number'] = $lims_customer_data->phone_number;
+        $mail_data['customer_email'] = $lims_customer_data->email;
+        $mail_data['customer_address'] = $lims_customer_data->address;
+        $mail_data['customer_city'] = $lims_customer_data->city;
         $mail_data['reference_no'] = $lims_sale_data->reference_no;
         $mail_data['sale_status'] = $lims_sale_data->sale_status;
         $mail_data['payment_status'] = $lims_sale_data->payment_status;
@@ -472,8 +478,15 @@ class SaleController extends Controller
         $mail_data['order_discount'] = $lims_sale_data->order_discount;
         $mail_data['shipping_cost'] = $lims_sale_data->shipping_cost;
         $mail_data['grand_total'] = $lims_sale_data->grand_total;
+        $mail_data['from_date'] = $lims_sale_data['created_at']->format('d-m-Y');
         $mail_data['paid_amount'] = $lims_sale_data->paid_amount;
 
+        $mail_data['order_discount_method'] = '';
+        if ($lims_sale_data->order_discount_method == 'discount') {
+            $mail_data['order_discount_method'] = 'Percentage';
+        } else if ($lims_sale_data->order_discount_method == 'amount') {
+            $mail_data['order_discount_method'] = 'Flat';
+        }
         $product_id = $data['product_id'];
         $product_batch_id = $data['product_batch_id'];
         $imei_number = $data['imei_number'];
@@ -618,11 +631,22 @@ class SaleController extends Controller
             $message = ' Sale created successfully';
         $lims_customer_data->last_visited = now();
         $lims_customer_data->save();
+        // dd($lims_sale_data);
+        $billerDetails = Biller::where('id', $lims_sale_data->biller_id)->first();
+        $fromEmail = $billerDetails['email'];
+        $mail_data['biller_name'] = $billerDetails['name'];
+        $mail_data['from_biller_name'] = $billerDetails['name'];
+        $mail_data['from_biller_email'] = $billerDetails['email'];
+        // $mail_data['from_date'] = $billerDetails['created_at'];
+        $mail_data['from_phone_number'] = $billerDetails['phone_number'];
+        $mail_data['from_address'] = $billerDetails['address'];
+        $mail_data['from_city'] = $billerDetails['city'];
+        $mail_data['from'] =  $fromEmail;
         if ($mail_data['email'] && $data['sale_status'] == 1) {
             try {
-                // Mail::send( 'mail.sale_details', $mail_data, function( $message ) use ($mail_data)
-                // {
-                //     $message->to( $mail_data['email'] )->subject( 'Sale Details');
+                $res = Mail::to($mail_data['email'])->send(new \App\Mail\SalesMail($mail_data));
+                // Mail::send('mail.sale_details', $mail_data, function ($message) use ($mail_data) {
+                //     $message->from($mail_data['from'])->to($mail_data['email'])->subject('Sale Details');
                 // });
             } catch (\Exception $e) {
                 $message = ' Sale created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
@@ -1869,8 +1893,12 @@ class SaleController extends Controller
         $lims_warehouse_data = Warehouse::find($lims_sale_data->warehouse_id);
         $lims_customer_data = Customer::find($lims_sale_data->customer_id);
         $lims_payment_data = Payment::where('sale_id', $id)->get();
-
-
+        $shipping_cost = 0;
+        if ($lims_sale_data->shipping_cost) {
+            $shipping_cost =  $lims_sale_data->shipping_cost;
+        }
+        $amount = ((float)$lims_sale_data->total_price + (float)$lims_sale_data->order_tax + (float)$shipping_cost);
+        $discount_amount = $amount - (float)$lims_sale_data->grand_total;
 
         $numberToWords = new NumberToWords();
         if (\App::getLocale() == 'ar' || \App::getLocale() == 'hi' || \App::getLocale() == 'vi' || \App::getLocale() == 'en-gb')
@@ -1878,7 +1906,7 @@ class SaleController extends Controller
         else
             $numberTransformer = $numberToWords->getNumberTransformer(\App::getLocale());
         $numberInWords = $numberTransformer->toWords($lims_sale_data->grand_total);
-        return view('sale.invoice', compact('lims_sale_data', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords'));
+        return view('sale.invoice', compact('discount_amount', 'lims_sale_data', 'lims_product_sale_data', 'lims_biller_data', 'lims_warehouse_data', 'lims_customer_data', 'lims_payment_data', 'numberInWords'));
     }
     public function downloadInvoice($id)
     {

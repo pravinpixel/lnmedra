@@ -2315,17 +2315,18 @@ else {
     else {
         customer_id = $("input[name='customer_id_hidden']").val();
     }
-    if(getSavedValue("biller_id")){
+    if(getSavedValue("biller_id")){   
       biller_id = getSavedValue("biller_id");
     }
-    else {
+    else {  
       biller_id = $("input[name='biller_id_hidden']").val();
-    }
+    } 
     $('select[name=warehouse_id]').val(warehouse_id);
     $('select[name=biller_id]').val(biller_id);
     $('select[name=customer_id]').val(customer_id);
 }
-
+    biller_id = $("input[name='biller_id_hidden']").val();
+    $('select[name=biller_id]').val(biller_id);
 //   if(getSavedValue("biller_id")) {
 //     $('select[name=customer_id]').val(getSavedValue("customer_id"));
 //   }

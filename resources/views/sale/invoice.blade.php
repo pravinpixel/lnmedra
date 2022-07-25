@@ -176,15 +176,7 @@
 
                 </tr>
                 @endif
-                @if($lims_sale_data->order_discount)
-                <tr>
-                    <th colspan="2" style="text-align:left">{{trans('file.Order Discount')}}({{$lims_sale_data->order_discount}}<?php if($lims_sale_data->order_discount_method=='discount')echo"%"?>)
-                        
-                    </th>
-                    
-                    <th style="text-align:right">{{number_format((float)$lims_sale_data->total_price, 2, '.', '') - number_format((float)$lims_sale_data->grand_total, 2, '.', '')}}</th>
-                </tr>
-                @endif
+                
                 {{-- @if($lims_sale_data->order_discount)
                 <tr>
                     <th colspan="2" style="text-align:left">{{trans('file.Order Discount')}}</th>
@@ -196,6 +188,16 @@
                 <tr>
                     <th colspan="2" style="text-align:left">{{trans('file.Coupon Discount')}}</th>
                     <th style="text-align:right">{{number_format((float)$lims_sale_data->coupon_discount, 2, '.', '')}}</th>
+                </tr>
+                @endif
+                @if($lims_sale_data->order_discount)
+                <tr>
+                    <th colspan="2" style="text-align:left">{{trans('file.Order Discount')}}({{$lims_sale_data->order_discount}}<?php if($lims_sale_data->order_discount_method=='discount')echo"%"?>)
+                        
+                    </th>
+                    
+                    {{-- <th style="text-align:right">{{number_format((float)$lims_sale_data->grand_total, 2, '.', '') - number_format((float)$lims_sale_data->total_price, 2, '.', '')}}</th> --}}
+                    <th style="text-align:right">{{ round($discount_amount) }}</th>
                 </tr>
                 @endif
                 @if($lims_sale_data->shipping_cost)

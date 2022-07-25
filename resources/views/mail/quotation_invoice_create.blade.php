@@ -1,16 +1,8 @@
 @component('mail::message')
-{{-- {!! $details['email'] !!} --}}
-
-
-<h1>Quotation Details</h1><br>
-<strong>{{trans("file.Date")}}: </strong>
-{{$details['from_date']}}
-<br>
-<strong>{{trans("file.reference")}}: </strong>
-{{$details['reference_no']}}<br>
-
-<p>Dear <strong>{{$details['customer_name']}},</strong> </p>
-<p>Thanks for visiting <strong>{{$details['from_biller_name']}} </strong>. Please find the product information below.</p><br>
+<h1>Quotation Details</h1>
+<p><strong>{{trans("file.Date")}}: </strong>
+{{$details['from_date']}}</p>
+<p><strong>Reference: </strong>{{$details['reference_no']}}</p>
 
 <table style="border-collapse: collapse; width: 100%;">
 	<tbody>
@@ -40,8 +32,7 @@
 		</tr>
 	</tbody>
 </table>
-
-<h3>Order Table</h3><br>
+<h3>Order Table</h3>
 
 <table style="border-collapse: collapse; width: 100%;">
 	<thead>
@@ -101,7 +92,7 @@
 		</tr>
 	</tbody>
 </table>
-<br>
 <p><strong>{{trans("file.Note")}}:</strong> {{ $details['note'] }}</p>
+
 <p>Thank You</p>
 @endcomponent

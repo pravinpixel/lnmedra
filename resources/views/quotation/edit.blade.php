@@ -265,12 +265,12 @@
                                         </div>
                                     </div>
                                     <div class="col-md-4">
-                                        <label>{{trans('file.discount_method')}} *</label>
+                                        <label>{{trans('file.discount_method')}}</label>
                                         @if($lims_quotation_data)
                                         <input type="hidden" value="" name="order_total_discount" id="order_total_discount">
                                         <input type="hidden" name="discount_method_hidden" value="{{$lims_quotation_data->order_discount_method}}">
                                         @endif
-                                        <select required name="order_discount_method" id="order_discount_method" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Discount...">
+                                        <select  name="order_discount_method" id="order_discount_method" class="selectpicker form-control" data-live-search="true" data-live-search-style="begins" title="Select Discount...">
                                             <option value="amount" >Flat</option>
                                             <option value="discount">Discount</option>
                                         </select>

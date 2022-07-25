@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class QuotationMail extends Mailable
+class SalesMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -28,13 +28,8 @@ class QuotationMail extends Mailable
      */
     public function build()
     {
-
         $this->from($this->details['from'])->with('details', $this->details)
-            ->markdown('mail.quotation_create');
-        if (isset($this->details['attachement'])) {
-            $this->attach($this->details['attachement']);
-        }
-
+            ->markdown('mail.sales_mail');
         return $this;
     }
 }

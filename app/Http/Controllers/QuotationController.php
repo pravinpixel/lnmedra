@@ -13,6 +13,7 @@ use App\Unit;
 use App\Tax;
 use App\Quotation;
 use App\Mail\QuotationMail;
+use App\Mail\QuotationInvoice;
 use App\Delivery;
 use App\PosSetting;
 use App\ProductQuotation;
@@ -21,6 +22,7 @@ use App\ProductVariant;
 use App\ProductBatch;
 use App\Variant;
 use DB;
+use PDF;
 use NumberToWords\NumberToWords;
 use Auth;
 use App\MailTemplate;
@@ -71,7 +73,7 @@ class QuotationController extends Controller
     {
 
         $data = $request->except('document');
-        //return dd($data);
+        // dd($data);
         $data['user_id'] = Auth::id();
         $document = $request->document;
         if ($document) {
@@ -87,7 +89,10 @@ class QuotationController extends Controller
                 return redirect()->back()->withErrors($v->errors());
             $documentName = $document->getClientOriginalName();
             $document->move('public/quotation/documents', $documentName);
+            $attachPath = public_path('quotation/documents');
             $data['document'] = $documentName;
+            $attachement =  $attachPath . '/' . $data['document'];
+            $mail_data['attachement'] =   $attachement;
         }
         $data['reference_no'] = 'qr-' . date("Ymd") . '-' . date("his");
 
@@ -104,16 +109,21 @@ class QuotationController extends Controller
 
         ];
         $to_mail = $lims_customer['email'];
-        try {
-            $res = Mail::to($to_mail)->send(new QuotationMail($details));
-        } catch (\Exception $e) {
-            $message = $e;
-            $message = 'Data inserted successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
-        }
+        // try {
+        //     $res = Mail::to($to_mail)->send(new QuotationMail($details));
+        // } catch (\Exception $e) {
+        //     $message = $e;
+        //     $message = 'Data inserted successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
+        // }
         if ($lims_quotation_data->quotation_status == 2) {
             //collecting mail data
             $lims_customer_data = Customer::find($data['customer_id']);
             $mail_data['email'] = $lims_customer_data->email;
+            $mail_data['customer_name'] = $lims_customer_data->name;
+            $mail_data['customer_phone_number'] = $lims_customer_data->phone_number;
+            $mail_data['customer_address'] = $lims_customer_data->address;
+            $mail_data['customer_email'] = $lims_customer_data->email;
+            $mail_data['customer_city'] = $lims_customer_data->city;
             $mail_data['reference_no'] = $lims_quotation_data->reference_no;
             $mail_data['total_qty'] = $lims_quotation_data->total_qty;
             $mail_data['total_price'] = $lims_quotation_data->total_price;
@@ -122,6 +132,18 @@ class QuotationController extends Controller
             $mail_data['order_discount'] = $lims_quotation_data->order_discount;
             $mail_data['shipping_cost'] = $lims_quotation_data->shipping_cost;
             $mail_data['grand_total'] = $lims_quotation_data->grand_total;
+            $mail_data['from_date'] = $lims_quotation_data['created_at']->format('d-m-Y');
+            $mail_data['note'] = $lims_quotation_data->note;
+            $mail_data['date'] = $lims_quotation_data->created_at;
+
+
+
+            $mail_data['order_discount_method'] = '';
+            if ($lims_quotation_data->order_discount_method == 'discount') {
+                $mail_data['order_discount_method'] = 'Percentage';
+            } else if ($lims_quotation_data->order_discount_method == 'amount') {
+                $mail_data['order_discount_method'] = 'Flat';
+            }
         }
         $product_id = $data['product_id'];
         $product_batch_id = $data['product_batch_id'];
@@ -168,12 +190,30 @@ class QuotationController extends Controller
             $product_quotation['total'] = $mail_data['total'][$i] = $total[$i];
             ProductQuotation::create($product_quotation);
         }
+        $billerDetails = Biller::where('id', $lims_quotation_data->biller_id)->first();
+        $fromEmail = $billerDetails['email'];
+        $mail_data['from_biller_name'] = $billerDetails['name'];
+        $mail_data['from_biller_email'] = $billerDetails['email'];
+        // $mail_data['from_date'] = $billerDetails['created_at'];
+        $mail_data['from_phone_number'] = $billerDetails['phone_number'];
+        $mail_data['from_address'] = $billerDetails['address'];
+        $mail_data['from_city'] = $billerDetails['city'];
+        $mail_data['from'] =  $fromEmail;
         $message = 'Quotation created successfully';
         if ($lims_quotation_data->quotation_status == 2 && $mail_data['email']) {
             try {
-                Mail::send('mail.quotation_details', $mail_data, function ($message) use ($mail_data) {
-                    $message->to($mail_data['email'])->subject('Quotation Details');
-                });
+                // if (isset($mail_data['attachement'])) {
+
+                // Mail::send('mail.quotation_customer', $mail_data, function ($message) use ($mail_data, $attachement) {
+                //     $message->from($mail_data['from'])->to($mail_data['email'])->subject('Quotation Details')->attach($attachement);
+                // });
+                $res = Mail::to($mail_data['email'])->send(new \App\Mail\QuotationMail($mail_data));
+                // } else {
+                //     // Mail::send('mail.quotation_customer', $mail_data, function ($message) use ($mail_data) {
+                //     //     $message->from($mail_data['from'])->to($mail_data['email'])->subject('Quotation Details');
+                //     // });
+                //     $res = Mail::to($mail_data['email'])->send(new \App\Mail\QuotationMail($mail_data));
+                // }
             } catch (\Exception $e) {
                 $message = 'Quotation created successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
             }
@@ -183,13 +223,13 @@ class QuotationController extends Controller
 
     public function sendMail(Request $request)
     {
-        // dd($request->all());
+
         $data = $request->all();
         $lims_quotation_data = Quotation::find($data['quotation_id']);
         $lims_product_quotation_data = ProductQuotation::where('quotation_id', $data['quotation_id'])->get();
         $lims_customer_data = Customer::find($lims_quotation_data->customer_id);
         if ($lims_customer_data->email) {
-            //collecting male data
+
             $mail_data['order_discount_method'] = '';
             if ($lims_quotation_data->order_discount_method == 'discount') {
                 $mail_data['order_discount_method'] = 'Percentage';
@@ -198,6 +238,11 @@ class QuotationController extends Controller
             }
 
             $mail_data['email'] = $lims_customer_data->email;
+            $mail_data['customer_name'] = $lims_customer_data->name;
+            $mail_data['customer_phone_number'] = $lims_customer_data->phone_number;
+            $mail_data['customer_address'] = $lims_customer_data->address;
+            $mail_data['customer_email'] = $lims_customer_data->email;
+            $mail_data['customer_city'] = $lims_customer_data->city;
             $mail_data['reference_no'] = $lims_quotation_data->reference_no;
             $mail_data['total_qty'] = $lims_quotation_data->total_qty;
             $mail_data['total_price'] = $lims_quotation_data->total_price;
@@ -206,6 +251,8 @@ class QuotationController extends Controller
             $mail_data['order_discount'] = $lims_quotation_data->order_discount;
             $mail_data['shipping_cost'] = $lims_quotation_data->shipping_cost;
             $mail_data['grand_total'] = $lims_quotation_data->grand_total;
+            $mail_data['from_date'] = $lims_quotation_data['created_at']->format('d-m-Y');
+            $mail_data['note'] = $lims_quotation_data->note;
 
             foreach ($lims_product_quotation_data as $key => $product_quotation_data) {
                 $lims_product_data = Product::find($product_quotation_data->product_id);
@@ -226,12 +273,18 @@ class QuotationController extends Controller
 
             $billerDetails = Biller::where('id', $lims_quotation_data->biller_id)->first();
             $fromEmail = $billerDetails['email'];
-            // dd($billerDetails['email']);
+            $mail_data['from_biller_name'] = $billerDetails['name'];
+            $mail_data['from_biller_email'] = $billerDetails['email'];
+            $mail_data['from_phone_number'] = $billerDetails['phone_number'];
+            $mail_data['from_address'] = $billerDetails['address'];
+            $mail_data['from_city'] = $billerDetails['city'];
             $mail_data['from'] =  $fromEmail;
+            // dd($mail_data);
             try {
-                Mail::send('mail.quotation_details', $mail_data, function ($message) use ($mail_data) {
-                    $message->from($mail_data['from'])->to($mail_data['email'])->subject('Quotation Details');
-                });
+                // Mail::send('mail.quotation_details', $mail_data, function ($message) use ($mail_data) {
+                //     $message->from($mail_data['from'])->to($mail_data['email'])->subject('Quotation Details');
+                // });
+                $res = Mail::to($mail_data['email'])->send(new \App\Mail\QuotationInvoice($mail_data));
                 $message = 'Mail sent successfully';
             } catch (\Exception $e) {
                 $message = 'Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';
@@ -451,7 +504,7 @@ class QuotationController extends Controller
                 $product_quotation[7][$key] = $product_batch_data->batch_no;
             } else
                 $product_quotation[7][$key] = 'N/A';
-                
+
             $product_quotation[8][$key] = $quotation_method;
             $product_quotation[9][$key] = $billerLable['name'];
             $product_quotation[10][$key] = $billerLable['image'];
@@ -504,6 +557,7 @@ class QuotationController extends Controller
             //collecting mail data
             $lims_customer_data = Customer::find($data['customer_id']);
             $mail_data['email'] = $lims_customer_data->email;
+            $mail_data['customer_name'] = $lims_customer_data->name;
             $mail_data['reference_no'] = $lims_quotation_data->reference_no;
             $mail_data['total_qty'] = $data['total_qty'];
             $mail_data['total_price'] = $data['total_price'];
@@ -512,6 +566,12 @@ class QuotationController extends Controller
             $mail_data['order_discount'] = $data['order_discount'];
             $mail_data['shipping_cost'] = $data['shipping_cost'];
             $mail_data['grand_total'] = $data['grand_total'];
+            $mail_data['order_discount_method'] = '';
+            if ($lims_quotation_data->order_discount_method == 'discount') {
+                $mail_data['order_discount_method'] = 'Percentage';
+            } else if ($lims_quotation_data->order_discount_method == 'amount') {
+                $mail_data['order_discount_method'] = 'Flat';
+            }
         }
         $product_id = $data['product_id'];
         $product_batch_id = $data['product_batch_id'];
@@ -590,11 +650,14 @@ class QuotationController extends Controller
         }
 
         $message = 'Quotation updated successfully';
-
+        $billerDetails = Biller::where('id', $lims_quotation_data->biller_id)->first();
+        $fromEmail = $billerDetails['email'];
+        $mail_data['biller_name'] = $billerDetails['name'];
+        $mail_data['from'] =  $fromEmail;
         if ($lims_quotation_data->quotation_status == 2 && $mail_data['email']) {
             try {
-                Mail::send('mail.quotation_details', $mail_data, function ($message) use ($mail_data) {
-                    $message->to($mail_data['email'])->subject('Quotation Details');
+                Mail::send('mail.quotation_customer', $mail_data, function ($message) use ($mail_data) {
+                    $message->from($mail_data['from'])->to($mail_data['email'])->subject('Quotation Details');
                 });
             } catch (\Exception $e) {
                 $message = 'Quotation updated successfully. Please setup your <a href="setting/mail_setting">mail setting</a> to send mail.';

@@ -1,32 +1,49 @@
-<h1>Quotation Details</h1>
-<p><strong>{{trans("file.Date")}}: </strong>
-{{$from_date->format('Y-m-d')}}</p>
-<p><strong>Reference: </strong>{{$reference_no}}</p>
-<div class="row">
-    <div class="col-md-6">
-        <strong>{{trans("file.From")}}:</strong>
-        <br>
-        {{$from_biller_name}}
-        <br>
-        {{$from_biller_email}}
-        <br> {{$from_phone_number}}
-        <br> {{$from_address}}
-        <br> {{$from_city}}
-    </div>
-    <div class="col-md-6">
-        <div class="float-right">
-            <strong>{{trans("file.To")}}:</strong>
-            <br>
-            {{$customer_name}}
-            <br>
-            {{$customer_phone_number}}
-            <br> {{$from_phone_number}}
-            <br> {{$customer_address}}
-            <br> {{$customer_city}}
-        </div>
-    </div>
-</div>
-<h3>Order Table</h3>
+
+
+<h1>Quotation Details</h1><br>
+<p>Dear <strong>{{$customer_name}},</strong> </p>
+<p>Thanks for visiting <strong>{{$from_biller_name}} </strong>. Please find the product information below.</p><br>
+{{-- <p><strong>Reference: </strong>{{$reference_no}}</p><br> --}}
+
+
+<strong>{{trans("file.Date")}}: </strong>
+{{$from_date->format('Y-m-d')}}
+<br>
+<strong>{{trans("file.reference")}}: </strong>
+{{$reference_no}}<br>
+<br>
+
+<table style="border-collapse: collapse; width: 100%;">
+	<tbody>
+		<tr>
+			<td style="width:70%"><b>From:</b></td>
+			<td><b>To:</b></td>
+		</tr>
+		<tr>
+			<td style=" padding: 5px">{{$details['from_biller_name']}}</td>
+			<td style="padding: 5px">{{$details['customer_name']}}</td>
+		</tr>
+		<tr>
+			<td style=" padding: 5px">{{$details['from_biller_email']}}</td>
+			<td style=" padding: 5px">{{$details['customer_email']}}</td>
+		</tr>
+		<tr>
+			<td style=" padding: 5px">{{$details['from_phone_number']}}</td>
+			<td style=" padding: 5px">{{$details['customer_phone_number']}}</td>
+		</tr>
+		<tr>
+			<td style=" padding: 5px">{{$details['from_address']}}</td>
+			<td style=" padding: 5px">{{$details['customer_address']}}</td>
+		</tr>
+		<tr>
+			<td style=" padding: 5px">{{$details['from_city']}}</td>
+			<td style=" padding: 5px">{{$details['customer_city']}}</td>
+		</tr>
+	</tbody>
+</table>
+
+
+<h3>Order Table</h3><br>
 
 <table style="border-collapse: collapse; width: 100%;">
 	<thead>
@@ -86,6 +103,6 @@
 		</tr>
 	</tbody>
 </table>
+<br>
 <p><strong>{{trans("file.Note")}}:</strong> {{ $note }}</p>
-
 <p>Thank You</p>
