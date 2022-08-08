@@ -95,7 +95,7 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label>{{trans('file.Product Name')}} *</strong> </label>
-                                <input type="text" name="name" value="{{$lims_product_data->name}}" required class="form-control">
+                                <input type="text" name="name" value="{!!$lims_product_data->name!!}" required class="form-control">
                                 <span class="validation-msg" id="name-error"></span>
                             </div>
                         </div>

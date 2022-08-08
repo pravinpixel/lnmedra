@@ -593,10 +593,14 @@ $("#supplier_id").val($("#defaultSupplier").val());
                 if(data.length>0){
                 lims_product_code.length = 0;
       
-            
+                    console.log(data);
                     for(var i=0;i<data.length;i++)
                     {
-                        lims_product_code.push((data[i].code +' (' + data[i].name + ')'));
+                        // console.log(data);
+                      var  text= data[i].name;
+                        name = text.replace(/&quot;/g, '"');
+                        console.log(name);
+                        lims_product_code.push((data[i].code +' (' + name + ')'));
                     }
                 // lims_product_code.map((item) => {
                 //     productSearch(item);
