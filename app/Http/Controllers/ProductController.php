@@ -34,20 +34,20 @@ class ProductController extends Controller
     public function index()
     {
         $role = Role::find(Auth::user()->role_id);
-        if ($role->hasPermissionTo('products-index')) {
-            $permissions = Role::findByName($role->name)->permissions;
+        // if ($role->hasPermissionTo('products-index')) {
+        $permissions = Role::findByName($role->name)->permissions;
 
-            foreach ($permissions as $permission)
-                $all_permission[] = $permission->name;
-            if (empty($all_permission))
-                $all_permission[] = 'dummy text';
+        foreach ($permissions as $permission)
+            $all_permission[] = $permission->name;
+        if (empty($all_permission))
+            $all_permission[] = 'dummy text';
 
-            $lims_productType_list =  ProductType::where('is_active', true)->where('is_active', '!=', 2)->get();
-            $lims_category_list = Category::where('is_active', true)->get();
-            $lims_brand_list = Brand::where('is_active', true)->get();
-            return view('product.index', compact('all_permission', 'lims_category_list', 'lims_brand_list', 'lims_productType_list'));
-        } else
-            return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
+        $lims_productType_list =  ProductType::where('is_active', true)->where('is_active', '!=', 2)->get();
+        $lims_category_list = Category::where('is_active', true)->get();
+        $lims_brand_list = Brand::where('is_active', true)->get();
+        return view('product.index', compact('all_permission', 'lims_category_list', 'lims_brand_list', 'lims_productType_list'));
+        // } else
+        // return redirect()->back()->with('not_permitted', 'Sorry! You are not allowed to access this module');
     }
 
     public function productData(Request $request)

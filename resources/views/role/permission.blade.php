@@ -215,6 +215,27 @@
 							</td> -->
 						</tr>
 
+						<tr>
+							<td>{{trans('file.dashboard')}}</td>
+							<td class="text-center">
+								<div class="icheckbox_square-blue checked" aria-checked="false" aria-disabled="false">
+									<div class="checkbox">
+										@if(in_array("dashboard-index", $all_permission))
+										<input type="checkbox" value="1" id="dashboard-index" name="dashboard-index" checked />
+										@else
+										<input type="checkbox" value="1" id="dashboard-index" name="dashboard-index" />
+										@endif
+										<label for="dashboard-index"></label>
+									</div>
+								</div>
+							</td>
+							<td class="text-center">
+							</td>
+							<td class="text-center">
+							</td>
+							<td class="text-center">
+							</td>
+						</tr>
 
 						<tr>
 							<td>{{trans('file.vendorproductapprove')}}</td>

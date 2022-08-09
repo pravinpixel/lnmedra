@@ -104,9 +104,24 @@
               @if(Auth::user()->role_id == 6) 
               <li id="vendorDashboard-menu"><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>Vendor dashboard</span></a></li>
                           
-              @elseif(Auth::user()->role_id != 7)
+              {{-- @elseif(Auth::user()->role_id != 7)
                 <li><a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a></li>
-              @endif 
+                --}}
+              @endif  
+              <?php
+               $role = DB::table('roles')->find(Auth::user()->role_id);
+              $dashboard_management = DB::table('permissions')->where('name', 'dashboard-index')->first();
+              $dashboard_management_active = DB::table('role_has_permissions')->where([
+                  ['permission_id', $dashboard_management->id],
+                  ['role_id', $role->id]
+              ])->first();
+
+      ?>
+        @if(userHasAccess('dashboard-index') && Auth::user()->role_id != 6)
+        <li>
+          <a href="{{url('/')}}"> <i class="dripicons-meter"></i><span>{{ __('file.dashboard') }}</span></a>
+        </li>
+        @endif
               <?php
                   $role = DB::table('roles')->find(Auth::user()->role_id);
                 
@@ -207,7 +222,7 @@
               ?>
               
             
-              @if(userHasAccess('products-index') || userHasAccess('category') || userHasAccess('print_barcode') )
+              @if(userHasAccess('products-index') || userHasAccess('category') || userHasAccess('print_barcode'))
               <li><a href="#product" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.product')}}</span><span></a>
                 <ul id="product" class="collapse list-unstyled ">
                   @if(userHasAccess('category'))
@@ -229,8 +244,14 @@
                   -->
                 </ul>
               </li>
+              @elseif(Auth::user()->role_id >7)
+              <li><a href="#product" aria-expanded="false" data-toggle="collapse"> <i class="dripicons-list"></i><span>{{__('file.product')}}</span><span></a>
+                <ul id="product" class="collapse list-unstyled ">
+                  <li id="product-list-menu"><a href="{{route('products.index')}}">{{__('file.product_list')}}</a></li>             
+                </ul>
+              </li>
               @endif
-
+             
 
              
                   
